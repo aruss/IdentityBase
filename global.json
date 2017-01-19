@@ -1,5 +1,5 @@
 {
-  "projects": [ "src", "test", "samples" ],
+  "projects": [ "src", "test", "samples", "Submodules/ServiceBase/src" ],
   "sdk": {
     "version": "1.0.0-preview2-003121"
   }
