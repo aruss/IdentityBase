@@ -12,6 +12,8 @@ branches:
 
 configuration: Release
 
+install:
+  - git submodule update --init --recursive
 shallow_clone: true
 
 build_script:
