@@ -8,9 +8,7 @@
   "dependencies": {
     "NETStandard.Library": "1.6.1",
     "IdentityServer4": "1.0.0",
-    "ServiceBase": {
-      "target": "project"
-    }
+    "ServiceBase": "1.0.0-*"
   },
   "frameworks": {
     "netstandard1.6": {
