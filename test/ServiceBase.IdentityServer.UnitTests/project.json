@@ -10,9 +10,13 @@
     "xunit": "2.2.0-beta2-build3300",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.DotNet.InternalAbstractions": "1.0.500-preview2-1-003177",
-    "ServiceBase.IdentityServer": "1.0.0-*",
-    "ServiceBase.IdentityServer.Public": "1.0.0-*",
-    "Moq": "4.6.38-alpha",
+    "ServiceBase.IdentityServer": {
+      "target": "project"
+    },
+    "ServiceBase.IdentityServer.Public": {
+      "target": "project"
+    },
+    "Moq": "4.6.38-alpha"
   },
   "frameworks": {
     "netcoreapp1.1": {
