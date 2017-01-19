@@ -11,6 +11,10 @@ branches:
     - /^(.*\/)?ci-.*$/
 
 configuration: Release
+
+install
+  - git submodule update --init --recursive
+
 build_script:
   - dotnet --info
   - dotnet restore --no-cache
