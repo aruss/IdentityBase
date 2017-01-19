@@ -1,0 +1,21 @@
+{
+  "name": "nodejsapi",
+  "private":  true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "1.21.x",
+    "elasticsearch": "11.0.x",
+    "hapi": "14.2.x",
+    "hapi-auth-jwt2": "^7.0.1",
+    "joi": "9.0.x",
+    "minimist": "1.2.x",
+    "safe-json-stringify": "1.0.x"
+  }
+}

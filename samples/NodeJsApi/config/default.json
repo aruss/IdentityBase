@@ -1,0 +1,9 @@
+{
+  "connection": {
+    "port": 3000
+  },
+  "elastic": {
+    "host": "localhost:9200",
+    "log": "warning"
+  }
+}

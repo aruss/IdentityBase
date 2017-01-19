@@ -1,0 +1,43 @@
+{
+  "title": "ServiceBase.IdentityServer.Public.UnitTests",
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": false,
+    "preserveCompilationContext": true,
+    "copyToOutput": {
+      "include": [ "xunit.runner.json" ]
+    }
+  },
+  "testRunner": "xunit",
+  "dependencies": {
+    "xunit": "2.2.0-beta4-build3444",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Moq": "4.6.38-alpha",
+    "AngleSharp": "0.9.9",
+    "HtmlAgilityPack.NetCore": "1.5.0.1",
+    "FluentAssertions": "4.18.0",
+    "ServiceBase.IdentityServer": {
+      "target": "project"
+    },
+    "ServiceBase.IdentityServer.Public": {
+      "target": "project"
+    },
+    "ServiceBase.IdentityServer.EntityFramework": {
+      "target": "project"
+    },
+    "Microsoft.EntityFrameworkCore": "1.1.0",
+    "Microsoft.AspNetCore.TestHost": "1.1.0",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      },
+      "imports": "dnxcore50"
+    }
+  }
+}

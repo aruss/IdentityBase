@@ -1,0 +1,25 @@
+{
+  "title": "ServiceBase.IdentityServer",
+  "version": "1.0.0-*",
+  "buildOptions": {
+    //"debugType": "portable",
+    "emitEntryPoint": false
+  },
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "IdentityServer4": "1.0.0",
+    "ServiceBase": {
+      "target": "project"
+    }
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "System.Collections.Specialized": "4.3.0",
+        "System.Diagnostics.Process": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0"
+      }
+    }
+  }
+}

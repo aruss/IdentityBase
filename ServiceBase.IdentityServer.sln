@@ -1,0 +1,109 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{723206AB-DF2F-45BF-9D69-44EAE91688B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5EFD3297-E28B-41EB-82F1-F4B32D745420}"
+	ProjectSection(SolutionItems) = preProject
+		.coveralls.yml = .coveralls.yml
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		appveyor.yml = appveyor.yml
+		coverage.sh = coverage.sh
+		coverage_local.sh = coverage_local.sh
+		coveralls.sh = coveralls.sh
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D4686FA7-9CA0-49D3-BF46-1FE7D68DB0D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9A2E66E2-59A7-48F1-94E9-58EAA33107FC}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.UnitTests", "test\ServiceBase.IdentityServer.UnitTests\ServiceBase.IdentityServer.UnitTests.xproj", "{C3AC36BB-A09A-4301-95AF-02837BA34247}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AspNetCoreWeb", "samples\AspNetCoreWeb\AspNetCoreWeb.xproj", "{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AspNetCoreApi", "samples\AspNetCoreApi\AspNetCoreApi.xproj", "{07A53097-4D2E-41C3-884B-D37B86289F66}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.Public", "src\ServiceBase.IdentityServer.Public\ServiceBase.IdentityServer.Public.xproj", "{CFDC94F0-B320-495A-AB21-22B0011075DE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer", "src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.xproj", "{784B3C88-30FA-415D-B99E-584063064508}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.EntityFramework.UnitTests", "test\ServiceBase.IdentityServer.EntityFramework.UnitTests\ServiceBase.IdentityServer.EntityFramework.UnitTests.xproj", "{E575208A-5146-47AC-BDBD-E9E1134B7AE9}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.EntityFramework.IntegrationTests", "test\ServiceBase.IdentityServer.EntityFramework.IntegrationTests\ServiceBase.IdentityServer.EntityFramework.IntegrationTests.xproj", "{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.Public.UnitTests", "test\ServiceBase.IdentityServer.Public.UnitTests\ServiceBase.IdentityServer.Public.UnitTests.xproj", "{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.Public.IntegrationTests", "test\ServiceBase.IdentityServer.Public.IntegrationTests\ServiceBase.IdentityServer.Public.IntegrationTests.xproj", "{24F5104B-D432-45E8-9739-74BCBE5C74BE}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ServiceBase.IdentityServer.EntityFramework", "src\ServiceBase.IdentityServer.EntityFramework\ServiceBase.IdentityServer.EntityFramework.xproj", "{AB83F911-8B78-4973-A3A9-2A2D85581F25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3AC36BB-A09A-4301-95AF-02837BA34247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3AC36BB-A09A-4301-95AF-02837BA34247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3AC36BB-A09A-4301-95AF-02837BA34247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3AC36BB-A09A-4301-95AF-02837BA34247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07A53097-4D2E-41C3-884B-D37B86289F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07A53097-4D2E-41C3-884B-D37B86289F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07A53097-4D2E-41C3-884B-D37B86289F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07A53097-4D2E-41C3-884B-D37B86289F66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFDC94F0-B320-495A-AB21-22B0011075DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFDC94F0-B320-495A-AB21-22B0011075DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFDC94F0-B320-495A-AB21-22B0011075DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFDC94F0-B320-495A-AB21-22B0011075DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784B3C88-30FA-415D-B99E-584063064508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784B3C88-30FA-415D-B99E-584063064508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784B3C88-30FA-415D-B99E-584063064508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784B3C88-30FA-415D-B99E-584063064508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E575208A-5146-47AC-BDBD-E9E1134B7AE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E575208A-5146-47AC-BDBD-E9E1134B7AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E575208A-5146-47AC-BDBD-E9E1134B7AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E575208A-5146-47AC-BDBD-E9E1134B7AE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F5104B-D432-45E8-9739-74BCBE5C74BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F5104B-D432-45E8-9739-74BCBE5C74BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F5104B-D432-45E8-9739-74BCBE5C74BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F5104B-D432-45E8-9739-74BCBE5C74BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB83F911-8B78-4973-A3A9-2A2D85581F25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB83F911-8B78-4973-A3A9-2A2D85581F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB83F911-8B78-4973-A3A9-2A2D85581F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB83F911-8B78-4973-A3A9-2A2D85581F25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C3AC36BB-A09A-4301-95AF-02837BA34247} = {9A2E66E2-59A7-48F1-94E9-58EAA33107FC}
+		{963B39C0-FA62-40EE-9B3A-974B0DFBD7F0} = {D4686FA7-9CA0-49D3-BF46-1FE7D68DB0D9}
+		{07A53097-4D2E-41C3-884B-D37B86289F66} = {D4686FA7-9CA0-49D3-BF46-1FE7D68DB0D9}
+		{CFDC94F0-B320-495A-AB21-22B0011075DE} = {723206AB-DF2F-45BF-9D69-44EAE91688B6}
+		{784B3C88-30FA-415D-B99E-584063064508} = {723206AB-DF2F-45BF-9D69-44EAE91688B6}
+		{E575208A-5146-47AC-BDBD-E9E1134B7AE9} = {9A2E66E2-59A7-48F1-94E9-58EAA33107FC}
+		{98F7972C-1CD1-48A8-9A32-9C3A3C06BA05} = {9A2E66E2-59A7-48F1-94E9-58EAA33107FC}
+		{CAC745D6-D23C-4B1F-99AB-85028BAA8BB6} = {9A2E66E2-59A7-48F1-94E9-58EAA33107FC}
+		{24F5104B-D432-45E8-9739-74BCBE5C74BE} = {9A2E66E2-59A7-48F1-94E9-58EAA33107FC}
+		{AB83F911-8B78-4973-A3A9-2A2D85581F25} = {723206AB-DF2F-45BF-9D69-44EAE91688B6}
+	EndGlobalSection
+EndGlobal

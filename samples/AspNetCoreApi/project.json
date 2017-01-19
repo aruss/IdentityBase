@@ -1,0 +1,51 @@
+{
+  "userSecretsId": "AspNetCoreApi-c23d27a4-eb88-4b18-9b77-2a93f3b15119",
+  "title": "AspNetCoreApi",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Microsoft.AspNetCore.Mvc.Core": "1.1.0",
+    "Microsoft.AspNetCore.Mvc.Formatters.Json": "1.1.0",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+    "IdentityServer4.AccessTokenValidation": "1.0.1",
+    "Microsoft.AspNetCore.Hosting": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0"
+  },
+
+  "tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
+    "Microsoft.DotNet.Watcher.Tools": "1.0.0-preview2-final"
+  },
+
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      },
+      "imports": "dnxcore50"
+    }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "web.config"
+    ]
+  },
+
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  }
+}
