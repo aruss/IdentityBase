@@ -1,28 +1,27 @@
 version: 1.0.{build}
 skip_tags: true
 image: Visual Studio 2015
-clone_depth: 1
+deploy: off
+configuration: Release
+platform: Any CPU
+services: mssql2012sp1
 
 branches:
   only:
-    - master
-    - release
-    - dev
-    - /^(.*\/)?ci-.*$/
-
-configuration: Release
+  - release
+  - master
 
 install:
-  - git submodule update --init --recursive
-shallow_clone: true
+- cmd: git submodule update --init --recursive
 
-build_script:
-  - dotnet --info
-  - dotnet restore --no-cache
-  - dotnet build **/project.json --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
+before_build:
+- cmd: dotnet restore --no-cache
+
+build:
+  project: ServiceBase.IdentityServer.sln
+  verbosity: minimal
 
 test_script:
-  - bash coverage.sh
-  - bash coveralls.sh
-
-deploy: off
+- cmd: >-
+    bash coverage.sh
+    bash coveralls.sh
