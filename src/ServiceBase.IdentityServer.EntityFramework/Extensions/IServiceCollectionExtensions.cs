@@ -31,29 +31,42 @@ namespace ServiceBase.IdentityServer.EntityFramework
         }
 
         // https://docs.microsoft.com/en-us/ef/core/providers/
-        public static void AddEntityFrameworkInMemoryStores(
+        public static void AddEntityFrameworkStores(
             this IServiceCollection services,
             Action<EntityFrameworkOptions> configure = null)
         {
             services.Configure<EntityFrameworkOptions>(configure);
             var options = configure.ToOptions();
-            services.AddEntityFrameworkStores((builder) =>
-            {
-                builder.UseInMemoryDatabase();
-            }, options);
+            AddEntityFrameworkStores(services, options);
         }
 
-        public static void AddEntityFrameworkSqlServerStores(
+        public static void AddEntityFrameworkStores(
             this IServiceCollection services,
-            IConfigurationSection section)
+            IConfigurationSection section = null)
         {
-            services.Configure<EntityFrameworkOptions>(section);
             var options = section.ToOptions();
+            AddEntityFrameworkStores(services, options);
+        }
 
+        public static void AddEntityFrameworkStores(
+            this IServiceCollection services,
+            EntityFrameworkOptions options)
+        {
             var migrationsAssembly = typeof(IServiceCollectionExtensions).GetTypeInfo().Assembly.GetName().Name;
             services.AddEntityFrameworkStores((builder) =>
             {
-                builder.UseSqlServer(options.ConnectionString, o => o.MigrationsAssembly(migrationsAssembly));
+                if (options.SqlServer != null)
+                {
+                    builder.UseSqlServer(options.SqlServer.ConnectionString, o => o.MigrationsAssembly(migrationsAssembly));
+                }
+                else if (options.Npgsql != null)
+                {
+                    builder.UseNpgsql(options.Npgsql.ConnectionString, o => o.MigrationsAssembly(migrationsAssembly));
+                }
+                else
+                {
+                    builder.UseInMemoryDatabase();
+                }
             }, options);
         }
 

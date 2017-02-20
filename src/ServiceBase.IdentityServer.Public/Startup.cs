@@ -103,7 +103,7 @@ namespace ServiceBase.IdentityServer.Public
         {
             if (String.IsNullOrWhiteSpace(_configuration["EntityFramework"]))
             {
-                services.AddEntityFrameworkSqlServerStores(_configuration.GetSection("EntityFramework"));
+                services.AddEntityFrameworkStores(_configuration.GetSection("EntityFramework"));
             }
             else
             {

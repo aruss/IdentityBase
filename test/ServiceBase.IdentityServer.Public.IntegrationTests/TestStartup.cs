@@ -59,7 +59,7 @@ namespace ServiceBase.IdentityServer.Public.IntegrationTests
 
             #region Entity Framework Store Layer
 
-            services.AddEntityFrameworkInMemoryStores((options) =>
+            services.AddEntityFrameworkStores((options) =>
             {
                 options.MigrateDatabase = false;
                 options.SeedExampleData = false;

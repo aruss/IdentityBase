@@ -1,8 +1,20 @@
 ﻿namespace ServiceBase.IdentityServer.EntityFramework.Options
 {
-    public class EntityFrameworkOptions
+    public class EntityFrameworkNpgsqlOptions
     {
         public string ConnectionString { get; set; }
+    }
+
+    public class EntityFrameworkSqlServerOptions
+    {
+        public string ConnectionString { get; set; }
+    }
+
+    public class EntityFrameworkOptions
+    {
+        public EntityFrameworkSqlServerOptions SqlServer { get; set; }
+        public EntityFrameworkNpgsqlOptions Npgsql { get; set; }
+
         public bool SeedExampleData { get; set; } = false;
         public bool MigrateDatabase { get; set; } = false;
 
