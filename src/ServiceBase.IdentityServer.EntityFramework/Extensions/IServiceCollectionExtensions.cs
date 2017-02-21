@@ -44,6 +44,7 @@ namespace ServiceBase.IdentityServer.EntityFramework
             this IServiceCollection services,
             IConfigurationSection section = null)
         {
+            services.Configure<EntityFrameworkOptions>(section);
             var options = section.ToOptions();
             AddEntityFrameworkStores(services, options);
         }
@@ -80,7 +81,7 @@ namespace ServiceBase.IdentityServer.EntityFramework
             services.AddUserAccountStore(dbContextOptionsAction, options);
 
             // If db inialization or example data seeding is required add a default store initializer
-            if (options.MigrateDatabase)
+            if (options.MigrateDatabase || options.SeedExampleData)
             {
                 services.AddDbContext<DefaultDbContext>(dbContextOptionsAction);
                 if (options.SeedExampleData)
@@ -126,7 +127,7 @@ namespace ServiceBase.IdentityServer.EntityFramework
            EntityFrameworkOptions options)
         {
             services.AddDbContext<UserAccountDbContext>(dbContextOptionsAction);
-            services.AddScoped<UserAccountDbContext>();
+            services.AddScoped<IUserAccountDbContext, UserAccountDbContext>();
             services.AddTransient<IUserAccountStore, UserAccountStore>();
         }
     }

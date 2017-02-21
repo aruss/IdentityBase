@@ -2,11 +2,11 @@
   "EntityFramework": {
     /*"SqlServer": {
       "ConnectionString": "Server=.\\SQLEXPRESS;Database=IdentityServer;Trusted_Connection=True;"
-    },*/
+    },
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitysrv;Pooling=true;"
-    },
-    "MigrateDatabase": true,
+    },*/
+    "MigrateDatabase": false,
     "SeedExampleData": true
   },
   "Logging": {

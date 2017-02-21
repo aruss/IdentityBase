@@ -15,15 +15,13 @@ namespace ServiceBase.IdentityServer.EntityFramework
     public class Startup
     {
         static void Main()
-        {
-
-        }
+        { }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DefaultDbContext>((builder) =>
             {
-                builder.UseSqlServer("just for migration creation purposes");
+                builder.UseSqlServer("Just for migration creation purposes");
             });
         }
     }
