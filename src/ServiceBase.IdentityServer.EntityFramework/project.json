@@ -9,7 +9,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "IdentityServer4": "1.0.0",
+    "IdentityServer4": "1.2.0",
     "Microsoft.EntityFrameworkCore": "1.1.0",
     "Microsoft.EntityFrameworkCore.Relational": "1.1.0",
     "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",

@@ -5,7 +5,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "IdentityServer4": "1.0.0",
+    "IdentityServer4": "1.2.0",
     "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Google": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
