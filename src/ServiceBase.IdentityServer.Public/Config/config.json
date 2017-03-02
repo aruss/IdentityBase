@@ -43,10 +43,22 @@
     "EnableRememberLogin": true,
     "EnableLocalLogin": true
   },
-  "SendGrid": {
-    "User": "",
-    "Key": ""
-  },
+  "Email": {
+    "TemplateDirectoryPath": "./EmailTemplates",
+    "Smtp": {
+      "EmailFrom": "info@netzkern.de",
+      "Host": "caipiroska.netzkern.net",
+      "Port": 25,
+      "UseSsl": false
+    } /*,
+    "SendGrid": {
+      "User": "",
+      "Key": ""
+    }*/
+  }
+
+
+  /*,
   "Twillio": {
     "AccountSid": "",
     "AuthToken": ""
@@ -54,5 +66,5 @@
   "Recaptcha": {
     "SiteKey": "",
     "SecretKey": ""
+  }*/
   }
-}

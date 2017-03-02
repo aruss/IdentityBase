@@ -113,25 +113,32 @@ namespace ServiceBase.IdentityServer.Public
 
         internal void ConfigureEmailSenderServices(IServiceCollection services)
         {
-            if (String.IsNullOrWhiteSpace(_configuration["SendGrid"]))
+            if (String.IsNullOrWhiteSpace(_configuration["Email"]))
             {
-                services.AddTransient<IEmailService, DefaultEmailService>();
-                services.Configure<SendGridOptions>(_configuration.GetSection("SendGrid"));
-                services.AddTransient<IEmailSender, SendGridEmailSender>();
+                services.Configure<DefaultEmailServiceOptions>(_configuration.GetSection("Email"));
+
+                if (String.IsNullOrWhiteSpace(_configuration["Email:Smtp"]))
+                {
+                    services.AddTransient<IEmailService, DefaultEmailService>();
+                    services.Configure<SmtpOptions>(_configuration.GetSection("Email:Smtp"));
+                    services.AddTransient<IEmailSender, SmtpEmailSender>();
+                    return;
+                }
+
+                if (String.IsNullOrWhiteSpace(_configuration["Email:SendGrid"]))
+                {
+                    services.AddTransient<IEmailService, DefaultEmailService>();
+                    services.Configure<SendGridOptions>(_configuration.GetSection("Email:SendGrid"));
+                    services.AddTransient<IEmailSender, SendGridEmailSender>();
+                    return;
+                }
+
+                // else if o360
+                // else if MailGun
             }
-            else if (String.IsNullOrWhiteSpace(_configuration["Smtp"]))
-            {
-                services.AddTransient<IEmailService, DefaultEmailService>();
-                services.Configure<SmtpOptions>(_configuration.GetSection("Smtp"));
-                services.AddTransient<IEmailSender, SmtpEmailSender>();
-            }
-            // else if o360
-            // else if MailGun
-            else
-            {
-                _logger.LogError("Email Service configuration not present");
-                services.AddTransient<IEmailService, DebugEmailService>();
-            }
+
+            _logger.LogError("Email Service configuration not present");
+            services.AddTransient<IEmailService, DebugEmailService>();
         }
 
         internal void ConfigureSmsSenderServices(IServiceCollection services)
