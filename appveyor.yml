@@ -26,5 +26,3 @@ build_script:
 test_script:
   - bash coverage.sh
   - bash coveralls.sh
-
-deploy: off
