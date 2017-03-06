@@ -5,7 +5,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace ServiceBase.IdentityServer.EntityFramework.IntegrationTests
+namespace ServiceBase.IdentityServer.Public.EF.IntegrationTests
 {
     /// <summary>
     /// Helper methods to initialize DbContextOptions for the specified database provider and context.
@@ -29,7 +29,7 @@ namespace ServiceBase.IdentityServer.EntityFramework.IntegrationTests
         public static DbContextOptions<T> BuildSqlite<T>(string name, object tableOptions) where T : DbContext
         {
             var builder = new DbContextOptionsBuilder<T>();
-            builder.UseSqlite($"Filename=./Test.ServiceBase.IdentityServer.EntityFramework.{name}.db");
+            builder.UseSqlite($"Filename=./Test.ServiceBase.IdentityServer.Public.EF.{name}.db");
             var options = builder.Options;
 
             using (var context = (T)Activator.CreateInstance(typeof(T), options, tableOptions))

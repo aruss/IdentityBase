@@ -5,14 +5,14 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ServiceBase.IdentityServer.EntityFramework.Interfaces;
-using ServiceBase.IdentityServer.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EF.Interfaces;
+using ServiceBase.IdentityServer.Public.EF.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Stores
+namespace ServiceBase.IdentityServer.Public.EF.Stores
 {
     public class ResourceStore : IResourceStore
     {

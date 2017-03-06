@@ -2,14 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using Microsoft.EntityFrameworkCore;
-using ServiceBase.IdentityServer.EntityFramework.Entities;
-using ServiceBase.IdentityServer.EntityFramework.Extensions;
-using ServiceBase.IdentityServer.EntityFramework.Interfaces;
-using ServiceBase.IdentityServer.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EF.Extensions;
+using ServiceBase.IdentityServer.Public.EF.Interfaces;
+using ServiceBase.IdentityServer.Public.EF.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework.DbContexts
+namespace ServiceBase.IdentityServer.Public.EF.DbContexts
 {
     public class PersistedGrantDbContext : DbContext, IPersistedGrantDbContext
     {

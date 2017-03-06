@@ -1,4 +1,4 @@
-﻿# ServiceBase.IdentityServer.EntityFramework
+﻿# ServiceBase.IdentityServer.Public.EF
 
 See EntityFramework 7 https://docs.microsoft.com/en-us/ef/
 

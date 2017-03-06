@@ -1,5 +1,5 @@
 {
-  "title": "ServiceBase.IdentityServer.EntityFramework.IntegrationTests",
+  "title": "ServiceBase.IdentityServer.Public.EF.IntegrationTests",
   "version": "1.0.0-*",
   "buildOptions": {
     "emitEntryPoint": false,
@@ -16,7 +16,7 @@
     "ServiceBase.IdentityServer": {
       "target": "project"
     },
-    "ServiceBase.IdentityServer.EntityFramework": {
+    "ServiceBase.IdentityServer.Public.FE": {
       "target": "project"
     }
   },

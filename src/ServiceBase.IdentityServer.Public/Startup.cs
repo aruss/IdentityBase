@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using ServiceBase.Configuration;
 using ServiceBase.IdentityServer.Configuration;
 using ServiceBase.IdentityServer.Crypto;
-using ServiceBase.IdentityServer.EntityFramework;
+using ServiceBase.IdentityServer.Public.EF;
 using ServiceBase.IdentityServer.Extensions;
 using ServiceBase.IdentityServer.Services;
 using ServiceBase.Notification.Email;

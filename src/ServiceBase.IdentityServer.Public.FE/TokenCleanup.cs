@@ -3,14 +3,14 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ServiceBase.IdentityServer.EntityFramework.DbContexts;
-using ServiceBase.IdentityServer.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EF.DbContexts;
+using ServiceBase.IdentityServer.Public.EF.Options;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework
+namespace ServiceBase.IdentityServer.Public.EF
 {
     internal class TokenCleanup
     {

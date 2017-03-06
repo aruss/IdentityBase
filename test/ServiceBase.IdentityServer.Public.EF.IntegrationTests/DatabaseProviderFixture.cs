@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace ServiceBase.IdentityServer.EntityFramework.IntegrationTests
+namespace ServiceBase.IdentityServer.Public.EF.IntegrationTests
 {
     /// <summary>
     /// xUnit ClassFixture for creating and deleting integration test databases.

@@ -2,13 +2,13 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceBase.IdentityServer.EntityFramework.Entities;
-using ServiceBase.IdentityServer.EntityFramework.Extensions;
-using ServiceBase.IdentityServer.EntityFramework.Interfaces;
-using ServiceBase.IdentityServer.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EF.Extensions;
+using ServiceBase.IdentityServer.Public.EF.Interfaces;
+using ServiceBase.IdentityServer.Public.EF.Options;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework
+namespace ServiceBase.IdentityServer.Public.EF
 {
     // Only for `dotnet ef migrations` command
     // dotnet ef migrations add init --context DefaultDbContext

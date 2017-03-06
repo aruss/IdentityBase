@@ -3,12 +3,12 @@
 
 using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
-using ServiceBase.IdentityServer.EntityFramework.Interfaces;
+using ServiceBase.IdentityServer.Public.EF.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Services
+namespace ServiceBase.IdentityServer.Public.EF.Services
 {
     public class CorsPolicyService : ICorsPolicyService
     {

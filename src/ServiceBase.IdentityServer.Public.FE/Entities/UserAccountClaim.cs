@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Entities
+namespace ServiceBase.IdentityServer.Public.EF.Entities
 {
     public class UserAccountClaim
     {

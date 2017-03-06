@@ -4,7 +4,7 @@
 using System;
 using static IdentityServer4.IdentityServerConstants;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Entities
+namespace ServiceBase.IdentityServer.Public.EF.Entities
 {
     public abstract class Secret
     {

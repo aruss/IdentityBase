@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Options;
 using ServiceBase.IdentityServer.Configuration;
 using ServiceBase.IdentityServer.Crypto;
-using ServiceBase.IdentityServer.EntityFramework.DbContexts;
-using ServiceBase.IdentityServer.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EF.DbContexts;
+using ServiceBase.IdentityServer.Public.EF.Mappers;
 using ServiceBase.IdentityServer.Models;
 using ServiceBase.IdentityServer.Services;
 using System;

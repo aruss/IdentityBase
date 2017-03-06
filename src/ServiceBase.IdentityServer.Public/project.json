@@ -27,7 +27,7 @@
     "ServiceBase.IdentityServer": {
       "target": "project"
     },
-    "ServiceBase.IdentityServer.EntityFramework": {
+    "ServiceBase.IdentityServer.Public.FE": {
       "target": "project"
     },
     "ServiceBase.Notification.Twilio": {

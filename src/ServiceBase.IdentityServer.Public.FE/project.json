@@ -1,5 +1,5 @@
 {
-  "title": "ServiceBase.IdentityServer.EntityFramework",
+  "title": "ServiceBase.IdentityServer.Public.FE",
   "version": "1.0.0-*",
 
   "buildOptions": {

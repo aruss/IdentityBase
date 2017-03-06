@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ServiceBase.IdentityServer.EntityFramework.DbContexts;
-using ServiceBase.IdentityServer.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EF.DbContexts;
+using ServiceBase.IdentityServer.Public.EF.Mappers;
 using ServiceBase.IdentityServer.Models;
 using ServiceBase.IdentityServer.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Stores
+namespace ServiceBase.IdentityServer.Public.EF.Stores
 {
     // TODO: make use of value type  System.Security.Claims.ClaimValueTypes while create UserClaim
     // http://www.npgsql.org/doc/faq.html

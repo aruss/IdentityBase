@@ -1,10 +1,10 @@
-﻿using ServiceBase.IdentityServer.EntityFramework.Entities;
-using ServiceBase.IdentityServer.EntityFramework.Mappers;
+﻿using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EF.Mappers;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ServiceBase.IdentityServer.EntityFramework.UnitTests.Mappers
+namespace ServiceBase.IdentityServer.Public.EF.UnitTests.Mappers
 {
     public class ClientMappersTests
     {

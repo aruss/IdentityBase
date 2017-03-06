@@ -3,7 +3,7 @@
 
 using AutoMapper;
 
-namespace ServiceBase.IdentityServer.EntityFramework.Mappers
+namespace ServiceBase.IdentityServer.Public.EF.Mappers
 {
     public static class ClientMappers
     {
