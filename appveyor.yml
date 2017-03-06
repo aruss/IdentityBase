@@ -8,20 +8,23 @@ services: mssql2012sp1
 
 branches:
   only:
-  - release
-  - master
+    - master
+    - release
+    - /^(.*\/)?ci-.*$/
 
 install:
-- cmd: git submodule update --init --recursive
+  - cmd: git submodule update --init --recursive
 
 before_build:
-- cmd: dotnet restore --no-cache
+  - cmd: dotnet restore --no-cache
 
-build:
-  project: ServiceBase.IdentityServer.sln
-  verbosity: minimal
+build_script:
+  - dotnet --info
+  - dotnet restore --no-cache
+  - dotnet build **/project.json --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
 
 test_script:
-- cmd: >-
-    bash coverage.sh
-    bash coveralls.sh
+  - bash coverage.sh
+  - bash coveralls.sh
+
+deploy: off
