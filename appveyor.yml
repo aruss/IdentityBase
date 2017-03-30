@@ -4,7 +4,9 @@ image: Visual Studio 2017
 deploy: off
 configuration: Release
 platform: Any CPU
-services: mssql2012sp1
+services:
+- mssql2012sp1
+- postgresql
 
 branches:
   only:
