@@ -3,7 +3,7 @@
 set -e
 
 nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/artifacts
-nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator -Source $PWD/artifacts
+nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator
 
 OPENCOVER=$PWD/packages/OpenCover.4.6.589/tools/OpenCover.Console.exe
 REPORTGENERATOR=$PWD/packages/ReportGenerator.2.4.5.0/tools/ReportGenerator.exe

@@ -27,7 +27,7 @@ $OPENCOVER \
   -hideskipped:File \
   -output:$COVERAGE_DIR/coverage.xml \
   -oldStyle \
-  -filter:"+[ServiceBase*]* -[ServiceBase.*Tests*]*" \
+  -filter:"+[ServiceBase.IdentityServer*]* -[ServiceBase.IdentityServer.*Tests*]*" \
   -searchdirs:./test/$PROJECT/bin/Release/netcoreapp1.1 \
   -register:user
 done
