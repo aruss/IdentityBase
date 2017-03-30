@@ -1,0 +1,3 @@
+[submodule "submodules/ServiceBase"]
+	path = submodules/ServiceBase
+	url = https://github.com/aruss/ServiceBase.git
