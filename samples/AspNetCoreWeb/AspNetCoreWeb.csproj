@@ -21,7 +21,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
+    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
   </ItemGroup>
 
 </Project>

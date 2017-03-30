@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
+    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
   </ItemGroup>
 
 </Project>

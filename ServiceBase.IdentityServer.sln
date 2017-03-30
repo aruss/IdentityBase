@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase", "submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj", "{8B5C685A-2F20-4BAF-A9A0-16BC065CC8B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.SendGrid", "Ssubmodules\ServiceBase\src\ServiceBase.Notification.SendGrid\ServiceBase.Notification.SendGrid.csproj", "{C899A0F0-5FE7-4DF7-A500-7F97EC7018EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.SendGrid", "submodules\ServiceBase\src\ServiceBase.Notification.SendGrid\ServiceBase.Notification.SendGrid.csproj", "{C899A0F0-5FE7-4DF7-A500-7F97EC7018EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.Smtp", "submodules\ServiceBase\src\ServiceBase.Notification.Smtp\ServiceBase.Notification.Smtp.csproj", "{769165D9-E392-412A-8814-513F0B64CFE6}"
 EndProject

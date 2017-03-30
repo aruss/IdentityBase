@@ -15,9 +15,6 @@ branches:
 install:
   - cmd: git submodule update --init --recursive
 
-before_build:
-  - cmd: dotnet restore --no-cache
-
 build_script:
   - dotnet --info
   - dotnet restore --no-cache
