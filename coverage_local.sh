@@ -2,52 +2,36 @@
 
 set -e
 
-OPENCOVER=C:/build/OpenCover/OpenCover.Console.exe
-REPORTGENERATOR=C:/build/ReportGenerator/ReportGenerator.exe
+nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/artifacts
+nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator -Source $PWD/artifacts
 
-CONFIG=Release
-# Arguments to use for the build
-DOTNET_BUILD_ARGS="-c $CONFIG"
-# Arguments to use for the test
-DOTNET_TEST_ARGS="$DOTNET_BUILD_ARGS"
-
-echo CLI args: $DOTNET_BUILD_ARGS
-
-echo Restoring
-#dotnet restore -v Warning
-
-echo Building
-#dotnet build $DOTNET_BUILD_ARGS **/project.json
-
-echo Testing
-
+OPENCOVER=$PWD/packages/OpenCover.4.6.589/tools/OpenCover.Console.exe
+REPORTGENERATOR=$PWD/packages/ReportGenerator.2.4.5.0/tools/ReportGenerator.exe
 COVERAGE_DIR=./coverage/report
 COVERAGE_HISTORY_DIR=./coverage/history
+
 rm -rf $COVERAGE_DIR
 mkdir $COVERAGE_DIR
 
-echo "Calculating coverage with OpenCover"
-
 PROJECTS=(\
-"ServiceBase.IdentityServer.Public.EF.IntegrationTests" \
-"ServiceBase.IdentityServer.Public.EF.UnitTests" \
-"ServiceBase.IdentityServer.Public.IntegrationTests" \
-"ServiceBase.IdentityServer.Public.UnitTests" \
-"ServiceBase.IdentityServer.UnitTests" \
-)
+"ServiceBase.IdentityServer.Public.EF.IntegrationTests\ServiceBase.IdentityServer.Public.EF.IntegrationTests.csproj" \
+"ServiceBase.IdentityServer.Public.EF.UnitTests\ServiceBase.IdentityServer.Public.EF.UnitTests.csproj" \
+"ServiceBase.IdentityServer.Public.IntegrationTests\ServiceBase.IdentityServer.Public.IntegrationTests.csproj" \
+"ServiceBase.IdentityServer.Public.UnitTests\ServiceBase.IdentityServer.Public.UnitTests.csproj" \
+"ServiceBase.IdentityServer.UnitTests\ServiceBase.IdentityServer.UnitTests.csproj")
 
 for PROJECT in "${PROJECTS[@]}"
 do
    :
 $OPENCOVER \
   -target:"c:\Program Files\dotnet\dotnet.exe" \
-  -targetargs:"test -f netcoreapp1.1 $DOTNET_TEST_ARGS test/$PROJECT" \
+  -targetargs:"test -f netcoreapp1.1 -c Release ./test/$PROJECT" \
   -mergeoutput \
   -hideskipped:File \
   -output:$COVERAGE_DIR/coverage.xml \
   -oldStyle \
-  -filter:"+[ServiceBase.IdentityServer*]* -[ServiceBase.IdentityServer.*Tests*]*" \
-  -searchdirs:$testdir/bin/$CONFIG/netcoreapp1.1 \
+  -filter:"+[ServiceBase*]* -[ServiceBase.*Tests*]*" \
+  -searchdirs:./test/$PROJECT/bin/Release/netcoreapp1.1 \
   -register:user
 done
 
@@ -58,3 +42,5 @@ $REPORTGENERATOR \
   -historydir:$COVERAGE_HISTORY_DIR \
   -reporttypes:"Html" \
   -verbosity:Error
+
+  

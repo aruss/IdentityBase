@@ -14,7 +14,7 @@ namespace ServiceBase.IdentityServer.Public.IntegrationTests
             var contentRoot = Path.Combine(Directory.GetCurrentDirectory(), "src", "ServiceBase.IdentityServer.Public");
             if (!Directory.Exists(contentRoot))
             {
-                contentRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "src", "ServiceBase.IdentityServer.Public");
+                contentRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "src", "ServiceBase.IdentityServer.Public");
             }
 
             var builder = new WebHostBuilder()

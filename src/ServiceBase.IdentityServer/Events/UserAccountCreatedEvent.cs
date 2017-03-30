@@ -1,12 +1,19 @@
-﻿using System;
+﻿using IdentityServer4.Events;
+using System;
 
 namespace ServiceBase.IdentityServer.Events
 {
     /// <summary>
     /// Event data for <see cref="Models.UserAccount"/> creation
     /// </summary>
-    public class UserAccountCreatedDetails
+    public class UserAccountCreatedEvent : Event 
     {
+        public UserAccountCreatedEvent(string category, string name, EventTypes type, int id, string message = null)
+            : base(category, name, type, id, message)
+        {
+
+        }
+
         /// <summary>
         /// User accounts primary key
         /// </summary>
@@ -16,16 +23,5 @@ namespace ServiceBase.IdentityServer.Events
         /// Used Identity Provider
         /// </summary>
         public string Provider { get; set; }
-    }
-
-    /// <summary>
-    /// Event data for <see cref="Models.UserAccount"/> update
-    /// </summary>
-    public class UserAccountUpdatedDetails
-    {
-        /// <summary>
-        /// User accounts primary key
-        /// </summary>
-        public Guid UserAccountId { get; set; }
     }
 }

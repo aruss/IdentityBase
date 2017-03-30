@@ -33,7 +33,14 @@ namespace ServiceBase.IdentityServer.Public
             ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<Startup>();
-            _configuration = ConfigurationSetup.Configure(environment);
+            _configuration = ConfigurationSetup.Configure(environment, (confBuilder) =>
+            {
+                if (environment.IsDevelopment())
+                {
+                    confBuilder.AddUserSecrets("ServiceBase.IdentityServer.Public-c23d27a4-eb88-4b18-9b77-2a93f3b15119");
+                }
+            });
+
             _environment = environment;
         }
 

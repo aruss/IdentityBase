@@ -16,16 +16,15 @@ namespace ServiceBase.IdentityServer.Events
         /// <returns></returns>
         public static async Task RaiseSuccessfulUserAccountCreatedEventAsync(this IEventService events, Guid userAccountId, string provider)
         {
-            var evt = new Event<UserAccountCreatedDetails>(
+            var evt = new UserAccountCreatedEvent(
                 EventConstants.Categories.UserAccount,
                 "User Account Creation Success",
                 EventTypes.Success,
-                EventConstants.Ids.UserAccountCreated,
-                new UserAccountCreatedDetails
-                {
-                    UserAccountId = userAccountId,
-                    Provider = provider
-                });
+                EventConstants.Ids.UserAccountCreated)
+            {
+                UserAccountId = userAccountId,
+                Provider = provider
+            };
 
             await events.RaiseAsync(evt);
         }
@@ -38,15 +37,14 @@ namespace ServiceBase.IdentityServer.Events
         /// <returns></returns>
         public static async Task RaiseSuccessfulUserAccountUpdatedEventAsync(this IEventService events, Guid userAccountId)
         {
-            var evt = new Event<UserAccountUpdatedDetails>(
+            var evt = new UserAccountUpdatedEvent(
                  EventConstants.Categories.UserAccount,
                  "User Account Update Success",
                  EventTypes.Success,
-                 EventConstants.Ids.UserAccountUpdated,
-                 new UserAccountUpdatedDetails
-                 {
-                     UserAccountId = userAccountId
-                 });
+                 EventConstants.Ids.UserAccountUpdated)
+            {
+                UserAccountId = userAccountId
+            };
 
             await events.RaiseAsync(evt);
 
