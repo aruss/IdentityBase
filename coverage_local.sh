@@ -11,7 +11,7 @@ COVERAGE_DIR=./coverage/report
 COVERAGE_HISTORY_DIR=./coverage/history
 
 rm -rf $COVERAGE_DIR
-mkdir $COVERAGE_DIR
+mkdir -p $COVERAGE_DIR
 
 PROJECTS=(\
 "ServiceBase.IdentityServer.Public.EF.IntegrationTests\ServiceBase.IdentityServer.Public.EF.IntegrationTests.csproj" \
@@ -30,7 +30,7 @@ $OPENCOVER \
   -hideskipped:File \
   -output:$COVERAGE_DIR/coverage.xml \
   -oldStyle \
-  -filter:"+[ServiceBase*]* -[ServiceBase.*Tests*]*" \
+  -filter:"+[ServiceBase.IdentityServer*]* -[ServiceBase.IdentityServer.*Tests*]*" \
   -searchdirs:./test/$PROJECT/bin/Release/netcoreapp1.1 \
   -register:user
 done

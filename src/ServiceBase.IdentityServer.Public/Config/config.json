@@ -17,6 +17,12 @@
       "Microsoft": "Information"
     }
   },
+  "Events": {
+    "RaiseErrorEvents": true,
+    "RaiseFailureEvents": true,
+    "RaiseInformationEvents": true,
+    "RaiseSuccessEvents": true
+  }, 
   "Authentication": {
     "Facebook": {
       "AppId": "",

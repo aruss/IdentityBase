@@ -202,3 +202,4 @@ FakesAssemblies/
 samples/AspNetCoreWeb/wwwroot/lib/
 .build/
 coverage/
+src/ServiceBase.IdentityServer.Public/tempkey.rsa
