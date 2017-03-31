@@ -28,7 +28,7 @@ namespace ServiceBase.IdentityServer.Public
             {
                 if (environment.IsDevelopment())
                 {
-                    confBuilder.AddUserSecrets("ServiceBase.IdentityServer.Public-c23d27a4-eb88-4b18-9b77-2a93f3b15119");
+                    confBuilder.AddUserSecrets<Startup>();
                 }
             });
 
