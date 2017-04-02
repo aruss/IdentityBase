@@ -22,16 +22,6 @@
     "RaiseFailureEvents": true,
     "RaiseInformationEvents": true,
     "RaiseSuccessEvents": true
-  }, 
-  "Authentication": {
-    "Facebook": {
-      "AppId": "",
-      "AppSecret": ""
-    },
-    "Google": {
-      "ClientId": "",
-      "ClientSecret": ""
-    }
   },
   "App": {
     "PasswordHashingIterationCount": 0,
@@ -50,27 +40,9 @@
     "EnableLocalLogin": true
   },
   "Email": {
-    "TemplateDirectoryPath": "./EmailTemplates",
-    "Smtp": {
-      "EmailFrom": "info@netzkern.de",
-      "Host": "caipiroska.netzkern.net",
-      "Port": 25,
-      "UseSsl": false
-    } /*,
-    "SendGrid": {
-      "User": "",
-      "Key": ""
-    }*/
-  }
-
-
-  /*,
-  "Twillio": {
-    "AccountSid": "",
-    "AuthToken": ""
+    "TemplateDirectoryPath": "./EmailTemplates"
   },
-  "Recaptcha": {
-    "SiteKey": "",
-    "SecretKey": ""
-  }*/
+  "Sms": {
+    "TemplateDirectoryPath": "./Templates/Sms"
   }
+}
