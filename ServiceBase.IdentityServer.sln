@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A584B11-E625-41B3-9C7A-ACA7D536DDFF}"
 EndProject
@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer", "src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj", "{CC3F72FC-39EE-47FD-8430-CA056D7C2A13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer.Public.FE", "src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.FE.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer.Public.EntityFramework", "src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{6493683A-59E0-4A96-B43A-95E609B87376}"
 EndProject
@@ -36,9 +36,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.Tw
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C47B5EFB-92B9-412D-834D-32FFE16FCFB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.EF.IntegrationTests", "test\ServiceBase.IdentityServer.Public.EF.IntegrationTests\ServiceBase.IdentityServer.Public.EF.IntegrationTests.csproj", "{01F527D8-7F80-431B-9355-28E4837038AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests", "test\ServiceBase.IdentityServer.Public.EF.IntegrationTests\ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.csproj", "{01F527D8-7F80-431B-9355-28E4837038AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.EF.UnitTests", "test\ServiceBase.IdentityServer.Public.EF.UnitTests\ServiceBase.IdentityServer.Public.EF.UnitTests.csproj", "{E08D9D07-AE41-42FD-BB09-84636BD02BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.EntityFramework.UnitTests", "test\ServiceBase.IdentityServer.Public.EF.UnitTests\ServiceBase.IdentityServer.Public.EntityFramework.UnitTests.csproj", "{E08D9D07-AE41-42FD-BB09-84636BD02BAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.IntegrationTests", "test\ServiceBase.IdentityServer.Public.IntegrationTests\ServiceBase.IdentityServer.Public.IntegrationTests.csproj", "{25B52726-0E49-4B1B-BA44-1936886D6A8F}"
 EndProject

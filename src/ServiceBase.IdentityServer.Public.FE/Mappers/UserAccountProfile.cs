@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
 
-namespace ServiceBase.IdentityServer.Public.EF.Mappers
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Mappers
 {
     public class UserAccountProfile : Profile
     {

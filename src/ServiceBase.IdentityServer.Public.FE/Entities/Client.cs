@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using static IdentityServer4.IdentityServerConstants;
 
-namespace ServiceBase.IdentityServer.Public.EF.Entities
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Entities
 {
     public class Client
     {

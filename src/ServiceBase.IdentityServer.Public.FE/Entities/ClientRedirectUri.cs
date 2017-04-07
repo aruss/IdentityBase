@@ -3,7 +3,7 @@
 
 using System;
 
-namespace ServiceBase.IdentityServer.Public.EF.Entities
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Entities
 {
     public class ClientRedirectUri
     {

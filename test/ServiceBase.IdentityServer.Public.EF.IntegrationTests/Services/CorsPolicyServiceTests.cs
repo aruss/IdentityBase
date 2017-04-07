@@ -3,17 +3,17 @@
 
 using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
-using ServiceBase.IdentityServer.Public.EF.DbContexts;
-using ServiceBase.IdentityServer.Public.EF.Mappers;
-using ServiceBase.IdentityServer.Public.EF.Options;
-using ServiceBase.IdentityServer.Public.EF.Services;
+using ServiceBase.IdentityServer.Public.EntityFramework.DbContexts;
+using ServiceBase.IdentityServer.Public.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.Services;
 using ServiceBase.Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace ServiceBase.IdentityServer.Public.EF.IntegrationTests.Services
+namespace ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.Services
 {
     public class CorsPolicyServiceTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {

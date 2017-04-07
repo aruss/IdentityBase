@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ServiceBase.IdentityServer.Configuration;
 using ServiceBase.IdentityServer.Crypto;
-using ServiceBase.IdentityServer.Public.EF.DbContexts;
-using ServiceBase.IdentityServer.Public.EF.Interfaces;
-using ServiceBase.IdentityServer.Public.EF.Mappers;
-using ServiceBase.IdentityServer.Public.EF.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.DbContexts;
+using ServiceBase.IdentityServer.Public.EntityFramework.Interfaces;
+using ServiceBase.IdentityServer.Public.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
 using ServiceBase.IdentityServer.Services;
 using System.Linq;
 
-namespace ServiceBase.IdentityServer.Public.EF
+namespace ServiceBase.IdentityServer.Public.EntityFramework
 {
     public class DefaultStoreInitializer : IStoreInitializer
     {

@@ -1,9 +1,9 @@
 ﻿using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
-using ServiceBase.IdentityServer.Public.EF.DbContexts;
-using ServiceBase.IdentityServer.Public.EF.Mappers;
-using ServiceBase.IdentityServer.Public.EF.Options;
-using ServiceBase.IdentityServer.Public.EF.Stores;
+using ServiceBase.IdentityServer.Public.EntityFramework.DbContexts;
+using ServiceBase.IdentityServer.Public.EntityFramework.Mappers;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.Stores;
 using ServiceBase.IdentityServer.Models;
 using ServiceBase.Xunit;
 using System;
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace ServiceBase.IdentityServer.Public.EF.IntegrationTests.Stores
+namespace ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.Stores
 {
     public class UserAccountStoreTests : IClassFixture<DatabaseProviderFixture<UserAccountDbContext>>
     {

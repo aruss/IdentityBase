@@ -11,8 +11,8 @@ rm -rf $COVERAGE_DIR
 mkdir $COVERAGE_DIR
 
 PROJECTS=(\
-"ServiceBase.IdentityServer.Public.EF.IntegrationTests\ServiceBase.IdentityServer.Public.EF.IntegrationTests.csproj" \
-"ServiceBase.IdentityServer.Public.EF.UnitTests\ServiceBase.IdentityServer.Public.EF.UnitTests.csproj" \
+"ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests\ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.csproj" \
+"ServiceBase.IdentityServer.Public.EntityFramework.UnitTests\ServiceBase.IdentityServer.Public.EntityFramework.UnitTests.csproj" \
 "ServiceBase.IdentityServer.Public.IntegrationTests\ServiceBase.IdentityServer.Public.IntegrationTests.csproj" \
 "ServiceBase.IdentityServer.Public.UnitTests\ServiceBase.IdentityServer.Public.UnitTests.csproj" \
 "ServiceBase.IdentityServer.UnitTests\ServiceBase.IdentityServer.UnitTests.csproj")

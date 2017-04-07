@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceBase.IdentityServer.Public.EF.Entities
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Entities
 {
     public class UserAccount
     {

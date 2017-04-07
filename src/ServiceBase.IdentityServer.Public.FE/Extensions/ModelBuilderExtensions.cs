@@ -4,10 +4,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ServiceBase.IdentityServer.Public.EF.Entities;
-using ServiceBase.IdentityServer.Public.EF.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
 
-namespace ServiceBase.IdentityServer.Public.EF.Extensions
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Extensions
 {
     public static class ModelBuilderExtensions
     {

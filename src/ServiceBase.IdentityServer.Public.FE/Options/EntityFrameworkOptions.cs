@@ -1,4 +1,4 @@
-﻿namespace ServiceBase.IdentityServer.Public.EF.Options
+﻿namespace ServiceBase.IdentityServer.Public.EntityFramework.Options
 {
     public class EntityFrameworkNpgsqlOptions
     {

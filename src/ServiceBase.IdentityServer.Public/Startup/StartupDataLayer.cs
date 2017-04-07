@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ServiceBase.IdentityServer.Public.EF;
+using ServiceBase.IdentityServer.Public.EntityFramework;
 using System;
 
 namespace ServiceBase.IdentityServer.Public

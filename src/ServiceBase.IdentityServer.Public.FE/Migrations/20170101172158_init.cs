@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ServiceBase.IdentityServer.Public.EF.Migrations
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Migrations
 {
     public partial class init : Migration
     {

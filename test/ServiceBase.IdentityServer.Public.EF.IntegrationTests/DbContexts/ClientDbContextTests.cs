@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using Microsoft.EntityFrameworkCore;
-using ServiceBase.IdentityServer.Public.EF.DbContexts;
-using ServiceBase.IdentityServer.Public.EF.Entities;
-using ServiceBase.IdentityServer.Public.EF.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.DbContexts;
+using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
 using System.Linq;
 using Xunit;
 
-namespace ServiceBase.IdentityServer.Public.EF.IntegrationTests.DbContexts
+namespace ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.DbContexts
 {
     public class ClientDbContextTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {

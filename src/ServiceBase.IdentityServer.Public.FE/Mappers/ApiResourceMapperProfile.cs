@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using AutoMapper;
-using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
 using System.Linq;
 
-namespace ServiceBase.IdentityServer.Public.EF.Mappers
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Mappers
 {
     /// <summary>
     /// AutoMapper configuration for API resource

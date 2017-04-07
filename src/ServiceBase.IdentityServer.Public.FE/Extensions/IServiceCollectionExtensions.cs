@@ -3,16 +3,16 @@ using IdentityServer4.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceBase.IdentityServer.Public.EF.DbContexts;
-using ServiceBase.IdentityServer.Public.EF.Interfaces;
-using ServiceBase.IdentityServer.Public.EF.Options;
-using ServiceBase.IdentityServer.Public.EF.Services;
-using ServiceBase.IdentityServer.Public.EF.Stores;
+using ServiceBase.IdentityServer.Public.EntityFramework.DbContexts;
+using ServiceBase.IdentityServer.Public.EntityFramework.Interfaces;
+using ServiceBase.IdentityServer.Public.EntityFramework.Options;
+using ServiceBase.IdentityServer.Public.EntityFramework.Services;
+using ServiceBase.IdentityServer.Public.EntityFramework.Stores;
 using ServiceBase.IdentityServer.Services;
 using System;
 using System.Reflection;
 
-namespace ServiceBase.IdentityServer.Public.EF
+namespace ServiceBase.IdentityServer.Public.EntityFramework
 {
     public static class IServiceCollectionExtensions
     {

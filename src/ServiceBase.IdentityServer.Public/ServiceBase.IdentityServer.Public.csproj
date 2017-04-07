@@ -5,6 +5,10 @@
     <UserSecretsId>7f742bdf-fc51-4620-b061-e42e68d2a7ed</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp1.1\ServiceBase.IdentityServer.Public.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -32,7 +36,7 @@
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Smtp\ServiceBase.Notification.Smtp.csproj" />
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Twilio\ServiceBase.Notification.Twilio.csproj" />
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
-    <ProjectReference Include="..\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.FE.csproj" />
+    <ProjectReference Include="..\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
 

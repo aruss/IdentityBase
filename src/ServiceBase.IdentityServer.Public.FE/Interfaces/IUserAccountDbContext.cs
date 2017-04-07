@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ServiceBase.IdentityServer.Public.EF.Entities;
+using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.EF.Interfaces
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Interfaces
 {
     public interface IUserAccountDbContext : IDisposable
     {

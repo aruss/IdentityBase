@@ -10,15 +10,21 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>    
     <ApplicationIcon />    
     <OutputTypeEx>library</OutputTypeEx>    
-    <StartupObject />
+    <StartupObject />    
+    <AssemblyName>ServiceBase.IdentityServer.Public.EF.IntegrationTests</AssemblyName>    
+    <RootNamespace>ServiceBase.IdentityServer.Public.EF.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp1.1\SServiceBase.IdentityServer.Public.EF.UnitTests.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp1.1\ServiceBase.IdentityServer.Public.EF.IntegrationTests.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="Moq" Version="4.7.8" />
     <PackageReference Include="xunit" Version="2.2.0" />
@@ -26,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.FE.csproj" />
+    <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\..\src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
 
