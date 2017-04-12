@@ -12,6 +12,7 @@ using ServiceBase.IdentityServer.Services;
 using ServiceBase.Notification.Email;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ServiceBase.IdentityServer.Public.IntegrationTests
 {
@@ -61,8 +62,11 @@ namespace ServiceBase.IdentityServer.Public.IntegrationTests
 
             services.AddEntityFrameworkStores((options) =>
             {
-                options.MigrateDatabase = false;
-                options.SeedExampleData = false;
+                options.DbContextOptions = (dbOptions) =>
+                {
+                    dbOptions.UseInMemoryDatabase(Guid.NewGuid().ToString()); 
+  
+                }; 
             });
 
             // Register default store initializer in case none of the tests registered one already

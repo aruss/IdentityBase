@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using ServiceBase.IdentityServer.Configuration;
-using ServiceBase.IdentityServer.Crypto;
 using System.IO;
 
 namespace ServiceBase.IdentityServer.Public
@@ -10,7 +7,7 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void Main(string[] args)
         {
-            /*var host = new WebHostBuilder()
+            var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://localhost:5000/")
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -19,10 +16,9 @@ namespace ServiceBase.IdentityServer.Public
                 // .UseApplicationInsights()
                 .Build();
 
-            host.Run();*/
+            host.Run();
 
-
-            System.IO.File.WriteAllText(@"./config/data_clients.json", 
+            /*System.IO.File.WriteAllText(@"./config/data_clients.json", 
                 JsonConvert.SerializeObject(ServiceBase.IdentityServer.Configuration.Clients.Get()));
 
             System.IO.File.WriteAllText(@"./config/data_resources_api.json",
@@ -34,8 +30,7 @@ namespace ServiceBase.IdentityServer.Public
             var crypto = new DefaultCrypto();
             var config = new ApplicationOptions(); 
             System.IO.File.WriteAllText(@"./config/data_users.json",
-                JsonConvert.SerializeObject(UserAccounts.Get(crypto, config)));
-
+                JsonConvert.SerializeObject(UserAccounts.Get(crypto, config)));*/
         }
     }
 }

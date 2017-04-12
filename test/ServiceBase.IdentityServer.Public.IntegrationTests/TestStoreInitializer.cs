@@ -9,6 +9,7 @@ using ServiceBase.IdentityServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ServiceBase.IdentityServer.Public.IntegrationTests.Config;
 
 namespace ServiceBase.IdentityServer.Public.IntegrationTests
 {

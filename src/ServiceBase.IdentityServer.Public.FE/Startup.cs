@@ -1,7 +1,6 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using ServiceBase.IdentityServer.Public.EntityFramework.Entities;
 using ServiceBase.IdentityServer.Public.EntityFramework.Extensions;
 using ServiceBase.IdentityServer.Public.EntityFramework.Interfaces;
@@ -12,7 +11,7 @@ namespace ServiceBase.IdentityServer.Public.EntityFramework
 {
     // Only for `dotnet ef migrations` command
     // dotnet ef migrations add init --context DefaultDbContext
-    public class Startup
+    /*public class Startup
     {
         static void Main()
         { }
@@ -24,7 +23,7 @@ namespace ServiceBase.IdentityServer.Public.EntityFramework
                 builder.UseSqlServer("Just for migration creation purposes");
             });
         }
-    }
+    }*/
 
     public class DefaultDbContext : DbContext, IConfigurationDbContext, IPersistedGrantDbContext, IUserAccountDbContext
     {

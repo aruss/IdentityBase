@@ -5,7 +5,7 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
-namespace ServiceBase.IdentityServer.Configuration
+namespace ServiceBase.IdentityServer.Public.IntegrationTests.Config
 {
     public class Clients
     {

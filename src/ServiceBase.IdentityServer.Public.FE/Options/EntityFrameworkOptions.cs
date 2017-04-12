@@ -1,21 +1,14 @@
-﻿namespace ServiceBase.IdentityServer.Public.EntityFramework.Options
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+
+namespace ServiceBase.IdentityServer.Public.EntityFramework.Options
 {
-    public class EntityFrameworkNpgsqlOptions
-    {
-        public string ConnectionString { get; set; }
-    }
-
-    public class EntityFrameworkSqlServerOptions
-    {
-        public string ConnectionString { get; set; }
-    }
-
     public class EntityFrameworkOptions
     {
-        public EntityFrameworkSqlServerOptions SqlServer { get; set; }
-        public EntityFrameworkNpgsqlOptions Npgsql { get; set; }
+        public Action<DbContextOptionsBuilder>  DbContextOptions { get; set; }
 
         public bool SeedExampleData { get; set; } = false;
+        public string SeedExampleDataPath { get; set; }
         public bool MigrateDatabase { get; set; } = false;
 
         public bool CleanupTokens { get; set; } = true;

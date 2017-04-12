@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Linq;
 
-namespace ServiceBase.IdentityServer.Configuration
+namespace ServiceBase.IdentityServer.Public.IntegrationTests.Config
 {
     public class UserAccounts
     {
