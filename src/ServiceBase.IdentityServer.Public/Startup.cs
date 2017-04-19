@@ -1,8 +1,10 @@
 ﻿using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Configuration;
 using ServiceBase.IdentityServer.Configuration;
@@ -10,6 +12,7 @@ using ServiceBase.IdentityServer.Crypto;
 using ServiceBase.IdentityServer.Extensions;
 using ServiceBase.IdentityServer.Services;
 using System;
+using System.IO;
 
 namespace ServiceBase.IdentityServer.Public
 {
@@ -54,10 +57,10 @@ namespace ServiceBase.IdentityServer.Public
                 .AddMvc()
                 .AddRazorOptions(razor =>
                 {
-                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander());
+                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander(_configuration["App:Theme"]));
                 });
 
-            services.AddCors(); 
+            services.AddCors();
 
             // Only use for development until this bug is fixed
             // https://github.com/aspnet/DependencyInjection/pull/470
@@ -126,11 +129,15 @@ namespace ServiceBase.IdentityServer.Public
             }
 
             #endregion Use third party authentication
+            
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Themes", _configuration["App:Theme"], "Public")),
+            });
 
-            app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
             app.UseMiddleware<RequestIdMiddleware>();
-            app.UseCors("AllowAll"); 
+            app.UseCors("AllowAll");
 
             // TODO: if feature "user account api" is enabled
             /*app.Map("/api", apiApp =>

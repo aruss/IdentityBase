@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace ServiceBase.IdentityServer.Public.UI.TagHelpers
+namespace ServiceBase.IdentityServer.Public.Razor.TagHelpers
 {
     [HtmlTargetElement(Attributes = "hide-if")]
     public class HideIfTagHelper : TagHelper

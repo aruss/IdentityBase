@@ -32,7 +32,8 @@
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
     "EnableRememberLogin": true,
-    "EnableLocalLogin": true
+    "EnableLocalLogin": true,
+    "Theme": "Default"
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"

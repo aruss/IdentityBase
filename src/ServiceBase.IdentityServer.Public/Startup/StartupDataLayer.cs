@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.IdentityServer.Public.EntityFramework;
 using System;
+using System.Linq; 
 using System.IO;
 using System.Reflection;
 
@@ -14,12 +15,12 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void AddDataLayer(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
-            if (!String.IsNullOrWhiteSpace(config["EntityFramework"]))
+            if (config.GetChildren().Any(x => x.Key == "EntityFramework"))
             {
                 services.AddEntityFrameworkStores((options) =>
                 {   
                     // https://docs.microsoft.com/en-us/ef/core/providers/
-                    if (!String.IsNullOrWhiteSpace(config["EntityFramework:SqlServer"]))
+                    if (config.GetChildren().Any(x => x.Key == "EntityFramework:SqlServer"))
                     {
                         var migrationsAssembly = typeof(IServiceCollectionExtensions).GetTypeInfo().Assembly.GetName().Name;
                         options.DbContextOptions = (builder) =>
@@ -27,7 +28,7 @@ namespace ServiceBase.IdentityServer.Public
                             builder.UseSqlServer(config["EntityFramework:SqlServer:ConnectionString"], o => o.MigrationsAssembly(migrationsAssembly));
                         };
                     }
-                    else if (!String.IsNullOrWhiteSpace(config["EntityFramework:Npgsql"]))
+                    else if (config.GetChildren().Any(x => x.Key == "EntityFramework:Npgsql"))
                     {
                         var migrationsAssembly = typeof(IServiceCollectionExtensions).GetTypeInfo().Assembly.GetName().Name;
                         options.DbContextOptions = (builder) =>
