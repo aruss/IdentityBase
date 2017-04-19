@@ -14,7 +14,7 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void AddDataLayer(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
-            if (String.IsNullOrWhiteSpace(config["EntityFramework"]))
+            if (!String.IsNullOrWhiteSpace(config["EntityFramework"]))
             {
                 services.AddEntityFrameworkStores((options) =>
                 {   
