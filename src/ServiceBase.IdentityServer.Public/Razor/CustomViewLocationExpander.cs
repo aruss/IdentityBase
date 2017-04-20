@@ -6,21 +6,20 @@ namespace ServiceBase.IdentityServer.Public.UI
 {
     public class CustomViewLocationExpander : IViewLocationExpander
     {
-        const string DefaultThemeName = "Default";
-        private readonly string _themeName; 
+        private readonly string _themePath; 
 
         // http://benfoster.io/blog/asp-net-core-themes-and-multi-tenancy
-        public CustomViewLocationExpander(string themeName)
+        public CustomViewLocationExpander(string themePath)
         {
-            _themeName = themeName; 
+            _themePath = themePath; 
         }
         
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            if (!_themeName.Equals(DefaultThemeName))
+            if (!String.IsNullOrWhiteSpace(_themePath))
             {
-                yield return String.Format("~/Themes/{0}/Views/{{1}}/{{0}}.cshtml", _themeName);
-                yield return String.Format("~/Themes/{0}/Views/Shared/{{0}}.cshtml", _themeName);
+                yield return String.Format("{0}/Views/{{1}}/{{0}}.cshtml", _themePath);
+                yield return String.Format("{0}/Views/Shared/{{0}}.cshtml", _themePath);
             }
 
             yield return "~/Themes/Default/Views/{1}/{0}.cshtml";

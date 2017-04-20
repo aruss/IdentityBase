@@ -57,7 +57,7 @@ namespace ServiceBase.IdentityServer.Public
                 .AddMvc()
                 .AddRazorOptions(razor =>
                 {
-                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander(_configuration["App:Theme"]));
+                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander(_configuration["App:ThemePath"]));
                 });
 
             services.AddCors();
@@ -129,12 +129,21 @@ namespace ServiceBase.IdentityServer.Public
             }
 
             #endregion Use third party authentication
-            
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Themes", _configuration["App:Theme"], "Public")),
-            });
 
+            var staticFilesPath = _configuration["App:ThemePath"]; 
+            if (!String.IsNullOrWhiteSpace(staticFilesPath))
+            {
+                staticFilesPath = Path.IsPathRooted(staticFilesPath)
+                    ? Path.Combine(staticFilesPath, "Public")
+                    : Path.Combine(Directory.GetCurrentDirectory(), staticFilesPath, "Public");
+
+                if (Directory.Exists(staticFilesPath))
+                {
+
+                }
+            }
+
+            app.UseStaticFiles(_configuration, _logger, _environment); 
             app.UseMvcWithDefaultRoute();
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
