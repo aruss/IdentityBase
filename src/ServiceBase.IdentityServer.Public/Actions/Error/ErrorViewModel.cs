@@ -1,6 +1,6 @@
 ﻿using IdentityServer4.Models;
 
-namespace ServiceBase.IdentityServer.Public.UI.Error
+namespace ServiceBase.IdentityServer.Public.Actions.Error
 {
     public class ErrorViewModel
     {

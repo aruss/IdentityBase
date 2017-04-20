@@ -12,7 +12,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Login
+namespace ServiceBase.IdentityServer.Public.Actions.Login
 {
     // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5_HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
     public class LoginController : Controller

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ServiceBase.IdentityServer.Public.UI.Login
+namespace ServiceBase.IdentityServer.Public.Actions.Login
 {
     public class LoginViewModel : LoginInputModel, IExternalLoginsViewModel
     {

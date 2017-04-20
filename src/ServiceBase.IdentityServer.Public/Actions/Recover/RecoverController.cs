@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Recover
+namespace ServiceBase.IdentityServer.Public.Actions.Recover
 {
     public class RecoverController : Controller
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ServiceBase.IdentityServer.Public.UI.Recover
+namespace ServiceBase.IdentityServer.Public.Actions.Recover
 {
     public class RecoverInputModel
     {

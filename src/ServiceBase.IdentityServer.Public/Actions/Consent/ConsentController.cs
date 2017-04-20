@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 
-namespace ServiceBase.IdentityServer.Public.UI.Consent
+namespace ServiceBase.IdentityServer.Public.Actions.Consent
 {
     public class ConsentController : Controller
     {

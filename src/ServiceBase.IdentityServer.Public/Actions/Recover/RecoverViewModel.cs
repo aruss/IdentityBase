@@ -1,9 +1,9 @@
-﻿using ServiceBase.IdentityServer.Public.UI.Login;
+﻿using ServiceBase.IdentityServer.Public.Actions.Login;
 using System.Collections.Generic;
 using System;
 using ServiceBase.IdentityServer.Models;
 
-namespace ServiceBase.IdentityServer.Public.UI.Recover
+namespace ServiceBase.IdentityServer.Public.Actions.Recover
 {
     public class RecoverViewModel : RecoverInputModel, IExternalLoginsViewModel
     {

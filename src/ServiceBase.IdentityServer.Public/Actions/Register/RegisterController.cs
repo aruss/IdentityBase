@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Register
+namespace ServiceBase.IdentityServer.Public.Actions.Register
 {
     public class RegisterController : Controller
     {

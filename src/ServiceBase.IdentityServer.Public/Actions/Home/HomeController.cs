@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Home
+namespace ServiceBase.IdentityServer.Public.Actions.Home
 {
     public class HomeController : Controller
     {

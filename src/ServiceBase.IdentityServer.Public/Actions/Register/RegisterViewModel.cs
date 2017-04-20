@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ServiceBase.IdentityServer.Public.UI.Login;
+using ServiceBase.IdentityServer.Public.Actions.Login;
 using ServiceBase.IdentityServer.Models;
 
-namespace ServiceBase.IdentityServer.Public.UI.Register
+namespace ServiceBase.IdentityServer.Public.Actions.Register
 {
     public class RegisterViewModel : RegisterInputModel, IExternalLoginsViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace ServiceBase.IdentityServer.Public.UI.Register
+﻿namespace ServiceBase.IdentityServer.Public.Actions.Register
 {
     public class SuccessViewModel : SuccessInputModel
     {

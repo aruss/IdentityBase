@@ -17,7 +17,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Login
+namespace ServiceBase.IdentityServer.Public.Actions.Login
 {
     public class ExternalController : Controller
     {

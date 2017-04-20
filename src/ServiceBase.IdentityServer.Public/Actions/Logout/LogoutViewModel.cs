@@ -1,4 +1,4 @@
-﻿namespace ServiceBase.IdentityServer.Public.UI.Logout
+﻿namespace ServiceBase.IdentityServer.Public.Actions.Logout
 {
     public class LogoutViewModel : LogoutInputModel
     {

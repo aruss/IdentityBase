@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace ServiceBase.IdentityServer.Public.UI.Error
+namespace ServiceBase.IdentityServer.Public.Actions.Error
 {
     public class ErrorController : Controller
     {

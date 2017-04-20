@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ServiceBase.IdentityServer.Public.UI.Register
+namespace ServiceBase.IdentityServer.Public.Actions.Register
 {
     // TODO: together its longer than 2000 characters :/
     public class SuccessInputModel

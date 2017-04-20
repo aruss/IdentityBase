@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ServiceBase.IdentityServer.Public.UI
+namespace ServiceBase.IdentityServer.Public.Actions
 {
     public class CustomViewLocationExpander : IViewLocationExpander
     {

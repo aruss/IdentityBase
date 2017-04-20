@@ -1,4 +1,4 @@
-﻿namespace ServiceBase.IdentityServer.Public.UI.Consent
+﻿namespace ServiceBase.IdentityServer.Public.Actions.Consent
 {
     public class ScopeViewModel
     {
