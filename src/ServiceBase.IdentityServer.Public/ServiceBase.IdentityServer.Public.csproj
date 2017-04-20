@@ -99,5 +99,8 @@
     <ProjectReference Include="..\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Themes\Fancy\Public\" />
+  </ItemGroup>
 
 </Project>

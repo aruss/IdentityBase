@@ -33,7 +33,7 @@
     "EnableLoginHints": false,
     "EnableRememberLogin": true,
     "EnableLocalLogin": true,
-    "Theme": "Default"
+    //"ThemePath":  "./Themes/Fancy"
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"
