@@ -57,7 +57,7 @@ namespace ServiceBase.IdentityServer.Public
                 .AddMvc()
                 .AddRazorOptions(razor =>
                 {
-                    razor.ViewLocationExpanders.Add(new Actions.CustomViewLocationExpander(_configuration["App:ThemePath"]));
+                    razor.ViewLocationExpanders.Add(new Razor.CustomViewLocationExpander(_configuration["App:ThemePath"]));
                 });
 
             services.AddCors();

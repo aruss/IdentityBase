@@ -81,7 +81,7 @@ namespace ServiceBase.IdentityServer.Public.IntegrationTests
               .AddMvc()
               .AddRazorOptions(razor =>
               {
-                  razor.ViewLocationExpanders.Add(new Public.UI.CustomViewLocationExpander());
+                  razor.ViewLocationExpanders.Add(new Public.Razor.CustomViewLocationExpander());
               });
         }
 

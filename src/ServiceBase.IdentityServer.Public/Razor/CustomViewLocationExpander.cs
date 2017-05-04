@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace ServiceBase.IdentityServer.Public.Actions
+namespace ServiceBase.IdentityServer.Public.Razor
 {
     public class CustomViewLocationExpander : IViewLocationExpander
     {
         private readonly string _themePath; 
 
         // http://benfoster.io/blog/asp-net-core-themes-and-multi-tenancy
-        public CustomViewLocationExpander(string themePath)
+        public CustomViewLocationExpander(string themePath = null)
         {
             _themePath = themePath; 
         }
