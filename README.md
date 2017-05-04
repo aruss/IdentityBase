@@ -1,6 +1,6 @@
 # ServiceBase.IdentityServer
 
-ServiceBase.IdentityServer is a [STS](https://en.wikipedia.org/wiki/Security_token_service) based on [IdentityServer 4](https://github.com/IdentityServer/IdentityServer4) and [MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot). It contains all the self service features for end customers to create and manage an user account. 
+ServiceBase.IdentityServer is a [STS](https://en.wikipedia.org/wiki/Security_token_service) based on [IdentityServer 4](https://github.com/IdentityServer/IdentityServer4) and [MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot). It contains all the self service features for end customers to create and manage an user account.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0kld9s4sm8b50930/branch/master?svg=true)](https://ci.appveyor.com/project/aruss81994/servicebase-identityserver/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/aruss/ServiceBase.IdentityServer/badge.svg?branch=master)](https://coveralls.io/github/aruss/ServiceBase.IdentityServer?branch=master)
@@ -25,8 +25,8 @@ IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships 
 
 ### How to build
 
-* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1 
-* Run build.ps1 from Powershell
+* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1
+* Run `sh ./build.sh`
 
 ### Acknowledgements
 
@@ -37,4 +37,4 @@ IdentityServer4 is built using the following great open source projects
 * [XUnit](https://xunit.github.io/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
-* [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot) 
+* [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)
