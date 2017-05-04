@@ -1,28 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A584B11-E625-41B3-9C7A-ACA7D536DDFF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B41C93AC-D91C-4144-985F-613DB1FDB50D}"
 	ProjectSection(SolutionItems) = preProject
-		.coveralls.yml = .coveralls.yml
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
+		build.sh = build.sh
 		coverage.sh = coverage.sh
-		coverage_local.sh = coverage_local.sh
 		coveralls.sh = coveralls.sh
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer.Public", "src\ServiceBase.IdentityServer.Public\ServiceBase.IdentityServer.Public.csproj", "{82B74722-8F71-4D09-AF72-390FF28DFF64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public", "src\ServiceBase.IdentityServer.Public\ServiceBase.IdentityServer.Public.csproj", "{82B74722-8F71-4D09-AF72-390FF28DFF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer", "src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj", "{CC3F72FC-39EE-47FD-8430-CA056D7C2A13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer", "src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj", "{CC3F72FC-39EE-47FD-8430-CA056D7C2A13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBase.IdentityServer.Public.EntityFramework", "src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.Public.EntityFramework", "src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{6493683A-59E0-4A96-B43A-95E609B87376}"
 EndProject
@@ -48,9 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.IdentityServer.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F0015D43-954F-45EF-B89A-5DE580CAC948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreWeb", "samples\AspNetCoreWeb\AspNetCoreWeb.csproj", "{19D7E836-2FEC-49A7-BC90-D581A5D9D60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWeb", "samples\AspNetCoreWeb\AspNetCoreWeb.csproj", "{19D7E836-2FEC-49A7-BC90-D581A5D9D60D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreApi", "samples\AspNetCoreApi\AspNetCoreApi.csproj", "{800E97A2-6012-4816-B9B8-64F409028A70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApi", "samples\AspNetCoreApi\AspNetCoreApi.csproj", "{800E97A2-6012-4816-B9B8-64F409028A70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
