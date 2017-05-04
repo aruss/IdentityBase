@@ -15,6 +15,8 @@ namespace ServiceBase.IdentityServer.Public
         {
             var builder = services.AddIdentityServer((options) =>
             {
+                // TODO: set configuration from config file 
+
                 //options.RequireSsl = false;
 
                 options.Events.RaiseErrorEvents = true;
@@ -26,10 +28,11 @@ namespace ServiceBase.IdentityServer.Public
                 options.UserInteraction.LogoutUrl = "/logout";
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
+
                 options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");
+                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");       
 
             }).AddProfileService<ProfileService>()
              .AddSecretParser<ClientAssertionSecretParser>()
@@ -44,7 +47,6 @@ namespace ServiceBase.IdentityServer.Public
             }
             else
             {
-                // TODO: look for operating system maybe ...
 
                 var cert = new X509Certificate2(Path.Combine(
                     environment.ContentRootPath, "config/idsvr3test.pfx"), "idsrv3test");

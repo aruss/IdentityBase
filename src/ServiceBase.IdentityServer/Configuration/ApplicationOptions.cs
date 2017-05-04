@@ -64,14 +64,24 @@ namespace ServiceBase.IdentityServer.Configuration
 
         public bool EnableRememberLogin { get; set; } = true;
 
+        public bool EnableLocalLogin { get; set; } = true;
+
+        public bool AllowLocalLogin { get; set; } = true;
+        public bool AllowRememberLogin { get; set; } = true;
+
         /// <summary>
         /// How long should Remember Login last in days
         /// </summary>
-        public int RememberMeLoginDuration { get; set; } = 30;
+        public double RememberMeLoginDuration { get; set; } = 30;
 
-        public bool EnableLocalLogin { get; set; } = true;
+        public bool ShowLogoutPrompt { get; set; } = false;
+        public bool AutomaticRedirectAfterSignOut { get; set; } = true;
 
-        public bool ShowLogoutPrompt = false;
-        public bool AutomaticRedirectAfterSignOut = true;
+        public bool WindowsAuthenticationEnabled { get; set; } = false;
+        // specify the Windows authentication schemes you want to use for authentication
+        public string[] WindowsAuthenticationSchemes { get; set; } = new string[] { "Negotiate", "NTLM" };
+        public string WindowsAuthenticationDisplayName { get; set; } = "Windows";
+
+        public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
     }
 }

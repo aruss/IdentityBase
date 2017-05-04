@@ -37,3 +37,8 @@
 .page-consent .consent-form .consent-remember {
   padding-left: 16px;
 }
+iframe.signout {
+    border: none;
+    position: absolute;
+    left: -1000px;
+}

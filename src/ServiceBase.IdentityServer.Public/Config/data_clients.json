@@ -535,7 +535,7 @@
     "PostLogoutRedirectUris": [ "http://localhost:3308/" ],
     "LogoutUri": "http://localhost:3308/signout-oidc",
     "LogoutSessionRequired": true,
-    "AllowOfflineAccess": false,
+    "AllowOfflineAccess": true,
     "AllowedScopes": [ "openid", "profile", "email", "offline_access", "api1", "api2" ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,

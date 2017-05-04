@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,7 +67,6 @@ namespace AspNetCoreWeb
             {
                 AuthenticationScheme = "oidc",
                 SignInScheme = "Cookies",
-
                 Authority = "http://localhost:5000",
                 RequireHttpsMetadata = false,
                 PostLogoutRedirectUri = "http://localhost:3308/",
@@ -74,9 +75,19 @@ namespace AspNetCoreWeb
                 ResponseType = "code id_token",
                 GetClaimsFromUserInfoEndpoint = true,
                 SaveTokens = true,
-                /*Events = new OpenIdConnectEvents
+                Events = new OpenIdConnectEvents
                 {
-                    OnTokenValidated = async context =>
+                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow 
+                    OnRedirectToIdentityProviderForSignOut = async n =>
+                    {
+                        var idTokenHint = await n.HttpContext.Authentication.GetTokenAsync("id_token");
+                        if (idTokenHint != null)
+                        {
+                            n.ProtocolMessage.IdTokenHint = idTokenHint;
+                            n.ProtocolMessage.PostLogoutRedirectUri = "http://localhost:3308/";
+                        }
+                    }
+                    /*,OnTokenValidated = async context =>
                      {
                          var profileService = context.HttpContext.RequestServices.GetService<IProfileService>();
                          var profileId = Guid.Parse(context.Ticket.Principal.FindFirst("sub").Value);
@@ -94,8 +105,8 @@ namespace AspNetCoreWeb
                              await profileService.SaveAsync(profile);
                              context.Ticket.Properties.RedirectUri = "/profile";
                          }
-                     }
-                }*/
+                     }*/
+                }
             };
 
             oidcOptions.Scope.Clear();
