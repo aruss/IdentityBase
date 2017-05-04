@@ -33,11 +33,26 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public\ServiceBase.IdentityServer.Public.csproj" />
-    <ProjectReference Include="..\..\src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\src\ServiceBase.Identi tyServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  
+  <!--
+    Work around https://github.com/NuGet/Home/issues/4412. MVC uses DependencyContext.Load() which looks next to a .dll
+    for a .deps.json. Information isn't available elsewhere. Need the .deps.json file for all web site applications.
+  -->
+  <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+    <ItemGroup>
+      <DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
+    </ItemGroup>
+
+    <Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
+  </Target>
 </Project>
