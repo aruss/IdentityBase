@@ -3,12 +3,15 @@
 set -e
 
 nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/artifacts
+nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator
 
 OPENCOVER=$PWD/packages/OpenCover.4.6.589/tools/OpenCover.Console.exe
-COVERAGE_DIR=./coverage
+REPORTGENERATOR=$PWD/packages/ReportGenerator.2.4.5.0/tools/ReportGenerator.exe
+COVERAGE_DIR=./coverage/report
+COVERAGE_HISTORY_DIR=./coverage/history
 
 rm -rf $COVERAGE_DIR
-mkdir $COVERAGE_DIR
+mkdir -p $COVERAGE_DIR
 
 PROJECTS=(\
 "ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests\ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.csproj" \
@@ -31,3 +34,11 @@ $OPENCOVER \
   -searchdirs:./test/$PROJECT/bin/Release/netcoreapp1.1 \
   -register:user
 done
+
+echo "Generating HTML report"
+$REPORTGENERATOR \
+  -reports:$COVERAGE_DIR/coverage.xml \
+  -targetdir:$COVERAGE_DIR \
+  -historydir:$COVERAGE_HISTORY_DIR \
+  -reporttypes:"Html" \
+  -verbosity:Error
