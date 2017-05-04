@@ -5,8 +5,8 @@ deploy: off
 configuration: Release
 platform: Any CPU
 services:
+  - mssql2014
   - postgresql
-  - mssql2012sp1
 
 branches:
   only:
