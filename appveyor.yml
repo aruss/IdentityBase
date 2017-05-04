@@ -5,22 +5,18 @@ deploy: off
 configuration: Release
 platform: Any CPU
 services:
-- mssql2012sp1
-- postgresql
-
+  - mssql2012sp1
+  - postgresql
 branches:
   only:
     - master
     - release
     - /^(.*\/)?ci-.*$/
-
 install:
   - cmd: git submodule update --init --recursive
-
 build_script:
   - dotnet --info
   - dotnet restore --no-cache
   - dotnet build .\ServiceBase.IdentityServer.sln --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
-
 test_script:
   - bash coveralls.sh
