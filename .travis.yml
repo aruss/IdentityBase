@@ -1,33 +1,32 @@
 language: csharp
+# dotnet: 1.0.0-preview2-003131
+os:
+  - osx
+  - linux
+script:
+  - ./build.sh
+
+# .NET CLI require Ubuntu 14.04
 sudo: required
 dist: trusty
 addons:
   apt:
-    packages:
+    packages: 
     - gettext
     - libcurl4-openssl-dev
     - libicu-dev
     - libssl-dev
     - libunwind8
-    - zlib1g
-env:
-  global:
-    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-    - DOTNET_CLI_TELEMETRY_OPTOUT: 1
-    - NO_PARALLEL_TEST_PROJECTS=E2ETests
-mono:
-  - 4.0.5
-os:
-  - linux
-  - osx
+
+# .NET CLI require OSX 10.10
 osx_image: xcode7.1
-branches:
-  only:
-    - master
-    - release
-    - dev
-    - /^(.*\/)?ci-.*$/
-before_install:
+before_install:  
   - if test "$TRAVIS_OS_NAME" == "osx"; then brew update; brew install openssl; ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/; ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/; fi
-script:
-  - ./build.sh --quiet verify
+
+mono:  
+  - 4.6.0
+
+cache:
+  directories:
+    - src/packages
+    - tools
