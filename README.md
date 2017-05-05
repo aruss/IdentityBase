@@ -46,7 +46,7 @@ IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships 
 
 ### Acknowledgements
 
-IdentityServer4 is built using the following great open source projects
+ServiceBase.IdentityServer is built using the following great open source projects
 
 * [ASP.NET Core](https://github.com/aspnet)
 * [Json.Net](http://www.newtonsoft.com/json)
