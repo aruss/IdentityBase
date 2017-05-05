@@ -18,21 +18,27 @@ ServiceBase.IdentityServer is a [STS](https://en.wikipedia.org/wiki/Security_tok
   Support for external identity providers like Azure Active Directory, Google, Facebook etc. This shields your applications from the details of how to connect to these external providers.
 * #### Theming 
   Support for custom themes, you can change the default [Bootstrap](http://getbootstrap.com/) styles or create completely new UI by writing your own Razor views. 
+* #### Event Messaging 
+
 
 #### Upcoming features
 * Authentication API
 * Multitenancy
 * Administration dashboard 
-* Localization support 
+* Localization 
 * Configuration wizzard
 * Two-Factor authentication
 * SMS OTP authentication
 * MySQL support
 * Docker support 
+* Event Messaging Support for pache Kafka, RabbitMQ
+* Switch DI Container to Autofac
+* Plugin support 
 
 ### Requirements
 
-* MSSQL or PostgreSQL
+* MSSQL or PostgreSQL (Can also run in memory only)
+* SMTP or SendGrid 
 * HTTPS
 
 ### Platform
