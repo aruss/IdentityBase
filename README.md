@@ -50,6 +50,10 @@ IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships 
 * [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1
 * Run `sh ./build.sh`
 
+### Docker support
+
+after you run the `build.sh` script navigate to `./docker` directory and run `sh ./build-identitybase-public.sh` then you can start the container by running `docker run -it --rm -p 5000:5000 servicebase/identitybase` it will start the IdentiServiceBase.IdentityServer on port `http://localhost:5000`
+
 ### Acknowledgements
 
 ServiceBase.IdentityServer is built using the following great open source projects

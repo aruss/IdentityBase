@@ -32,7 +32,7 @@ namespace ServiceBase.IdentityServer.Public
                 options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");       
+                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");
 
             }).AddProfileService<ProfileService>()
              .AddSecretParser<ClientAssertionSecretParser>()
@@ -47,10 +47,8 @@ namespace ServiceBase.IdentityServer.Public
             }
             else
             {
-
-                var cert = new X509Certificate2(Path.Combine(
-                    environment.ContentRootPath, "config/idsvr3test.pfx"), "idsrv3test");
-
+                var certPath = Path.Combine(environment.ContentRootPath, "Config/idsvr3test.pfx");
+                var cert = new X509Certificate2(certPath, "idsrv3test");
                 builder.AddSigningCredential(cert);
 
                 /*builder.AddSigningCredential("98D3ACF057299C3745044BE918986AD7ED0AD4A2",

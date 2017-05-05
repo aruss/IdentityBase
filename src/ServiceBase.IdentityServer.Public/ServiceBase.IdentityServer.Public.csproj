@@ -103,5 +103,10 @@
   <ItemGroup>
     <Folder Include="Themes\Fancy\Public\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Config\idsvr3test.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
