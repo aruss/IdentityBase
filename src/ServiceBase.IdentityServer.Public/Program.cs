@@ -1,36 +1,48 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using ServiceBase.Configuration;
+using System;
 using System.IO;
+
 
 namespace ServiceBase.IdentityServer.Public
 {
     public class Program
     {
+        public static IConfigurationRoot Configuration { get; set; }
+
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls("http://localhost:5000/")
+            var contentRoot = Directory.GetCurrentDirectory();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var configuration = ConfigurationSetup.Configure(contentRoot, environment, (confBuilder) =>
+            {
+                if ("Development".Equals(environment, StringComparison.OrdinalIgnoreCase))
+                {
+                    confBuilder.AddUserSecrets<Startup>();
+                }
+
+                confBuilder.AddCommandLine(args);
+            });
+
+            var hostConfig = configuration.GetSection("Host");
+
+            var hostBuilder = new WebHostBuilder()
+                .UseUrls(hostConfig["Urls"])
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                // .UseApplicationInsights()
-                .Build();
+                //.UseConfiguration(configuration.GetSection("Kestrel"))
+                .UseKestrel()
+                .ConfigureLogging(f => f.AddConsole(configuration.GetSection("Logging")))
+                .UseStartup<Startup>();
 
-            host.Run();
-
-            /*System.IO.File.WriteAllText(@"./config/data_clients.json", 
-                JsonConvert.SerializeObject(ServiceBase.IdentityServer.Configuration.Clients.Get()));
-
-            System.IO.File.WriteAllText(@"./config/data_resources_api.json",
-                JsonConvert.SerializeObject(ServiceBase.IdentityServer.Configuration.Resources.GetApiResources()));
-
-            System.IO.File.WriteAllText(@"./config/data_resources_identity.json",
-                JsonConvert.SerializeObject(Resources.GetIdentityResources()));
-
-            var crypto = new DefaultCrypto();
-            var config = new ApplicationOptions(); 
-            System.IO.File.WriteAllText(@"./config/data_users.json",
-                JsonConvert.SerializeObject(UserAccounts.Get(crypto, config)));*/
+            if (!String.IsNullOrWhiteSpace(hostConfig["UseIISIntegration"]))
+            {
+                hostBuilder = hostBuilder.UseIISIntegration(); 
+            }
+            
+            hostBuilder.Build().Run();
         }
     }
 }

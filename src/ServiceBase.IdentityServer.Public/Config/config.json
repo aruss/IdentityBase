@@ -1,16 +1,20 @@
 ﻿{
-  "EntityFramework": {
-    
-    "MigrateDatabase": false,
-    "SeedExampleData": true
+  "Host": {
+    "Urls": "http://*:5000"
   },
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {
-      "Default": "Debug",
+      "Default": "Information",
       "System": "Information",
-      "Microsoft": "Information"
+      "Microsoft": "Information",
+      "IdentityModel": "Information",
+      "IdentityServer4": "Information"
     }
+  },
+  "EntityFramework": {
+    "MigrateDatabase": false,
+    "SeedExampleData": true
   },
   "Events": {
     "RaiseErrorEvents": true,
@@ -32,7 +36,7 @@
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
     "EnableRememberLogin": true,
-    "EnableLocalLogin": true,
+    "EnableLocalLogin": true
     //"ThemePath":  "./Themes/Fancy"
   },
   "Email": {

@@ -72,17 +72,9 @@ namespace ServiceBase.IdentityServer.Public
             IHostingEnvironment env,
             ILoggerFactory loggerFactory)
         {
-            /*Func<string, LogLevel, bool> filter = (scope, level) =>
-                scope.StartsWith("IdentityServer") ||
-                scope.StartsWith("IdentityModel") ||
-                level == LogLevel.Error ||
-                level == LogLevel.Critical;*/
-
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
+                loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
                 //app.UseBrowserLink();
             }
