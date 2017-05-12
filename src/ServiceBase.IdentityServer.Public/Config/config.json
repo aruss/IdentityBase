@@ -1,6 +1,7 @@
 ﻿{
   "Host": {
-    "Urls": "http://*:5000"
+    "Urls": "http://*:5000",
+    "UseIISIntegration": true
   },
   "Logging": {
     "IncludeScopes": false,
