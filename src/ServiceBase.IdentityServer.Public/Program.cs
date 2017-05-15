@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using ServiceBase.Configuration;
 using System;
 using System.IO;
+using ServiceBase.Extensions;
 
 
 namespace ServiceBase.IdentityServer.Public
@@ -33,7 +34,14 @@ namespace ServiceBase.IdentityServer.Public
                 .UseUrls(hostConfig["Urls"])
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 //.UseConfiguration(configuration.GetSection("Kestrel"))
-                .UseKestrel()
+                .UseKestrel();
+            
+            if (hostConfig["UseIISIntegration"].ToBoolean())
+            {
+                hostBuilder = hostBuilder.UseIISIntegration();
+            }
+
+            hostBuilder = hostBuilder
                 .ConfigureLogging(f => f.AddConsole(configuration.GetSection("Logging")))
                 .UseStartup<Startup>();
 
