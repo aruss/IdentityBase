@@ -1,6 +1,6 @@
 # ServiceBase.IdentityServer
 
-ServiceBase.IdentityServer is a [STS](https://en.wikipedia.org/wiki/Security_token_service) based on [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) and [MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot). It contains all the self service features for end customers to create and manage an user account.
+ServiceBase.IdentityServer is a [Secure Token Service (STS)](https://en.wikipedia.org/wiki/Security_token_service) based on [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) and [MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot). It contains all the self service features for end customers to create and manage an user account.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0kld9s4sm8b50930/branch/master?svg=true)](https://ci.appveyor.com/project/aruss81994/servicebase-identityserver/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/aruss/ServiceBase.IdentityServer/badge.svg?branch=master)](https://coveralls.io/github/aruss/ServiceBase.IdentityServer?branch=master)
@@ -16,29 +16,29 @@ ServiceBase.IdentityServer is a [STS](https://en.wikipedia.org/wiki/Security_tok
   Issue access tokens for APIs for various types of clients, e.g. server to server, web applications, SPAs and native/mobile apps.
 * #### Federation Gateway
   Support for external identity providers like Azure Active Directory, Google, Facebook etc. This shields your applications from the details of how to connect to these external providers.
-* #### Theming 
-  Support for custom themes, you can change the default [Bootstrap](http://getbootstrap.com/) styles or create completely new UI by writing your own Razor views. 
-* #### Event Messaging 
+* #### Theming
+  Support for custom themes, you can change the default [Bootstrap](http://getbootstrap.com/) styles or create completely new UI by writing your own Razor views.
+* #### Event Messaging
 
 
 #### Upcoming features
 * Authentication API
 * Multitenancy
-* Administration dashboard 
-* Localization 
+* Administration dashboard
+* Localization
 * Configuration wizzard
 * Two-Factor authentication
 * SMS OTP authentication
 * MySQL support
-* Docker support 
+* Docker support
 * Event Messaging Support for pache Kafka, RabbitMQ
 * Switch DI Container to Autofac
-* Plugin support 
+* Plugin support
 
 ### Requirements
 
 * MSSQL or PostgreSQL (Can also run in memory only)
-* SMTP or SendGrid 
+* SMTP or SendGrid
 * HTTPS
 
 ### Platform

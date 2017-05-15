@@ -28,28 +28,21 @@ namespace ServiceBase.IdentityServer.Public
                 confBuilder.AddCommandLine(args);
             });
 
-            var hostConfig = configuration.GetSection("Host");
+            var configHost = configuration.GetSection("Host");
+            var configLogging = configuration.GetSection("Logging");
 
             var hostBuilder = new WebHostBuilder()
-                .UseUrls(hostConfig["Urls"])
+                .UseUrls(configHost["Urls"])
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseConfiguration(configuration.GetSection("Kestrel"))
-                .UseKestrel();
+                .UseKestrel()
+                .ConfigureLogging(f => f.AddConsole(configLogging))
+                .UseStartup<Startup>();
             
-            if (hostConfig["UseIISIntegration"].ToBoolean())
+            if (configHost["UseIISIntegration"].ToBoolean())
             {
                 hostBuilder = hostBuilder.UseIISIntegration();
             }
 
-            hostBuilder = hostBuilder
-                .ConfigureLogging(f => f.AddConsole(configuration.GetSection("Logging")))
-                .UseStartup<Startup>();
-
-            if (!String.IsNullOrWhiteSpace(hostConfig["UseIISIntegration"]))
-            {
-                hostBuilder = hostBuilder.UseIISIntegration(); 
-            }
-            
             hostBuilder.Build().Run();
         }
     }
