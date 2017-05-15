@@ -97,7 +97,7 @@
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Smtp\ServiceBase.Notification.Smtp.csproj" />
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Twilio\ServiceBase.Notification.Twilio.csproj" />
     <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
-    <ProjectReference Include="..\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
+    <ProjectReference Include="..\ServiceBase.IdentityServer.Public.EntityFramework\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
   <ItemGroup>

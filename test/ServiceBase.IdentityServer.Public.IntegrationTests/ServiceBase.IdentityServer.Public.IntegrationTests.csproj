@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public.FE\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public.EntityFramework\ServiceBase.IdentityServer.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\..\src\ServiceBase.IdentityServer.Public\ServiceBase.IdentityServer.Public.csproj" />
     <ProjectReference Include="..\..\src\ServiceBase.IdentityServer\ServiceBase.IdentityServer.csproj" />
   </ItemGroup>
