@@ -65,10 +65,7 @@ namespace ServiceBase.IdentityServer.Configuration
         public bool EnableRememberLogin { get; set; } = true;
 
         public bool EnableLocalLogin { get; set; } = true;
-
-        public bool AllowLocalLogin { get; set; } = true;
-        public bool AllowRememberLogin { get; set; } = true;
-
+        
         /// <summary>
         /// How long should Remember Login last in days
         /// </summary>

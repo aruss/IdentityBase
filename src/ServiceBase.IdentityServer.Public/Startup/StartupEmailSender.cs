@@ -13,21 +13,21 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void AddEmailSender(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
-            if (String.IsNullOrWhiteSpace(config["Email"]))
+            if (!String.IsNullOrWhiteSpace(config["Email"]))
             {
                 services.Configure<DefaultEmailServiceOptions>(config.GetSection("Email"));
 
-                if (String.IsNullOrWhiteSpace(config["Email:Smtp"]))
+                if (!String.IsNullOrWhiteSpace(config["Email:Smtp"]))
                 {
                     services.AddTransient<IEmailService, DefaultEmailService>();
-                    services.Configure<SmtpOptions>(config.GetSection("Email:Smtp"));
+                    services.AddSingleton(config.GetSection("Email:Smtp").Get<SmtpOptions>());
                     services.AddTransient<IEmailSender, SmtpEmailSender>();
                 }
 
-                else if (String.IsNullOrWhiteSpace(config["Email:SendGrid"]))
+                else if (!String.IsNullOrWhiteSpace(config["Email:SendGrid"]))
                 {
                     services.AddTransient<IEmailService, DefaultEmailService>();
-                    services.Configure<SendGridOptions>(config.GetSection("Email:SendGrid"));
+                    services.AddSingleton(config.GetSection("Email:SendGrid").Get<SendGridOptions>());
                     services.AddTransient<IEmailSender, SendGridEmailSender>();
                 }
 

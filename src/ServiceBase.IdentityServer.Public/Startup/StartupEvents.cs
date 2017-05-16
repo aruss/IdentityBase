@@ -11,20 +11,20 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void AddEvents(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
-            if (String.IsNullOrWhiteSpace(config["Events"]))
+            if (!String.IsNullOrWhiteSpace(config["Events"]))
             {
-                services.Configure<EventOptions>(config.GetSection("Events"));
+                services.AddSingleton(config.GetSection("Events").Get<EventOptions>());
                 services.AddTransient<IEventService, DefaultEventService>();
                 services.AddTransient<IEventSink, DefaultEventSink>();
 
-                if (String.IsNullOrWhiteSpace(config["Events:Logstash"]))
+                if (!String.IsNullOrWhiteSpace(config["Events:Logstash"]))
                 {
                     // TODO: configure logstash event sink 
                 }
             }
             else
             {
-                throw new Exception("Store configuration not present");
+                logger.LogInformation("No event sing registered");
             }
         }
     }

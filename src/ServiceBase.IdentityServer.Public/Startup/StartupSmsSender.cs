@@ -12,10 +12,10 @@ namespace ServiceBase.IdentityServer.Public
     {
         public static void AddSmsSender(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
-            if (String.IsNullOrWhiteSpace(config["Twillio"]))
+            if (!String.IsNullOrWhiteSpace(config["Sms:Twillio"]))
             {
                 services.AddTransient<ISmsService, DefaultSmsService>();
-                services.Configure<TwillioOptions>(config.GetSection("Twillio"));
+                services.AddSingleton(config.GetSection("Twillio").Get<TwillioOptions>());
                 services.AddTransient<ISmsSender, TwillioSmsSender>();
             }
             // TODO: Add additional services here
