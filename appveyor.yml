@@ -20,7 +20,7 @@ install:
 build_script:
   - dotnet --info
   - dotnet restore --no-cache
-  - dotnet build .\ServiceBase.IdentityServer.sln --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
+  - dotnet build .\IdentityBase.sln --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
 
 test_script:
   - bash coveralls.sh

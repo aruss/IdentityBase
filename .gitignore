@@ -202,5 +202,5 @@ FakesAssemblies/
 samples/AspNetCoreWeb/wwwroot/lib/
 .build/
 coverage/
-src/ServiceBase.IdentityServer.Public/tempkey.rsa
+src/IdentityBase.Public/tempkey.rsa
 docker/identitybase-public-ctx/

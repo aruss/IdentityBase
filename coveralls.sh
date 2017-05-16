@@ -11,11 +11,11 @@ rm -rf $COVERAGE_DIR
 mkdir $COVERAGE_DIR
 
 PROJECTS=(\
-"ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests\ServiceBase.IdentityServer.Public.EntityFramework.IntegrationTests.csproj" \
-"ServiceBase.IdentityServer.Public.EntityFramework.UnitTests\ServiceBase.IdentityServer.Public.EntityFramework.UnitTests.csproj" \
-"ServiceBase.IdentityServer.Public.IntegrationTests\ServiceBase.IdentityServer.Public.IntegrationTests.csproj" \
-"ServiceBase.IdentityServer.Public.UnitTests\ServiceBase.IdentityServer.Public.UnitTests.csproj" \
-"ServiceBase.IdentityServer.UnitTests\ServiceBase.IdentityServer.UnitTests.csproj")
+"IdentityBase.Public.EntityFramework.IntegrationTests\IdentityBase.Public.EntityFramework.IntegrationTests.csproj" \
+"IdentityBase.Public.EntityFramework.UnitTests\IdentityBase.Public.EntityFramework.UnitTests.csproj" \
+"IdentityBase.Public.IntegrationTests\IdentityBase.Public.IntegrationTests.csproj" \
+"IdentityBase.Public.UnitTests\IdentityBase.Public.UnitTests.csproj" \
+"IdentityBase.UnitTests\IdentityBase.UnitTests.csproj")
 
 for PROJECT in "${PROJECTS[@]}"
 do
@@ -27,7 +27,7 @@ $OPENCOVER \
   -hideskipped:File \
   -output:$COVERAGE_DIR/coverage.xml \
   -oldStyle \
-  -filter:"+[ServiceBase.IdentityServer*]* -[ServiceBase.IdentityServer.*Tests*]*" \
+  -filter:"+[IdentityBase*]* -[IdentityBase.*Tests*]*" \
   -searchdirs:./test/$PROJECT/bin/Release/netcoreapp1.1 \
   -register:user
 done
