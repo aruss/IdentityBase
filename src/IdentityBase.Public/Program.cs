@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using ServiceBase.Extensions;
 
-
 namespace IdentityBase.Public
 {
     public class Program

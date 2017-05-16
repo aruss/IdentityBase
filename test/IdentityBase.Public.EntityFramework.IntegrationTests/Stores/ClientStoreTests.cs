@@ -7,7 +7,7 @@ using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Public.EntityFramework.Stores;
-using ServiceBase.Xunit;
+using ServiceBase.Logging;
 using System.Linq;
 using Xunit;
 
