@@ -15,7 +15,10 @@
   },
   "EntityFramework": {
     "MigrateDatabase": false,
-    "SeedExampleData": true
+    "SeedExampleData": true,
+    "SqlServer": {
+      "ConnectionString": "" 
+    }
   },
   "Events": {
     "RaiseErrorEvents": true,
@@ -45,5 +48,11 @@
   },
   "Sms": {
     "TemplateDirectoryPath": "./Templates/Sms"
-  }
+  },
+  "modules": [
+    { "type": "IdentityBase.Public.EntityFrameworkInMemoryModule, IdentityBase.Public" },
+    { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
+    { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
+    { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
+  ]
 }

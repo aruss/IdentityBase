@@ -26,13 +26,13 @@ namespace IdentityBase.Public.IntegrationTests
             PersistedGrantDbContext persistedGrantDbContext,
             UserAccountDbContext defaultDbContext,
             ICrypto crypto,
-            IOptions<ApplicationOptions> applicationOptions)
+            ApplicationOptions applicationOptions)
         {
             _configurationDbContext = configurationDbContext;
             _persistedGrantDbContext = persistedGrantDbContext;
             _defaultDbContext = defaultDbContext;
             _crypto = crypto;
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
         }
 
         public void Dispose()

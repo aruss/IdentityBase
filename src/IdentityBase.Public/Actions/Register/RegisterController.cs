@@ -23,14 +23,14 @@ namespace IdentityBase.Public.Actions.Register
         private readonly ClientService _clientService;
 
         public RegisterController(
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ILogger<RegisterController> logger,
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
             UserAccountService userAccountService,
             ClientService clientService)
         {
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _logger = logger;
             _interaction = interaction;
             _emailService = emailService;

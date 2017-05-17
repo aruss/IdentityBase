@@ -24,13 +24,13 @@ namespace IdentityBase.Public.Actions.Login
         private readonly ClientService _clientService;
 
         public LoginController(
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ILogger<LoginController> logger,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
             ClientService clientService)
         {
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _logger = logger;
             _interaction = interaction;
             _userAccountService = userAccountService;

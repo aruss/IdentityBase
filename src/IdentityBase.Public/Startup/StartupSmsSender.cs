@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Sms;
 using ServiceBase.Notification.Twilio;
@@ -10,28 +9,36 @@ namespace IdentityBase.Public
 {
     public static class StartupSmsSender
     {
-        public static void AddSmsSender(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
+        public static void ValidateSmsServices(this IContainer container, ILogger logger)
         {
-            if (!String.IsNullOrWhiteSpace(config["Sms:Twillio"]))
-            {
-                services.AddTransient<ISmsService, DefaultSmsService>();
-                services.AddSingleton(config.GetSection("Twillio").Get<TwillioOptions>());
-                services.AddTransient<ISmsSender, TwillioSmsSender>();
-            }
-            // TODO: Add additional services here
-            else
-            {
+            if (!container.IsRegistered<ISmsService>()) { throw new Exception("ISmsService not registered."); }
+        }
+    }
 
-                logger.LogError("SMS service configuration not present");
-                if (environment.IsDevelopment())
-                {
-                    services.AddTransient<ISmsService, DebugSmsService>();
-                }
-                else
-                {
-                    throw new Exception("SMS service configuration not present");
-                }
-            }
+    public class TwillioModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<DefaultSmsService>().As<ISmsService>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Sms").Get<DefaultSmsServiceOptions>());
+            builder.RegisterType<TwillioSmsSender>().As<ISmsSender>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Sms:Twillio").Get<TwillioOptions>());
+        }
+    }
+
+    public class DebugSmsModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<DebugSmsService>().As<ISmsService>();
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
 using ServiceBase.Notification.SendGrid;
@@ -11,41 +10,52 @@ namespace IdentityBase.Public
 {
     public static class StartupEmailSender
     {
-        public static void AddEmailSender(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
+        public static void ValidateEmailSenderServices(this IContainer container, ILogger logger)
         {
-            if (!String.IsNullOrWhiteSpace(config["Email"]))
-            {
-                services.Configure<DefaultEmailServiceOptions>(config.GetSection("Email"));
+            if (!container.IsRegistered<IEmailService>()) { throw new Exception("IEmailService not registered."); }
+        }
+    }
 
-                if (!String.IsNullOrWhiteSpace(config["Email:Smtp"]))
-                {
-                    services.AddTransient<IEmailService, DefaultEmailService>();
-                    services.AddSingleton(config.GetSection("Email:Smtp").Get<SmtpOptions>());
-                    services.AddTransient<IEmailSender, SmtpEmailSender>();
-                }
+    public class SmtpEmailSenderModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<DefaultEmailService>().As<IEmailService>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
+            builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Email:Smtp").Get<SmtpOptions>());
+        }
+    }
 
-                else if (!String.IsNullOrWhiteSpace(config["Email:SendGrid"]))
-                {
-                    services.AddTransient<IEmailService, DefaultEmailService>();
-                    services.AddSingleton(config.GetSection("Email:SendGrid").Get<SendGridOptions>());
-                    services.AddTransient<IEmailSender, SendGridEmailSender>();
-                }
+    public class SendGridEmailSenderModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<DefaultEmailService>().As<IEmailService>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
+            builder.RegisterType<SendGridEmailSender>().As<IEmailSender>();
+            builder.RegisterInstance(Program.Configuration.GetSection("Email:SendGrid").Get<SendGridOptions>());
+        }
+    }
 
-                // else if o360
-                // else if MailGun
-            }
-            else
-            {
-                logger.LogError("Email service configuration not present");
-                if (environment.IsDevelopment())
-                {
-                    services.AddTransient<IEmailService, DebugEmailService>();
-                }
-                else
-                {
-                    throw new Exception("Email service configuration not present");
-                }
-            }
+
+    public class DebugEmailModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<DebugEmailService>().As<IEmailService>();
         }
     }
 }

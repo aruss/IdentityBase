@@ -20,12 +20,12 @@ namespace IdentityBase.Services
         private IEventService _eventService;
 
         public UserAccountService(
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ICrypto crypto,
             IUserAccountStore userAccountStore,
             IEventService eventService)
         {
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _crypto = crypto;
             _userAccountStore = userAccountStore;
             _eventService = eventService;

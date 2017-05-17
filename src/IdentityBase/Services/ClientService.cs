@@ -15,9 +15,7 @@ namespace IdentityBase.Services
         private IHttpContextAccessor _contextAccessor;
         private IClientStore _clientStore;
 
-        public ClientService(
-            IClientStore clientStore,
-            IHttpContextAccessor contextAccessor)
+        public ClientService(IClientStore clientStore, IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
             _clientStore = clientStore;

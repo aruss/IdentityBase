@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Events;
 using System;
@@ -9,23 +8,23 @@ namespace IdentityBase.Public
 {
     public static class StartupEvents
     {
-        public static void AddEvents(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
+        public static void ValidateEventServices(this IContainer container, ILogger logger)
         {
-            if (!String.IsNullOrWhiteSpace(config["Events"]))
-            {
-                services.AddSingleton(config.GetSection("Events").Get<EventOptions>());
-                services.AddTransient<IEventService, DefaultEventService>();
-                services.AddTransient<IEventSink, DefaultEventSink>();
+            if (!container.IsRegistered<IEventService>()) { throw new Exception("IEventService not registered."); }
+        }
+    }
 
-                if (!String.IsNullOrWhiteSpace(config["Events:Logstash"]))
-                {
-                    // TODO: configure logstash event sink 
-                }
-            }
-            else
-            {
-                logger.LogInformation("No event sing registered");
-            }
+    public class DefaultEventModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterInstance(Program.Configuration.GetSection("Events").Get<EventOptions>());
+            builder.RegisterType<DefaultEventService>().As<IEventService>();
+            builder.RegisterType<DefaultEventSink>().As<IEventSink>();
         }
     }
 }

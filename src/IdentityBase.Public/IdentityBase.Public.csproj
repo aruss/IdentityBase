@@ -69,6 +69,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac.Configuration" Version="4.0.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.1.0" />
     <PackageReference Include="IdentityServer4" Version="1.5.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="1.1.2" />

@@ -21,11 +21,11 @@ namespace IdentityBase.Public.Actions.Logout
 
         public LogoutController(
             IIdentityServerInteractionService interaction,
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ILogger<LogoutController> logger)
         {
             _interaction = interaction;
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _logger = logger;
         }
 

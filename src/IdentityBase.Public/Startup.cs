@@ -14,6 +14,9 @@ using IdentityBase.Services;
 using System;
 using System.IO;
 using ServiceBase;
+using Autofac;
+using Autofac.Configuration;
+using Autofac.Extensions.DependencyInjection;
 
 namespace IdentityBase.Public
 {
@@ -25,10 +28,9 @@ namespace IdentityBase.Public
         private readonly ILogger _logger;
         private readonly IHostingEnvironment _environment;
         private readonly IConfigurationRoot _configuration;
+        private IContainer _applicationContainer;
 
-        public Startup(
-            IHostingEnvironment environment,
-            ILoggerFactory loggerFactory)
+        public Startup(IHostingEnvironment environment, ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<Startup>();
             _configuration = ConfigurationSetup.Configure(environment, (confBuilder) =>
@@ -42,41 +44,37 @@ namespace IdentityBase.Public
             _environment = environment;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-            services.Configure<ApplicationOptions>(_configuration.GetSection("App"));
-
+            //services.AddOptions();
+            //services.Configure<ApplicationOptions>(_configuration.GetSection("App"));
+            services.AddSingleton(_configuration.GetSection("App").Get<ApplicationOptions>()); 
             services.AddIdentityServer(_configuration, _logger, _environment);
-            services.AddDataLayer(_configuration, _logger, _environment);
-            services.AddSmsSender(_configuration, _logger, _environment);
-            services.AddEmailSender(_configuration, _logger, _environment);
-            services.AddEvents(_configuration, _logger, _environment);
-
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
-            services
-                .AddMvc()
-                .AddRazorOptions(razor =>
-                {
-                    razor.ViewLocationExpanders.Add(
-                        new Razor.CustomViewLocationExpander(
-                            _configuration["App:ThemePath"]));
-                });
-
             services.AddCors();
+            services.AddMvc().AddRazorOptions(razor =>
+                {
+                    razor.ViewLocationExpanders.Add(new Razor.CustomViewLocationExpander(_configuration["App:ThemePath"]));
+                });            
 
-            // Only use for development until this bug is fixed
-            // https://github.com/aspnet/DependencyInjection/pull/470
-            // return services.BuildServiceProvider(validateScopes: true);
+            // Create the container builder.
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterModule(new ConfigurationModule(_configuration));
+            _applicationContainer = builder.Build();
+
+            _applicationContainer.ValidateDataLayerServices(_logger);
+            _applicationContainer.ValidateEmailSenderServices(_logger);
+            _applicationContainer.ValidateSmsServices(_logger);
+            _applicationContainer.ValidateEventServices(_logger); 
+
+            return new AutofacServiceProvider(_applicationContainer);
         }
 
-        public void Configure(
-            IApplicationBuilder app,
-            IHostingEnvironment env,
-            ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -128,7 +126,7 @@ namespace IdentityBase.Public
 
             #endregion Use third party authentication
 
-            var staticFilesPath = _configuration["App:ThemePath"]; 
+            var staticFilesPath = _configuration["App:ThemePath"];
             if (!String.IsNullOrWhiteSpace(staticFilesPath))
             {
                 staticFilesPath = Path.IsPathRooted(staticFilesPath)
@@ -141,7 +139,7 @@ namespace IdentityBase.Public
                 }
             }
 
-            app.UseStaticFiles(_configuration, _logger, _environment); 
+            app.UseStaticFiles(_configuration, _logger, _environment);
             app.UseMvcWithDefaultRoute();
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");

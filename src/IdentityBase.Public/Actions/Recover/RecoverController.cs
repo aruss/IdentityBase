@@ -22,7 +22,7 @@ namespace IdentityBase.Public.Actions.Recover
         private readonly UserAccountService _userAccountService;
 
         public RecoverController(
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ILogger<RecoverController> logger,
             IUserAccountStore userAccountStore,
             IIdentityServerInteractionService interaction,
@@ -30,7 +30,7 @@ namespace IdentityBase.Public.Actions.Recover
             ClientService clientService,
             UserAccountService userAccountService)
         {
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _logger = logger;
             _interaction = interaction;
             _emailService = emailService;

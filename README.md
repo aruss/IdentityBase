@@ -30,9 +30,7 @@ IdentityBase is a [Secure Token Service (STS)](https://en.wikipedia.org/wiki/Sec
 * Two-Factor authentication
 * SMS OTP authentication
 * MySQL support
-* Docker support
 * Event Messaging Support for pache Kafka, RabbitMQ
-* Switch DI Container to Autofac
 * Plugin support
 
 ### Requirements
@@ -44,7 +42,7 @@ IdentityBase is a [Secure Token Service (STS)](https://en.wikipedia.org/wiki/Sec
 ### Platform
 
 IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
-
+    
 ### How to build
 
 * [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1
@@ -61,6 +59,7 @@ IdentityBase is built using the following great open source projects
 * [ASP.NET Core](https://github.com/aspnet)
 * [Json.Net](http://www.newtonsoft.com/json)
 * [XUnit](https://xunit.github.io/)
+* [Autofac](https://autofac.org/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
 * [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)

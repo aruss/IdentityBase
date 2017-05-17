@@ -27,12 +27,12 @@ namespace IdentityBase.Public.Actions.Login
         private readonly UserAccountService _userAccountService;
 
         public ExternalController(
-            IOptions<ApplicationOptions> applicationOptions,
+            ApplicationOptions applicationOptions,
             ILogger<ExternalController> logger,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService)
         {
-            _applicationOptions = applicationOptions.Value;
+            _applicationOptions = applicationOptions;
             _logger = logger;
             _interaction = interaction;
             _userAccountService = userAccountService;
