@@ -11,6 +11,6 @@ dotnet publish -c Release -o ../../docker/identitybase-public-ctx/app && \
 cd ../../docker && \
 cp ./identitybase-public.dockerfile ./identitybase-public-ctx/ && \
 cd ./identitybase-public-ctx && \
-docker build -f ./identitybase-public.dockerfile -t servicebase/identitybase .
+docker build -f ./identitybase-public.dockerfile -t docker.econduct.de/identitybase/identitybase .
 
-#docker run -it --rm -p 5000:5000 servicebase/identitybase
+#docker run -it --rm -p 5000:5000 docker.econduct.de/identitybase/identitybase

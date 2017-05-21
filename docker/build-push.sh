@@ -11,6 +11,5 @@ rm -rf ./identitybase-public-ctx && \
 	cd ../../docker && \
 	cp ./identitybase-public.dockerfile ./identitybase-public-ctx/ && \
 	cd ./identitybase-public-ctx && \
-	docker build -f ./identitybase-public.dockerfile -t servicebase/identitybase . && \
-	docker tag servicebase/identitybase docker.econduct.de/servicebase/identitybase && \
-	docker push docker.econduct.de/servicebase/identitybase
+	docker build -f ./identitybase-public.dockerfile -t docker.econduct.de/identitybase/identitybase . && \
+	docker push docker.econduct.de/identitybase/identitybase

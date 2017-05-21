@@ -1,22 +1,20 @@
-﻿using IdentityServer4;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
-using ServiceBase.Configuration;
+﻿using Autofac;
+using Autofac.Configuration;
+using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Configuration;
 using IdentityBase.Crypto;
 using IdentityBase.Extensions;
 using IdentityBase.Services;
+using IdentityServer4;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using ServiceBase;
+using ServiceBase.Configuration;
 using System;
 using System.IO;
-using ServiceBase;
-using Autofac;
-using Autofac.Configuration;
-using Autofac.Extensions.DependencyInjection;
 
 namespace IdentityBase.Public
 {
@@ -48,7 +46,7 @@ namespace IdentityBase.Public
         {
             //services.AddOptions();
             //services.Configure<ApplicationOptions>(_configuration.GetSection("App"));
-            services.AddSingleton(_configuration.GetSection("App").Get<ApplicationOptions>()); 
+            services.AddSingleton(_configuration.GetSection("App").Get<ApplicationOptions>());
             services.AddIdentityServer(_configuration, _logger, _environment);
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
@@ -58,19 +56,19 @@ namespace IdentityBase.Public
             services.AddMvc().AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(new Razor.CustomViewLocationExpander(_configuration["App:ThemePath"]));
-                });            
+                });
 
             // Create the container builder.
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            builder.RegisterModule(new ConfigurationModule(_configuration));
-            _applicationContainer = builder.Build();
+            builder.RegisterInstance(_configuration).As<IConfigurationRoot>().SingleInstance();
 
+            builder.RegisterModule(new ConfigurationModule(_configuration.GetSection("Services")));
+            _applicationContainer = builder.Build();
             _applicationContainer.ValidateDataLayerServices(_logger);
             _applicationContainer.ValidateEmailSenderServices(_logger);
             _applicationContainer.ValidateSmsServices(_logger);
-            _applicationContainer.ValidateEventServices(_logger); 
-
+            _applicationContainer.ValidateEventServices(_logger);
             return new AutofacServiceProvider(_applicationContainer);
         }
 
@@ -139,8 +137,17 @@ namespace IdentityBase.Public
                 }
             }
 
+            //           app.UseMvcWithDefaultRoute();   
+
+            app.UseMvc(routes =>
+            {
+                //routes.MapRoute(name: "areaRoute", template: "{area:exists}/{controller=Home}/{action=Index}");
+
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+
             app.UseStaticFiles(_configuration, _logger, _environment);
-            app.UseMvcWithDefaultRoute();
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
 
