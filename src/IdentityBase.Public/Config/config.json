@@ -4,18 +4,20 @@
     "UseIISIntegration": false
   },
   "Logging": {
-    "IncludeScopes": false,
+    "IncludeScopes": true,
     "LogLevel": {
       "Default": "Information",
       "System": "Information",
       "Microsoft": "Information",
       "IdentityModel": "Information",
-      "IdentityServer4": "Information"
+      "IdentityServer4": "Information",
+      "IdentityBase": "Information"
     }
   },
   "EntityFramework": {
     "MigrateDatabase": true,
     "SeedExampleData": true,
+    "EnsureDeleted": false,
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     }

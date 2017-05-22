@@ -10,7 +10,8 @@ namespace IdentityBase.Public.EntityFramework.Options
         public bool SeedExampleData { get; set; } = false;
         public string SeedExampleDataPath { get; set; }
         public bool MigrateDatabase { get; set; } = false;
-
+        public bool EnsureDeleted { get; set; } = false;
+        
         public bool CleanupTokens { get; set; } = true;
         public int TokenCleanupInterval { get; set; } = 60;
 

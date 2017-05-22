@@ -19,5 +19,19 @@ namespace IdentityBase.Extensions
 
             return app;
         }
+
+        public static IApplicationBuilder CleanupStores(this IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var initializer = serviceScope.ServiceProvider.GetService<IStoreInitializer>();
+                if (initializer != null)
+                {
+                    initializer.CleanupStores();
+                }
+            }
+
+            return app;
+        }        
     }
 }

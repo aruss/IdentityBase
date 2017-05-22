@@ -176,5 +176,10 @@ namespace IdentityBase.Public.IntegrationTests
 
             _defaultDbContext.SaveChanges();
         }
+
+        public void CleanupStores()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace IdentityBase.Public
 
             if (options.EnableRestApi)
             {
-                services.AddRestApi(options); 
+                services.AddRestApi(options);
             }
 
             // Create the container builder.
@@ -76,7 +76,12 @@ namespace IdentityBase.Public
             return new AutofacServiceProvider(_applicationContainer);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationOptions options)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime,
+            ApplicationOptions options)
         {
             if (env.IsDevelopment())
             {
@@ -127,7 +132,7 @@ namespace IdentityBase.Public
             }
 
             #endregion Use third party authentication
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
@@ -136,13 +141,32 @@ namespace IdentityBase.Public
             app.UseStaticFiles(_configuration, _logger, _environment);
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
-            
+
             if (options.EnableRestApi)
             {
-                app.UseRestApi(options); 
+                app.UseRestApi(options);
             }
 
-            app.InitializeStores();
+            appLifetime.ApplicationStarted.Register(() =>
+            {
+                _logger.LogInformation("Application started");
+
+                // TODO: implement leader election
+                options.Leader = true; 
+
+                app.InitializeStores();
+            });
+
+            appLifetime.ApplicationStopping.Register(() =>
+            {
+                _logger.LogInformation("Stopping application...");
+                app.CleanupStores(); 
+            });
+                       
+            appLifetime.ApplicationStopped.Register(() =>
+            {
+                _logger.LogInformation("Application stopped");
+            });
         }
     }
 }

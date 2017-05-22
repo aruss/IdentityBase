@@ -7,6 +7,8 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ApplicationOptions
     {
+        public bool Leader { get; set; } = true; 
+
         // Local account options
 
         public int PasswordHashingIterationCount { get; set; } = 0;

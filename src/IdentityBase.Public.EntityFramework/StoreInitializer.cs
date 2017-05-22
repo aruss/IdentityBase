@@ -11,20 +11,23 @@ using IdentityBase.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IdentityBase.Configuration;
 
 namespace IdentityBase.Public.EntityFramework
 {
     public class DefaultStoreInitializer : IStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
+        private readonly ApplicationOptions _appOptions;
         private readonly ILogger<DefaultStoreInitializer> _logger;
         private readonly DefaultDbContext _defaultDbContext;
         private readonly IConfigurationDbContext _configurationDbContext;
         private readonly IPersistedGrantDbContext _persistedGrantDbContext;
         private readonly IUserAccountDbContext _userAccountDbContext;
-        
+
         public DefaultStoreInitializer(
             EntityFrameworkOptions options,
+            ApplicationOptions appOptions,
             ILogger<DefaultStoreInitializer> logger,
             DefaultDbContext defaultDbContext,
             IConfigurationDbContext configurationDbContext,
@@ -32,6 +35,7 @@ namespace IdentityBase.Public.EntityFramework
             IUserAccountDbContext userAccountDbContext)
         {
             _options = options;
+            _appOptions = appOptions; 
             _logger = logger;
             _defaultDbContext = defaultDbContext;
             _configurationDbContext = configurationDbContext;
@@ -41,20 +45,35 @@ namespace IdentityBase.Public.EntityFramework
 
         public void InitializeStores()
         {
-            if (_options.MigrateDatabase)
+            // Only a leader may migrate or seed 
+            if (_appOptions.Leader)
             {
-                _defaultDbContext.Database.Migrate();
-            }
+                if (_options.MigrateDatabase)
+                {
+                    _logger.LogInformation("Try migrate database"); 
+                    _defaultDbContext.Database.Migrate();
+                }
 
-            if (_options.SeedExampleData)
-            {
-                this.EnsureSeedData();
+                if (_options.SeedExampleData)
+                {
+                    _logger.LogInformation("Try seed initial data");
+                    this.EnsureSeedData();
+                }
             }
-        }        
+        }
+
+        public void CleanupStores()
+        {
+            // Only leader may delete the database 
+            if (_appOptions.Leader && _options.EnsureDeleted)
+            {
+                _logger.LogInformation("Ensure deleting database");
+                _defaultDbContext.Database.EnsureDeleted(); 
+            }
+        }
 
         internal virtual void EnsureSeedData()
         {
-         
             if (!_configurationDbContext.IdentityResources.Any())
             {
                 var resources = JsonConvert.DeserializeObject<List<IdentityResource>>(
@@ -87,7 +106,7 @@ namespace IdentityBase.Public.EntityFramework
                 }
                 _configurationDbContext.SaveChanges();
             }
-            
+
             if (!_userAccountDbContext.UserAccounts.Any())
             {
                 var userAccounts = JsonConvert.DeserializeObject<List<UserAccount>>(
