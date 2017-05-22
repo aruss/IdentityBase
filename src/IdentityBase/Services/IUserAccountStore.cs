@@ -57,8 +57,5 @@ namespace IdentityBase.Services
         Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount);
 
         Task DeleteExternalAccountAsync(Guid id);
-
-        // Managment 
-        Task<IEnumerable<UserAccount>> LoadAsync();
     }
 }

@@ -15,15 +15,7 @@ namespace IdentityBase.Public.Api
         {
             _userAccountStore = userAccountStore;
         }
-
-        [HttpGet]
-        [Route("api/useraccounts")]
-        [Authorize("useraccount:read")]
-        public async Task<object> Get()
-        {
-            return await _userAccountStore.LoadAsync();
-        }
-
+        
         [HttpGet]
         [Route("api/useraccounts/{id}")]
         [Authorize("useraccount:read")]

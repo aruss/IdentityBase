@@ -27,51 +27,6 @@ namespace IdentityBase.Public.EntityFramework.Stores
             _logger = logger;
         }
 
-        public Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount)
-        {
-            var userAccountId = externalAccount.UserAccount != null ?
-                externalAccount.UserAccount.Id : externalAccount.UserAccountId;
-            var userAccountEntity = _context.UserAccounts
-                .SingleOrDefault(x => x.Id == userAccountId);
-
-            if (userAccountEntity == null)
-            {
-                _logger.LogError("{existingUserAccountId} not found in database", userAccountId);
-                return null;
-            }
-
-            var externalAccountEntity = _context.ExternalAccounts.SingleOrDefault(x =>
-                x.Provider == externalAccount.Provider && x.Subject == externalAccount.Subject);
-
-            if (externalAccountEntity == null)
-            {
-                _logger.LogDebug("{0} {1} not found in database",
-                    externalAccount.Provider, externalAccount.Subject);
-
-                externalAccountEntity = externalAccount.ToEntity();
-                _context.ExternalAccounts.Add(externalAccountEntity);
-            }
-            else
-            {
-                _logger.LogDebug("{0} {1} found in database",
-                    externalAccountEntity.Provider, externalAccountEntity.Subject);
-
-                externalAccount.UpdateEntity(externalAccountEntity);
-            }
-
-            try
-            {
-                _context.SaveChanges();
-                return Task.FromResult(externalAccountEntity.ToModel());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(0, ex, "Exception storing external account");
-            }
-
-            return Task.FromResult<ExternalAccount>(null);
-        }
-
         public Task DeleteByIdAsync(Guid id)
         {
             var userAccount = _context.UserAccounts
@@ -194,7 +149,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
             }
 
             try
-           {
+            {
                 _context.SaveChanges();
                 return Task.FromResult(userAccountEntity.ToModel());
             }
@@ -205,17 +160,50 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             return Task.FromResult<UserAccount>(null);
         }
-
-        // Managment 
-        public async Task<IEnumerable<UserAccount>> LoadAsync()
+        
+        public Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount)
         {
-            return _context.UserAccounts
-               .Include(x => x.Accounts)
-               .Include(x => x.Claims)
-               .Select(s => s.ToModel())
-               .ToList(); 
-        }
+            var userAccountId = externalAccount.UserAccount != null ?
+                externalAccount.UserAccount.Id : externalAccount.UserAccountId;
+            var userAccountEntity = _context.UserAccounts
+                .SingleOrDefault(x => x.Id == userAccountId);
 
-     
+            if (userAccountEntity == null)
+            {
+                _logger.LogError("{existingUserAccountId} not found in database", userAccountId);
+                return null;
+            }
+
+            var externalAccountEntity = _context.ExternalAccounts.SingleOrDefault(x =>
+                x.Provider == externalAccount.Provider && x.Subject == externalAccount.Subject);
+
+            if (externalAccountEntity == null)
+            {
+                _logger.LogDebug("{0} {1} not found in database",
+                    externalAccount.Provider, externalAccount.Subject);
+
+                externalAccountEntity = externalAccount.ToEntity();
+                _context.ExternalAccounts.Add(externalAccountEntity);
+            }
+            else
+            {
+                _logger.LogDebug("{0} {1} found in database",
+                    externalAccountEntity.Provider, externalAccountEntity.Subject);
+
+                externalAccount.UpdateEntity(externalAccountEntity);
+            }
+
+            try
+            {
+                _context.SaveChanges();
+                return Task.FromResult(externalAccountEntity.ToModel());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(0, ex, "Exception storing external account");
+            }
+
+            return Task.FromResult<ExternalAccount>(null);
+        }
     }
 }
