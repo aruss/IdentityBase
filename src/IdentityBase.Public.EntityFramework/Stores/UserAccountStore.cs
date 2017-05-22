@@ -7,6 +7,7 @@ using IdentityBase.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace IdentityBase.Public.EntityFramework.Stores
 {
@@ -204,5 +205,17 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             return Task.FromResult<UserAccount>(null);
         }
+
+        // Managment 
+        public async Task<IEnumerable<UserAccount>> LoadAsync()
+        {
+            return _context.UserAccounts
+               .Include(x => x.Accounts)
+               .Include(x => x.Claims)
+               .Select(s => s.ToModel())
+               .ToList(); 
+        }
+
+     
     }
 }

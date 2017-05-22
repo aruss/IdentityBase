@@ -80,5 +80,9 @@ namespace IdentityBase.Configuration
         public string WindowsAuthenticationDisplayName { get; set; } = "Windows";
 
         public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
+
+        public bool EnableRestApi { get; set; } = false;
+
+        public string ThemePath { get; set; }
     }
 }

@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityBase.Public.Api
 {
-    [Area("publicapi")]
-    public class FooController : Controller
+    [Area("Api")]
+    public class ClientsController : Controller
     {
+        public ClientsController()
+        {
 
+        }
+        
         public object Get()
         {
             return new

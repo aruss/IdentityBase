@@ -44,9 +44,8 @@ namespace IdentityBase.Public
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.AddOptions();
-            //services.Configure<ApplicationOptions>(_configuration.GetSection("App"));
-            services.AddSingleton(_configuration.GetSection("App").Get<ApplicationOptions>());
+            var options = _configuration.GetSection("App").Get<ApplicationOptions>();
+            services.AddSingleton(options);
             services.AddIdentityServer(_configuration, _logger, _environment);
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
@@ -57,6 +56,11 @@ namespace IdentityBase.Public
                 {
                     razor.ViewLocationExpanders.Add(new Razor.CustomViewLocationExpander(_configuration["App:ThemePath"]));
                 });
+
+            if (options.EnableRestApi)
+            {
+                services.AddRestApi(options); 
+            }
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -72,7 +76,7 @@ namespace IdentityBase.Public
             return new AutofacServiceProvider(_applicationContainer);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationOptions options)
         {
             if (env.IsDevelopment())
             {
@@ -123,45 +127,20 @@ namespace IdentityBase.Public
             }
 
             #endregion Use third party authentication
-
-            var staticFilesPath = _configuration["App:ThemePath"];
-            if (!String.IsNullOrWhiteSpace(staticFilesPath))
-            {
-                staticFilesPath = Path.IsPathRooted(staticFilesPath)
-                    ? Path.Combine(staticFilesPath, "Public")
-                    : Path.Combine(Directory.GetCurrentDirectory(), staticFilesPath, "Public");
-
-                if (Directory.Exists(staticFilesPath))
-                {
-
-                }
-            }
-
-            //           app.UseMvcWithDefaultRoute();   
-
+            
             app.UseMvc(routes =>
             {
-                //routes.MapRoute(name: "areaRoute", template: "{area:exists}/{controller=Home}/{action=Index}");
-
                 routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
             });
-
 
             app.UseStaticFiles(_configuration, _logger, _environment);
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
-
-            // TODO: if feature "user account api" is enabled
-            /*app.Map("/api", apiApp =>
+            
+            if (options.EnableRestApi)
             {
-                apiApp.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-                {
-                    Authority = "https://demo.identityserver.io",
-                    ApiName = "api"
-                });
-
-                apiApp.UseMvc();
-            });*/
+                app.UseRestApi(options); 
+            }
 
             app.InitializeStores();
         }

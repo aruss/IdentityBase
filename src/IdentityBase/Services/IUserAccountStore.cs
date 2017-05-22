@@ -1,5 +1,6 @@
 ﻿using IdentityBase.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace IdentityBase.Services
@@ -56,5 +57,8 @@ namespace IdentityBase.Services
         Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount);
 
         Task DeleteExternalAccountAsync(Guid id);
+
+        // Managment 
+        Task<IEnumerable<UserAccount>> LoadAsync();
     }
 }
