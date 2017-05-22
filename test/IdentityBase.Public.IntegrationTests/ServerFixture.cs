@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using IdentityBase.Configuration;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 
@@ -11,7 +13,11 @@ namespace IdentityBase.Public.IntegrationTests
 
         public ServerFixture()
         {
-            this.Server = ServerHelper.CreateServer();
+            this.Server = ServerHelper.CreateServer((services) =>
+            {
+                services.AddSingleton(new ApplicationOptions());
+            });
+
             this.Client = this.Server.CreateClient();
         }
 

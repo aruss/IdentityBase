@@ -49,9 +49,9 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountRecovery = false;
+                    LoginAfterAccountRecovery = false
                 });
             });
 

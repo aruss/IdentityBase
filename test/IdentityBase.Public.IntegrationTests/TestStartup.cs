@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using ServiceBase;
+using IdentityBase.Configuration;
 
 namespace IdentityBase.Public.IntegrationTests
 {
@@ -25,7 +26,7 @@ namespace IdentityBase.Public.IntegrationTests
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
+            services.AddRestApi(new ApplicationOptions()); 
 
             services.AddIdentityServer((options) =>
             {
@@ -86,7 +87,10 @@ namespace IdentityBase.Public.IntegrationTests
               });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseExceptionHandler("/error");
@@ -98,7 +102,11 @@ namespace IdentityBase.Public.IntegrationTests
                 AutomaticChallenge = false
             });
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.UseRestApi(new ApplicationOptions());
             app.InitializeStores();
         }
     }

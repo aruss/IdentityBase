@@ -31,11 +31,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true,
                 });
             });
 
@@ -74,11 +74,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true,
                 });
             });
 
@@ -124,11 +124,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -166,11 +166,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -208,11 +208,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -274,11 +274,11 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -336,11 +336,11 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = false;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = false,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -399,11 +399,11 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = true;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = true,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -448,11 +448,11 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = true;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = false;
+                    LoginAfterAccountCreation = true,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = false
                 });
             });
 
@@ -513,11 +513,11 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true
                 });
             });
 
@@ -573,12 +573,12 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = true;
-                    option.AutomaticAccountMerge = true;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = true,
+                    AutomaticAccountMerge = true
                 });
             });
 
@@ -621,11 +621,11 @@ namespace IdentityBase.Public.IntegrationTests
                 var emailServiceMock = new Mock<IEmailService>();
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
 
-                services.Configure<ApplicationOptions>((option) =>
+                services.AddSingleton(new ApplicationOptions
                 {
-                    option.LoginAfterAccountCreation = false;
-                    option.LoginAfterAccountConfirmation = true;
-                    option.RequireLocalAccountVerification = false;
+                    LoginAfterAccountCreation = false,
+                    LoginAfterAccountConfirmation = true,
+                    RequireLocalAccountVerification = false
                 });
             });
 

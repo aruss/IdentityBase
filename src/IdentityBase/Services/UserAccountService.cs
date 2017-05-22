@@ -52,13 +52,21 @@ namespace IdentityBase.Services
                 return result;
             }
 
-            result.IsPasswordValid = _crypto.VerifyPasswordHash(userAccount.PasswordHash, password,
+            if (userAccount.HasPassword())
+            {
+                result.IsLocalAccount = true;
+                result.IsPasswordValid = _crypto.VerifyPasswordHash(userAccount.PasswordHash, password,
                 _applicationOptions.PasswordHashingIterationCount);
+            }
 
             result.UserAccount = userAccount;
             result.IsLoginAllowed = userAccount.IsLoginAllowed;
             result.NeedChangePassword = false;
-            result.IsLocalAccount = userAccount.HasPassword();
+
+            if (!result.IsPasswordValid && !result.IsLocalAccount)
+            {
+                var hints = userAccount.Accounts.Select(s => s.Provider).ToArray(); 
+            }
 
             return result;
         }

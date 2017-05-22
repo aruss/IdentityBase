@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using IdentityBase.Configuration;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -13,7 +15,11 @@ namespace IdentityBase.Public.IntegrationTests
 
         public GeneralTests()
         {
-            _server = ServerHelper.CreateServer();
+            _server = ServerHelper.CreateServer((services) =>
+            {
+                services.AddSingleton(new ApplicationOptions());
+            }); 
+
             _client = _server.CreateClient();
         }
 

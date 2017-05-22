@@ -17,7 +17,7 @@
     "MigrateDatabase": true,
     "SeedExampleData": true,
     "Npgsql": {
-      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+      "ConnectionString": "User ID=damienbod;Password=1234;Host=localhost;Port=5432;Database=damienbod;Pooling=true;"
     }
   },
   "Events": {
@@ -27,6 +27,7 @@
     "RaiseSuccessEvents": true
   },
   "App": {
+    // local account
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
     "PasswordHashingIterationCount": 0,
@@ -42,6 +43,7 @@
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
     "EnableRestApi": true
+    //"ThemePath":  "./Themes/Fancy"
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"
@@ -51,6 +53,7 @@
   },
   "services": {
     "modules": [
+      //{ "type": "IdentityBase.Public.EntityFrameworkInMemoryModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.EntityFrameworkNpgsqlModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
