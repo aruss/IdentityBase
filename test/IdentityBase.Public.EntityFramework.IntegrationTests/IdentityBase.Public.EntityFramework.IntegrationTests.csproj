@@ -11,8 +11,8 @@
     <ApplicationIcon />    
     <OutputTypeEx>library</OutputTypeEx>    
     <StartupObject />    
-    <AssemblyName>IdentityBase.Public.EF.IntegrationTests</AssemblyName>    
-    <RootNamespace>IdentityBase.Public.EF.IntegrationTests</RootNamespace>
+    <AssemblyName>IdentityBase.Public.EntityFramework.IntegrationTests</AssemblyName>    
+    <RootNamespace>IdentityBase.Public.EntityFramework.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
