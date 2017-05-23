@@ -4,16 +4,19 @@ using System.Collections.Generic;
 
 namespace IdentityBase.Public.Razor
 {
+    /// <summary>
+    /// Specifies the contracts for a view location expander that is used by <see cref="Microsoft.AspNetCore.Mvc.Razor.RazorViewEngine"/> instances to determine search paths for a view.
+    /// </summary>
     public class CustomViewLocationExpander : IViewLocationExpander
     {
-        private readonly string _themePath; 
+        private readonly string _themePath;
 
         // http://benfoster.io/blog/asp-net-core-themes-and-multi-tenancy
         public CustomViewLocationExpander(string themePath = null)
         {
-            _themePath = themePath; 
+            _themePath = themePath;
         }
-        
+
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
             if (!String.IsNullOrWhiteSpace(_themePath))

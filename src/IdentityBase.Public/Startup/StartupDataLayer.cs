@@ -10,10 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Reflection;
-using IdentityBase.Public.Extensions;
-using IdentityBase.Public.EntityFramework.Options;
 
 namespace IdentityBase.Public
 {
@@ -70,8 +67,6 @@ namespace IdentityBase.Public
                 };
 
                 config.GetSection("EntityFramework").Bind(options); 
-                
-                //services.AddDefaultStoreInitializer(options);
             });
 
             builder.Populate(services);
@@ -98,12 +93,6 @@ namespace IdentityBase.Public
                 };
 
                 config.GetSection("EntityFramework").Bind(options);
-
-                /*options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
-                options.SeedExampleData = config.GetSection("EntityFramework").GetValue<bool>("SeedExampleData");
-                options.SeedExampleDataPath = Path.Combine(".", "Config");
-
-                services.AddDefaultStoreInitializer(options);*/
             });
 
             builder.Populate(services);
@@ -130,12 +119,6 @@ namespace IdentityBase.Public
                 };
 
                 config.GetSection("EntityFramework").Bind(options);
-
-                /*options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
-                options.SeedExampleData = config.GetSection("EntityFramework").GetValue<bool>("SeedExampleData");
-                options.SeedExampleDataPath = Path.Combine(".", "Config");
-
-                services.AddDefaultStoreInitializer(options);*/
             });
 
             builder.Populate(services);
