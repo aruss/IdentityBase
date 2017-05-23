@@ -44,7 +44,7 @@
     "AutomaticAccountMerge": true,
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
-    "EnableRestApi": true
+    "EnableRestApi": false
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"

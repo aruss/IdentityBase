@@ -18,7 +18,8 @@ namespace IdentityBase.Public.Api
         
         [HttpGet]
         [Route("api/useraccounts/{id}")]
-        [Authorize("useraccount:read")]
+        [Authorize]
+        //[Authorize("useraccount:read")]
         public async Task<object> Get(Guid id)
         {
             return await _userAccountStore.LoadByIdAsync(id);

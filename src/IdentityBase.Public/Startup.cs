@@ -84,12 +84,11 @@ namespace IdentityBase.Public
                     new Razor.CustomViewLocationExpander(Configuration["App:ThemePath"]));
             });
 
-            if (options.EnableRestApi)
-            {
-                services.AddRestApi(options);
-            }
-
-
+            //if (options.EnableRestApi)
+            //{
+            //    services.AddRestApi(options);
+            //}
+            
             // Update current instances 
             Current.Configuration = Configuration;
             Current.Logger = _logger;
@@ -178,10 +177,10 @@ namespace IdentityBase.Public
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
 
-            if (options.EnableRestApi)
-            {
-                app.UseRestApi(options);
-            }
+            //if (options.EnableRestApi)
+            //{
+            //    app.UseRestApi(options);
+            //}
 
             appLifetime.ApplicationStarted.Register(() =>
             {
