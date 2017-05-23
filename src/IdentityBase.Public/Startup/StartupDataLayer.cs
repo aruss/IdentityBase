@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
+using IdentityBase.Public.Extensions;
+using IdentityBase.Public.EntityFramework.Options;
 
 namespace IdentityBase.Public
 {
@@ -31,6 +33,22 @@ namespace IdentityBase.Public
         }
     }
 
+    public class EntityFrameworkInitializerModule : Autofac.Module
+    {
+        /// <summary>
+        /// Loads dependencies 
+        /// </summary>
+        /// <param name="builder">The builder through which components can be registered.</param>
+        protected override void Load(ContainerBuilder builder)
+        {
+            var services = new ServiceCollection();
+            var config = Current.Configuration;
+            var options = new EntityFrameworkOptions(); 
+            Current.Configuration.GetSection("EntityFramework").Bind(options);
+            services.AddDefaultStoreInitializer(options);
+            builder.Populate(services);
+        }
+    }
 
     public class EntityFrameworkInMemoryModule : Autofac.Module
     {
@@ -41,7 +59,7 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             var services = new ServiceCollection();
-            var config = Program.Configuration;
+            var config = Current.Configuration;
 
             services.AddEntityFrameworkStores((options) =>
             {
@@ -50,11 +68,9 @@ namespace IdentityBase.Public
                     dbBuilder.UseInMemoryDatabase();
                 };
 
-                options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
-                options.SeedExampleData = config.GetSection("EntityFramework").GetValue<bool>("SeedExampleData");
-                options.SeedExampleDataPath = Path.Combine(".", "Config");
-
-                services.AddDefaultStoreInitializer(options);
+                config.GetSection("EntityFramework").Bind(options); 
+                
+                //services.AddDefaultStoreInitializer(options);
             });
 
             builder.Populate(services);
@@ -70,7 +86,7 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             var services = new ServiceCollection();
-            var config = Program.Configuration;
+            var config = Current.Configuration;
 
             services.AddEntityFrameworkStores((options) =>
             {
@@ -80,11 +96,13 @@ namespace IdentityBase.Public
                     dbBuilder.UseSqlServer(config["EntityFramework:SqlServer:ConnectionString"], o => o.MigrationsAssembly(migrationsAssembly));
                 };
 
-                options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
+                config.GetSection("EntityFramework").Bind(options);
+
+                /*options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
                 options.SeedExampleData = config.GetSection("EntityFramework").GetValue<bool>("SeedExampleData");
                 options.SeedExampleDataPath = Path.Combine(".", "Config");
 
-                services.AddDefaultStoreInitializer(options);
+                services.AddDefaultStoreInitializer(options);*/
             });
 
             builder.Populate(services);
@@ -100,7 +118,7 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             var services = new ServiceCollection();
-            var config = Program.Configuration;
+            var config = Current.Configuration;
 
             services.AddEntityFrameworkStores((options) =>
             {
@@ -110,11 +128,13 @@ namespace IdentityBase.Public
                     dbBuilder.UseNpgsql(config["EntityFramework:Npgsql:ConnectionString"], o => o.MigrationsAssembly(migrationsAssembly));
                 };
 
-                options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
+                config.GetSection("EntityFramework").Bind(options);
+
+                /*options.MigrateDatabase = config.GetSection("EntityFramework").GetValue<bool>("MigrateDatabase");
                 options.SeedExampleData = config.GetSection("EntityFramework").GetValue<bool>("SeedExampleData");
                 options.SeedExampleDataPath = Path.Combine(".", "Config");
 
-                services.AddDefaultStoreInitializer(options);
+                services.AddDefaultStoreInitializer(options);*/
             });
 
             builder.Populate(services);

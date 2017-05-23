@@ -15,9 +15,10 @@
     }
   },
   "EntityFramework": {
-    "MigrateDatabase": true,
+    "MigrateDatabase": false,
     "SeedExampleData": true,
     "EnsureDeleted": false,
+    "SeedExampleDataPath": "./config",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     }
@@ -51,9 +52,10 @@
   "Sms": {
     "TemplateDirectoryPath": "./Templates/Sms"
   },
-  "services": {
+  "Services": {
     "modules": [
-      { "type": "IdentityBase.Public.EntityFrameworkNpgsqlModule, IdentityBase.Public" },
+      { "type": "IdentityBase.Public.EntityFrameworkInMemoryModule, IdentityBase.Public" },
+      { "type": "IdentityBase.Public.EntityFrameworkInitializerModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }

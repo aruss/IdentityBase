@@ -25,9 +25,9 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<DefaultEmailService>().As<IEmailService>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
             builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Email:Smtp").Get<SmtpOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Email:Smtp").Get<SmtpOptions>());
         }
     }
 
@@ -40,9 +40,9 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<DefaultEmailService>().As<IEmailService>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Email").Get<DefaultEmailServiceOptions>());
             builder.RegisterType<SendGridEmailSender>().As<IEmailSender>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Email:SendGrid").Get<SendGridOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Email:SendGrid").Get<SendGridOptions>());
         }
     }
 

@@ -10,14 +10,12 @@ namespace IdentityBase.Public
 {
     public class Program
     {
-        public static IConfigurationRoot Configuration { get; private set; }
-
         public static void Main(string[] args)
         {
             var contentRoot = Directory.GetCurrentDirectory();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            Configuration = ConfigurationSetup.Configure(contentRoot, environment, (confBuilder) =>
+            var configuration = ConfigurationSetup.Configure(contentRoot, environment, (confBuilder) =>
             {
                 if ("Development".Equals(environment, StringComparison.OrdinalIgnoreCase))
                 {
@@ -27,8 +25,8 @@ namespace IdentityBase.Public
                 confBuilder.AddCommandLine(args);
             });
 
-            var configHost = Configuration.GetSection("Host");
-            var configLogging = Configuration.GetSection("Logging");
+            var configHost = configuration.GetSection("Host");
+            var configLogging = configuration.GetSection("Logging");
 
             var hostBuilder = new WebHostBuilder()
                 .UseKestrel()

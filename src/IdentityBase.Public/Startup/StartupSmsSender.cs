@@ -24,9 +24,9 @@ namespace IdentityBase.Public
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<DefaultSmsService>().As<ISmsService>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Sms").Get<DefaultSmsServiceOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Sms").Get<DefaultSmsServiceOptions>());
             builder.RegisterType<TwillioSmsSender>().As<ISmsSender>();
-            builder.RegisterInstance(Program.Configuration.GetSection("Sms:Twillio").Get<TwillioOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Sms:Twillio").Get<TwillioOptions>());
         }
     }
 
