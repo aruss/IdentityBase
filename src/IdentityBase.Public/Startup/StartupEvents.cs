@@ -22,7 +22,7 @@ namespace IdentityBase.Public
         /// <param name="builder">The builder through which components can be registered.</param>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterInstance(Current.Configuration.GetSection("Events").Get<EventOptions>());
+            builder.RegisterInstance(Current.Configuration.GetSection("Events").Get<EventOptions>() ?? new EventOptions());
             builder.RegisterType<DefaultEventService>().As<IEventService>();
             builder.RegisterType<DefaultEventSink>().As<IEventSink>();
         }

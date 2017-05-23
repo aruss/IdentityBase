@@ -10,22 +10,28 @@ namespace IdentityBase.Public
 {
     public static class StartupStaticFiles
     {
-        public static void UseStaticFiles(this IApplicationBuilder app, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
+        public static void UseStaticFiles(
+            this IApplicationBuilder app, 
+            IConfigurationRoot config,
+            ILogger logger, 
+            IHostingEnvironment environment)
         {
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(GetStaticFilesPath(config)),
+                FileProvider = new PhysicalFileProvider(GetStaticFilesPath(config, environment)),
             });
         }
 
-        private static string GetStaticFilesPath(IConfigurationRoot config)
+        private static string GetStaticFilesPath(
+            IConfigurationRoot config,
+            IHostingEnvironment environment)
         {
             var staticFilesPath = config["App:ThemePath"];
             if (!String.IsNullOrWhiteSpace(staticFilesPath))
             {
                 staticFilesPath = Path.IsPathRooted(staticFilesPath)
                     ? Path.Combine(staticFilesPath, "Public")
-                    : Path.Combine(Directory.GetCurrentDirectory(), staticFilesPath, "Public");
+                    : Path.Combine(environment.ContentRootPath, staticFilesPath, "Public");
 
                 if (Directory.Exists(staticFilesPath))
                 {
@@ -33,7 +39,7 @@ namespace IdentityBase.Public
                 }
             }
 
-            return Path.Combine(Directory.GetCurrentDirectory(), "Themes", "Default", "Public");
+            return Path.Combine(environment.ContentRootPath, "Themes/Default/Public");
         }
     }
 }

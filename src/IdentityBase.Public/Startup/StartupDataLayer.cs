@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Public.EntityFramework;
+using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Services;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
