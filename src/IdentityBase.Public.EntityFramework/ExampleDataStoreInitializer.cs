@@ -1,18 +1,121 @@
 ﻿using IdentityBase.Services;
 using System;
+using IdentityBase.Configuration;
+using IdentityBase.Models;
+using IdentityBase.Public.EntityFramework.Interfaces;
+using IdentityBase.Public.EntityFramework.Mappers;
+using IdentityBase.Public.EntityFramework.Options;
+using IdentityBase.Services;
+using IdentityServer4.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using IdentityBase.Crypto;
 
 namespace IdentityBase.Public.EntityFramework
 {
     public class ExampleDataStoreInitializer : IStoreInitializer
     {
-        public void CleanupStores()
+        private readonly EntityFrameworkOptions _options;
+        private readonly ApplicationOptions _appOptions;
+        private readonly ILogger<ConfigBasedStoreInitializer> _logger;
+        private readonly DefaultDbContext _defaultDbContext;
+        private readonly IConfigurationDbContext _configurationDbContext;
+        private readonly IPersistedGrantDbContext _persistedGrantDbContext;
+        private readonly IUserAccountDbContext _userAccountDbContext;
+        private readonly ICrypto _crypto;
+
+        public ExampleDataStoreInitializer(
+            EntityFrameworkOptions options,
+            ApplicationOptions appOptions,
+            ILogger<ConfigBasedStoreInitializer> logger,
+            DefaultDbContext defaultDbContext,
+            IConfigurationDbContext configurationDbContext,
+            IPersistedGrantDbContext persistedGrantDbContext,
+            IUserAccountDbContext userAccountDbContext,
+            ICrypto crypto)
         {
-            throw new NotImplementedException();
+            _options = options;
+            _appOptions = appOptions;
+            _logger = logger;
+            _defaultDbContext = defaultDbContext;
+            _configurationDbContext = configurationDbContext;
+            _persistedGrantDbContext = persistedGrantDbContext;
+            _userAccountDbContext = userAccountDbContext;
+            _crypto = crypto; 
         }
 
         public void InitializeStores()
         {
-            throw new NotImplementedException();
+            // Only a leader may migrate or seed 
+            if (_appOptions.Leader)
+            {
+                if (_options.MigrateDatabase)
+                {
+                    _logger.LogInformation("Try migrate database");
+                    _defaultDbContext.Database.Migrate();
+                }
+
+                if (_options.SeedExampleData)
+                {
+                    _logger.LogInformation("Try seed initial data");
+                    this.EnsureSeedData();
+                }
+            }
+        }
+
+        public void CleanupStores()
+        {
+            // Only leader may delete the database 
+            if (_appOptions.Leader && _options.EnsureDeleted)
+            {
+                _logger.LogInformation("Ensure deleting database");
+                _defaultDbContext.Database.EnsureDeleted();
+            }
+        }
+
+        internal virtual void EnsureSeedData()
+        {
+            var exampleData = new ExampleData(); 
+
+            if (!_configurationDbContext.IdentityResources.Any())
+            {
+                foreach (var resource in exampleData.GetIdentityResources())
+                {
+                    _configurationDbContext.IdentityResources.Add(resource.ToEntity());
+                }
+                _configurationDbContext.SaveChanges();
+            }
+
+            if (!_configurationDbContext.ApiResources.Any())
+            {
+                foreach (var resource in exampleData.GetApiResources())
+                {
+                    _configurationDbContext.ApiResources.Add(resource.ToEntity());
+                }
+                _configurationDbContext.SaveChanges();
+            }
+
+            if (!_configurationDbContext.Clients.Any())
+            {
+                foreach (var client in exampleData.GetClients())
+                {
+                    _configurationDbContext.Clients.Add(client.ToEntity());
+                }
+                _configurationDbContext.SaveChanges();
+            }
+
+            if (!_userAccountDbContext.UserAccounts.Any())
+            {
+                foreach (var userAccount in exampleData.GetUserAccounts(_crypto, _appOptions))
+                {
+                    _userAccountDbContext.UserAccounts.Add(userAccount.ToEntity());
+                }
+                _userAccountDbContext.SaveChanges();
+            }
         }
     }
 }

@@ -55,7 +55,7 @@
   "Services": {
     "modules": [
       { "type": "IdentityBase.Public.EntityFramework.InMemoryModule, IdentityBase.Public.EntityFramework" },
-      { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+      { "type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
       { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
