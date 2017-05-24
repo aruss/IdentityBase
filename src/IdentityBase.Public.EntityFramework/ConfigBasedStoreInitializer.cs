@@ -1,41 +1,40 @@
-﻿using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+﻿using IdentityBase.Configuration;
 using IdentityBase.Models;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Services;
+using IdentityServer4.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IdentityBase.Configuration;
 
 namespace IdentityBase.Public.EntityFramework
 {
-    public class DefaultStoreInitializer : IStoreInitializer
+    public class ConfigBasedStoreInitializer : IStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
         private readonly ApplicationOptions _appOptions;
-        private readonly ILogger<DefaultStoreInitializer> _logger;
+        private readonly ILogger<ConfigBasedStoreInitializer> _logger;
         private readonly DefaultDbContext _defaultDbContext;
         private readonly IConfigurationDbContext _configurationDbContext;
         private readonly IPersistedGrantDbContext _persistedGrantDbContext;
         private readonly IUserAccountDbContext _userAccountDbContext;
 
-        public DefaultStoreInitializer(
+        public ConfigBasedStoreInitializer(
             EntityFrameworkOptions options,
             ApplicationOptions appOptions,
-            ILogger<DefaultStoreInitializer> logger,
+            ILogger<ConfigBasedStoreInitializer> logger,
             DefaultDbContext defaultDbContext,
             IConfigurationDbContext configurationDbContext,
             IPersistedGrantDbContext persistedGrantDbContext,
             IUserAccountDbContext userAccountDbContext)
         {
             _options = options;
-            _appOptions = appOptions; 
+            _appOptions = appOptions;
             _logger = logger;
             _defaultDbContext = defaultDbContext;
             _configurationDbContext = configurationDbContext;
@@ -50,7 +49,7 @@ namespace IdentityBase.Public.EntityFramework
             {
                 if (_options.MigrateDatabase)
                 {
-                    _logger.LogInformation("Try migrate database"); 
+                    _logger.LogInformation("Try migrate database");
                     _defaultDbContext.Database.Migrate();
                 }
 
@@ -68,7 +67,7 @@ namespace IdentityBase.Public.EntityFramework
             if (_appOptions.Leader && _options.EnsureDeleted)
             {
                 _logger.LogInformation("Ensure deleting database");
-                _defaultDbContext.Database.EnsureDeleted(); 
+                _defaultDbContext.Database.EnsureDeleted();
             }
         }
 
