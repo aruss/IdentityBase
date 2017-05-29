@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Authentication;
-using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 
-namespace IdentityBase.Public.Extensions
+namespace Microsoft.AspNetCore.Mvc
 {
     public static class ControllerExtensions
     {

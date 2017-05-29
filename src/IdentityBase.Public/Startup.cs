@@ -1,6 +1,4 @@
-﻿
-using IdentityBase.Public.Extensions;
-using Autofac;
+﻿using Autofac;
 using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Configuration;

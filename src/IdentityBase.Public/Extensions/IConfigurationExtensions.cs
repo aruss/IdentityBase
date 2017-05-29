@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace IdentityBase.Public.Extensions
+namespace Microsoft.Extensions.Configuration
 {
     /// <summary>
     /// Contains extensions for <see cref="IConfiguration"/> 
