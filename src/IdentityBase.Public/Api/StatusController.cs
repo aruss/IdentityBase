@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityBase.Public.Api
 {
-    [Area("Api")]
+    //[Area("PublicApi")]
     public class StatusController : Controller
     {
         public StatusController()
@@ -11,6 +11,9 @@ namespace IdentityBase.Public.Api
 
         }
         
+        [Route("api/status")]
+        [HttpGet]
+        [Authorize("api1")]
         public object Get()
         {
             return new

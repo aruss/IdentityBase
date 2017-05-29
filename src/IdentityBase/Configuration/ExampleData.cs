@@ -419,7 +419,7 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api1", "api2",
+                        "api1"
                     },
                 },
             };

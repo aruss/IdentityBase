@@ -12,13 +12,14 @@ namespace IdentityBase.Public
     {
         public static void AddRestApi(this IServiceCollection services, ApplicationOptions options)
         {
-            var issuer = "http://localhost:5000"; 
+            var issuer = "http://localhost:5000";
 
             services.AddAuthorization(authOptions =>
             {
-                authOptions.AddScopePolicy("useraccount:read", issuer);
-                authOptions.AddScopePolicy("useraccount:write", issuer);
-                authOptions.AddScopePolicy("useraccount:delete", issuer);
+                //authOptions.AddScopePolicy("useraccount:read", issuer);
+                //authOptions.AddScopePolicy("useraccount:write", issuer);
+                //authOptions.AddScopePolicy("useraccount:delete", issuer);
+                authOptions.AddScopePolicy("api1", issuer);
             });
         }
 
@@ -29,7 +30,7 @@ namespace IdentityBase.Public
 
         public static void UseRestApi(this IApplicationBuilder app, ApplicationOptions options)
         {
-            app.Map("/api", appApi =>
+            /*app.Map("/api", appApi =>
             {
                 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -43,8 +44,18 @@ namespace IdentityBase.Public
 
                 appApi.UseMvc(routes =>
                 {
-                    routes.MapRoute(name: "api", template: "{controller=Status}/{action=Get}/{id?}", defaults: new { area = "Api" });
+                    routes.MapRoute(name: "PublicApi", template: "{controller=Status}/{action=Get}/{id?}", defaults: new { area = "PublicApi" });
                 });
+            });*/
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            {
+                Authority = "http://localhost:5000",
+                RequireHttpsMetadata = false,
+                AllowedScopes = { "api1" },
+                AutomaticAuthenticate = true
             });
         }
     }
@@ -67,7 +78,8 @@ namespace IdentityBase.Public
                 return Task.CompletedTask;
 
             // Split the scopes string into an array
-            var scopes = context.User.FindFirst(c => c.Type == "scope" && c.Issuer == issuer).Value.Split(' ');
+            //var scopes = context.User.FindFirst(c => c.Type == "scope" && c.Issuer == issuer).Value.Split(' ');
+            var scopes = context.User.FindAll(c => c.Type == "scope" && c.Issuer == issuer).Select(s => s.Value); 
 
             // Succeed if the scope array contains the required scope
             if (scopes.Any(s => s == scope))

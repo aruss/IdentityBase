@@ -71,16 +71,17 @@ namespace IdentityBase.Public
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
             services.AddCors();
+            if (options.EnableRestApi)
+            {
+                services.AddRestApi(options);
+            }
             services.AddMvc().AddRazorOptions(razor =>
             {
                 razor.ViewLocationExpanders.Add(
                     new Razor.CustomViewLocationExpander(Configuration["App:ThemePath"]));
             });
 
-            //if (options.EnableRestApi)
-            //{
-            //    services.AddRestApi(options);
-            //}
+            
             
             // Update current instances 
             Current.Configuration = Configuration;
@@ -161,19 +162,22 @@ namespace IdentityBase.Public
 
             #endregion Use third party authentication
 
-            app.UseMvc(routes =>
+            if (options.EnableRestApi)
+            {
+                app.UseRestApi(options);
+            }
+
+            /*app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            });*/
+            app.UseMvcWithDefaultRoute(); 
 
             app.UseStaticFiles(Configuration, _logger, _environment);
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseCors("AllowAll");
 
-            //if (options.EnableRestApi)
-            //{
-            //    app.UseRestApi(options);
-            //}
+           
 
             appLifetime.ApplicationStarted.Register(() =>
             {

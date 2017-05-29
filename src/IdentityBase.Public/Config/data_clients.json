@@ -536,7 +536,7 @@
     "LogoutUri": "http://localhost:3308/signout-oidc",
     "LogoutSessionRequired": true,
     "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "profile", "email", "offline_access", "api1", "api2" ],
+    "AllowedScopes": [ "openid", "profile", "email", "offline_access", "api1" ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,

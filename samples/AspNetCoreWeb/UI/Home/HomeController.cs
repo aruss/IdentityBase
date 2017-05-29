@@ -36,5 +36,18 @@ namespace AspNetCoreWeb.Controllers
 
             return View();
         }
+
+        [Authorize]
+        public async Task<IActionResult> CallIdentityPublicApi()
+        {
+            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await client.GetStringAsync("http://localhost:5000/api/status");
+            ViewBag.Json = JObject.Parse(response).ToString();
+
+            return View("CallApi");
+        }
     }
 }
