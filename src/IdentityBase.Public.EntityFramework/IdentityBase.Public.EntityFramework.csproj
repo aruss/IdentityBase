@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Russlan Akiev</Authors>
+    <Company />
+    <Description>Datalayer for IdentityBase.Public</Description>
+    <Copyright>Copyright (c) Russlan Akiev. All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/aruss/IdentityBase</PackageProjectUrl>
+    <PackageTags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security entityframework</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
