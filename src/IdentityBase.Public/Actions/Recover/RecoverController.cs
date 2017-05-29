@@ -1,10 +1,9 @@
-﻿using IdentityServer4.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using IdentityBase.Configuration;
+﻿using IdentityBase.Configuration;
 using IdentityBase.Models;
 using IdentityBase.Services;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
 using System;
 using System.Linq;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Recover
 {
-    public class RecoverController : Controller
+    public class RecoverController : PublicController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<RecoverController> _logger;

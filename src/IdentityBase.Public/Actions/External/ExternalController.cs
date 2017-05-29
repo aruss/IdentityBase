@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Login
 {
-    public class ExternalController : Controller
+    public class ExternalController : PublicController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<ExternalController> _logger;

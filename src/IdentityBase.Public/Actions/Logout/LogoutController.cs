@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿using IdentityBase.Configuration;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
@@ -6,14 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using IdentityBase.Configuration;
 using System;
 using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Logout
 {
-    public class LogoutController : Controller
+    public class LogoutController : PublicController
     {
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ApplicationOptions _applicationOptions;

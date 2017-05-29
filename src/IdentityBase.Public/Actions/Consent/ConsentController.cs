@@ -9,7 +9,7 @@ using IdentityServer4.Stores;
 
 namespace IdentityBase.Public.Actions.Consent
 {
-    public class ConsentController : Controller
+    public class ConsentController : PublicController
     {
         private readonly ILogger<ConsentController> _logger;
         private readonly IClientStore _clientStore;

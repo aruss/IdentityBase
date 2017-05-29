@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Home
 {
-    public class HomeController : Controller
+    public class HomeController : PublicController
     {
         private readonly IIdentityServerInteractionService _interaction;
 

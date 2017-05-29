@@ -8,12 +8,16 @@ using IdentityBase.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase;
 using ServiceBase.Configuration;
 using System;
+using System.Linq;
 
 //var myService = (IService)DependencyResolver.Current.GetService(typeof(IService));
 
@@ -69,18 +73,33 @@ namespace IdentityBase.Public
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
             services.AddCors();
-            if (options.EnableRestApi)
+            if (options.EnablePublicApi)
             {
                 services.AddRestApi(options);
             }
-            services.AddMvc().AddRazorOptions(razor =>
-            {
-                razor.ViewLocationExpanders.Add(
-                    new Razor.CustomViewLocationExpander(Configuration["App:ThemePath"]));
-            });
+            services.AddMvc()
+                .AddRazorOptions(razor =>
+                {
+                    razor.ViewLocationExpanders.Add(
+                        new Razor.CustomViewLocationExpander(options.ThemePath));
+                })
+                .ConfigureApplicationPartManager(manager =>
+                {
+                    // Remove default ControllerFeatureProvider 
+                    var item = manager.FeatureProviders.FirstOrDefault(c => c.GetType()
+                        .Equals(typeof(ControllerFeatureProvider)));
+                    if (item != null)
+                    {
+                        manager.FeatureProviders.Remove(item);
+                    }
+                    manager.FeatureProviders.Add(new ControllerFeatureProvider<PublicController>());
 
-            
-            
+                    if (options.EnablePublicApi)
+                    {
+                        manager.FeatureProviders.Add(new ControllerFeatureProvider<PublicApiController>());
+                    }
+                });
+
             // Update current instances 
             Current.Configuration = Configuration;
             Current.Logger = _logger;
@@ -160,7 +179,7 @@ namespace IdentityBase.Public
 
             #endregion Use third party authentication
 
-            if (options.EnableRestApi)
+            if (options.EnablePublicApi)
             {
                 app.UseRestApi(options);
             }

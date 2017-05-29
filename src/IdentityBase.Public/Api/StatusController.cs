@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdentityBase.Public.Api
 {
     //[Area("PublicApi")]
-    public class StatusController : Controller
+    public class StatusController : PublicApiController
     {
         public StatusController()
         {

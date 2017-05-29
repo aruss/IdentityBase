@@ -1,11 +1,10 @@
-﻿using IdentityServer4.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using IdentityBase.Configuration;
+﻿using IdentityBase.Configuration;
 using IdentityBase.Extensions;
 using IdentityBase.Models;
 using IdentityBase.Services;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
 using System;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Register
 {
-    public class RegisterController : Controller
+    public class RegisterController : PublicController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<RegisterController> _logger;

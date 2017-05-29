@@ -83,7 +83,7 @@ namespace IdentityBase.Configuration
 
         public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
 
-        public bool EnableRestApi { get; set; } = false;
+        public bool EnablePublicApi { get; set; } = false;
 
         public string ThemePath { get; set; }
     }

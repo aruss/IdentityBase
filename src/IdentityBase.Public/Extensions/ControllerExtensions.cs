@@ -24,4 +24,25 @@ namespace Microsoft.AspNetCore.Mvc
             return new ChallengeResult(provider, props);
         }
     }
+
+    /// <summary>
+    /// A base class for an public controller.
+    /// </summary>
+    public abstract class PublicController : Controller
+    {
+    }
+
+    /// <summary>
+    /// A base class for an public api controller.
+    /// </summary>
+    public abstract class PublicApiController : ControllerBase
+    {
+    }
+
+    /// <summary>
+    /// A base class for an admin api controller.
+    /// </summary>
+    public abstract class AdminApiController : ControllerBase
+    {
+    }
 }
