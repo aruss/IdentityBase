@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="tempkey.rsa" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Themes\Default\Public\css\site.css">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

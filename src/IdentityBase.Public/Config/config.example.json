@@ -4,20 +4,23 @@
     "UseIISIntegration": false
   },
   "Logging": {
-    "IncludeScopes": false,
+    "IncludeScopes": true,
     "LogLevel": {
       "Default": "Information",
       "System": "Information",
       "Microsoft": "Information",
       "IdentityModel": "Information",
-      "IdentityServer4": "Information"
+      "IdentityServer4": "Information",
+      "IdentityBase": "Information"
     }
   },
   "EntityFramework": {
-    "MigrateDatabase": true,
+    "MigrateDatabase": false,
     "SeedExampleData": true,
+    "EnsureDeleted": false,
+    "SeedExampleDataPath": "./config",
     "Npgsql": {
-      "ConnectionString": "User ID=damienbod;Password=1234;Host=localhost;Port=5432;Database=damienbod;Pooling=true;"
+      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     }
   },
   "Events": {
@@ -26,8 +29,17 @@
     "RaiseInformationEvents": true,
     "RaiseSuccessEvents": true
   },
+  "Identity": {
+    "SigningCredentialFromPfx": {
+      "Path": "./Config/idsvr3test.pfx",
+      "Password": "idsrv3test"
+    },
+    "SigningCredentialFromStore": {
+      "Thumbprint": "98D3ACF057299C3745044BE918986AD7ED0AD4A2",
+      "StoreLocation": "LocalMachine"
+    }
+  },
   "App": {
-    // local account
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
     "PasswordHashingIterationCount": 0,
@@ -43,7 +55,6 @@
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
     "EnablePublicApi": true
-    //"ThemePath":  "./Themes/Fancy"
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"
@@ -51,10 +62,10 @@
   "Sms": {
     "TemplateDirectoryPath": "./Templates/Sms"
   },
-  "services": {
+  "Services": {
     "modules": [
-      //{ "type": "IdentityBase.Public.EntityFrameworkInMemoryModule, IdentityBase.Public" },
-      { "type": "IdentityBase.Public.EntityFrameworkNpgsqlModule, IdentityBase.Public" },
+      { "type": "IdentityBase.Public.EntityFramework.InMemoryModule, IdentityBase.Public.EntityFramework" },
+      { "type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
       { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }

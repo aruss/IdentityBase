@@ -1,9 +1,11 @@
-﻿using IdentityServer4.Validation;
+﻿using IdentityBase.Services;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using IdentityBase.Services;
+using ServiceBase.Events;
+using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
@@ -13,16 +15,15 @@ namespace IdentityBase.Public
     {
         public static void AddIdentityServer(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
+            var eventOptions = config.GetSection("Events").Get<EventOptions>() ?? new EventOptions();
+            var identitySection = config.GetSection("IdentityServer"); 
+
             var builder = services.AddIdentityServer((options) =>
             {
-                // TODO: set configuration from config file 
-
-                //options.RequireSsl = false;
-
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseSuccessEvents = true;
+                options.Events.RaiseErrorEvents = eventOptions.RaiseErrorEvents;
+                options.Events.RaiseFailureEvents = eventOptions.RaiseFailureEvents;
+                options.Events.RaiseInformationEvents = eventOptions.RaiseInformationEvents;
+                options.Events.RaiseSuccessEvents = eventOptions.RaiseSuccessEvents;
 
                 options.UserInteraction.LoginUrl = "/login";
                 options.UserInteraction.LogoutUrl = "/logout";
@@ -47,12 +48,37 @@ namespace IdentityBase.Public
             }
             else
             {
-                var certPath = Path.Combine(environment.ContentRootPath, "Config/idsvr3test.pfx");
-                var cert = new X509Certificate2(certPath, "idsrv3test");
-                builder.AddSigningCredential(cert);
-
-                /*builder.AddSigningCredential("98D3ACF057299C3745044BE918986AD7ED0AD4A2",
-                    StoreLocation.CurrentUser, nameType: NameType.Thumbprint);*/
+                if (config.ContainsSection("IdentityServer"))
+                {
+                    var section = config.GetSection("IdentityServer"); 
+                    if (section.ContainsSection("SigningCredentialFromPfx"))
+                    {
+                        var filePath = section.GetValue<string>("SigningCredentialFromPfx:Path");
+                        if (!Path.IsPathRooted(filePath))
+                        {
+                            filePath = Path.Combine(environment.ContentRootPath, filePath);
+                        }
+                        if (!File.Exists(filePath))
+                        {
+                            throw new FileNotFoundException("Signing certificate file not found", filePath); 
+                        }
+                        var password = section.GetValue<string>("SigningCredentialFromPfx:Password");
+                        builder.AddSigningCredential(new X509Certificate2(filePath, password));
+                    }
+                    if (section.ContainsSection("SigningCredentialFromStore"))
+                    {
+                        throw new NotImplementedException();
+                        // builder.AddSigningCredential("98D3ACF057299C3745044BE918986AD7ED0AD4A2", StoreLocation.LocalMachine, nameType: NameType.Thumbprint);
+                    }
+                    else
+                    {
+                        builder.AddTemporarySigningCredential();
+                    }
+                }
+                else
+                {
+                    builder.AddTemporarySigningCredential();
+                }                
             }
         }
     }

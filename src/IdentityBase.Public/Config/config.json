@@ -29,6 +29,12 @@
     "RaiseInformationEvents": true,
     "RaiseSuccessEvents": true
   },
+  "IdentityServer": {
+    "SigningCredentialFromPfx": {
+      "Path": "./Config/idsvr3test.pfx",
+      "Password": "idsrv3test"
+    }
+  },
   "App": {
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
