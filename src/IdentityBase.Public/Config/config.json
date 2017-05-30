@@ -1,7 +1,8 @@
 ﻿{
   "Host": {
     "Urls": "http://*:5000",
-    "UseIISIntegration": false
+    "UseIISIntegration": false,
+    "Cors": "http://localhost:8080"
   },
   "Logging": {
     "IncludeScopes": true,

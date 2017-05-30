@@ -63,7 +63,7 @@ namespace IdentityBase.Public
                     }
                 });
             }
-            
+
             var options = Configuration.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
             services.AddSingleton(Configuration);
             services.AddSingleton(options);
@@ -72,7 +72,14 @@ namespace IdentityBase.Public
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
-            services.AddCors();
+
+            services.AddCors(corsOpts =>
+            {
+                corsOpts.AddPolicy("CorsPolicy",
+                    corsBuilder => corsBuilder.WithOrigins(
+                        Configuration.GetValue<string>("Host:Cors")));
+            });
+
             if (options.EnablePublicApi)
             {
                 services.AddRestApi(options);
@@ -103,7 +110,7 @@ namespace IdentityBase.Public
             // Update current instances 
             Current.Configuration = Configuration;
             Current.Logger = _logger;
-            
+
             // Add AutoFac continer and register modules form config 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -117,7 +124,7 @@ namespace IdentityBase.Public
             _applicationContainer.ValidateSmsServices(_logger);
             _applicationContainer.ValidateEventServices(_logger);
 
-            Current.Container = _applicationContainer; 
+            Current.Container = _applicationContainer;
 
             return new AutofacServiceProvider(_applicationContainer);
         }
@@ -139,6 +146,10 @@ namespace IdentityBase.Public
             {
                 app.UseExceptionHandler("/error");
             }
+
+            app.UseCors("CorsPolicy");
+            app.UseStaticFiles(Configuration, _logger, _environment);
+            app.UseMiddleware<RequestIdMiddleware>();
 
             app.UseIdentityServer();
 
@@ -183,18 +194,7 @@ namespace IdentityBase.Public
             {
                 app.UseRestApi(options);
             }
-
-            /*app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-            });*/
-            app.UseMvcWithDefaultRoute(); 
-
-            app.UseStaticFiles(Configuration, _logger, _environment);
-            app.UseMiddleware<RequestIdMiddleware>();
-            app.UseCors("AllowAll");
-
-           
+            app.UseMvcWithDefaultRoute();
 
             appLifetime.ApplicationStarted.Register(() =>
             {
