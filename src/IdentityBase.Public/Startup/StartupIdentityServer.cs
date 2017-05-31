@@ -1,4 +1,5 @@
-﻿using IdentityBase.Services;
+﻿using IdentityBase.Configuration;
+using IdentityBase.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ namespace IdentityBase.Public
         public static void AddIdentityServer(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
         {
             var eventOptions = config.GetSection("Events").Get<EventOptions>() ?? new EventOptions();
+            var appOptions = config.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
             var identitySection = config.GetSection("IdentityServer"); 
 
             var builder = services.AddIdentityServer((options) =>
@@ -44,7 +46,7 @@ namespace IdentityBase.Public
 
             if (environment.IsDevelopment())
             {
-                builder.AddDeveloperSigningCredential();
+                builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa")); 
             }
             else
             {

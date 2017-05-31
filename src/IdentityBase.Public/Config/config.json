@@ -37,6 +37,7 @@
     }
   },
   "App": {
+    "TempFolder": "./TempData",
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
     "PasswordHashingIterationCount": 0,
