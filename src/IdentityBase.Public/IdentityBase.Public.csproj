@@ -17,6 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TempData\**" />
+    <Content Remove="TempData\**" />
+    <EmbeddedResource Remove="TempData\**" />
+    <None Remove="TempData\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="tempkey.rsa" />
   </ItemGroup>
 
