@@ -1,19 +1,12 @@
-﻿using IdentityBase.Services;
-using System;
-using IdentityBase.Configuration;
-using IdentityBase.Models;
+﻿using IdentityBase.Configuration;
+using IdentityBase.Crypto;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Services;
-using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using IdentityBase.Crypto;
 
 namespace IdentityBase.Public.EntityFramework
 {
