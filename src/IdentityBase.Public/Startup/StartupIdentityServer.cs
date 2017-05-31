@@ -32,6 +32,8 @@ namespace IdentityBase.Public
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
 
+                options.Cors.CorsPolicyName = "CorsPolicy"; 
+
                 options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");

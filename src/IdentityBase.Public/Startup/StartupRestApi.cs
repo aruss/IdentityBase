@@ -30,7 +30,7 @@ namespace IdentityBase.Public
 
         public static void UseRestApi(this IApplicationBuilder app, ApplicationOptions options)
         {
-            /*app.Map("/api", appApi =>
+            app.Map("/api", appApi =>
             {
                 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -42,20 +42,7 @@ namespace IdentityBase.Public
                     AutomaticAuthenticate = true
                 });
 
-                appApi.UseMvc(routes =>
-                {
-                    routes.MapRoute(name: "PublicApi", template: "{controller=Status}/{action=Get}/{id?}", defaults: new { area = "PublicApi" });
-                });
-            });*/
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            {
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
-                AllowedScopes = { "api1" },
-                AutomaticAuthenticate = true
+                appApi.UseMvc();
             });
         }
     }

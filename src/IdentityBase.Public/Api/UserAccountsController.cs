@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using ServiceBase.Authorization;
 
-namespace IdentityBase.Public.Api
+namespace IdentityBase.Public.AdminApi
 {
-    [Area("Api")]
-    public class UserAccountsController : Controller
+    public class UserAccountsController : AdminApiController
     {
         private readonly IUserAccountStore _userAccountStore;
 
@@ -15,11 +15,12 @@ namespace IdentityBase.Public.Api
         {
             _userAccountStore = userAccountStore;
         }
-        
-        [HttpGet]
-        [Route("api/useraccounts/{id}")]
+
+        [HttpGet("useraccounts/{id}")]
         [Authorize]
         //[Authorize("useraccount:read")]
+
+        //[ScopeAuthorize("api2")]
         public async Task<object> Get(Guid id)
         {
             return await _userAccountStore.LoadByIdAsync(id);
