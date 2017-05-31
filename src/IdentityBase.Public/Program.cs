@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using ServiceBase.Configuration;
 using ServiceBase.Extensions;
 using System;
@@ -15,10 +15,11 @@ namespace IdentityBase.Public
             RunIdentityBase<Startup>(Directory.GetCurrentDirectory(), args);
         }
 
+        public static Serilog.Core.Logger Logger; 
+
         public static void RunIdentityBase<TStartup>(string contentRoot, string[] args) where TStartup : Startup
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
             var configuration = ConfigurationSetup.Configure(contentRoot, environment, (confBuilder) =>
             {
                 if ("Development".Equals(environment, StringComparison.OrdinalIgnoreCase))
@@ -29,21 +30,29 @@ namespace IdentityBase.Public
                 confBuilder.AddCommandLine(args);
             });
 
-            var configHost = configuration.GetSection("Host");
-            var configLogging = configuration.GetSection("Logging");
+            var logger = new LoggerConfiguration()
+               .ReadFrom.ConfigurationSection(configuration.GetSection("Serilog"))
+               .CreateLogger();
+            Logger = logger; 
 
+            logger.Information("Application Starting");
+
+            var configHost = configuration.GetSection("Host");
+            
             var hostBuilder = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(configHost["Urls"])
                 .UseContentRoot(contentRoot)
-                .ConfigureLogging(f => f.AddConsole(configLogging))
+                .ConfigureLogging(f => f.AddSerilog(logger))
                 .UseStartup<TStartup>();
 
             if (configHost["UseIISIntegration"].ToBoolean())
             {
+                logger.Information("Enabling IIS Integration");
                 hostBuilder = hostBuilder.UseIISIntegration();
             }
 
+          
             hostBuilder.Build().Run();
         }
     }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using ServiceBase;
 using ServiceBase.Configuration;
 using System;
@@ -29,7 +30,7 @@ namespace IdentityBase.Public
     /// </summary>
     public class Startup : IStartup
     {
-        private readonly ILogger _logger;
+        private readonly Microsoft.Extensions.Logging.ILogger _logger;
         private readonly IHostingEnvironment _environment;
         private IContainer _applicationContainer;
 
@@ -63,6 +64,8 @@ namespace IdentityBase.Public
                     }
                 });
             }
+
+            _logger.LogInformation("Services Configure");
 
             var options = Configuration.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
             services.AddSingleton(Configuration);
@@ -126,19 +129,34 @@ namespace IdentityBase.Public
 
             Current.Container = _applicationContainer;
 
+            _logger.LogInformation("Services Configured");
+
             return new AutofacServiceProvider(_applicationContainer);
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            _logger.LogInformation("Application Configure");
+
             var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
             var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
             var appLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
             var options = app.ApplicationServices.GetRequiredService<ApplicationOptions>();
+            
+            if (Program.Logger != null)
+            {
+                loggerFactory.AddSerilog(Program.Logger);
+            }
+            else if (Configuration.ContainsSection("Serilog"))
+            {
+                loggerFactory.AddSerilog(new LoggerConfiguration()
+                   .ReadFrom.ConfigurationSection(Configuration.GetSection("Serilog"))
+                   .CreateLogger());
+            }            
 
             if (env.IsDevelopment())
             {
-                loggerFactory.AddDebug();
+                // loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
                 //app.UseBrowserLink();
             }
@@ -146,6 +164,8 @@ namespace IdentityBase.Public
             {
                 app.UseExceptionHandler("/error");
             }
+
+            //loggerFactory.AddSerilog();
 
             app.UseCors("CorsPolicy");
             app.UseStaticFiles(Configuration, _logger, _environment);
@@ -198,24 +218,26 @@ namespace IdentityBase.Public
 
             appLifetime.ApplicationStarted.Register(() =>
             {
-                _logger.LogInformation("Application started");
-
                 // TODO: implement leader election
                 options.Leader = true;
 
                 app.InitializeStores();
+
+                _logger.LogInformation("Application Started");
             });
 
             appLifetime.ApplicationStopping.Register(() =>
             {
-                _logger.LogInformation("Stopping application...");
+                _logger.LogInformation("Application Stopping");
                 app.CleanupStores();
             });
 
             appLifetime.ApplicationStopped.Register(() =>
             {
-                _logger.LogInformation("Application stopped");
+                _logger.LogInformation("Application Stopped");
             });
+
+            _logger.LogInformation("Application Configured");
         }
     }
 }
