@@ -1,7 +1,8 @@
 ﻿{
   "Host": {
     "Urls": "http://*:5000",
-    "UseIISIntegration": false
+    "UseIISIntegration": false,
+    "Cors": "http://localhost:8080"
   },
   "Serilog": {
     "Using": [ "Serilog.Sinks.RollingFile" ],
@@ -45,7 +46,7 @@
     "RaiseInformationEvents": true,
     "RaiseSuccessEvents": true
   },
-  "Identity": {
+  "IdentityServer": {
     "SigningCredentialFromPfx": {
       "Path": "./Config/idsvr3test.pfx",
       "Password": "idsrv3test"
@@ -57,6 +58,7 @@
   },
   "App": {
     "PublicUrl": "http://localhost:5000",
+    "TempFolder": "./TempData",
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
     "PasswordHashingIterationCount": 0,
