@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using ServiceBase;
 using IdentityBase.Configuration;
+using ServiceBase.Authorization;
 
 namespace IdentityBase.Public.IntegrationTests
 {
@@ -56,6 +57,11 @@ namespace IdentityBase.Public.IntegrationTests
                 services.AddSingleton<IEmailService>(emailServiceMock.Object);
             }
 
+            services.AddAuthorization(opt =>
+            {
+                opt.AddScopePolicy("api1", "http://localhost");
+                opt.AddScopePolicy("useraccount.read", "http://localhost"); 
+            }); 
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
