@@ -14,7 +14,7 @@ namespace IdentityBase.Public
         {
             services.AddAuthorization(authOptions =>
             {
-                authOptions.AddScopePolicies<PublicApiController>(options.PublicUrl);
+                authOptions.AddScopePolicies<ApiController>(options.PublicUrl);
             });
         }
 
@@ -29,7 +29,7 @@ namespace IdentityBase.Public
                     Authority = options.PublicUrl,
                     RequireHttpsMetadata = false,
                     AllowedScopes = ScopeAuthorizeHelper
-                        .GetAllScopeAuthorizeAttributes<PublicApiController>()
+                        .GetAllScopeAuthorizeAttributes<ApiController>()
                         .Select(s => s.Scope).ToArray(),
                     AutomaticAuthenticate = true
                 });

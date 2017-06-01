@@ -9,7 +9,7 @@ namespace IdentityBase.Configuration
     {
         public string PublicUrl { get; set; }
         public string TempFolder { get; set; } = "./TempData";
-        public bool Leader { get; set; } = true; 
+        public bool Leader { get; set; } = true;
 
         // Local account options
 
@@ -69,7 +69,7 @@ namespace IdentityBase.Configuration
         public bool EnableRememberLogin { get; set; } = true;
 
         public bool EnableLocalLogin { get; set; } = true;
-        
+
         /// <summary>
         /// How long should Remember Login last in days
         /// </summary>
@@ -86,6 +86,7 @@ namespace IdentityBase.Configuration
         public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
 
         public bool EnablePublicApi { get; set; } = false;
+        public bool EnableAdminApi { get; set; } = false; 
 
         public string ThemePath { get; set; }
     }
