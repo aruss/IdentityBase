@@ -18,10 +18,11 @@ namespace IdentityBase.Public
         {
             var eventOptions = config.GetSection("Events").Get<EventOptions>() ?? new EventOptions();
             var appOptions = config.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
-            var identitySection = config.GetSection("IdentityServer"); 
-
+            
             var builder = services.AddIdentityServer((options) =>
             {
+                config.GetSection("IdentityServer").Bind(options); 
+                
                 options.Events.RaiseErrorEvents = eventOptions.RaiseErrorEvents;
                 options.Events.RaiseFailureEvents = eventOptions.RaiseFailureEvents;
                 options.Events.RaiseInformationEvents = eventOptions.RaiseInformationEvents;
@@ -31,13 +32,13 @@ namespace IdentityBase.Public
                 options.UserInteraction.LogoutUrl = "/logout";
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
-
+            
                 options.Cors.CorsPolicyName = "CorsPolicy"; 
 
                 options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");
+                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");                
 
             }).AddProfileService<ProfileService>()
              .AddSecretParser<ClientAssertionSecretParser>()
