@@ -131,30 +131,32 @@ namespace IdentityBase.Public.Actions.Login
             UserAccount userAccount = null)
         {
             var context = await _interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
+
+            var vm = new LoginViewModel(inputModel)
+            {
+                EnableRememberLogin = _applicationOptions.EnableRememberLogin,
+                EnableAccountRegistration = _applicationOptions.EnableAccountRegistration,
+                EnableAccountRecover = _applicationOptions.EnableAccountRecover,
+                Email = context?.LoginHint,
+            };
+
             if (context?.IdP != null)
             {
                 // This is meant to short circuit the UI and only trigger the one external IdP
-                return new LoginViewModel(inputModel)
-                {
-                    EnableLocalLogin = false,
-                    Email = context?.LoginHint,
-                    ExternalProviders = new ExternalProvider[] {
-                        new ExternalProvider { AuthenticationScheme = context.IdP }
-                    }
+                vm.EnableLocalLogin = _applicationOptions.EnableLocalLogin;
+                vm.ExternalProviders = new ExternalProvider[] {
+                    new ExternalProvider { AuthenticationScheme = context.IdP }
                 };
+
+                return vm;
             }
 
             var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
             var providers = await _clientService.GetEnabledProvidersAsync(client);
 
-            var vm = new LoginViewModel(inputModel)
-            {
-                EnableRememberLogin = _applicationOptions.EnableRememberLogin,
-                Email = context?.LoginHint,
-                ExternalProviders = providers.ToArray(),
-                EnableLocalLogin = (client != null ? client.EnableLocalLogin : false)
-                    && _applicationOptions.EnableLocalLogin
-            };
+            vm.ExternalProviders = providers.ToArray();
+            vm.EnableLocalLogin = (client != null ? client.EnableLocalLogin : false)
+                && _applicationOptions.EnableLocalLogin;
 
             if (userAccount != null)
             {

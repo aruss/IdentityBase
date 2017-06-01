@@ -61,6 +61,10 @@ namespace IdentityBase.Configuration
         /// </summary>
         public int VerificationKeyLifetime { get; set; } = 1440; // 24 hours
 
+        public bool EnableAccountRegistration { get; set; } = true;
+
+        public bool EnableAccountRecover { get; set; } = true; 
+
         /// <summary>
         /// Automatically merges third party accounts with local account if email matches
         /// </summary>

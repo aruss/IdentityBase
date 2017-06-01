@@ -67,6 +67,8 @@
     "LoginAfterAccountRecovery": true,
     "VerificationKeyLifetime": 1440,
     "AutomaticAccountMerge": true,
+    "EnableAccountRegistration": true,
+    "EnableAccountRecover": true,
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
     "EnablePublicApi": true,

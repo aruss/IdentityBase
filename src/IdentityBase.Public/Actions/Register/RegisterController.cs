@@ -40,6 +40,11 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet(IdentityBaseConstants.Routes.Register, Name = "Register")]
         public async Task<IActionResult> Index(string returnUrl)
         {
+            if (!_applicationOptions.EnableAccountRegistration)
+            {
+                return NotFound();
+            }
+
             var vm = new RegisterViewModel();
 
             if (!String.IsNullOrWhiteSpace(returnUrl))
@@ -154,6 +159,11 @@ namespace IdentityBase.Public.Actions.Register
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RegisterInputModel model)
         {
+            if (!_applicationOptions.EnableAccountRegistration)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 var email = model.Email.ToLower();
@@ -199,6 +209,11 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet(IdentityBaseConstants.Routes.RegisterSuccess, Name = "RegisterSuccess")]
         public async Task<IActionResult> Success(SuccessInputModel model)
         {
+            if (!_applicationOptions.EnableAccountRegistration)
+            {
+                return NotFound();
+            }
+            
             // TODO: Select propper mail provider and render it as button
 
             var vm = new SuccessViewModel(model);
@@ -209,6 +224,11 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
+            if (!_applicationOptions.EnableAccountRegistration)
+            {
+                return NotFound();
+            }
+
             var result = await _userAccountService.HandleVerificationKey(key,
                 VerificationKeyPurpose.ConfirmAccount);
 
@@ -238,6 +258,11 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
+            if (!_applicationOptions.EnableAccountRegistration)
+            {
+                return NotFound();
+            }
+
             var result = await _userAccountService.HandleVerificationKey(key,
                VerificationKeyPurpose.ConfirmAccount);
 

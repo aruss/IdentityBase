@@ -40,6 +40,11 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover", Name = "Recover")]
         public async Task<IActionResult> Index(string returnUrl)
         {
+            if (!_applicationOptions.EnableAccountRecover)
+            {
+                return NotFound();
+            }
+
             var vm = new RecoverViewModel();
 
             if (!String.IsNullOrWhiteSpace(returnUrl))
@@ -76,6 +81,11 @@ namespace IdentityBase.Public.Actions.Recover
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RecoverInputModel model)
         {
+            if (!_applicationOptions.EnableAccountRecover)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 // Load user by email
@@ -112,6 +122,11 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover/success", Name = "RecoverSuccess")]
         public async Task<IActionResult> Success(string returnUrl, string provider)
         {
+            if (!_applicationOptions.EnableAccountRecover)
+            {
+                return NotFound();
+            }
+
             // select propper mail provider and render it as button
 
             return View();
@@ -120,6 +135,11 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover/confirm/{key}", Name = "RecoverConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
+            if (!_applicationOptions.EnableAccountRecover)
+            {
+                return NotFound();
+            }
+
             var result = await _userAccountService.HandleVerificationKey(key,
                 VerificationKeyPurpose.ResetPassword);
 
@@ -143,6 +163,11 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover/cancel/{key}", Name = "RecoverCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
+            if (!_applicationOptions.EnableAccountRecover)
+            {
+                return NotFound();
+            }
+
             var result = await _userAccountService.HandleVerificationKey(key,
                 VerificationKeyPurpose.ResetPassword);
 

@@ -36,10 +36,9 @@
                             </div>
                         </fieldset>
                     </form>
-
                     <ul class="list-inline">
-                        <li><a asp-route="Recover" asp-route-returnUrl="@Model.ReturnUrl">Forgot password?</a></li>
-                        <li><a asp-route="Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a></li>
+                        <li show-if="@Model.EnableAccountRecover"><a asp-route="Recover" asp-route-returnUrl="@Model.ReturnUrl">Forgot password?</a></li>
+                        <li show-if="@Model.EnableAccountRegistration"><a asp-route="Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a></li>
                     </ul>
                 </div>
             </div>
