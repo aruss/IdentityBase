@@ -1,9 +1,8 @@
 ﻿using IdentityBase.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using System;
 using ServiceBase.Authorization;
+using System;
+using System.Threading.Tasks;
 
 namespace IdentityBase.Public.AdminApi
 {
@@ -17,10 +16,7 @@ namespace IdentityBase.Public.AdminApi
         }
 
         [HttpGet("useraccounts/{id}")]
-        [Authorize]
-        //[Authorize("useraccount:read")]
-
-        //[ScopeAuthorize("api2")]
+        [ScopeAuthorize("useraccount.read")]
         public async Task<object> Get(Guid id)
         {
             return await _userAccountStore.LoadByIdAsync(id);

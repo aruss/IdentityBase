@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServiceBase.Authorization;
 
 namespace IdentityBase.Public.Api
 {
@@ -12,7 +12,7 @@ namespace IdentityBase.Public.Api
 
         [Route("status")]
         [HttpGet]
-        [Authorize("api1")]
+        [ScopeAuthorize("api1")]
         public object Get()
         {
             return new
