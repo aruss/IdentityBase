@@ -7,6 +7,7 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ApplicationOptions
     {
+        public string PublicUrl { get; set; }
         public string TempFolder { get; set; } = "./TempData";
         public bool Leader { get; set; } = true; 
 

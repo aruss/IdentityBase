@@ -53,6 +53,7 @@
     }
   },
   "App": {
+    "PublicUrl": "http://localhost:5000",
     "TempFolder": "./TempData",
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
