@@ -3,15 +3,31 @@
     "Urls": "http://*:5000",
     "UseIISIntegration": false
   },
-  "Logging": {
-    "IncludeScopes": true,
-    "LogLevel": {
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.RollingFile" ],
+    "MinimumLevel": {
       "Default": "Information",
-      "System": "Information",
-      "Microsoft": "Information",
-      "IdentityModel": "Information",
-      "IdentityServer4": "Information",
-      "IdentityBase": "Information"
+      "Override": {
+        "System": "Information",
+        "Microsoft": "Information",
+        "IdentityModel": "Information",
+        "IdentityServer4": "Information",
+        "IdentityBase": "Information"
+      }
+    },
+    "WriteTo": [
+      { "Name": "LiterateConsole" },
+      {
+        "Name": "RollingFile",
+        "Args": {
+          "pathFormat": "./TempData/log-{Date}.txt",
+          "fileSizeLimitBytes": 1234567
+        }
+      }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "Properties": {
+      "Application": "IdentityBase"
     }
   },
   "EntityFramework": {
