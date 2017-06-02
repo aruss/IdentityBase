@@ -71,8 +71,7 @@
     "EnableAccountRecover": true,
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
-    "EnablePublicApi": true,
-    "EnableAdminApi": false
+    "EnableUserInviteEndpoint": true
   },
   "Email": {
     "TemplateDirectoryPath": "./EmailTemplates"

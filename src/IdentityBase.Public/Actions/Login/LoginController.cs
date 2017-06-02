@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace IdentityBase.Public.Actions.Login
 {
     // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5_HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
-    public class LoginController : PublicController
+    public class LoginController : Controller
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<LoginController> _logger;

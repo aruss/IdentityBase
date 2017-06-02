@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Logout
 {
-    public class LogoutController : PublicController
+    public class LogoutController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ApplicationOptions _applicationOptions;

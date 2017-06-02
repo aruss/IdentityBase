@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.AdminApi
 {
-    public class UserAccountsController : AdminApiController
+    public class UserAccountsController : ApiController
     {
         private readonly IUserAccountStore _userAccountStore;
 

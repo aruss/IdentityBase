@@ -26,30 +26,9 @@ namespace Microsoft.AspNetCore.Mvc
     }
 
     /// <summary>
-    /// A base class for an public controller.
-    /// </summary>
-    public abstract class PublicController : Controller
-    {
-    }
-
-    /// <summary>
     /// A base class for an api controller.
     /// </summary>
     public abstract class ApiController : ControllerBase
     {
-    }
-
-    /// <summary>
-    /// A base class for an public api controller.
-    /// </summary>
-    public abstract class PublicApiController : ApiController
-    {
-    }
-
-    /// <summary>
-    /// A base class for an admin api controller.
-    /// </summary>
-    public abstract class AdminApiController : ApiController
-    {
-    }
+    }    
 }

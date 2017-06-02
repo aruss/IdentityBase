@@ -12,30 +12,36 @@ namespace IdentityBase.Public
     {
         public static void AddRestApi(this IServiceCollection services, ApplicationOptions options)
         {
-            services.AddAuthorization(authOptions =>
+            if (options.IsRestApiEnabled())
             {
-                authOptions.AddScopePolicies<ApiController>(options.PublicUrl);
-            });
+                services.AddAuthorization(authOptions =>
+                {
+                    authOptions.AddScopePolicies<ApiController>(options.PublicUrl);
+                });
+            }
         }
 
         public static void UseRestApi(this IApplicationBuilder app, ApplicationOptions options)
         {
-            app.Map("/api", appApi =>
+            if (options.IsRestApiEnabled())
             {
-                JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-                appApi.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+                app.Map("/api", appApi =>
                 {
-                    Authority = options.PublicUrl,
-                    RequireHttpsMetadata = false,
-                    AllowedScopes = ScopeAuthorizeHelper
-                        .GetAllScopeAuthorizeAttributes<ApiController>()
-                        .Select(s => s.Scope).ToArray(),
-                    AutomaticAuthenticate = true
-                });
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-                appApi.UseMvc();
-            });
+                    appApi.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+                    {
+                        Authority = options.PublicUrl,
+                        RequireHttpsMetadata = false,
+                        AllowedScopes = ScopeAuthorizeHelper
+                            .GetAllScopeAuthorizeAttributes<ApiController>()
+                            .Select(s => s.Scope).ToArray(),
+                        AutomaticAuthenticate = true
+                    });
+
+                    appApi.UseMvc();
+                });
+            }
         }
     }
 }

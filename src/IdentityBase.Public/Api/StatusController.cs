@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityBase.Configuration;
+using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using ServiceBase.Authorization;
+using System.Collections.Generic;
 
 namespace IdentityBase.Public.Api
 {
-    public class StatusController : PublicApiController
+    public class StatusController : ApiController
     {
-        public StatusController()
+        public StatusController(ApplicationOptions options)
         {
 
         }
@@ -15,9 +18,11 @@ namespace IdentityBase.Public.Api
         [ScopeAuthorize("api1")]
         public object Get()
         {
+            var status = new Dictionary<string, string>(); 
+
             return new
             {
-                Id = "foo",
+                UserInviteEndpoint = HttpContext.GetIdentityServerBaseUrl(),
                 Name = "Bar"
             };
         }

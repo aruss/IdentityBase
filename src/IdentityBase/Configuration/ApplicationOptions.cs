@@ -7,6 +7,7 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ApplicationOptions
     {
+        [Obsolete]
         public string PublicUrl { get; set; }
         public string TempFolder { get; set; } = "./TempData";
         public bool Leader { get; set; } = true;
@@ -63,7 +64,7 @@ namespace IdentityBase.Configuration
 
         public bool EnableAccountRegistration { get; set; } = true;
 
-        public bool EnableAccountRecover { get; set; } = true; 
+        public bool EnableAccountRecover { get; set; } = true;
 
         /// <summary>
         /// Automatically merges third party accounts with local account if email matches
@@ -89,9 +90,16 @@ namespace IdentityBase.Configuration
 
         public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
 
-        public bool EnablePublicApi { get; set; } = false;
-        public bool EnableAdminApi { get; set; } = false; 
-
         public string ThemePath { get; set; }
+
+        public bool EnableUserInviteEndpoint { get; set; } = false;
+    }
+
+    public static class ApplicationOptionsExtensions
+    {
+        public static bool IsRestApiEnabled(this ApplicationOptions options)
+        {
+            return options.EnableUserInviteEndpoint; 
+        }
     }
 }

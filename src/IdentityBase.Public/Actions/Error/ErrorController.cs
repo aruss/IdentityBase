@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Error
 {
-    public class ErrorController : PublicController
+    public class ErrorController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;
 
