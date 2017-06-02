@@ -60,7 +60,8 @@ namespace IdentityBase.Public.IntegrationTests
             services.AddAuthorization(opt =>
             {
                 opt.AddScopePolicy("api1", "http://localhost");
-                opt.AddScopePolicy("useraccount.read", "http://localhost"); 
+                opt.AddScopePolicy("useraccount.read", "http://localhost");
+                opt.AddScopePolicy("user.invite", "http://localhost");
             }); 
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
