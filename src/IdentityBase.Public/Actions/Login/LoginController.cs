@@ -137,7 +137,7 @@ namespace IdentityBase.Public.Actions.Login
                 EnableRememberLogin = _applicationOptions.EnableRememberLogin,
                 EnableAccountRegistration = _applicationOptions.EnableAccountRegistration,
                 EnableAccountRecover = _applicationOptions.EnableAccountRecover,
-                Email = context?.LoginHint,
+                LoginHint = context?.LoginHint,
             };
 
             if (context?.IdP != null)
@@ -160,7 +160,7 @@ namespace IdentityBase.Public.Actions.Login
 
             if (userAccount != null)
             {
-                vm.LoginHints = userAccount?.Accounts.Select(c => c.Provider);
+                vm.ExternalProviderHints = userAccount?.Accounts.Select(c => c.Provider);
             }
 
             return vm;

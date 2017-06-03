@@ -26,7 +26,8 @@ namespace IdentityBase.Public.Actions.Login
         public bool EnableAccountRecover { get; set; }
         public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
-        public IEnumerable<string> LoginHints { get; set; }
+        public string LoginHint { get; set; }
+        public IEnumerable<string> ExternalProviderHints { get; set; }
     }
 
     public interface IExternalLoginsViewModel
