@@ -2,7 +2,6 @@
 
 namespace IdentityBase.Public.Actions.Register
 {
-    // TODO: together its longer than 2000 characters :/
     public class SuccessInputModel
     {
         [StringLength(254)]
