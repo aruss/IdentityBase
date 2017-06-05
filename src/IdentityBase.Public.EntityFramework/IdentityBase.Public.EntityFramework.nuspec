@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>IdentityBase.Public.EntityFramework</id>
+    <version>1.0.0</version>
+    <authors>Russlan Akiev</authors>
+    <owners>Russlan Akiev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/aruss/IdentityBase</projectUrl>
+    <description>Datalayer for IdentityBase.Public</description>
+    <copyright>Copyright (c) Russlan Akiev. All rights reserved.</copyright>
+    <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security entityframework</tags>
+    <dependencies>
+      <group targetFramework=".NETCoreApp1.1">
+        <dependency id="IdentityBase" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="1.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.Tools" version="1.1.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Autofac.Extensions.DependencyInjection" version="4.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.NETCore.App" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.Sqlite" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="AutoMapper" version="6.0.2" exclude="Build,Analyzers" />
+        <dependency id="IdentityServer4" version="1.5.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src/IdentityBase.Public.EntityFramework/bin/Release/netcoreapp1.1/IdentityBase.Public.EntityFramework.dll" target="lib/netcoreapp1.1/IdentityBase.Public.EntityFramework.dll" />
+  </files>
+</package>
