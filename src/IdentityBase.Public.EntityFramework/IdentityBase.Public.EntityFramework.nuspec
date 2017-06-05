@@ -29,6 +29,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src/IdentityBase.Public.EntityFramework/bin/Release/netcoreapp1.1/IdentityBase.Public.EntityFramework.dll" target="lib/netcoreapp1.1/IdentityBase.Public.EntityFramework.dll" />
+    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp1.1\IdentityBase.Public.EntityFramework.dll" />
   </files>
 </package>

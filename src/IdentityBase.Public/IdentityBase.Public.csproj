@@ -9,7 +9,7 @@
     <Copyright>Copyright (c) Russlan Akiev. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/aruss/IdentityBase</PackageProjectUrl>
     <PackageTags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</PackageTags>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

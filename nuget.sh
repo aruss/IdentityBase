@@ -1,1 +1,0 @@
-nuget pack src/IdentityBase.Public/IdentityBase.Public.nuspec -OutputDirectory src/IdentityBase.Public/bin

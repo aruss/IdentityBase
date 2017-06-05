@@ -47,7 +47,7 @@
     </contentFiles>
   </metadata>
   <files>
-    <file src=".\bin\Release\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" />
-    <file src=".\bin\Release\netcoreapp1.1\IdentityBase.Public.dll" target="lib\netcoreapp1.1\IdentityBase.Public.dll" />
+    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" />
+    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.dll" target="lib\netcoreapp1.1\IdentityBase.Public.dll" />
   </files>
 </package>

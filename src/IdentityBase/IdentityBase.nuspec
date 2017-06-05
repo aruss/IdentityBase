@@ -14,12 +14,12 @@
       <group targetFramework=".NETCoreApp1.1">
         <dependency id="ServiceBase" version="1.0.0" exclude="Build,Analyzers" />
         <dependency id="Autofac.Extensions.DependencyInjection" version="4.1.0" exclude="Build,Analyzers" />
-        <dependency id="Microsoft.NETCore.App" version="1.1.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.NETCore.App" version="1.1.1" exclude="Build,Analyzers" />
         <dependency id="IdentityServer4" version="1.5.1" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="src/IdentityBase/bin/Release/netcoreapp1.1/IdentityBase.dll" target="lib/netcoreapp1.1/IdentityBase.dll" />
+    <file src="bin\Release\netcoreapp1.1\IdentityBase.dll" target="lib\netcoreapp1.1\IdentityBase.dll" />
   </files>
 </package>

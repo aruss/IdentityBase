@@ -4,6 +4,7 @@ image: Visual Studio 2017
 deploy: off
 configuration: Release
 platform: Any CPU
+
 services:
   - mssql2014
   - postgresql
@@ -15,12 +16,11 @@ branches:
     - /^(.*\/)?ci-.*$/
 
 install:
-  - cmd: git submodule update --init --recursive
+  - bash init.sh
 
 build_script:
-  - dotnet --info
-  - dotnet restore --no-cache
-  - dotnet build .\IdentityBase.sln --configuration Release --version-suffix %APPVEYOR_BUILD_NUMBER%
+  - bash build.sh
+  - bash pack.sh
 
 test_script:
   - bash coveralls.sh
