@@ -28,9 +28,10 @@ artifacts:
   - path: artifacts/packages/*.nupkg
 
 deploy:
-  - provider: NuGet
-    api_key:
+- provider: NuGet
+  api_key:
     secure: zvmFPbRUqY3XRSzcu3pTNsOiLshSTF/BylhxFHPhq6H2e1TEDNPeQS2rhnttASCU
-    skip_symbols: true
-    on:
-      branch: master
+  skip_symbols: true
+  artifact: artifacts/packages/*.nupkg
+  on:
+    branch: master
