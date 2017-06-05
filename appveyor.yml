@@ -19,7 +19,6 @@ install:
 
 build_script:
   - bash build.sh
-  - bash pack.sh
 
 test_script:
   - bash coveralls.sh
