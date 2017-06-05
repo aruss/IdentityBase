@@ -1,7 +1,4 @@
 ﻿using IdentityBase.Configuration;
-using IdentityBase.Public.Actions.Recover;
-using IdentityBase.Public.Actions.Register;
-using IdentityBase.Public.Api;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
@@ -24,24 +21,24 @@ namespace IdentityBase.Public
                 {
                     // Remove default ControllerFeatureProvider 
                     var item = manager.FeatureProviders.FirstOrDefault(c => c.GetType()
-                                    .Equals(typeof(ControllerFeatureProvider)));
+                        .Equals(typeof(ControllerFeatureProvider)));
                     if (item != null)
                     {
                         manager.FeatureProviders.Remove(item);
                     }
 
-                    // Register new 
+                    // Register new IApplicationFeatureProvider with a blacklist depending on current configuration
                     manager.FeatureProviders.Add(new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-                        .AddIf<UserAccountInviteController>(options.EnableUserInviteEndpoint)
-                        .AddIf<RecoverController>(options.EnableAccountRecover)
-                        .AddIf<RegisterController>(options.EnableAccountRegistration)
+                        .AddIf<Api.UserAccountInvite.UserAccountInviteController>(!options.EnableUserInviteEndpoint)
+                        .AddIf<Actions.Recover.RecoverController>(!options.EnableAccountRecover)
+                        .AddIf<Actions.Register.RegisterController>(!options.EnableAccountRegistration)
                     ));
                 });
         }
         
         private static List<TypeInfo> AddIf<TController>(this List<TypeInfo> list, bool assertion)
         {
-            if (!assertion)
+            if (assertion)
             {
                 list.Add(typeof(TController).GetTypeInfo());
             }
