@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 
 namespace AspNetCoreWeb
 {
@@ -77,35 +79,23 @@ namespace AspNetCoreWeb
                 SaveTokens = true,
                 Events = new OpenIdConnectEvents
                 {
-                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow 
-                    OnRedirectToIdentityProviderForSignOut = async n =>
+                    OnTicketReceived = async context =>
                     {
-                        var idTokenHint = await n.HttpContext.Authentication.GetTokenAsync("id_token");
+                        var profileId = Guid.Parse(context.Ticket.Principal.FindFirst("sub").Value);
+                        var emailClaim = context?.Ticket?.Principal?.FindFirst("email");
+
+                        // Load current domain profile/user object if dont find any create one
+                    },
+                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow 
+                    OnRedirectToIdentityProviderForSignOut = async context =>
+                    {
+                        var idTokenHint = await context.HttpContext.Authentication.GetTokenAsync("id_token");
                         if (idTokenHint != null)
                         {
-                            n.ProtocolMessage.IdTokenHint = idTokenHint;
-                            n.ProtocolMessage.PostLogoutRedirectUri = "http://localhost:3308/";
+                            context.ProtocolMessage.IdTokenHint = idTokenHint;
+                            context.ProtocolMessage.PostLogoutRedirectUri = "http://localhost:3308/";
                         }
                     }
-                    /*,OnTokenValidated = async context =>
-                     {
-                         var profileService = context.HttpContext.RequestServices.GetService<IProfileService>();
-                         var profileId = Guid.Parse(context.Ticket.Principal.FindFirst("sub").Value);
-                         var profile = await profileService.GetByIdAsync(profileId);
-                         if (profile == null)
-                         {
-                             // TODO: Encapsulate
-                             profile = new Profile
-                             {
-                                 Id = profileId,
-                                 DisplayName = "john doe"
-                                 // TODO: set other fields
-                             };
-
-                             await profileService.SaveAsync(profile);
-                             context.Ticket.Properties.RedirectUri = "/profile";
-                         }
-                     }*/
                 }
             };
 
