@@ -23,5 +23,7 @@ namespace IdentityBase.Public.EntityFramework.Entities
         public DateTime UpdatedAt { get; set; }
         public List<ExternalAccount> Accounts { get; set; }
         public List<UserAccountClaim> Claims { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public int CreationKind { get; set; }
     }
 }

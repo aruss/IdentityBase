@@ -2,9 +2,12 @@
 using IdentityBase.Extensions;
 using IdentityBase.Models;
 using IdentityBase.Services;
+using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ServiceBase.Extensions;
 using ServiceBase.Notification.Email;
 using System;
 using System.Linq;
@@ -20,6 +23,7 @@ namespace IdentityBase.Public.Actions.Register
         private readonly IEmailService _emailService;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RegisterController(
             ApplicationOptions applicationOptions,
@@ -27,7 +31,8 @@ namespace IdentityBase.Public.Actions.Register
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
             UserAccountService userAccountService,
-            ClientService clientService)
+            ClientService clientService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _applicationOptions = applicationOptions;
             _logger = logger;
@@ -35,6 +40,7 @@ namespace IdentityBase.Public.Actions.Register
             _emailService = emailService;
             _userAccountService = userAccountService;
             _clientService = clientService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet(IdentityBaseConstants.Routes.Register, Name = "Register")]
@@ -64,14 +70,12 @@ namespace IdentityBase.Public.Actions.Register
 
         private async Task SendUserAccountCreatedAsync(UserAccount userAccount)
         {
-            var args = new { Key = userAccount.VerificationKey };
-
+            var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
             await _emailService.SendEmailAsync(
                 IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
                 {
-                    // TODO: change to read x-forwared-host or use event context
-                    ConfirmUrl = Url.Action("Confirm", "Register", args, Request.Scheme),
-                    CancelUrl = Url.Action("Cancel", "Register", args, Request.Scheme)
+                    ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                    CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
                 }
             );
         }
@@ -91,7 +95,7 @@ namespace IdentityBase.Public.Actions.Register
 
             if (_applicationOptions.LoginAfterAccountCreation)
             {
-                await HttpContext.Authentication.SignInAsync(userAccount, null);
+                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
 
                 if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
                 {
@@ -126,7 +130,7 @@ namespace IdentityBase.Public.Actions.Register
 
                 if (_applicationOptions.LoginAfterAccountCreation)
                 {
-                    await HttpContext.Authentication.SignInAsync(userAccount, null);
+                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
 
                     if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
                     {
@@ -224,7 +228,7 @@ namespace IdentityBase.Public.Actions.Register
             // If applicatin settings provided login user after confirmation
             if (_applicationOptions.LoginAfterAccountConfirmation)
             {
-                await HttpContext.Authentication.SignInAsync(result.UserAccount, null);
+                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
 
                 if (returnUrl != null && _interaction.IsValidReturnUrl(returnUrl))
                 {

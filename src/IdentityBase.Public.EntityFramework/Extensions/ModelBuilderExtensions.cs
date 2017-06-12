@@ -222,6 +222,9 @@ namespace IdentityBase.Public.EntityFramework.Extensions
                 userAccount.Property(x => x.CreatedAt);
                 userAccount.Property(x => x.UpdatedAt);
 
+                userAccount.Property(x => x.CreatedBy);
+                userAccount.Property(x => x.CreationKind);
+
                 userAccount.HasMany(x => x.Accounts)
                     .WithOne(x => x.UserAccount)
                     .HasForeignKey(x => x.UserAccountId)

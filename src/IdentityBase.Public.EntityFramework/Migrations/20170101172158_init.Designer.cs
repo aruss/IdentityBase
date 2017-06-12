@@ -530,6 +530,10 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                     b.Property<string>("VerificationStorage")
                         .HasAnnotation("MaxLength", 2000);
 
+                    b.Property<Guid?>("CreatedBy");
+
+                    b.Property<int?>("CreationKind");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")

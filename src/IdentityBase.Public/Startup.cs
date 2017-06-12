@@ -79,7 +79,7 @@ namespace IdentityBase.Public
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
-
+            
             services.AddCors(corsOpts =>
             {
                 corsOpts.AddPolicy("CorsPolicy",

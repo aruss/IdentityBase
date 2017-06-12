@@ -1,6 +1,7 @@
 ﻿using IdentityBase.Configuration;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceBase.Api;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,13 +10,16 @@ namespace IdentityBase.Public
 {
     public static class StartupMvc
     {
-        public static void AddMvc(this IServiceCollection services, ApplicationOptions options)
-        {
-            services.AddMvc()
+        public static void AddMvc(this IServiceCollection services, ApplicationOptions appOptions)
+        {   
+            services.AddMvc(mvcOptions =>
+                {
+                    mvcOptions.OutputFormatters.ReplaceJsonOutputFormatter(); 
+                })
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
-                        new Razor.CustomViewLocationExpander(options.ThemePath));
+                        new Razor.CustomViewLocationExpander(appOptions.ThemePath));
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
@@ -29,13 +33,14 @@ namespace IdentityBase.Public
 
                     // Register new IApplicationFeatureProvider with a blacklist depending on current configuration
                     manager.FeatureProviders.Add(new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-                        .AddIf<Api.UserAccountInvite.UserAccountInviteController>(!options.EnableUserInviteEndpoint)
-                        .AddIf<Actions.Recover.RecoverController>(!options.EnableAccountRecover)
-                        .AddIf<Actions.Register.RegisterController>(!options.EnableAccountRegistration)
+                        .AddIf<Api.UserAccountInvite.InvitationsController>(!appOptions.EnableUserInviteEndpoint)
+                        .AddIf<Actions.Invite.InviteController>(!appOptions.EnableUserInviteEndpoint)
+                        .AddIf<Actions.Recover.RecoverController>(!appOptions.EnableAccountRecover)
+                        .AddIf<Actions.Register.RegisterController>(!appOptions.EnableAccountRegistration)
                     ));
                 });
         }
-        
+
         private static List<TypeInfo> AddIf<TController>(this List<TypeInfo> list, bool assertion)
         {
             if (assertion)

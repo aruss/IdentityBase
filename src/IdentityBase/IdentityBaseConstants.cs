@@ -19,6 +19,8 @@ namespace IdentityBase
         {
             public const string UserAccountCreated = "UserAccountCreated";
             public const string UserAccountRecover = "UserAccountRecover";
+            public const string UserAccountInvited = "UserAccountInvited";
         }
     }
 }
+    

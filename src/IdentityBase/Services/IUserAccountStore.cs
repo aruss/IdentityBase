@@ -1,4 +1,5 @@
 ﻿using IdentityBase.Models;
+using ServiceBase.Collections;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -57,5 +58,7 @@ namespace IdentityBase.Services
         Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount);
 
         Task DeleteExternalAccountAsync(Guid id);
+
+        Task<PagedList<UserAccount>> LoadInvitedUserAccounts(int take, int skip = 0, Guid? invitedBy = null); 
     }
 }

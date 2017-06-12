@@ -38,6 +38,9 @@
     "SeedExampleDataPath": "./config",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+    },
+    "SqlServer": {
+      "ConnectionString": "Data Source=.\\SQLEXPRESS;Initial Catalog=IdentityBase;Persist Security Info=True;User ID=devuser;Password=devuser;MultipleActiveResultSets=True"
     }
   },
   "Events": {

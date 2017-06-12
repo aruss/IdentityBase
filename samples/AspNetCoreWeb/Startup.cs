@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 
 namespace AspNetCoreWeb
 {
@@ -86,7 +85,7 @@ namespace AspNetCoreWeb
 
                         // Load current domain profile/user object if dont find any create one
                     },
-                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow 
+                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow
                     OnRedirectToIdentityProviderForSignOut = async context =>
                     {
                         var idTokenHint = await context.HttpContext.Authentication.GetTokenAsync("id_token");

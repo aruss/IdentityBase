@@ -6,11 +6,18 @@ namespace IdentityBase.Models
 {
     public enum VerificationKeyPurpose
     {
-        ResetPassword = 1,
-        ChangeEmail = 2,
-        ChangeMobile = 3,
-        ConfirmAccount = 4,
-        MergeAccount = 5
+        ResetPassword,
+        ChangeEmail,
+        ChangeMobile,
+        ConfirmAccount,
+        MergeAccount,
+        AcceptInvitation
+    }
+
+    public enum CreationKind
+    {
+        SelfService,
+        Invitation
     }
 
     public class UserAccount
@@ -43,7 +50,7 @@ namespace IdentityBase.Models
         /// <summary>
         /// How many times user tried to login with invalid credentials
         /// </summary>
-        public virtual int FailedLoginCount { get;set; }
+        public virtual int FailedLoginCount { get; set; }
 
         /// <summary>
         /// Hashed password
@@ -70,5 +77,9 @@ namespace IdentityBase.Models
 
         public IEnumerable<ExternalAccount> Accounts { get; set; }
         public IEnumerable<UserAccountClaim> Claims { get; set; }
+
+        public Guid? CreatedBy { get; set; }
+        public CreationKind CreationKind { get; set; }
+
     }
 }

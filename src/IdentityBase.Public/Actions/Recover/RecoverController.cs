@@ -1,9 +1,12 @@
 ﻿using IdentityBase.Configuration;
 using IdentityBase.Models;
 using IdentityBase.Services;
+using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ServiceBase.Extensions;
 using ServiceBase.Notification.Email;
 using System;
 using System.Linq;
@@ -19,6 +22,7 @@ namespace IdentityBase.Public.Actions.Recover
         private readonly IEmailService _emailService;
         private readonly ClientService _clientService;
         private readonly UserAccountService _userAccountService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RecoverController(
             ApplicationOptions applicationOptions,
@@ -27,7 +31,8 @@ namespace IdentityBase.Public.Actions.Recover
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
             ClientService clientService,
-            UserAccountService userAccountService)
+            UserAccountService userAccountService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _applicationOptions = applicationOptions;
             _logger = logger;
@@ -35,6 +40,7 @@ namespace IdentityBase.Public.Actions.Recover
             _emailService = emailService;
             _clientService = clientService;
             _userAccountService = userAccountService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("recover", Name = "Recover")]
@@ -87,15 +93,7 @@ namespace IdentityBase.Public.Actions.Recover
                 if (userAccount != null)
                 {
                     await _userAccountService.SetResetPasswordVirificationKey(userAccount, model.ReturnUrl);
-
-                    var args = new { Key = userAccount.VerificationKey };
-                    await _emailService.SendEmailAsync(
-                        IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
-                        {
-                            ConfirmUrl = Url.Action("Confirm", "Recover", args, Request.Scheme),
-                            CancelUrl = Url.Action("Cancel", "Recover", args, Request.Scheme)
-                        }
-                    );
+                    SendUserAccountCreatedAsync(userAccount);
 
                     return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
                 }
@@ -107,6 +105,18 @@ namespace IdentityBase.Public.Actions.Recover
 
             var vm = new RecoverViewModel(model);
             return View(vm);
+        }
+
+        private async Task SendUserAccountCreatedAsync(UserAccount userAccount)
+        {
+            var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
+            await _emailService.SendEmailAsync(
+                IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
+                {
+                    ConfirmUrl = $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
+                    CancelUrl = $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
+                }
+            );
         }
 
         [HttpGet("recover/success", Name = "RecoverSuccess")]

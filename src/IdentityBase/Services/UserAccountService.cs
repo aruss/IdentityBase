@@ -1,11 +1,11 @@
-﻿using IdentityServer4;
-using IdentityServer4.Services;
-using Microsoft.Extensions.Options;
-using IdentityBase.Configuration;
+﻿using IdentityBase.Configuration;
 using IdentityBase.Crypto;
 using IdentityBase.Events;
 using IdentityBase.Extensions;
 using IdentityBase.Models;
+using IdentityServer4;
+using IdentityServer4.Services;
+using ServiceBase.Collections;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +14,10 @@ namespace IdentityBase.Services
 {
     public class UserAccountService
     {
-        private ApplicationOptions _applicationOptions;
-        private ICrypto _crypto;
-        private IUserAccountStore _userAccountStore;
-        private IEventService _eventService;
+        private readonly ApplicationOptions _applicationOptions;
+        private readonly ICrypto _crypto;
+        private readonly IUserAccountStore _userAccountStore;
+        private readonly IEventService _eventService;
 
         public UserAccountService(
             ApplicationOptions applicationOptions,
@@ -65,13 +65,18 @@ namespace IdentityBase.Services
 
             if (!result.IsPasswordValid && !result.IsLocalAccount)
             {
-                var hints = userAccount.Accounts.Select(s => s.Provider).ToArray(); 
+                var hints = userAccount.Accounts.Select(s => s.Provider).ToArray();
             }
 
             return result;
         }
 
         #region Load UserAccounts
+
+        public async Task<UserAccount> LoadByIdAsync(Guid id)
+        {
+            return await _userAccountStore.LoadByIdAsync(id);
+        }
 
         public async Task<UserAccount> LoadByEmailAsync(string email)
         {
@@ -93,7 +98,7 @@ namespace IdentityBase.Services
             await _userAccountStore.DeleteByIdAsync(id);
         }
 
-        #endregion
+        #endregion Load UserAccounts
 
         #region Create new UserAccount
 
@@ -240,7 +245,7 @@ namespace IdentityBase.Services
             return userAccount;
         }
 
-        #endregion
+        #endregion Add Local/External Accounts to existing one
 
         #region Update UserAccount in case user is authenticated
 
@@ -299,7 +304,7 @@ namespace IdentityBase.Services
                 userAccount.Id);
         }
 
-        #endregion
+        #endregion Update UserAccount in case user is authenticated
 
         #region Recover UserAccount
 
@@ -327,7 +332,7 @@ namespace IdentityBase.Services
                 userAccount.Id);
         }
 
-        #endregion
+        #endregion Recover UserAccount
 
         #region Confirm UserAccount
 
@@ -342,7 +347,7 @@ namespace IdentityBase.Services
             await ClearVerificationKeyAsync(userAccount);
         }
 
-        #endregion
+        #endregion Confirm UserAccount
 
         /// <summary>
         /// Validate if verification key is valid, if yes it will load a corresponding <see cref="UserAccount"/>
@@ -392,6 +397,55 @@ namespace IdentityBase.Services
             await _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
                 userAccount.Id);
         }
+
+        #region Invitations
+
+        /// <summary>
+        /// Creates an local user account and sends email to the user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="invitedBy"></param>
+        /// <returns></returns>
+        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid invitedBy)
+        {
+            // TODO: check if inviter exists
+
+            var now = DateTime.UtcNow;
+
+            var userAccount = new UserAccount
+            {
+                Id = Guid.NewGuid(),
+                Email = email,
+                CreatedBy = invitedBy,
+                CreationKind = CreationKind.Invitation,
+                FailedLoginCount = 0,
+                IsEmailVerified = false,
+                IsLoginAllowed = _applicationOptions.RequireLocalAccountVerification,
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+
+            // Set verification key
+            userAccount.SetVerification(
+                _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64(),
+                VerificationKeyPurpose.AcceptInvitation,
+                null,
+                now);
+
+            await _userAccountStore.WriteAsync(userAccount);
+
+            // Emit event
+            _eventService.RaiseSuccessfulUserAccountInvitedEventAsync(userAccount.Id, invitedBy);
+
+            return userAccount;
+        }
+
+        public async Task<PagedList<UserAccount>> LoadInvitedUserAccounts(int take, int skip)
+        {
+            return await _userAccountStore.LoadInvitedUserAccounts(take, skip);
+        }
+
+        #endregion Invitations
     }
 
     public class TokenVerificationResult

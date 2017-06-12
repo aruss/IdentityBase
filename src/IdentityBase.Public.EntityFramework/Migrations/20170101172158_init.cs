@@ -117,7 +117,9 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                     VerificationKey = table.Column<string>(maxLength: 100, nullable: true),
                     VerificationKeySentAt = table.Column<DateTime>(nullable: true),
                     VerificationPurpose = table.Column<int>(nullable: true),
-                    VerificationStorage = table.Column<string>(maxLength: 2000, nullable: true)
+                    VerificationStorage = table.Column<string>(maxLength: 2000, nullable: true),
+                    CreatedBy = table.Column<Guid>(nullable: true),
+                    CreationKind = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {

@@ -47,7 +47,21 @@ namespace IdentityBase.Events
             };
 
             await events.RaiseAsync(evt);
+        }
 
+        public static async Task RaiseSuccessfulUserAccountInvitedEventAsync(this IEventService events, Guid userAccountId, Guid hostUserAccountId)
+        {
+            var evt = new UserAccountInvitedEvent(
+                EventConstants.Categories.UserAccount,
+                "User Account Invitation Success",
+                EventTypes.Success,
+                EventConstants.Ids.UserAccountInvited)
+            {
+                UserAccountId = userAccountId,
+                HostUserAccountId = hostUserAccountId
+            };
+
+            await events.RaiseAsync(evt);
         }
     }
 }

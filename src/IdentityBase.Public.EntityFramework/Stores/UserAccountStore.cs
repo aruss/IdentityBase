@@ -8,6 +8,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ServiceBase.Collections;
+using System.Diagnostics;
+using ServiceBase;
 
 namespace IdentityBase.Public.EntityFramework.Stores
 {
@@ -160,7 +163,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             return Task.FromResult<UserAccount>(null);
         }
-        
+
         public Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount)
         {
             var userAccountId = externalAccount.UserAccount != null ?
@@ -204,6 +207,39 @@ namespace IdentityBase.Public.EntityFramework.Stores
             }
 
             return Task.FromResult<ExternalAccount>(null);
+        }
+        
+        public async Task<PagedList<UserAccount>> LoadInvitedUserAccounts(int take, int skip = 0, Guid? invitedBy = null)
+        {
+            var baseQuery = _context.UserAccounts
+                .Where(c => c.CreationKind == (int)CreationKind.Invitation); 
+
+            if (invitedBy.HasValue)
+            {
+                baseQuery = baseQuery.Where(c => c.CreatedBy == invitedBy); 
+            }
+
+            var result = new PagedList<UserAccount>
+            {
+                Skip = skip,
+                Take = take,
+                Total = baseQuery.Count(),
+                Items = baseQuery
+                     .Include(x => x.Accounts)
+                     .Include(x => x.Claims)
+                     .OrderByDescending(c => c.CreatedAt)
+                     .Skip(skip)
+                     .Take(take)
+                     .Select(s => s.ToModel()).ToArray(),
+                Sort = new List<SortInfo>
+                {
+                    new SortInfo("CreatedAt".Camelize(), SortDirection.Descending)
+                }                
+            }; 
+            
+            // _logger.LogDebug("{email} found in database: {userAccountFound}", email, model != null);
+
+            return result;
         }
     }
 }

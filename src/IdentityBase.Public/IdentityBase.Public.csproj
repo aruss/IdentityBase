@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="IdentityBase.Public.nuspec" />
     <None Remove="tempkey.rsa" />
   </ItemGroup>
 
