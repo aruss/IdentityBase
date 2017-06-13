@@ -2,7 +2,7 @@
 
 set -e
 
-nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/artifacts
+nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/tools
 
 OPENCOVER=$PWD/packages/OpenCover.4.6.589/tools/OpenCover.Console.exe
 COVERAGE_DIR=./coverage
