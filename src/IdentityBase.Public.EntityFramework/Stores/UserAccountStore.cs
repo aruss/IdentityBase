@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using IdentityBase.Models;
 using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Models;
 using IdentityBase.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using ServiceBase;
+using ServiceBase.Collections;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using ServiceBase.Collections;
-using System.Diagnostics;
-using ServiceBase;
 
 namespace IdentityBase.Public.EntityFramework.Stores
 {
