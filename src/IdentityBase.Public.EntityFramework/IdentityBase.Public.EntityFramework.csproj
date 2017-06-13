@@ -26,6 +26,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
+	<PackageReference Include="ServiceBase" Version="1.0" />
+	<PackageReference Include="IdentityBase" Version="1.0" />
   </ItemGroup>
 
   <ItemGroup>
