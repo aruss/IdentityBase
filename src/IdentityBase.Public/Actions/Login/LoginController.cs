@@ -43,6 +43,12 @@ namespace IdentityBase.Public.Actions.Login
         {
             var vm = await this.CreateViewModelAsync(returnUrl);
 
+            if (vm == null)
+            {
+                _logger.LogError("Login attempt with missing returnUrl parameter"); 
+                return Redirect("/"); 
+            }
+
             if (vm.IsExternalLoginOnly)
             {
                 return this.ChallengeExternalLogin(
@@ -131,6 +137,11 @@ namespace IdentityBase.Public.Actions.Login
             UserAccount userAccount = null)
         {
             var context = await _interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
+
+            if (context == null)
+            {
+                return null; 
+            }
 
             var vm = new LoginViewModel(inputModel)
             {

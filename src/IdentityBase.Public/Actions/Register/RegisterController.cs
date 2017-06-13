@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using ServiceBase.Extensions;
 using ServiceBase.Notification.Email;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace IdentityBase.Public.Actions.Register
             return View(vm);
         }
 
-        private async Task SendUserAccountCreatedAsync(UserAccount userAccount)
+        private async Task SendEmailAsync(UserAccount userAccount)
         {
             var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
             await _emailService.SendEmailAsync(
@@ -90,7 +91,7 @@ namespace IdentityBase.Public.Actions.Register
             // Send confirmation mail
             if (_applicationOptions.RequireLocalAccountVerification)
             {
-                await SendUserAccountCreatedAsync(userAccount);
+                await SendEmailAsync(userAccount);
             }
 
             if (_applicationOptions.LoginAfterAccountCreation)
@@ -173,7 +174,7 @@ namespace IdentityBase.Public.Actions.Register
                 // User is just disabled by whatever reason
                 else if (!userAccount.IsLoginAllowed)
                 {
-                    ModelState.AddModelError("", "Your user account has be disabled");
+                    ModelState.AddModelError("Your user account has be disabled");
                 }
                 // If user has a password then its a local account
                 else if (userAccount.HasPassword())
@@ -182,13 +183,13 @@ namespace IdentityBase.Public.Actions.Register
                     if (_applicationOptions.RequireLocalAccountVerification
                         && !userAccount.IsEmailVerified)
                     {
-                        ModelState.AddModelError("", "Please confirm your email account");
+                        ModelState.AddModelError("Please confirm your email account");
 
                         // TODO: show link for resent confirmation link
                     }
 
                     // If user has a password then its a local account
-                    ModelState.AddModelError("", "User already exists");
+                    ModelState.AddModelError("User already exists");
                 }
                 // External account with same email
                 else
@@ -202,7 +203,7 @@ namespace IdentityBase.Public.Actions.Register
 
         [HttpGet(IdentityBaseConstants.Routes.RegisterSuccess, Name = "RegisterSuccess")]
         public async Task<IActionResult> Success(SuccessInputModel model)
-        {            
+        {
             // TODO: Select propper mail provider and render it as button
 
             var vm = new SuccessViewModel(model);
@@ -213,19 +214,33 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
-            var result = await _userAccountService.HandleVerificationKey(key,
-                VerificationKeyPurpose.ConfirmAccount);
-
+            var result = await _userAccountService.HandleVerificationKey(key, VerificationKeyPurpose.ConfirmAccount);
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("", "Invalid token");
+                ModelState.AddModelError("Invalid token");
                 return View("InvalidToken");
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
             await _userAccountService.SetEmailVerifiedAsync(result.UserAccount);
 
-            // If applicatin settings provided login user after confirmation
+            if (_applicationOptions.EnableUserInviteEndpoint && result.UserAccount.CreationKind == CreationKind.Invitation)
+            {
+                if (result.UserAccount.HasPassword())
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    _httpContextAccessor.HttpContext.Response.Cookies.Append("ConfirmUserAccountId", result.UserAccount.Id.ToString(), new CookieOptions
+                    {
+                        Path = "/",
+                        HttpOnly = true
+                    }); 
+                    return Redirect(Url.Action("Complete", "Register", new { ReturnUrl = returnUrl }));
+                }
+            }
+
             if (_applicationOptions.LoginAfterAccountConfirmation)
             {
                 await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
@@ -236,18 +251,17 @@ namespace IdentityBase.Public.Actions.Register
                 }
             }
 
-            return Redirect(Url.Action("Login", "Login", new { ReturnUrl = returnUrl }));
+            return Redirect(Url.Action("Login", "Login", new { ReturnUrl = returnUrl }));           
         }
 
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
-            var result = await _userAccountService.HandleVerificationKey(key,
-               VerificationKeyPurpose.ConfirmAccount);
+            var result = await _userAccountService.HandleVerificationKey(key, VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("", "Invalid token");
+                ModelState.AddModelError("Invalid token");
                 return View("InvalidToken");
             }
 
@@ -255,5 +269,97 @@ namespace IdentityBase.Public.Actions.Register
             await _userAccountService.DeleteByIdAsync(result.UserAccount.Id);
             return Redirect(Url.Action("Login", "Login", new { returnUrl = returnUrl }));
         }
+
+        [HttpGet("register/complete")]
+        public async Task<IActionResult> Complete(string returnUrl)
+        {
+            var userAccount = await GetUserAccountFromCoockyValue(); 
+            if (userAccount == null)
+            {
+                ModelState.AddModelError("Invalid token");
+                return View("InvalidToken");
+            }
+
+            var vm = new RegisterCompleteViewModel
+            {
+                ReturnUrl = returnUrl,
+                UserAccountId = userAccount.Id,
+                Email = userAccount.Email
+            }; 
+
+            return View(vm);
+        }
+
+        internal async Task<UserAccount> GetUserAccountFromCoockyValue()
+        {
+            string userIdStr;
+            if (_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("ConfirmUserAccountId", out userIdStr))
+            {
+                Guid userId;
+                if (Guid.TryParse(userIdStr, out userId))
+                {
+                    return await _userAccountService.LoadByIdAsync(userId);
+                }
+            }
+
+            return null; 
+        }
+
+        [HttpPost("register/complete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Complete(RegisterCompleteInputModel model)
+        {
+            // update user
+            // authenticate user
+            // redirect to return url
+
+            var userAccount = await GetUserAccountFromCoockyValue();
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
+
+            // TODO: cleanup
+            userAccount.ClearVerification();
+            var now = DateTime.UtcNow;
+            userAccount.IsLoginAllowed = true;
+            userAccount.IsEmailVerified = true;
+            userAccount.EmailVerifiedAt = now;
+            userAccount.UpdatedAt = now;
+            await _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
+
+            await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+
+            // && _interaction.IsValidReturnUrl(returnUrl)
+
+            if (model.ReturnUrl != null )
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            
+            return Redirect("/");
+        }
+    }
+
+    public class RegisterCompleteInputModel
+    {
+        [Required]
+        [StringLength(100)]
+        public string Password { get; set; }
+
+        [Required]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [StringLength(100)]
+        public string PasswordConfirm { get; set; }
+
+        [StringLength(2000)]
+        public string ReturnUrl { get; set; }
+    }
+
+    public class RegisterCompleteViewModel : RegisterCompleteInputModel
+    {
+        public Guid UserAccountId { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [StringLength(254)]
+        public string Email { get; set; }
     }
 }

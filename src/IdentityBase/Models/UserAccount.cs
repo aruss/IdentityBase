@@ -10,8 +10,7 @@ namespace IdentityBase.Models
         ChangeEmail,
         ChangeMobile,
         ConfirmAccount,
-        MergeAccount,
-        AcceptInvitation
+        MergeAccount
     }
 
     public enum CreationKind

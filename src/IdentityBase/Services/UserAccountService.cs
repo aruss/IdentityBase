@@ -3,9 +3,13 @@ using IdentityBase.Crypto;
 using IdentityBase.Events;
 using IdentityBase.Extensions;
 using IdentityBase.Models;
+using IdentityModel.Client;
 using IdentityServer4;
+using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Http;
 using ServiceBase.Collections;
+using ServiceBase.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,17 +22,20 @@ namespace IdentityBase.Services
         private readonly ICrypto _crypto;
         private readonly IUserAccountStore _userAccountStore;
         private readonly IEventService _eventService;
+        private readonly IHttpContextAccessor _httpContextAccessor; 
 
         public UserAccountService(
             ApplicationOptions applicationOptions,
             ICrypto crypto,
             IUserAccountStore userAccountStore,
-            IEventService eventService)
+            IEventService eventService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _applicationOptions = applicationOptions;
             _crypto = crypto;
             _userAccountStore = userAccountStore;
             _eventService = eventService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -406,7 +413,7 @@ namespace IdentityBase.Services
         /// <param name="email"></param>
         /// <param name="invitedBy"></param>
         /// <returns></returns>
-        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid invitedBy)
+        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid invitedBy, string returnUrl)
         {
             // TODO: check if inviter exists
 
@@ -424,12 +431,12 @@ namespace IdentityBase.Services
                 CreatedAt = now,
                 UpdatedAt = now
             };
-
+            
             // Set verification key
             userAccount.SetVerification(
                 _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64(),
-                VerificationKeyPurpose.AcceptInvitation,
-                null,
+                VerificationKeyPurpose.ConfirmAccount,
+                returnUrl,
                 now);
 
             await _userAccountStore.WriteAsync(userAccount);

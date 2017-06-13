@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using IdentityServer4.Extensions;
 using ServiceBase.Extensions;
 using System.Net.Http;
+using IdentityServer4.Stores;
 
 namespace IdentityBase.Public.Api.UserAccountInvite
 {
@@ -23,15 +24,18 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IClientStore _clientStore;
 
         public InvitationsController(
             UserAccountService userAccountService,
             IEmailService emailService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IClientStore clientStore)
         {
             _userAccountService = userAccountService;
             _emailService = emailService;
             _httpContextAccessor = httpContextAccessor;
+            _clientStore = clientStore;
         }
 
         [HttpGet("invitations")]
@@ -64,11 +68,32 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
         [HttpPut("invitations")]
         //[ScopeAuthorize("invite.write")]
-        public async Task<ApiResult> Put([FromBody]UserAccountInviteCreateRequest inputModel)
+        public async Task<object> Put([FromBody]UserAccountInviteCreateRequest inputModel)
         {
             var inviterId = Guid.NewGuid();
 
-            var userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inviterId);
+            var client = await _clientStore.FindClientByIdAsync(inputModel.ClientId);
+
+            if (client == null)
+            {
+                return BadRequest(new InvalidStateApiResult("The ClientId field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ClientId)));
+            }
+
+            string returnUri;
+            if (String.IsNullOrWhiteSpace(inputModel.ReturnUri) && client.RedirectUris.Count > 0)
+            {
+                returnUri = client.RedirectUris.First();
+            }
+            else if (client.RedirectUris.Contains(inputModel.ReturnUri))
+            {
+                returnUri = inputModel.ReturnUri;
+            }
+            else
+            {
+                return BadRequest(new InvalidStateApiResult("The ReturnUri field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ReturnUri))); 
+            }
+
+            var userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inviterId, returnUri);
             SendEmailAsync(userAccount);
 
             return new ApiResult
@@ -89,9 +114,9 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
             if (userAccount.IsEmailVerified)
             {
-                return this.BadRequest("Invitation is already confirmed and cannot be deleted"); 
+                return this.BadRequest("Invitation is already confirmed and cannot be deleted");
             }
-            
+
             await _userAccountService.DeleteByIdAsync(userAccountId);
             return new ApiResult
             {
@@ -105,11 +130,13 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             await _emailService.SendEmailAsync(
                 IdentityBaseConstants.EmailTemplates.UserAccountInvited, userAccount.Email, new
                 {
-                    ConfirmUrl = $"{baseUrl}invite/confirm/{userAccount.VerificationKey}",
-                    CancelUrl = $"{baseUrl}invite/cancel/{userAccount.VerificationKey}"
+                    ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                    CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
                 }
             );
         }
+
+
     }
 
     public class UserAccoutInviteListRequest : PagedListRequest
@@ -124,10 +151,21 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
     public class UserAccountInviteCreateRequest
     {
+        /// <summary>
+        /// Email address of a invited user
+        /// </summary>
         [Required]
         [EmailAddress]
         [StringLength(254)]
         public string Email { get; set; }
+
+        /// <summary>
+        /// Client id of the application where the user gets redirected 
+        /// </summary>
+        [Required]
+        public string ClientId { get; set; }
+
+        public string ReturnUri { get; set; }
     }
 
     public class UserAccountInviteCreateRespose

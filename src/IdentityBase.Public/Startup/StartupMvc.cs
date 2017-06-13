@@ -34,7 +34,6 @@ namespace IdentityBase.Public
                     // Register new IApplicationFeatureProvider with a blacklist depending on current configuration
                     manager.FeatureProviders.Add(new BlackListedControllerFeatureProvider(new List<TypeInfo>()
                         .AddIf<Api.UserAccountInvite.InvitationsController>(!appOptions.EnableUserInviteEndpoint)
-                        .AddIf<Actions.Invite.InviteController>(!appOptions.EnableUserInviteEndpoint)
                         .AddIf<Actions.Recover.RecoverController>(!appOptions.EnableAccountRecover)
                         .AddIf<Actions.Register.RegisterController>(!appOptions.EnableAccountRegistration)
                     ));

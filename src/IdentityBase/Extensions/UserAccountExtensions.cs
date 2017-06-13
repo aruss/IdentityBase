@@ -1,5 +1,6 @@
 ﻿using IdentityBase.Models;
 using System;
+using System.Linq;  
 
 namespace IdentityBase.Extensions
 {
@@ -10,6 +11,11 @@ namespace IdentityBase.Extensions
             if (userAccount == null) throw new ArgumentException(nameof(userAccount));
 
             return !String.IsNullOrWhiteSpace(userAccount.PasswordHash);
+        }
+
+        public static bool HasExternalAccounts(this UserAccount userAccount)
+        {
+            return userAccount.Accounts != null && userAccount.Accounts.Count() > 0; 
         }
 
         public static bool IsNew(this UserAccount userAccount)
