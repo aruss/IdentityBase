@@ -18,11 +18,11 @@ namespace IdentityBase.Public
         {
             var eventOptions = config.GetSection("Events").Get<EventOptions>() ?? new EventOptions();
             var appOptions = config.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
-            
+
             var builder = services.AddIdentityServer((options) =>
             {
-                config.GetSection("IdentityServer").Bind(options); 
-                
+                config.GetSection("IdentityServer").Bind(options);
+
                 options.Events.RaiseErrorEvents = eventOptions.RaiseErrorEvents;
                 options.Events.RaiseFailureEvents = eventOptions.RaiseFailureEvents;
                 options.Events.RaiseInformationEvents = eventOptions.RaiseInformationEvents;
@@ -32,30 +32,31 @@ namespace IdentityBase.Public
                 options.UserInteraction.LogoutUrl = "/logout";
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
-            
-                options.Cors.CorsPolicyName = "CorsPolicy"; 
+
+                options.Cors.CorsPolicyName = "CorsPolicy";
 
                 options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
                 options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");                
-
-            }).AddProfileService<ProfileService>()
-             .AddSecretParser<ClientAssertionSecretParser>()
-             .AddSecretValidator<PrivateKeyJwtSecretValidator>();
+                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");
+            })
+            .AddProfileService<ProfileService>()
+            .AddSecretParser<ClientAssertionSecretParser>()
+            .AddSecretValidator<PrivateKeyJwtSecretValidator>();
+            //.AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
 
             // AppAuth enabled redirect URI validator
             services.AddTransient<IRedirectUriValidator, StrictRedirectUriValidatorAppAuth>();
 
             if (environment.IsDevelopment())
             {
-                builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa")); 
+                builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa"));
             }
             else
             {
                 if (config.ContainsSection("IdentityServer"))
                 {
-                    var section = config.GetSection("IdentityServer"); 
+                    var section = config.GetSection("IdentityServer");
                     if (section.ContainsSection("SigningCredentialFromPfx"))
                     {
                         var filePath = section.GetValue<string>("SigningCredentialFromPfx:Path");
@@ -65,7 +66,7 @@ namespace IdentityBase.Public
                         }
                         if (!File.Exists(filePath))
                         {
-                            throw new FileNotFoundException("Signing certificate file not found", filePath); 
+                            throw new FileNotFoundException("Signing certificate file not found", filePath);
                         }
                         var password = section.GetValue<string>("SigningCredentialFromPfx:Password");
                         builder.AddSigningCredential(new X509Certificate2(filePath, password));
@@ -83,7 +84,7 @@ namespace IdentityBase.Public
                 else
                 {
                     builder.AddTemporarySigningCredential();
-                }                
+                }
             }
         }
     }

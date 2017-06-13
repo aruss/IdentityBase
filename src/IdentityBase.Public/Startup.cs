@@ -4,15 +4,10 @@ using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Configuration;
 using IdentityBase.Crypto;
 using IdentityBase.Extensions;
-using IdentityBase.Public.Api;
 using IdentityBase.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,15 +15,11 @@ using Serilog;
 using ServiceBase;
 using ServiceBase.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 //var myService = (IService)DependencyResolver.Current.GetService(typeof(IService));
 
 namespace IdentityBase.Public
 {
-
     /// <summary>
     /// Application startup class
     /// </summary>
@@ -41,7 +32,7 @@ namespace IdentityBase.Public
         public IConfigurationRoot Configuration { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="environment"></param>
         /// <param name="logger"></param>
@@ -52,7 +43,7 @@ namespace IdentityBase.Public
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
@@ -79,22 +70,22 @@ namespace IdentityBase.Public
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
-            
+
             services.AddCors(corsOpts =>
             {
                 corsOpts.AddPolicy("CorsPolicy",
                     corsBuilder => corsBuilder.WithOrigins(
                         Configuration.GetValue<string>("Host:Cors")));
             });
-            
+
             services.AddRestApi(options);
             services.AddMvc(options);
 
-            // Update current instances 
+            // Update current instances
             Current.Configuration = Configuration;
             Current.Logger = _logger;
 
-            // Add AutoFac continer and register modules form config 
+            // Add AutoFac continer and register modules form config
             var builder = new ContainerBuilder();
             builder.Populate(services);
             if (Configuration.ContainsSection("Services"))
@@ -136,20 +127,16 @@ namespace IdentityBase.Public
 
             if (env.IsDevelopment())
             {
-                // loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
-                //app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/error");
             }
 
-            //loggerFactory.AddSerilog();
-
             app.UseCors("CorsPolicy");
-            app.UseStaticFiles(Configuration, _logger, _environment);
             app.UseMiddleware<RequestIdMiddleware>();
+            app.UseStaticFiles(Configuration, _logger, _environment);
 
             app.UseIdentityServer();
 
