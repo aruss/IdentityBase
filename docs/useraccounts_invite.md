@@ -10,6 +10,7 @@ You can get all created invitations that are not yet confrimed or canceled.
 
 ``skip``
     identifier of the client (optional).
+    
 ``take``
     one or more registered scopes (optional)
 
@@ -52,8 +53,10 @@ You can get all created invitations that are not yet confrimed or canceled.
 
 ``email``
     email address of the user being invited (required)
+    
 ``clientId``
     client_id of the application the user will be redirected after he confirms the invitation (required)
+    
 ``returnUri``
     absolute return uri of the client (optional)
 
