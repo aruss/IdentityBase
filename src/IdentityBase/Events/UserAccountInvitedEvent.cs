@@ -22,6 +22,6 @@ namespace IdentityBase.Events
         /// <summary>
         /// User acccounts who invited primary key
         /// </summary>
-        public Guid HostUserAccountId { get; set; }
+        public Guid? InvitedByUserAccountId { get; set; }
     }
 }

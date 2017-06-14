@@ -39,7 +39,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpGet("invitations")]
-        //[ScopeAuthorize("invite.read")]
+        [ScopeAuthorize("useraccount.read")]
         public async Task<UserAccoutInviteListRespose> Get(UserAccoutInviteListRequest request)
         {
             var list = await _userAccountService.LoadInvitedUserAccounts(request.Take, request.Skip);
@@ -67,11 +67,9 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpPut("invitations")]
-        //[ScopeAuthorize("invite.write")]
+        [ScopeAuthorize("useraccount.write")]
         public async Task<object> Put([FromBody]UserAccountInviteCreateRequest inputModel)
         {
-            var inviterId = Guid.NewGuid();
-
             var client = await _clientStore.FindClientByIdAsync(inputModel.ClientId);
 
             if (client == null)
@@ -90,10 +88,24 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             }
             else
             {
-                return BadRequest(new InvalidStateApiResult("The ReturnUri field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ReturnUri))); 
+                return BadRequest(new InvalidStateApiResult("The ReturnUri field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ReturnUri)));
             }
 
-            var userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inviterId, returnUri);
+            if (inputModel.InvitedBy.HasValue)
+            {
+                if (await _userAccountService.LoadByEmailAsync(inputModel.Email) == null)
+                {
+                    return BadRequest(new InvalidStateApiResult("The InvitedBy field is invalid, UserAccount does not exists.", ResponseMessageKind.Error, nameof(inputModel.InvitedBy)));
+                }
+            }
+
+            var userAccount = await _userAccountService.LoadByEmailAsync(inputModel.Email);
+            if (userAccount != null)
+            {
+                return BadRequest(new InvalidStateApiResult("The Email field is invalid, UserAccount does not exists.", ResponseMessageKind.Error, nameof(inputModel.Email)));
+            }
+
+            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inputModel.InvitedBy, returnUri);
             SendEmailAsync(userAccount);
 
             return new ApiResult
@@ -103,7 +115,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpDelete("invitations/{UserAccountId}")]
-        //[ScopeAuthorize("invite.delete")]
+        [ScopeAuthorize("useraccount.delete")]
         public async Task<object> Delete([FromRoute]Guid userAccountId)
         {
             var userAccount = await _userAccountService.LoadByIdAsync(userAccountId);
@@ -135,8 +147,6 @@ namespace IdentityBase.Public.Api.UserAccountInvite
                 }
             );
         }
-
-
     }
 
     public class UserAccoutInviteListRequest : PagedListRequest
@@ -158,6 +168,11 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         [EmailAddress]
         [StringLength(254)]
         public string Email { get; set; }
+
+        /// <summary>
+        /// UserAccount id of the user who creates a invitation
+        /// </summary>
+        public Guid? InvitedBy { get; set; }
 
         /// <summary>
         /// Client id of the application where the user gets redirected 

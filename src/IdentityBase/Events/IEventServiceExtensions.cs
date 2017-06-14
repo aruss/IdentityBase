@@ -49,7 +49,7 @@ namespace IdentityBase.Events
             await events.RaiseAsync(evt);
         }
 
-        public static async Task RaiseSuccessfulUserAccountInvitedEventAsync(this IEventService events, Guid userAccountId, Guid hostUserAccountId)
+        public static async Task RaiseSuccessfulUserAccountInvitedEventAsync(this IEventService events, Guid userAccountId, Guid? invitedByUserAccountId)
         {
             var evt = new UserAccountInvitedEvent(
                 EventConstants.Categories.UserAccount,
@@ -58,7 +58,7 @@ namespace IdentityBase.Events
                 EventConstants.Ids.UserAccountInvited)
             {
                 UserAccountId = userAccountId,
-                HostUserAccountId = hostUserAccountId
+                InvitedByUserAccountId = invitedByUserAccountId
             };
 
             await events.RaiseAsync(evt);

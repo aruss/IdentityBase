@@ -57,6 +57,9 @@ You can get all created invitations that are not yet confrimed or canceled.
 ``clientId``
     client_id of the application the user will be redirected after he confirms the invitation (required)
     
+``invitedBy``
+    user account id of the user who creates a invitation (optional)
+	
 ``returnUri``
     absolute return uri of the client (optional)
 

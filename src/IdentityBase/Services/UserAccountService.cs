@@ -413,7 +413,7 @@ namespace IdentityBase.Services
         /// <param name="email"></param>
         /// <param name="invitedBy"></param>
         /// <returns></returns>
-        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid invitedBy, string returnUrl)
+        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid? invitedBy, string returnUrl)
         {
             // TODO: check if inviter exists
 
@@ -441,7 +441,8 @@ namespace IdentityBase.Services
 
             await _userAccountStore.WriteAsync(userAccount);
 
-            // Emit event
+            // Emit events
+            _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(userAccount.Id, IdentityServerConstants.LocalIdentityProvider); 
             _eventService.RaiseSuccessfulUserAccountInvitedEventAsync(userAccount.Id, invitedBy);
 
             return userAccount;
