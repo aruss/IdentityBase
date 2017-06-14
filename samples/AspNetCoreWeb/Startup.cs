@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ServiceBase.Notification.Email;
+//using ServiceBase.Notification.Email;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -18,7 +18,7 @@ namespace AspNetCoreWeb
 
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()            
                .SetBasePath(env.ContentRootPath)
                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
@@ -44,7 +44,7 @@ namespace AspNetCoreWeb
                     razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander());
                 });
 
-            services.AddTransient<IEmailService, DefaultEmailService>();
+           //services.AddTransient<IEmailService, DefaultEmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

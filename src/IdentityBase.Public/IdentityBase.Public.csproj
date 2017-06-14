@@ -113,12 +113,13 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="2.1.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="ServiceBase" Version="1.0.81" />
+    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.0.81" />
+    <PackageReference Include="ServiceBase.Notification.SendGrid" Version="1.0.81" />
+    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.0.81" />
+    <PackageReference Include="ServiceBase.Notification.Twilio" Version="1.0.81" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.SendGrid\ServiceBase.Notification.SendGrid.csproj" />
-    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Smtp\ServiceBase.Notification.Smtp.csproj" />
-    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase.Notification.Twilio\ServiceBase.Notification.Twilio.csproj" />
-    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework\IdentityBase.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\IdentityBase\IdentityBase.csproj" />
   </ItemGroup>

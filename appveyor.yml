@@ -16,9 +16,6 @@ branches:
     - master
     - release
     - /^(.*\/)?ci-.*$/
-
-install:
-  - git submodule update --init --recursive
   
 before_build:
   - appveyor-retry dotnet restore -v Minimal
