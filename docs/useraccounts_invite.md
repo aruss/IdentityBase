@@ -15,13 +15,11 @@ You can get all created invitations that are not yet confrimed or canceled.
 
 **Example**
 
-::
 
     GET /api/invitations?
         take=1&
         skip=0
 
-::
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -61,7 +59,6 @@ You can get all created invitations that are not yet confrimed or canceled.
 
 **Example**
 
-::
 
     PUT /api/invitations
     Content-Type: application/json
@@ -78,7 +75,6 @@ You can get all created invitations that are not yet confrimed or canceled.
 
 A successful response will return a status code of 200
 
-::
 
     HTTP/1.1 200 OK
     Content-Type: application/json
@@ -89,7 +85,6 @@ A successful response will return a status code of 200
 
 An invalid request will return a 400
 
-::
 
     {
         "success": false,
@@ -109,7 +104,6 @@ An invalid request will return a 400
 
 **Example**
 
-::
 
     DELETE /api/invitations/{UserAccountId}
     Authorization: Bearer <access_token>
@@ -117,7 +111,6 @@ An invalid request will return a 400
 
 A successful response will return a status code of 200
 
-::
 
     HTTP/1.1 200 OK
     Content-Type: application/json
