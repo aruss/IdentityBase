@@ -33,6 +33,3 @@ test_script:
   
 artifacts:
   - path: artifacts\**\*.*
-  
-cache:
-  - '%USERPROFILE%\.nuget\packages'
