@@ -1,31 +1,13 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
-using IdentityBase.Public.EntityFramework.Entities;
+﻿using IdentityBase.Public.EntityFramework.Entities;
 using IdentityBase.Public.EntityFramework.Extensions;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Options;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace IdentityBase.Public.EntityFramework
 {
-    // Only for `dotnet ef migrations` command
-    // dotnet ef migrations add init --context DefaultDbContext
-    /*public class Startup
-    {
-        static void Main()
-        { }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<DefaultDbContext>((builder) =>
-            {
-                builder.UseSqlServer("Just for migration creation purposes");
-            });
-        }
-    }*/
-
-    public class DefaultDbContext : DbContext, IConfigurationDbContext, IPersistedGrantDbContext, IUserAccountDbContext
+    public class MigrationDbContext : DbContext, IConfigurationDbContext, IPersistedGrantDbContext, IUserAccountDbContext
     {
         public DbSet<Client> Clients { get; set; }
         public DbSet<IdentityResource> IdentityResources { get; set; }
@@ -35,15 +17,23 @@ namespace IdentityBase.Public.EntityFramework
         public DbSet<ExternalAccount> ExternalAccounts { get; set; }
         public DbSet<UserAccountClaim> UserAccountClaims { get; set; }
 
-        public DefaultDbContext()
+        public MigrationDbContext()
         {
 
         }
 
-        public DefaultDbContext(DbContextOptions<DefaultDbContext> options)
+        public MigrationDbContext(DbContextOptions<MigrationDbContext> options)
             : base(options)
         {
 
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+#if DEBUG
+            // make sure the connection string makes sense for your machine
+            optionsBuilder.UseSqlServer(@"Server=(local);Database=EfCoreSample;Trusted_Connection=True;");
+#endif
         }
 
         public Task<int> SaveChangesAsync()

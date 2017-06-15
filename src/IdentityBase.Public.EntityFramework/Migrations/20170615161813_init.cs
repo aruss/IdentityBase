@@ -104,6 +104,8 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<Guid>(nullable: true),
+                    CreationKind = table.Column<int>(nullable: false),
                     Email = table.Column<string>(maxLength: 254, nullable: false),
                     EmailVerifiedAt = table.Column<DateTime>(nullable: true),
                     FailedLoginCount = table.Column<int>(nullable: false),
@@ -117,9 +119,7 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                     VerificationKey = table.Column<string>(maxLength: 100, nullable: true),
                     VerificationKeySentAt = table.Column<DateTime>(nullable: true),
                     VerificationPurpose = table.Column<int>(nullable: true),
-                    VerificationStorage = table.Column<string>(maxLength: 2000, nullable: true),
-                    CreatedBy = table.Column<Guid>(nullable: true),
-                    CreationKind = table.Column<int>(nullable: true),
+                    VerificationStorage = table.Column<string>(maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -370,18 +370,18 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                 name: "ExternalAccounts",
                 columns: table => new
                 {
+                    UserAccountId = table.Column<Guid>(nullable: false),
                     Provider = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    Email = table.Column<string>(maxLength: 250, nullable: true),
+                    Email = table.Column<string>(maxLength: 254, nullable: false),
                     IsLoginAllowed = table.Column<bool>(nullable: false),
                     LastLoginAt = table.Column<DateTime>(nullable: true),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
-                    UserAccountId = table.Column<Guid>(nullable: false)
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExternalAccounts", x => new { x.Provider, x.Subject });
+                    table.PrimaryKey("PK_ExternalAccounts", x => new { x.UserAccountId, x.Provider, x.Subject });
                     table.ForeignKey(
                         name: "FK_ExternalAccounts_UserAccounts_UserAccountId",
                         column: x => x.UserAccountId,
@@ -507,11 +507,6 @@ namespace IdentityBase.Public.EntityFramework.Migrations
                 name: "IX_ClientSecrets_ClientId",
                 table: "ClientSecrets",
                 column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExternalAccounts_UserAccountId",
-                table: "ExternalAccounts",
-                column: "UserAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityClaims_IdentityResourceId",

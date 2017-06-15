@@ -45,7 +45,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests
         {
             var builder = new DbContextOptionsBuilder<T>();
             builder.UseSqlServer(
-                 $@"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityServer4.EntityFramework.{name};trusted_connection=yes;");
+                 $@"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityBase.Public.EntityFramework.{name};trusted_connection=yes;");
 
             var options = builder.Options;
 

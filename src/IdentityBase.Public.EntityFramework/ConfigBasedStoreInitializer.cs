@@ -19,7 +19,7 @@ namespace IdentityBase.Public.EntityFramework
         private readonly EntityFrameworkOptions _options;
         private readonly ApplicationOptions _appOptions;
         private readonly ILogger<ConfigBasedStoreInitializer> _logger;
-        private readonly DefaultDbContext _defaultDbContext;
+        private readonly MigrationDbContext _migrationDbContext;
         private readonly IConfigurationDbContext _configurationDbContext;
         private readonly IPersistedGrantDbContext _persistedGrantDbContext;
         private readonly IUserAccountDbContext _userAccountDbContext;
@@ -28,7 +28,7 @@ namespace IdentityBase.Public.EntityFramework
             EntityFrameworkOptions options,
             ApplicationOptions appOptions,
             ILogger<ConfigBasedStoreInitializer> logger,
-            DefaultDbContext defaultDbContext,
+              MigrationDbContext migrationDbContext,
             IConfigurationDbContext configurationDbContext,
             IPersistedGrantDbContext persistedGrantDbContext,
             IUserAccountDbContext userAccountDbContext)
@@ -36,7 +36,7 @@ namespace IdentityBase.Public.EntityFramework
             _options = options;
             _appOptions = appOptions;
             _logger = logger;
-            _defaultDbContext = defaultDbContext;
+            _migrationDbContext = migrationDbContext;
             _configurationDbContext = configurationDbContext;
             _persistedGrantDbContext = persistedGrantDbContext;
             _userAccountDbContext = userAccountDbContext;
@@ -50,7 +50,7 @@ namespace IdentityBase.Public.EntityFramework
                 if (_options.MigrateDatabase)
                 {
                     _logger.LogInformation("Try migrate database");
-                    _defaultDbContext.Database.Migrate();
+                    _migrationDbContext.Database.Migrate();
                 }
 
                 if (_options.SeedExampleData)
@@ -67,7 +67,7 @@ namespace IdentityBase.Public.EntityFramework
             if (_appOptions.Leader && _options.EnsureDeleted)
             {
                 _logger.LogInformation("Ensure deleting database");
-                _defaultDbContext.Database.EnsureDeleted();
+                _migrationDbContext.Database.EnsureDeleted();
             }
         }
 

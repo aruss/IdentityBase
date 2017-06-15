@@ -33,21 +33,21 @@ namespace IdentityBase.Public.EntityFramework
 
         public static void AddConfigBasedStoreInitializer(this IServiceCollection services, EntityFrameworkOptions options)
         {
-            services.AddDbContext<DefaultDbContext>(options.DbContextOptions);
+            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
             services.AddScoped<ConfigurationDbContext>();
             services.AddTransient<IStoreInitializer, ConfigBasedStoreInitializer>();
         }
 
         public static void AddExampleDataStoreInitializer(this IServiceCollection services, EntityFrameworkOptions options)
         {
-            services.AddDbContext<DefaultDbContext>(options.DbContextOptions);
+            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
             services.AddScoped<ConfigurationDbContext>();
             services.AddTransient<IStoreInitializer, ExampleDataStoreInitializer>();
         }
 
         public static void AddExample(this IServiceCollection services, EntityFrameworkOptions options)
         {
-            services.AddDbContext<DefaultDbContext>(options.DbContextOptions);
+            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
             services.AddScoped<ConfigurationDbContext>();
             services.AddTransient<IStoreInitializer, ConfigBasedStoreInitializer>();
         }
