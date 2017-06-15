@@ -6,7 +6,6 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ServiceBase.Extensions;
 using ServiceBase.Notification.Email;
 using System;
 using System.Linq;
@@ -109,14 +108,12 @@ namespace IdentityBase.Public.Actions.Recover
 
         private async Task SendUserAccountCreatedAsync(UserAccount userAccount)
         {
-            var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
-            await _emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
-                {
-                    ConfirmUrl = $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
-                    CancelUrl = $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
-                }
-            );
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
+            {
+                ConfirmUrl = $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
+                CancelUrl = $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
+            }, true);
         }
 
         [HttpGet("recover/success", Name = "RecoverSuccess")]

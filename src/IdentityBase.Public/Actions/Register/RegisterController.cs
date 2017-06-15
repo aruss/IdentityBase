@@ -7,7 +7,6 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ServiceBase.Extensions;
 using ServiceBase.Notification.Email;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -71,14 +70,12 @@ namespace IdentityBase.Public.Actions.Register
 
         private async Task SendEmailAsync(UserAccount userAccount)
         {
-            var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
-            await _emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
-                {
-                    ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
-                    CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
-                }
-            );
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl()); 
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
+            {
+                ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
+            }, true);
         }
 
         private async Task<IActionResult> TryCreateNewUserAccount(
@@ -236,11 +233,12 @@ namespace IdentityBase.Public.Actions.Register
                     {
                         Path = "/",
                         HttpOnly = true
-                    }); 
+                    });
                     return Redirect(Url.Action("Complete", "Register", new { ReturnUrl = returnUrl }));
                 }
             }
 
+            // TODO: fix it, in case of following confirmation link while authenticated it will cause an error
             if (_applicationOptions.LoginAfterAccountConfirmation)
             {
                 await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
@@ -251,7 +249,7 @@ namespace IdentityBase.Public.Actions.Register
                 }
             }
 
-            return Redirect(Url.Action("Login", "Login", new { ReturnUrl = returnUrl }));           
+            return Redirect(Url.Action("Login", "Login", new { ReturnUrl = returnUrl }));
         }
 
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
@@ -273,7 +271,7 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/complete")]
         public async Task<IActionResult> Complete(string returnUrl)
         {
-            var userAccount = await GetUserAccountFromCoockyValue(); 
+            var userAccount = await GetUserAccountFromCoockyValue();
             if (userAccount == null)
             {
                 ModelState.AddModelError("Invalid token");
@@ -285,7 +283,7 @@ namespace IdentityBase.Public.Actions.Register
                 ReturnUrl = returnUrl,
                 UserAccountId = userAccount.Id,
                 Email = userAccount.Email
-            }; 
+            };
 
             return View(vm);
         }
@@ -302,7 +300,7 @@ namespace IdentityBase.Public.Actions.Register
                 }
             }
 
-            return null; 
+            return null;
         }
 
         [HttpPost("register/complete")]
@@ -329,11 +327,11 @@ namespace IdentityBase.Public.Actions.Register
 
             // && _interaction.IsValidReturnUrl(returnUrl)
 
-            if (model.ReturnUrl != null )
+            if (model.ReturnUrl != null)
             {
                 return Redirect(model.ReturnUrl);
             }
-            
+
             return Redirect("/");
         }
     }

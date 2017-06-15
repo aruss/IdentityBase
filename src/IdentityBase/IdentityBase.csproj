@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors>Russlan Akiev</Authors>
     <Company />
     <Description>IdentityBase common code base</Description>
@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.1.0" />
     <PackageReference Include="IdentityServer4" Version="1.5.2" />
-    <PackageReference Include="ServiceBase" Version="1.0.81" />
+    <PackageReference Include="ServiceBase" Version="1.0.82" />
   </ItemGroup>
 
 </Project>

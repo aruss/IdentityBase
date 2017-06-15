@@ -268,7 +268,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>(), It.IsAny<bool>())).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {
@@ -330,7 +330,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>(), It.IsAny<bool>())).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {
@@ -393,7 +393,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>(), It.IsAny<bool>())).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {
@@ -482,7 +482,7 @@ namespace IdentityBase.Public.IntegrationTests
             postResponse.Headers.Location.ToString().Should().StartWith("/connect/authorize/login");
 
             // There should be no email sent
-            emailServiceMock.Verify(c => c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>()), Times.Never());
+            emailServiceMock.Verify(c => c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>(), true), Times.Never());
         }
 
         /// <summary>
@@ -507,7 +507,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountCreated", "john@localhost", It.IsAny<object>(), It.IsAny<bool>())).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {
@@ -567,7 +567,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountCreated", "bob@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountCreated", "bob@localhost", It.IsAny<object>(), true)).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {

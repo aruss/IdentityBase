@@ -1,5 +1,8 @@
 ﻿using IdentityBase.Models;
 using IdentityBase.Services;
+using IdentityServer4.Extensions;
+using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServiceBase.Api;
 using ServiceBase.Authorization;
@@ -7,13 +10,8 @@ using ServiceBase.Collections;
 using ServiceBase.Notification.Email;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using IdentityServer4.Extensions;
-using ServiceBase.Extensions;
-using System.Net.Http;
-using IdentityServer4.Stores;
+using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Api.UserAccountInvite
 {
@@ -138,14 +136,12 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
         private async Task SendEmailAsync(UserAccount userAccount)
         {
-            var baseUrl = _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl().EnsureTrailingSlash();
-            await _emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountInvited, userAccount.Email, new
-                {
-                    ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
-                    CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
-                }
-            );
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountInvited, userAccount.Email, new
+            {
+                ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
+            }, true);
         }
     }
 

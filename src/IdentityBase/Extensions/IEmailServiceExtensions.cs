@@ -11,7 +11,7 @@ namespace IdentityBase.Extensions
             await emailService.SendEmailAsync("AccountCreated", userAccount.Email, new
             {
                 Token = userAccount.VerificationKey
-            });
+            }, true);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             emailServiceMock.Setup(c =>
-                c.SendEmailAsync("UserAccountRecover", "alice@localhost", It.IsAny<object>())).Returns(sendEmailAsync);
+                c.SendEmailAsync("UserAccountRecover", "alice@localhost", It.IsAny<object>(), true)).Returns(sendEmailAsync);
 
             var server = ServerHelper.CreateServer((services) =>
             {
