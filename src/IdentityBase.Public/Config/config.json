@@ -77,7 +77,7 @@
     "EnableUserInviteEndpoint": true
   },
   "Email": {
-    "TemplateDirectoryPath": "./EmailTemplates"
+    "TemplateDirectoryPath": "./Templates/Email"
   },
   "Sms": {
     "TemplateDirectoryPath": "./Templates/Sms"
