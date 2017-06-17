@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.1.0" />
-    <PackageReference Include="AutoMapper" Version="6.0.2" />
-    <PackageReference Include="IdentityBase" Version="1.0.103" />
+    <PackageReference Include="AutoMapper" Version="6.1.0" />
+    <PackageReference Include="IdentityBase" Version="1.0.105" />
     <PackageReference Include="IdentityServer4" Version="1.5.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.2" />

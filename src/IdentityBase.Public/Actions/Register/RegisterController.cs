@@ -43,34 +43,35 @@ namespace IdentityBase.Public.Actions.Register
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet(IdentityBaseConstants.Routes.Register, Name = "Register")]
+        [HttpGet("register", Name = "Register")]
         public async Task<IActionResult> Index(string returnUrl)
         {
             var vm = new RegisterViewModel();
 
-            if (!String.IsNullOrWhiteSpace(returnUrl))
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            if (context == null)
             {
-                var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-                if (context != null)
-                {
-                    vm.Email = context.LoginHint;
-                    vm.ReturnUrl = returnUrl;
+                _logger.LogError("Register attempt with missing returnUrl parameter");
+                return Redirect("/");
+            }
 
-                    if (!String.IsNullOrWhiteSpace(context.ClientId))
-                    {
-                        var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
-                        vm.ExternalProviders = await _clientService.GetEnabledProvidersAsync(client);
-                        vm.EnableLocalLogin = client != null ? client.EnableLocalLogin : false;
-                    }
-                }
+            vm.Email = context.LoginHint;
+            vm.ReturnUrl = returnUrl;
+
+            if (!String.IsNullOrWhiteSpace(context.ClientId))
+            {
+                var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
+                vm.ExternalProviders = await _clientService.GetEnabledProvidersAsync(client);
+                vm.EnableLocalLogin = client != null ? client.EnableLocalLogin : false;
             }
 
             return View(vm);
         }
 
-        private async Task SendEmailAsync(UserAccount userAccount)
+        [NonAction]
+        internal async Task SendEmailAsync(UserAccount userAccount)
         {
-            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl()); 
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
             await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
             {
                 ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
@@ -78,7 +79,8 @@ namespace IdentityBase.Public.Actions.Register
             }, true);
         }
 
-        private async Task<IActionResult> TryCreateNewUserAccount(
+        [NonAction]
+        internal async Task<IActionResult> TryCreateNewUserAccount(
             UserAccount userAccount,
             RegisterInputModel model)
         {
@@ -104,7 +106,8 @@ namespace IdentityBase.Public.Actions.Register
             return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
         }
 
-        private async Task<IActionResult> RedirectToSuccessAsync(
+        [NonAction]
+        internal async Task<IActionResult> RedirectToSuccessAsync(
             UserAccount userAccount,
             string returnUrl)
         {
@@ -117,7 +120,8 @@ namespace IdentityBase.Public.Actions.Register
             }));
         }
 
-        private async Task<IActionResult> TryMergeWithExistingUserAccount(
+        [NonAction]
+        internal async Task<IActionResult> TryMergeWithExistingUserAccount(
             UserAccount userAccount,
             RegisterInputModel model)
         {
@@ -152,7 +156,7 @@ namespace IdentityBase.Public.Actions.Register
             return View(vm);
         }
 
-        [HttpPost(IdentityBaseConstants.Routes.Register)]
+        [HttpPost("register")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RegisterInputModel model)
         {
@@ -188,9 +192,9 @@ namespace IdentityBase.Public.Actions.Register
                     // If user has a password then its a local account
                     ModelState.AddModelError("User already exists");
                 }
-                // External account with same email
                 else
                 {
+                    // External account with same email
                     return await this.TryMergeWithExistingUserAccount(userAccount, model);
                 }
             }
@@ -198,7 +202,7 @@ namespace IdentityBase.Public.Actions.Register
             return View(new RegisterViewModel(model));
         }
 
-        [HttpGet(IdentityBaseConstants.Routes.RegisterSuccess, Name = "RegisterSuccess")]
+        [HttpGet("register/success", Name = "RegisterSuccess")]
         public async Task<IActionResult> Success(SuccessInputModel model)
         {
             // TODO: Select propper mail provider and render it as button

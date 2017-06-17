@@ -50,7 +50,15 @@ namespace IdentityBase.Public
 
             if (environment.IsDevelopment())
             {
-                builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa"));
+                if (!Path.IsPathRooted(appOptions.TempFolder))
+                {
+                    builder.AddDeveloperSigningCredential(
+                        Path.Combine(environment.ContentRootPath, appOptions.TempFolder, "tempkey.rsa"));
+                }
+                else
+                {
+                    builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa"));
+                }
             }
             else
             {

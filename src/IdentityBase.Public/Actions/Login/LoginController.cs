@@ -45,8 +45,8 @@ namespace IdentityBase.Public.Actions.Login
 
             if (vm == null)
             {
-                _logger.LogError("Login attempt with missing returnUrl parameter"); 
-                return Redirect("/"); 
+                _logger.LogError("Login attempt with missing returnUrl parameter");
+                return Redirect("/");
             }
 
             if (vm.IsExternalLoginOnly)
@@ -66,6 +66,10 @@ namespace IdentityBase.Public.Actions.Login
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
+            // NOTE: since the theme does not renders the local login form 
+            // it is not possible to post this if local login is disabled
+            // due to missing anti forgery token. 
+            
             if (ModelState.IsValid)
             {
                 var result = await _userAccountService
@@ -109,12 +113,12 @@ namespace IdentityBase.Public.Actions.Login
                                 return Redirect(model.ReturnUrl);
                             }
 
-                            return Redirect("~/");
+                            return Redirect("/");
                         }
                     }
                     else
                     {
-                        var vm = await this.CreateViewModelAsync(model);
+                        var vm = await this.CreateViewModelAsync(model, result.UserAccount);
                         return View(vm);
                     }
                 }
@@ -127,12 +131,14 @@ namespace IdentityBase.Public.Actions.Login
             return View(vmx);
         }
 
-        public async Task<LoginViewModel> CreateViewModelAsync(string returnUrl)
+        [NonAction]
+        internal async Task<LoginViewModel> CreateViewModelAsync(string returnUrl)
         {
             return await this.CreateViewModelAsync(new LoginInputModel { ReturnUrl = returnUrl });
         }
 
-        public async Task<LoginViewModel> CreateViewModelAsync(
+        [NonAction]
+        internal async Task<LoginViewModel> CreateViewModelAsync(
             LoginInputModel inputModel,
             UserAccount userAccount = null)
         {
@@ -140,7 +146,7 @@ namespace IdentityBase.Public.Actions.Login
 
             if (context == null)
             {
-                return null; 
+                return null;
             }
 
             var vm = new LoginViewModel(inputModel)
@@ -151,6 +157,8 @@ namespace IdentityBase.Public.Actions.Login
                 LoginHint = context?.LoginHint,
             };
 
+            /*
+            // Not yet supported
             if (context?.IdP != null)
             {
                 // This is meant to short circuit the UI and only trigger the one external IdP
@@ -160,7 +168,7 @@ namespace IdentityBase.Public.Actions.Login
                 };
 
                 return vm;
-            }
+            }*/
 
             var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
             var providers = await _clientService.GetEnabledProvidersAsync(client);
