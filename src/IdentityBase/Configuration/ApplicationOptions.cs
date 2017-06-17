@@ -87,9 +87,7 @@ namespace IdentityBase.Configuration
         // specify the Windows authentication schemes you want to use for authentication
         public string[] WindowsAuthenticationSchemes { get; set; } = new string[] { "Negotiate", "NTLM" };
         public string WindowsAuthenticationDisplayName { get; set; } = "Windows";
-
-        public string InvalidCredentialsErrorMessage { get; set; } = "Invalid username or password";
-
+        
         public string ThemePath { get; set; }
 
         public bool EnableUserInviteEndpoint { get; set; } = false;

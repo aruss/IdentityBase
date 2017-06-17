@@ -42,7 +42,6 @@ namespace IdentityBase.Public.Actions.Login
         public async Task<IActionResult> Login(string returnUrl)
         {
             var vm = await this.CreateViewModelAsync(returnUrl);
-
             if (vm == null)
             {
                 _logger.LogError("Login attempt with missing returnUrl parameter");
@@ -154,7 +153,7 @@ namespace IdentityBase.Public.Actions.Login
                 EnableRememberLogin = _applicationOptions.EnableRememberLogin,
                 EnableAccountRegistration = _applicationOptions.EnableAccountRegistration,
                 EnableAccountRecover = _applicationOptions.EnableAccountRecover,
-                LoginHint = context?.LoginHint,
+                LoginHint = context.LoginHint,
             };
 
             /*

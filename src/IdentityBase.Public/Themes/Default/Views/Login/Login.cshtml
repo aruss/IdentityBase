@@ -14,8 +14,9 @@
                     <h3 class="panel-title">Local Account</h3>
                 </div>
                 <div class="panel-body">
-                    <form asp-route="Login">
-                        <input asp-for="ReturnUrl" type="hidden" />
+
+                    <form asp-controller="Login" asp-action="Index" asp-route-returnUrl="@Model.ReturnUrl">
+
                         <fieldset>
                             <div class="form-group">
                                 <label asp-for="Email"></label>

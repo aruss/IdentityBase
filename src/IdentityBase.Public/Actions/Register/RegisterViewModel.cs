@@ -1,26 +1,25 @@
-﻿using System;
+﻿using IdentityBase.Models;
 using System.Collections.Generic;
-using IdentityBase.Public.Actions.Login;
-using IdentityBase.Models;
 
 namespace IdentityBase.Public.Actions.Register
 {
     public class RegisterViewModel : RegisterInputModel, IExternalLoginsViewModel
     {
-        public string[] HintExternalAccounts { get; set; }
-        public string ErrorMessage { get; set; }
-        public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
         public bool EnableLocalLogin { get; set; }
+        public bool EnableAccountRecover { get; set; }
+        public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
+        public IEnumerable<string> ExternalProviderHints { get; set; }
 
         public RegisterViewModel()
         {
         }
 
-        public RegisterViewModel(RegisterInputModel other)
+        public RegisterViewModel(RegisterInputModel inputModel)
         {
-            this.Email = other.Email;
-            this.Password = other.Password;
-            this.PasswordConfirm = other.PasswordConfirm;
+            Email = inputModel.Email;
+            Password = inputModel.Password;
+            PasswordConfirm = inputModel.PasswordConfirm;
+            ReturnUrl = inputModel.ReturnUrl;
         }
     }
 }

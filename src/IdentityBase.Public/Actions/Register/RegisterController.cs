@@ -46,116 +46,16 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register", Name = "Register")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = new RegisterViewModel();
-
-            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            if (context == null)
+            var vm = await CreateViewModelAsync(returnUrl);
+            if (vm == null)
             {
                 _logger.LogError("Register attempt with missing returnUrl parameter");
                 return Redirect("/");
             }
 
-            vm.Email = context.LoginHint;
-            vm.ReturnUrl = returnUrl;
-
-            if (!String.IsNullOrWhiteSpace(context.ClientId))
-            {
-                var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
-                vm.ExternalProviders = await _clientService.GetEnabledProvidersAsync(client);
-                vm.EnableLocalLogin = client != null ? client.EnableLocalLogin : false;
-            }
-
             return View(vm);
         }
-
-        [NonAction]
-        internal async Task SendEmailAsync(UserAccount userAccount)
-        {
-            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
-            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
-            {
-                ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
-                CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
-            }, true);
-        }
-
-        [NonAction]
-        internal async Task<IActionResult> TryCreateNewUserAccount(
-            UserAccount userAccount,
-            RegisterInputModel model)
-        {
-            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(
-                        model.Email, model.Password, model.ReturnUrl);
-
-            // Send confirmation mail
-            if (_applicationOptions.RequireLocalAccountVerification)
-            {
-                await SendEmailAsync(userAccount);
-            }
-
-            if (_applicationOptions.LoginAfterAccountCreation)
-            {
-                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
-
-                if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
-                {
-                    return Redirect(model.ReturnUrl);
-                }
-            }
-
-            return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
-        }
-
-        [NonAction]
-        internal async Task<IActionResult> RedirectToSuccessAsync(
-            UserAccount userAccount,
-            string returnUrl)
-        {
-            // Redirect to success page by preserving the email provider name
-            return Redirect(Url.Action("Success", "Register", new
-            {
-                returnUrl = returnUrl,
-                // TODO: load provider info
-                provider = userAccount.Email.Split('@').LastOrDefault()
-            }));
-        }
-
-        [NonAction]
-        internal async Task<IActionResult> TryMergeWithExistingUserAccount(
-            UserAccount userAccount,
-            RegisterInputModel model)
-        {
-            // Merge accounts without user consent
-            if (_applicationOptions.AutomaticAccountMerge)
-            {
-                await _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
-
-                if (_applicationOptions.LoginAfterAccountCreation)
-                {
-                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
-
-                    if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                }
-                else
-                {
-                    return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
-                }
-            }
-            // Ask user if he wants to merge accounts
-            else
-            {
-                throw new NotImplementedException();
-            }
-
-            // Return list of external account providers as hint
-            var vm = new RegisterViewModel(model);
-            vm.HintExternalAccounts = userAccount.Accounts.Select(s => s.Provider).ToArray();
-            return View(vm);
-        }
-
+        
         [HttpPost("register")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RegisterInputModel model)
@@ -197,9 +97,11 @@ namespace IdentityBase.Public.Actions.Register
                     // External account with same email
                     return await this.TryMergeWithExistingUserAccount(userAccount, model);
                 }
+
+                return View(await CreateViewModelAsync(model, userAccount));
             }
 
-            return View(new RegisterViewModel(model));
+            return View(await CreateViewModelAsync(model));
         }
 
         [HttpGet("register/success", Name = "RegisterSuccess")]
@@ -291,22 +193,7 @@ namespace IdentityBase.Public.Actions.Register
 
             return View(vm);
         }
-
-        internal async Task<UserAccount> GetUserAccountFromCoockyValue()
-        {
-            string userIdStr;
-            if (_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("ConfirmUserAccountId", out userIdStr))
-            {
-                Guid userId;
-                if (Guid.TryParse(userIdStr, out userId))
-                {
-                    return await _userAccountService.LoadByIdAsync(userId);
-                }
-            }
-
-            return null;
-        }
-
+        
         [HttpPost("register/complete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Complete(RegisterCompleteInputModel model)
@@ -338,30 +225,140 @@ namespace IdentityBase.Public.Actions.Register
 
             return Redirect("/");
         }
-    }
+        
+        [NonAction]
+        internal async Task<UserAccount> GetUserAccountFromCoockyValue()
+        {
+            string userIdStr;
+            if (_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("ConfirmUserAccountId", out userIdStr))
+            {
+                Guid userId;
+                if (Guid.TryParse(userIdStr, out userId))
+                {
+                    return await _userAccountService.LoadByIdAsync(userId);
+                }
+            }
 
-    public class RegisterCompleteInputModel
-    {
-        [Required]
-        [StringLength(100)]
-        public string Password { get; set; }
+            return null;
+        }
 
-        [Required]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        [StringLength(100)]
-        public string PasswordConfirm { get; set; }
+        [NonAction]
+        internal async Task<RegisterViewModel> CreateViewModelAsync(string returnUrl)
+        {
+            return await CreateViewModelAsync(new RegisterViewModel { ReturnUrl = returnUrl });
+        }
 
-        [StringLength(2000)]
-        public string ReturnUrl { get; set; }
-    }
+        [NonAction]
+        internal async Task<RegisterViewModel> CreateViewModelAsync(
+            RegisterInputModel inputModel,
+            UserAccount userAccount = null)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
+            if (context == null)
+            {
+                return null;
+            }
 
-    public class RegisterCompleteViewModel : RegisterCompleteInputModel
-    {
-        public Guid UserAccountId { get; set; }
+            var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
+            var providers = await _clientService.GetEnabledProvidersAsync(client);
 
-        [Required]
-        [EmailAddress]
-        [StringLength(254)]
-        public string Email { get; set; }
-    }
+            var vm = new RegisterViewModel(inputModel)
+            {
+                EnableAccountRecover = _applicationOptions.EnableAccountRecover,
+                EnableLocalLogin = (client != null ? client.EnableLocalLogin : false) && _applicationOptions.EnableLocalLogin,
+                ExternalProviders = providers.ToArray(),
+                ExternalProviderHints = userAccount?.Accounts?.Select(c => c.Provider)
+            };
+
+            return vm;
+        }
+        
+        [NonAction]
+        internal async Task<IActionResult> RedirectToSuccessAsync(
+            UserAccount userAccount,
+            string returnUrl)
+        {
+            // Redirect to success page by preserving the email provider name
+            return Redirect(Url.Action("Success", "Register", new
+            {
+                returnUrl = returnUrl,
+                // TODO: load provider info
+                provider = userAccount.Email.Split('@').LastOrDefault()
+            }));
+        }
+
+        [NonAction]
+        internal async Task<IActionResult> TryMergeWithExistingUserAccount(
+            UserAccount userAccount,
+            RegisterInputModel model)
+        {
+            // Merge accounts without user consent
+            if (_applicationOptions.AutomaticAccountMerge)
+            {
+                await _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
+
+                if (_applicationOptions.LoginAfterAccountCreation)
+                {
+                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+
+                    if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                }
+                else
+                {
+                    return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+                }
+            }
+            // Ask user if he wants to merge accounts
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            // Return list of external account providers as hint
+            var vm = new RegisterViewModel(model);
+            vm.ExternalProviderHints = userAccount.Accounts.Select(s => s.Provider).ToArray();
+            return View(vm);
+        }
+
+        [NonAction]
+        internal async Task SendEmailAsync(UserAccount userAccount)
+        {
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountCreated, userAccount.Email, new
+            {
+                ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
+            }, true);
+        }
+
+        [NonAction]
+        internal async Task<IActionResult> TryCreateNewUserAccount(
+            UserAccount userAccount,
+            RegisterInputModel model)
+        {
+            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(
+                        model.Email, model.Password, model.ReturnUrl);
+
+            // Send confirmation mail
+            if (_applicationOptions.RequireLocalAccountVerification)
+            {
+                await SendEmailAsync(userAccount);
+            }
+
+            if (_applicationOptions.LoginAfterAccountCreation)
+            {
+                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+
+                if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
+                {
+                    return Redirect(model.ReturnUrl);
+                }
+            }
+
+            return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+        }
+    }    
 }

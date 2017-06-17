@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Notification.Email;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,36 +44,14 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover", Name = "Recover")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = new RecoverViewModel();
-
-            if (!String.IsNullOrWhiteSpace(returnUrl))
+            var vm = await CreateViewModelAsync(returnUrl);
+            if (vm == null)
             {
-                var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-                if (context != null)
-                {
-                    vm.Email = context.LoginHint;
-                    vm.ReturnUrl = returnUrl;
-
-                    if (!String.IsNullOrWhiteSpace(context.ClientId))
-                    {
-                        var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
-                        vm.ExternalProviders = await _clientService.GetEnabledProvidersAsync(client);
-                        vm.EnableLocalLogin = client != null ? client.EnableLocalLogin : false;
-                    }
-                }
+                _logger.LogError("Recover attempt with missing returnUrl parameter");
+                return Redirect("/");
             }
 
             return View(vm);
-        }
-
-        private async Task<IActionResult> RedirectToSuccessAsync(UserAccount userAccount, string returnUrl)
-        {
-            // Redirect to success page by preserving the email provider name
-            return Redirect(Url.Action("Success", "Recover", new
-            {
-                returnUrl = returnUrl,
-                provider = userAccount.Email.Split('@').LastOrDefault()
-            }));
         }
 
         [HttpPost("recover")]
@@ -88,38 +65,35 @@ namespace IdentityBase.Public.Actions.Recover
 
                 // Check if user with same email exists
                 var userAccount = await _userAccountService.LoadByEmailAsync(email);
-
                 if (userAccount != null)
                 {
-                    await _userAccountService.SetResetPasswordVirificationKey(userAccount, model.ReturnUrl);
-                    SendUserAccountCreatedAsync(userAccount);
+                    if (userAccount.IsLoginAllowed)
+                    {
+                        await _userAccountService.SetResetPasswordVirificationKey(userAccount, model.ReturnUrl);
+                        SendEmailAsync(userAccount);
 
-                    return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+                        return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("User is deactivated.");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "User is deactivated.");
+                    ModelState.AddModelError("User does not exists");
                 }
+
+                return View(await CreateViewModelAsync(model, userAccount));
             }
 
-            var vm = new RecoverViewModel(model);
-            return View(vm);
+            return View(await CreateViewModelAsync(model));
         }
-
-        private async Task SendUserAccountCreatedAsync(UserAccount userAccount)
-        {
-            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
-            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
-            {
-                ConfirmUrl = $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
-                CancelUrl = $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
-            }, true);
-        }
-
+        
         [HttpGet("recover/success", Name = "RecoverSuccess")]
         public async Task<IActionResult> Success(string returnUrl, string provider)
         {
-            // select propper mail provider and render it as button
+            // TODO: Select propper mail provider and render it as button
 
             return View();
         }
@@ -132,7 +106,7 @@ namespace IdentityBase.Public.Actions.Recover
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("", "Invalid token");
+                ModelState.AddModelError("Invalid token");
                 return View("InvalidToken");
             }
 
@@ -155,11 +129,65 @@ namespace IdentityBase.Public.Actions.Recover
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("", "Invalid token");
+                ModelState.AddModelError("Invalid token");
                 return View("InvalidToken");
             }
 
             return Redirect("~/");
+        }
+
+        [NonAction]
+        internal async Task<RecoverViewModel> CreateViewModelAsync(string returnUrl)
+        {
+            return await CreateViewModelAsync(new RecoverInputModel { ReturnUrl = returnUrl });
+        }
+
+        [NonAction]
+        internal async Task<RecoverViewModel> CreateViewModelAsync(
+            RecoverInputModel inputModel,
+            UserAccount userAccount = null)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
+            if (context == null)
+            {
+                return null;
+            }
+
+            var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
+            var providers = await _clientService.GetEnabledProvidersAsync(client);
+
+            var vm = new RecoverViewModel(inputModel)
+            {
+                EnableAccountRegistration = _applicationOptions.EnableAccountRegistration,
+                EnableLocalLogin = (client != null ? client.EnableLocalLogin : false) && _applicationOptions.EnableLocalLogin,
+                LoginHint = context.LoginHint,
+                ExternalProviders = providers.ToArray(),
+                ExternalProviderHints = userAccount?.Accounts?.Select(c => c.Provider)
+            };
+
+            return vm;
+        }
+
+        [NonAction]
+        internal async Task<IActionResult> RedirectToSuccessAsync(UserAccount userAccount, string returnUrl)
+        {
+            // Redirect to success page by preserving the email provider name
+            return Redirect(Url.Action("Success", "Recover", new
+            {
+                returnUrl = returnUrl,
+                provider = userAccount.Email.Split('@').LastOrDefault()
+            }));
+        }
+
+        [NonAction]
+        internal async Task SendEmailAsync(UserAccount userAccount)
+        {
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountRecover, userAccount.Email, new
+            {
+                ConfirmUrl = $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
+                CancelUrl = $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
+            }, true);
         }
     }
 }
