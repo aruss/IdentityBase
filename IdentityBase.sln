@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A584B11-E625-41B3-9C7A-ACA7D536DDFF}"
 EndProject
@@ -33,8 +33,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.UnitTests", "test\IdentityBase.Public.EntityFramework.UnitTests\IdentityBase.Public.EntityFramework.UnitTests.csproj", "{E08D9D07-AE41-42FD-BB09-84636BD02BAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.IntegrationTests", "test\IdentityBase.Public.IntegrationTests\IdentityBase.Public.IntegrationTests.csproj", "{25B52726-0E49-4B1B-BA44-1936886D6A8F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.UnitTests", "test\IdentityBase.Public.UnitTests\IdentityBase.Public.UnitTests.csproj", "{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.UnitTests", "test\IdentityBase.UnitTests\IdentityBase.UnitTests.csproj", "{C9217BE8-60DD-40EC-9B11-C8BA6CA58833}"
 EndProject
@@ -74,10 +72,6 @@ Global
 		{25B52726-0E49-4B1B-BA44-1936886D6A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25B52726-0E49-4B1B-BA44-1936886D6A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25B52726-0E49-4B1B-BA44-1936886D6A8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C9217BE8-60DD-40EC-9B11-C8BA6CA58833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9217BE8-60DD-40EC-9B11-C8BA6CA58833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9217BE8-60DD-40EC-9B11-C8BA6CA58833}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,7 +95,6 @@ Global
 		{01F527D8-7F80-431B-9355-28E4837038AB} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
 		{E08D9D07-AE41-42FD-BB09-84636BD02BAB} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
 		{25B52726-0E49-4B1B-BA44-1936886D6A8F} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
-		{6A3CD19C-4EBF-4355-A5F7-A29C9FD035F4} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
 		{C9217BE8-60DD-40EC-9B11-C8BA6CA58833} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
 		{19D7E836-2FEC-49A7-BC90-D581A5D9D60D} = {F0015D43-954F-45EF-B89A-5DE580CAC948}
 		{800E97A2-6012-4816-B9B8-64F409028A70} = {F0015D43-954F-45EF-B89A-5DE580CAC948}

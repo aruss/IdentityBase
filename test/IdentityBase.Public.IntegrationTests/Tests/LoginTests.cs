@@ -1,5 +1,4 @@
-﻿using AngleSharp.Parser.Html;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using System.Collections.Generic;
 using System.Net;
@@ -7,141 +6,181 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IdentityBase.Public.IntegrationTests
+namespace IdentityBase.Public.IntegrationTests.Tests
 {
-    // http://stackoverflow.com/questions/30557521/how-to-access-httpcontext-inside-a-unit-test-in-asp-net-5-mvc-6
 
-    [Collection("Login")]
-    public class LoginTests : IClassFixture<ServerFixture>
+    public class Login2Tests
     {
-        private string _returnUrl = "%2Fconnect%2Fauthorize%2Flogin%3Fclient_id%3Dmvc%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A3308%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520api1%26response_mode%3Dform_post%26nonce%3D636170876883483776.ZGUwYWY2NDctNDJlNy00MTVmLTkwZTYtZjVjMTQ4ZWVlMzAwMWM2OWNhODQtYzZjOS00ZDljLTk3NTktYWE1ZWExMDEwYzk2%26state%3DCfDJ8McEKbBuVCdHkFjjPyy6vSPN5QZvt6xKTHnnKEyNzXwN1YpWo0Mslqn-wBoHhp9vMSjqo3GQGU7emMMhZlgu0BK3G03m2uqLc5vrYBz06tcWr8S4f9oKl2u1S0cAiJEOw13GnuF-EJ0E3by0nUJ3m1MhhnovobqqTEpKMldmLGpaUxPS4YGxSQVgzDzo3XsyHB4KvWlsdnb3InqNoPKnTQ4ljgDOAeKTAMj39Jz1SMauTcfOXHDyCnJdLt7I0v0up1oY5Az9b7xjzk0oBq5P7lADyq88YTEG0EALJG8SgjYi-Ch-0jd26w74LJ5UyQNScc1ZS4n9dMKUHXvuuIWllzNK86la5X-ydnsNZo2a1HsHyPT4NHe6EG2LdVkh6Y-2-A";
         private HttpClient _client;
         private TestServer _server;
 
-        public LoginTests(ServerFixture fixture)
+        public Login2Tests()
         {
-            _server = fixture.Server;
-            _client = fixture.Client;
+            var config = ConfigBuilder
+                .Default
+                .RemoveAuthFacebook() // left only one identity provider
+                .Alter("App:EnableLocalLogin", "false") // disable local login
+                .Build();
+
+            _server = TestServerBuilder.BuildServer<Startup>(config);
+            _client = _server.CreateClient();
         }
 
-        [Fact]
-        public async Task LoginWithValidUserNotRemember()
+        // This will force user directly to thirdparty auth server
+        [Fact(DisplayName = "Get_LoginPage_With_IsExternalLoginOnly_Option")]
+        public async Task Get_LoginPage_With_IsExternalLoginOnly_Option()
         {
-            // Call login page
-            var getResponse = await _client.GetAsync("/login?returnUrl=" + _returnUrl);
-            getResponse.EnsureSuccessStatusCode();
+            // Act
+            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
 
-            // Create post body for login request
-            var getResponseContent = await getResponse.Content.ReadAsStringAsync();
-            var doc = (new HtmlParser().Parse(getResponseContent));
-            var formPostBodyData = new Dictionary<string, string>
-            {
-                {"Email","alice@localhost"},
-                {"Password", "alice@localhost"},
-                {"RememberLogin", "false"},
-                {"__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                {"ReturnUrl", doc.GetReturnUrl()}
-            };
-            var postRequest = getResponse.CreatePostRequest("/login", formPostBodyData);
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Found);
+            response.Headers.Location
+                .ToString().Should().StartWith("https://accounts.google.com/o/oauth2");
+        }
+    }
 
-            var postResponse = await _client.SendAsync(postRequest);
 
-            postResponse.StatusCode.Should().Be(HttpStatusCode.Found);
-            postResponse.Headers.Location.ToString().Should().StartWith("/connect/authorize/login");
+    [Collection("General Tests")]
+    public class LoginTests
+    {
+        private HttpClient _client;
+        private TestServer _server;
 
-            await Logout(postResponse);
+        public LoginTests()
+        {
+            var config = ConfigBuilder.Default.Build();
+            _server = TestServerBuilder.BuildServer<Startup>(config);
+            _client = _server.CreateClient();
         }
 
-        private async Task Logout(HttpResponseMessage responseFrom)
+        [Fact(DisplayName = "Get_LoginPage_Without_Args_Should_Redirect_To_LandingPage")]
+        public async Task Get_LoginPage_Without_Args_Should_Redirect_To_LandingPage()
         {
-            var getRequest = responseFrom.CreateGetRequest("/logout");
-            var getResponse = await _client.SendAsync(getRequest);
-            var content = await getResponse.Content.ReadAsStringAsync();
-            var doc = (new HtmlParser().Parse(content));
+            // Act
+            var response = await _client.GetAsync("/login");
 
-            var formPostBodyData = new Dictionary<string, string>
-            {
-                {"__RequestVerificationToken", doc.GetAntiForgeryToken() }
-            };
-
-            var postRequest = getResponse.CreatePostRequest("/logout", formPostBodyData);
-            var postResponse = await _client.SendAsync(postRequest);
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Found);
+            response.Headers.Location.ToString().Should().Equals("/");
         }
 
-        [Fact]
-        public async Task LoginWithValidUserRemember()
+        /// <summary>
+        /// Anti forgery token protection ...
+        /// </summary>
+        /// <returns></returns>
+        [Fact(DisplayName = "Post_LoginPage_With_IsExternalLoginOnly_Option_Should_Be_Disabled")]
+        public async Task Post_LoginPage_With_IsExternalLoginOnly_Option_Should_Be_Disabled()
         {
-            // Call login page
-            var getResponse = await _client.GetAsync("/login?returnUrl=" + _returnUrl);
-            getResponse.EnsureSuccessStatusCode();
+            // Act
+            var response = await _client.PostFormAsync("/login");
 
-            // Create post body for login request
-            var getResponseContent = await getResponse.Content.ReadAsStringAsync();
-            var doc = (new HtmlParser().Parse(getResponseContent));
-            var formPostBodyData = new Dictionary<string, string>
-            {
-                {"Email","alice@localhost"},
-                {"Password", "alice@localhost"},
-                {"RememberLogin", "true"},
-                {"__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                {"ReturnUrl", doc.GetReturnUrl()}
-            };
-            var postRequest = getResponse.CreatePostRequest("/login", formPostBodyData);
-
-            var postResponse = await _client.SendAsync(postRequest);
-
-            postResponse.StatusCode.Should().Be(HttpStatusCode.Found);
-            postResponse.Headers.Location.ToString().Should().StartWith("/connect/authorize/login");
+            // Assert
+            Assert.True(response.StatusCode == System.Net.HttpStatusCode.BadRequest,
+                "POST /login should return 400");
         }
 
-        [Fact]
-        public async Task LoginWithWrongPassword()
-        {
-            // Call login page
-            var getResponse = await _client.GetAsync("/login?returnUrl=" + _returnUrl);
-            getResponse.EnsureSuccessStatusCode();
+        [Theory(DisplayName = "Try_Login_With_Local_Account")]
 
-            // Create post body for login request
-            var getResponseContent = await getResponse.Content.ReadAsStringAsync();
-            var doc = (new HtmlParser().Parse(getResponseContent));
-            var formPostBodyData = new Dictionary<string, string>
+        // Valid user do not remember login
+        [InlineData("alice@localhost", "alice@localhost", false, HttpStatusCode.Found, false)]
+
+        // Valid user remember login
+        [InlineData("alice@localhost", "alice@localhost", true, HttpStatusCode.Found, false)]
+
+        // Valid user with wrong password, should get an error
+        [InlineData("alice@localhost", "test", false, HttpStatusCode.OK, true)]
+
+        // User does not exists, should get an error
+        [InlineData("notexists@localhost", "test", false, HttpStatusCode.OK, true)]
+
+        // Inactive user account , should get an error
+        [InlineData("jim@localhost", "jim@localhost", false, HttpStatusCode.OK, true)]
+
+        // Not verified user account, should get an error
+        [InlineData("paul@localhost", "paul@localhost", false, HttpStatusCode.OK, true)]
+
+        // Only external, has no local account, should receive a hint that he should use his facebook account
+        [InlineData("bill@localhost", "doesnothaveone", false, HttpStatusCode.OK, true)]
+
+        // Missing password
+        [InlineData("alice@localhost", "", false, HttpStatusCode.OK, true)]
+
+        // Missing email
+        [InlineData("", "password", false, HttpStatusCode.OK, true)]
+
+        // Wrong mail 
+        [InlineData("thats_not_a_mail", "foobar", false, HttpStatusCode.OK, true)]
+        public async Task Try_Login_With_Local_Account(
+            string email,
+            string password,
+            bool rememberMe,
+            HttpStatusCode statusCode,
+            bool isError)
+        {
+            // Call the login page 
+            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
+            response.EnsureSuccessStatusCode();
+
+            // Fill out the form and submit 
+            var doc = await response.Content.ReadAsHtmlDocumentAsync();
+            var form = new Dictionary<string, string>
             {
-                {"Email","alice@localhost"},
-                {"Password", "wrongpassword"},
-                {"RememberLogin", "false"},
-                {"__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                {"ReturnUrl", doc.GetReturnUrl()}
+                { "Email", email },
+                { "Password", password},
+                { "RememberLogin", rememberMe ? "true" : "false" },
+                { "__RequestVerificationToken", doc.GetAntiForgeryToken() },
+                { "ReturnUrl", doc.GetReturnUrl() }
             };
 
-            var postRequest = getResponse.CreatePostRequest("/login", formPostBodyData);
-            var postResponse = await _client.SendAsync(postRequest);
-            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await _client.PostFormAsync(doc.GetFormAction(), form, response);
+
+            if (statusCode == HttpStatusCode.Found)
+            {
+                // After successfull login user should be redirect to IdentityServer4 authorize endpoint
+                response2.StatusCode.Should().Be(HttpStatusCode.Found);
+                response2.Headers.Location.ToString().Should().StartWith("/connect/authorize/login");
+            }
+            else
+            {
+                response2.StatusCode.Should().Be(statusCode);
+                var doc2 = await response2.Content.ReadAsHtmlDocumentAsync();
+
+                // Check for error 
+                if (isError)
+                {
+                    var elm = doc2.QuerySelector(".alert.alert-danger");
+
+                    // TODO: check the error message 
+                    // elm.TextContent.Contains()
+                }
+            }
         }
 
-        [Fact]
-        public async Task LoginWithWrongUser()
+        [Fact(DisplayName = "Try_Login_With_Local_Account_Manipulate_ReturnUri")]
+        public async Task Try_Login_With_Local_Account_Manipulate_ReturnUri()
         {
-            // Call login page
-            var getResponse = await _client.GetAsync("/login?returnUrl=" + _returnUrl);
-            getResponse.EnsureSuccessStatusCode();
+            // Call the login page 
+            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
+            response.EnsureSuccessStatusCode();
 
-            // Create post body for login request
-            var getResponseContent = await getResponse.Content.ReadAsStringAsync();
-            var doc = (new HtmlParser().Parse(getResponseContent));
-            var formPostBodyData = new Dictionary<string, string>
+            // Fill out the form and submit 
+            var doc = await response.Content.ReadAsHtmlDocumentAsync();
+            var form = new Dictionary<string, string>
             {
-                {"Email","notthere@localhost"},
-                {"Password", "wrongpassword"},
-                {"RememberLogin", "false"},
-                {"__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                {"ReturnUrl", doc.GetReturnUrl()}
+                { "Email", "alice@localhost" },
+                { "Password", "alice@localhost"},
+                { "RememberLogin", "false" },
+                { "__RequestVerificationToken", doc.GetAntiForgeryToken() },
+                { "ReturnUrl", "http%3A%2F%2Fmalicous.com" }
             };
 
-            var postRequest = getResponse.CreatePostRequest("/login", formPostBodyData);
-            var postResponse = await _client.SendAsync(postRequest);
-            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await _client.PostFormAsync(doc.GetFormAction(), form, response);
 
-            // TODO: check for error message
+            // Should redirect to startpage, end of journey 
+            response2.StatusCode.Should().Be(HttpStatusCode.Found);
+            response2.Headers.Location.ToString().Should().Equals("/");
         }
     }
 }
+

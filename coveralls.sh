@@ -14,7 +14,6 @@ PROJECTS=(\
 "IdentityBase.Public.EntityFramework.IntegrationTests\IdentityBase.Public.EntityFramework.IntegrationTests.csproj" \
 "IdentityBase.Public.EntityFramework.UnitTests\IdentityBase.Public.EntityFramework.UnitTests.csproj" \
 "IdentityBase.Public.IntegrationTests\IdentityBase.Public.IntegrationTests.csproj" \
-"IdentityBase.Public.UnitTests\IdentityBase.Public.UnitTests.csproj" \
 "IdentityBase.UnitTests\IdentityBase.UnitTests.csproj")
 
 for PROJECT in "${PROJECTS[@]}"

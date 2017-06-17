@@ -3,10 +3,10 @@
 set -e
 
 nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.589 OpenCover -Source $PWD/tools
-nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator
+nuget install -Verbosity quiet -OutputDirectory packages -Version 2.5.8.0 ReportGenerator
 
 OPENCOVER=$PWD/packages/OpenCover.4.6.589/tools/OpenCover.Console.exe
-REPORTGENERATOR=$PWD/packages/ReportGenerator.2.4.5.0/tools/ReportGenerator.exe
+REPORTGENERATOR=$PWD/packages/ReportGenerator.2.5.8/tools/ReportGenerator.exe
 COVERAGE_DIR=./coverage/report
 COVERAGE_HISTORY_DIR=./coverage/history
 
@@ -17,8 +17,8 @@ PROJECTS=(\
 "IdentityBase.Public.EntityFramework.IntegrationTests\IdentityBase.Public.EntityFramework.IntegrationTests.csproj" \
 "IdentityBase.Public.EntityFramework.UnitTests\IdentityBase.Public.EntityFramework.UnitTests.csproj" \
 "IdentityBase.Public.IntegrationTests\IdentityBase.Public.IntegrationTests.csproj" \
-"IdentityBase.Public.UnitTests\IdentityBase.Public.UnitTests.csproj" \
-"IdentityBase.UnitTests\IdentityBase.UnitTests.csproj")
+"IdentityBase.UnitTests\IdentityBase.UnitTests.csproj"
+)
 
 for PROJECT in "${PROJECTS[@]}"
 do
