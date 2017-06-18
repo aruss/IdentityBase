@@ -141,7 +141,6 @@ namespace IdentityBase.Services
                 !String.IsNullOrWhiteSpace(returnUrl))
             {
                 SetVerification(userAccount,
-                    _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64(),
                     VerificationKeyPurpose.ConfirmAccount,
                     returnUrl, now);
             }
@@ -169,13 +168,13 @@ namespace IdentityBase.Services
             await UpdateUserAccountAsync(userAccount);
         }
 
+   
         public void SetVerification(UserAccount userAccount,
-            string key,
             VerificationKeyPurpose purpose,
             string storage = null,
             DateTime? sentAt = null)
         {
-            userAccount.VerificationKey = key.ToLowerInvariant();
+            userAccount.VerificationKey = _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64().ToLowerInvariant();
             userAccount.VerificationPurpose = (int)purpose;
             userAccount.VerificationKeySentAt = sentAt ?? DateTime.UtcNow;
             userAccount.VerificationStorage = storage;
@@ -194,11 +193,11 @@ namespace IdentityBase.Services
 
             return userAccount2;
         }
-        
+
         public async Task<UserAccount> UpdateUserAccountAsync(UserAccount userAccount)
         {
             // Update user account
-            userAccount.UpdatedAt = DateTime.UtcNow; 
+            userAccount.UpdatedAt = DateTime.UtcNow;
             var userAccount2 = await _userAccountStore.WriteAsync(userAccount);
 
             _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(userAccount.Id);
@@ -267,7 +266,7 @@ namespace IdentityBase.Services
 
         public async Task AddLocalCredentialsAsync(UserAccount userAccount, string password)
         {
-            AddLocalCredentials(userAccount, password); 
+            AddLocalCredentials(userAccount, password);
 
             await UpdateUserAccountAsync(userAccount);
         }
@@ -345,6 +344,7 @@ namespace IdentityBase.Services
         {
             var foo = CreateNewLocalUserAccount(email);
             foo.CreationKind = CreationKind.Invitation;
+            SetVerification(foo, VerificationKeyPurpose.ConfirmAccount, returnUrl);
 
             var userAccount = await _userAccountStore.WriteAsync(foo);
 
@@ -366,7 +366,6 @@ namespace IdentityBase.Services
         {
             // Set verification key
             SetVerification(userAccount,
-                _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64(),
                 VerificationKeyPurpose.ResetPassword,
                 returnUrl,
                 DateTime.UtcNow); // TODO: use time service

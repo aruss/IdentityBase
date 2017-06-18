@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using ServiceBase.Api;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -11,15 +12,15 @@ namespace IdentityBase.Public.IntegrationTests
         public static async Task<HttpResponseMessage> PutJsonAsync(
             this HttpClient client, string requestUri, object obj = null)
         {
-            string json; 
+            string json;
             if (obj == null)
             {
                 json = "{}";
             }
             else
             {
-                // Serialize object
-                throw new NotImplementedException(); 
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(obj,
+                    new JsonSerializerSettings().ConfigureCommon());
             }
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -43,7 +44,7 @@ namespace IdentityBase.Public.IntegrationTests
                 request.AddCookiesFromResponse(previousRequest);
             }
 
-            return await client.SendAsync(request); 
+            return await client.SendAsync(request);
         }
 
         public static async Task<HttpResponseMessage> GetAsync(
@@ -51,7 +52,7 @@ namespace IdentityBase.Public.IntegrationTests
               HttpResponseMessage previousRequest = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-            
+
             if (previousRequest != null)
             {
                 request.AddCookiesFromResponse(previousRequest);

@@ -11,6 +11,7 @@ using ServiceBase.Notification.Email;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Api.UserAccountInvite
@@ -37,7 +38,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpGet("invitations")]
-        [ScopeAuthorize("useraccount.read")]
+        //[ScopeAuthorize("useraccount.read")]
         public async Task<UserAccoutInviteListRespose> Get(UserAccoutInviteListRequest request)
         {
             var list = await _userAccountService.LoadInvitedUserAccountsAsync(request.Take, request.Skip);
@@ -65,7 +66,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpPut("invitations")]
-        [ScopeAuthorize("useraccount.write")]
+        //[ScopeAuthorize("useraccount.write")]
         public async Task<object> Put([FromBody]UserAccountInviteCreateRequest inputModel)
         {
             var client = await _clientStore.FindClientByIdAsync(inputModel.ClientId);
@@ -106,6 +107,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inputModel.InvitedBy, returnUri);
             SendEmailAsync(userAccount);
 
+            this.Response.StatusCode = (int)HttpStatusCode.Created; 
             return new ApiResult
             {
                 Success = true
@@ -113,7 +115,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpDelete("invitations/{UserAccountId}")]
-        [ScopeAuthorize("useraccount.delete")]
+        //[ScopeAuthorize("useraccount.delete")]
         public async Task<object> Delete([FromRoute]Guid userAccountId)
         {
             var userAccount = await _userAccountService.LoadByIdAsync(userAccountId);
@@ -134,7 +136,8 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             };
         }
 
-        private async Task SendEmailAsync(UserAccount userAccount)
+        [NonAction]
+        internal async Task SendEmailAsync(UserAccount userAccount)
         {
             var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
             await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountInvited, userAccount.Email, new
