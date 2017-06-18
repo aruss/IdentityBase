@@ -50,7 +50,7 @@ namespace IdentityBase.Public.Actions.Recover
             if (vm == null)
             {
                 _logger.LogWarning(IdentityBaseConstants.ErrorMessages.RecoveryNoReturnUrl);
-                return Redirect(Url.Action("Index", "Error")); 
+                return Redirect(Url.Action("Index", "Error"));
             }
 
             return View(vm);
@@ -74,32 +74,26 @@ namespace IdentityBase.Public.Actions.Recover
                         await _userAccountService.SetResetPasswordVirificationKeyAsync(userAccount, model.ReturnUrl);
                         SendEmailAsync(userAccount);
 
-                        return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+                        return View("Success", new SuccessViewModel()
+                        {
+                            ReturnUrl = model.ReturnUrl,
+                            Provider = userAccount.Email.Split('@').LastOrDefault()
+                        }); 
                     }
                     else
                     {
-                        ModelState.AddModelError(
-                            IdentityBaseConstants.ErrorMessages.UserAccountIsDeactivated);
+                        ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.UserAccountIsDeactivated);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(
-                        IdentityBaseConstants.ErrorMessages.UserAccountDoesNotExists);
+                    ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.UserAccountDoesNotExists);
                 }
 
                 return View(await CreateViewModelAsync(model, userAccount));
             }
 
             return View(await CreateViewModelAsync(model));
-        }
-
-        [HttpGet("recover/success", Name = "RecoverSuccess")]
-        public async Task<IActionResult> Success(string returnUrl, string provider)
-        {
-            // TODO: Select propper mail provider and render it as button
-
-            return View();
         }
 
         [HttpGet("recover/confirm/{key}", Name = "RecoverConfirm")]
@@ -114,7 +108,7 @@ namespace IdentityBase.Public.Actions.Recover
                 return View("InvalidToken");
             }
 
-            var vm = new RecoverConfirmViewModel
+            var vm = new ConfirmViewModel
             {
                 Key = key
             };
@@ -123,7 +117,7 @@ namespace IdentityBase.Public.Actions.Recover
         }
 
         [HttpPost("recover/confirm/{key}")]
-        public async Task<IActionResult> Confirm(RecoverConfirmInputModel model)
+        public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
             var result = await _userAccountService.HandleVerificationKeyAsync(model.Key,
                VerificationKeyPurpose.ResetPassword);
@@ -135,7 +129,7 @@ namespace IdentityBase.Public.Actions.Recover
                 ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
             }
-            
+
             var returnUrl = result.UserAccount.VerificationStorage;
             await _userAccountService.SetNewPasswordAsync(result.UserAccount, model.Password);
 
@@ -166,7 +160,7 @@ namespace IdentityBase.Public.Actions.Recover
                 return View("InvalidToken");
             }
 
-            var returnUrl = result.UserAccount.VerificationKey; 
+            var returnUrl = result.UserAccount.VerificationStorage;
             await _userAccountService.ClearVerificationAsync(result.UserAccount);
 
             return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
@@ -203,18 +197,7 @@ namespace IdentityBase.Public.Actions.Recover
 
             return vm;
         }
-
-        [NonAction]
-        internal async Task<IActionResult> RedirectToSuccessAsync(UserAccount userAccount, string returnUrl)
-        {
-            // Redirect to success page by preserving the email provider name
-            return Redirect(Url.Action("Success", "Recover", new
-            {
-                returnUrl = returnUrl,
-                provider = userAccount.Email.Split('@').LastOrDefault()
-            }));
-        }
-
+              
         [NonAction]
         internal async Task SendEmailAsync(UserAccount userAccount)
         {

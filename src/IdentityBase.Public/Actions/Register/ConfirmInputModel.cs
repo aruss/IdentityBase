@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityBase.Public.Actions.Recover
+namespace IdentityBase.Public.Actions.Register
 {
-    public class RecoverConfirmInputModel
+    public class ConfirmInputModel
     {
         [Required]
         [StringLength(100)]
@@ -13,7 +12,7 @@ namespace IdentityBase.Public.Actions.Recover
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         [StringLength(100)]
         public string PasswordConfirm { get; set; }
-        
+
         [Required]
         public string Key { get; set; }
     }

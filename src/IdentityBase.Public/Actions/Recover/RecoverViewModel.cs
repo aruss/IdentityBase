@@ -11,12 +11,7 @@ namespace IdentityBase.Public.Actions.Recover
         public string LoginHint { get; set; }
         public IEnumerable<string> ExternalProviderHints { get; set; }
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
-
-
-        public RecoverViewModel()
-        {
-        }
-
+        
         public RecoverViewModel(RecoverInputModel inputModel)
         {
             Email = inputModel.Email;

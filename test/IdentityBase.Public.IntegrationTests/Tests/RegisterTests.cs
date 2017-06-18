@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBase.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -82,27 +83,32 @@ namespace IdentityBase.Public.IntegrationTests.Tests
     [Collection("Register Tests")]
     public class Register2Tests
     {
-        [Fact(DisplayName = "Register_With_LoginAfterAccountCreation_False")]
-        public async Task Register_With_LoginAfterAccountCreation_False()
+        private async Task<HttpResponseMessage> GetAndPostRegisterForm(
+           bool loginAfterAccountCreation,
+           bool loginAfterAccountConfirmation,
+           Action<TestServer, HttpClient> gotServer,
+           Action<string, string> gotMail)
         {
-            string confirmUrl = null;
-            string cancelUrl = null;
-
             // Mock the email service to intercept the outgoing email messages
             var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
                 IdentityBaseConstants.EmailTemplates.UserAccountCreated,
-                "new2@localhost",
-                (templateName, email, viewData, isHtml) =>
+                "newone@localhost",
+                (templateName, emailTo, viewData, isHtml) =>
                 {
                     // 3. Get confirm url 
-                    confirmUrl = viewData.ToDictionary()["ConfirmUrl"] as string;
-                    cancelUrl = viewData.ToDictionary()["CancelUrl"] as string;
+                    var confirmUrl = viewData.ToDictionary()["ConfirmUrl"] as string;
+                    var cancelUrl = viewData.ToDictionary()["CancelUrl"] as string;
+
+                    gotMail(confirmUrl, cancelUrl);
                 });
 
             // Create a server with custom configuration 
             var config = ConfigBuilder.Default
-               .RemoveDefaultMailService() // remove the default service since we mocking it
-               .Alter("App:LoginAfterAccountCreation", "false") // dont login after registration
+               // remove the default service since we mocking it
+               .RemoveDefaultMailService()
+               // dont login after recovery
+               .Alter("App:LoginAfterAccountCreation", loginAfterAccountCreation ? "true" : "false")
+               .Alter("App:LoginAfterAccountConfirmation", loginAfterAccountConfirmation ? "true" : "false")
                .Build();
 
             var server = TestServerBuilder.BuildServer<Startup>(config, (services) =>
@@ -111,100 +117,205 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             });
             var client = server.CreateClient();
 
-            // 1. Call the register page 
+            gotServer(server, client);
+
+            // Call the recovery page 
             var response = await client.GetAsync($"/register?returnUrl={Constants.ReturnUrl}");
             response.EnsureSuccessStatusCode();
 
-            // 2. Fill out the form and submit 
+            // Fill out the form and submit 
             var doc = await response.Content.ReadAsHtmlDocumentAsync();
             var form = new Dictionary<string, string>
             {
-                { "Email", "new2@localhost" },
-                { "Password", "password" },
-                { "PasswordConfirm", "password" },
+                { "Email", "newone@localhost" },
+                { "Password", "newone@localhost" },
+                { "PasswordConfirm", "newone@localhost" },
                 { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
             };
 
             var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
+            response2.EnsureSuccessStatusCode();
 
-            // 4. You will get redirected to success page
-            response2.StatusCode.Should().Be(HttpStatusCode.Found);
-            var successUrl = response2.Headers.Location.ToString();
-            successUrl.Should().StartWith("/register/success");
-            var response3 = await client.GetAsync(successUrl, response2);
-
-            // 5. Confirm the registration by following the link from the email it 
-            // should be redirect to IdentityServer4 authorize endpoint
-            var response4 = await client.GetAsync(confirmUrl, response3);
-            response4.StatusCode.Should().Be(HttpStatusCode.Found);
-            var authorizeUrl = response4.Headers.Location.ToString();
-            authorizeUrl.Should().StartWith("/connect/authorize/login");
-            var response5 = await client.GetAsync(authorizeUrl, response4);
-
-            // 6. If the user tries to press the link again he should see the error message 
-            var response6 = await client.GetAsync(confirmUrl, response5);
-            response6.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            // 7. The same applies to cancel link
-            var response7 = await client.GetAsync(cancelUrl, response5);
-            response6.StatusCode.Should().Be(HttpStatusCode.OK);
+            //if (!loginAfterAccountCreation)
+            //{
+                return response2;
+            //}
+            //else
+            //{
+            //
+            //}
         }
+
+        [Fact(DisplayName = "Register_LoginAfterAccountCreation_False_LoginAfterAccountConfirmation_False")]
+        public async Task Register_LoginAfterAccountCreation_False_LoginAfterAccountConfirmation_False()
+        {
+            string confirmUrl = null;
+            string cancelUrl = null;
+            TestServer server = null;
+            HttpClient client = null;
+
+            var response = await GetAndPostRegisterForm(
+                false,
+                false,
+                (a, b) => { server = a; client = b; },
+                (a, b) => { confirmUrl = a; cancelUrl = b; }
+            );
+
+            var response1 = await client.GetAsync(confirmUrl, response);
+            response1.StatusCode.Should().Be(HttpStatusCode.Found);
+            response1.Headers.Location.ToString().Should().StartWith("/login");
+
+            var response2 = await client.GetAsync(confirmUrl, response);
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+            var doc = await response2.Content.ReadAsHtmlDocumentAsync();
+            doc.ShouldContainErrors(IdentityBaseConstants.ErrorMessages.TokenIsInvalid); 
+        }
+
+        [Fact(DisplayName = "Register_LoginAfterAccountCreation_False_LoginAfterAccountConfirmation_True")]
+        public async Task Register_LoginAfterAccountCreation_False_LoginAfterAccountConfirmation_True()
+        {
+            string confirmUrl = null;
+            string cancelUrl = null;
+            TestServer server = null;
+            HttpClient client = null;
+
+            var response = await GetAndPostRegisterForm(
+                false,
+                true,
+                (a, b) => { server = a; client = b; },
+                (a, b) => { confirmUrl = a; cancelUrl = b; }
+            );
+
+            var response1 = await client.GetAsync(confirmUrl, response);
+            response1.StatusCode.Should().Be(HttpStatusCode.Found);
+            response1.Headers.Location.ToString().Should().StartWith("/login");
+        }
+
+
+
+        //[Fact(DisplayName = "Register_With_LoginAfterAccountCreation_False")]
+        //public async Task Register_With_LoginAfterAccountCreation_False()
+        //{
+        //    string confirmUrl = null;
+        //    string cancelUrl = null;
+        //
+        //    // Mock the email service to intercept the outgoing email messages
+        //    var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
+        //        IdentityBaseConstants.EmailTemplates.UserAccountCreated,
+        //        "new2@localhost",
+        //        (templateName, email, viewData, isHtml) =>
+        //        {
+        //            // 3. Get confirm url 
+        //            confirmUrl = viewData.ToDictionary()["ConfirmUrl"] as string;
+        //            cancelUrl = viewData.ToDictionary()["CancelUrl"] as string;
+        //        });
+        //
+        //    // Create a server with custom configuration 
+        //    var config = ConfigBuilder.Default
+        //       .RemoveDefaultMailService() // remove the default service since we mocking it
+        //       .Alter("App:LoginAfterAccountCreation", "false") // dont login after registration
+        //       .Build();
+        //
+        //    var server = TestServerBuilder.BuildServer<Startup>(config, (services) =>
+        //    {
+        //        services.AddSingleton(emailServiceMock.Object);
+        //    });
+        //    var client = server.CreateClient();
+        //
+        //    // 1. Call the register page 
+        //    var response = await client.GetAsync($"/register?returnUrl={Constants.ReturnUrl}");
+        //    response.EnsureSuccessStatusCode();
+        //
+        //    // 2. Fill out the form and submit 
+        //    var doc = await response.Content.ReadAsHtmlDocumentAsync();
+        //    var form = new Dictionary<string, string>
+        //    {
+        //        { "Email", "new2@localhost" },
+        //        { "Password", "password" },
+        //        { "PasswordConfirm", "password" },
+        //        { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
+        //    };
+        //
+        //    var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
+        //
+        //    // 4. You will get redirected to success page
+        //    response2.StatusCode.Should().Be(HttpStatusCode.Found);
+        //    var successUrl = response2.Headers.Location.ToString();
+        //    successUrl.Should().StartWith("/register/success");
+        //    var response3 = await client.GetAsync(successUrl, response2);
+        //
+        //    // 5. Confirm the registration by following the link from the email it 
+        //    // should be redirect to IdentityServer4 authorize endpoint
+        //    var response4 = await client.GetAsync(confirmUrl, response3);
+        //    response4.StatusCode.Should().Be(HttpStatusCode.Found);
+        //    var authorizeUrl = response4.Headers.Location.ToString();
+        //    authorizeUrl.Should().StartWith("/connect/authorize/login");
+        //    var response5 = await client.GetAsync(authorizeUrl, response4);
+        //
+        //    // 6. If the user tries to press the link again he should see the error message 
+        //    var response6 = await client.GetAsync(confirmUrl, response5);
+        //    response6.StatusCode.Should().Be(HttpStatusCode.OK);
+        //
+        //    // 7. The same applies to cancel link
+        //    var response7 = await client.GetAsync(cancelUrl, response5);
+        //    response6.StatusCode.Should().Be(HttpStatusCode.OK);
+        //}
 
         //[Fact(DisplayName = "Register_With_LoginAfterAccountCreation_True")]
-        public async Task Register_With_LoginAfterAccountCreation_True()
-        {
-            string confirmUrl = null;
-            string cancelUrl = null;
-
-            // Mock the email service to intercept the outgoing email messages
-            var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
-                IdentityBaseConstants.EmailTemplates.UserAccountCreated,
-                "new2@localhost",
-                (templateName, email, viewData, isHtml) =>
-                {
-                    // 3. Get confirm url 
-                    confirmUrl = viewData.ToDictionary()["ConfirmUrl"] as string;
-                    cancelUrl = viewData.ToDictionary()["CancelUrl"] as string;
-                });
-
-            // Create a server with custom configuration 
-            var config = ConfigBuilder.Default
-               .RemoveDefaultMailService() // remove the default service since we mocking it
-               .Build();
-
-            var server = TestServerBuilder.BuildServer<Startup>(config, (services) =>
-            {
-                services.AddSingleton(emailServiceMock.Object);
-            });
-            var client = server.CreateClient();
-
-            // 1. Call the register page 
-            var response = await client.GetAsync($"/register?returnUrl={Constants.ReturnUrl}");
-            response.EnsureSuccessStatusCode();
-
-            // 2. Fill out the form and submit 
-            var doc = await response.Content.ReadAsHtmlDocumentAsync();
-            var form = new Dictionary<string, string>
-            {
-                { "Email", "new2@localhost" },
-                { "Password", "password" },
-                { "PasswordConfirm", "password" },
-                { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
-            };
-
-            var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
-
-            // 4. You will get redirected to success page
-            response2.StatusCode.Should().Be(HttpStatusCode.Found);
-            var authorizeUrl = response2.Headers.Location.ToString();
-            authorizeUrl.Should().StartWith("/connect/authorize/login");
-            var response3 = await client.GetAsync(authorizeUrl, response2);
-
-            // 5. Follow the confirmation link 
-            var response4 = await client.GetAsync(confirmUrl, response3);
-            response4.StatusCode.Should().Be(HttpStatusCode.Found);
-
-        }
+        //public async Task Register_With_LoginAfterAccountCreation_True()
+        //{
+        //    string confirmUrl = null;
+        //    string cancelUrl = null;
+        //
+        //    // Mock the email service to intercept the outgoing email messages
+        //    var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
+        //        IdentityBaseConstants.EmailTemplates.UserAccountCreated,
+        //        "new2@localhost",
+        //        (templateName, email, viewData, isHtml) =>
+        //        {
+        //            // 3. Get confirm url 
+        //            confirmUrl = viewData.ToDictionary()["ConfirmUrl"] as string;
+        //            cancelUrl = viewData.ToDictionary()["CancelUrl"] as string;
+        //        });
+        //
+        //    // Create a server with custom configuration 
+        //    var config = ConfigBuilder.Default
+        //       .RemoveDefaultMailService() // remove the default service since we mocking it
+        //       .Build();
+        //
+        //    var server = TestServerBuilder.BuildServer<Startup>(config, (services) =>
+        //    {
+        //        services.AddSingleton(emailServiceMock.Object);
+        //    });
+        //    var client = server.CreateClient();
+        //
+        //    // 1. Call the register page 
+        //    var response = await client.GetAsync($"/register?returnUrl={Constants.ReturnUrl}");
+        //    response.EnsureSuccessStatusCode();
+        //
+        //    // 2. Fill out the form and submit 
+        //    var doc = await response.Content.ReadAsHtmlDocumentAsync();
+        //    var form = new Dictionary<string, string>
+        //    {
+        //        { "Email", "new2@localhost" },
+        //        { "Password", "password" },
+        //        { "PasswordConfirm", "password" },
+        //        { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
+        //    };
+        //
+        //    var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
+        //
+        //    // 4. You will get redirected to success page
+        //    response2.StatusCode.Should().Be(HttpStatusCode.Found);
+        //    var authorizeUrl = response2.Headers.Location.ToString();
+        //    authorizeUrl.Should().StartWith("/connect/authorize/login");
+        //    var response3 = await client.GetAsync(authorizeUrl, response2);
+        //
+        //    // 5. Follow the confirmation link 
+        //    var response4 = await client.GetAsync(confirmUrl, response3);
+        //    response4.StatusCode.Should().Be(HttpStatusCode.Found);
+        //
+        //}
     }
 }
 

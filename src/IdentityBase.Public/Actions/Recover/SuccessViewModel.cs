@@ -1,7 +1,7 @@
-﻿namespace IdentityBase.Public.Actions.Register
+﻿namespace IdentityBase.Public.Actions.Recover
 {
     public class SuccessViewModel : SuccessInputModel
     {
-        
+
     }
 }

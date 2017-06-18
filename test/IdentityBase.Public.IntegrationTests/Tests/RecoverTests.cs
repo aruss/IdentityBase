@@ -80,7 +80,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
     [Collection("Recover Tests")]
     public class Recover2Tests
     {
-        private async Task<HttpResponseMessage> GetToConfirmationForm(
+        private async Task<HttpResponseMessage> GetAndPostRecoverForm(
             bool loginAfterAccountRecovery,
             Action<TestServer, HttpClient> gotServer,
             Action<string, string> gotMail)
@@ -128,15 +128,9 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             };
 
             var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
-            response2.StatusCode.Should().Be(HttpStatusCode.Found);
-            var successUrl = response2.Headers.Location.ToString();
-            successUrl.Should().StartWith("/recover/success");
-
-            // Go to success page 
-            var response3 = await client.GetAsync(successUrl, response2);
-            response3.EnsureSuccessStatusCode();
-
-            return response3;
+            response2.EnsureSuccessStatusCode();
+            
+            return response2;
         }
 
         /// <summary>
@@ -158,7 +152,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             TestServer server = null;
             HttpClient client = null;
 
-            var response = await GetToConfirmationForm(
+            var response = await GetAndPostRecoverForm(
                 false,
                 (a, b) => { server = a; client = b; },
                 (a, b) => { confirmUrl = a; cancelUrl = b; }
@@ -202,7 +196,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             TestServer server = null;
             HttpClient client = null;
 
-            var response = await GetToConfirmationForm(
+            var response = await GetAndPostRecoverForm(
                 true,
                 (a, b) => { server = a; client = b; },
                 (a, b) => { confirmUrl = a; cancelUrl = b; }
@@ -231,7 +225,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             TestServer server = null;
             HttpClient client = null;
 
-            var response = await GetToConfirmationForm(
+            var response = await GetAndPostRecoverForm(
                 false,
                 (a, b) => { server = a; client = b; },
                 (a, b) => { confirmUrl = a; cancelUrl = b; }
@@ -251,7 +245,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             TestServer server = null;
             HttpClient client = null;
 
-            var response = await GetToConfirmationForm(
+            var response = await GetAndPostRecoverForm(
                 false,
                 (a, b) => { server = a; client = b; },
                 (a, b) => { confirmUrl = a; cancelUrl = b; }

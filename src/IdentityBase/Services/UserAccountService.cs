@@ -167,7 +167,6 @@ namespace IdentityBase.Services
         {
             ClearVerification(userAccount);
             await UpdateUserAccountAsync(userAccount);
-
         }
 
         public void SetVerification(UserAccount userAccount,
@@ -215,7 +214,6 @@ namespace IdentityBase.Services
             userAccount.IsLoginAllowed = true;
             userAccount.IsEmailVerified = true;
             userAccount.EmailVerifiedAt = now;
-            userAccount.UpdatedAt = now;
         }
 
         public async Task SetEmailVerifiedAsync(UserAccount userAccount)
@@ -263,14 +261,13 @@ namespace IdentityBase.Services
             // Set user account password
             userAccount.PasswordHash = _crypto.HashPassword(password,
                 _applicationOptions.PasswordHashingIterationCount);
+
+            userAccount.PasswordChangedAt = DateTime.UtcNow;
         }
 
         public async Task AddLocalCredentialsAsync(UserAccount userAccount, string password)
         {
-            // Set user account password
-            userAccount.PasswordHash = _crypto.HashPassword(password,
-                _applicationOptions.PasswordHashingIterationCount);
-            userAccount.PasswordChangedAt = DateTime.UtcNow; 
+            AddLocalCredentials(userAccount, password); 
 
             await UpdateUserAccountAsync(userAccount);
         }
