@@ -14,6 +14,7 @@ namespace IdentityBase.Public.Actions.Login
         public string Password { get; set; }
 
         public bool RememberLogin { get; set; }
+
         [StringLength(2000)]
         public string ReturnUrl { get; set; }
     }

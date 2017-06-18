@@ -117,10 +117,12 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
-            var result = await _userAccountService.HandleVerificationKey(key, VerificationKeyPurpose.ConfirmAccount);
+            var result = await _userAccountService.HandleVerificationKeyAsync(key,
+                VerificationKeyPurpose.ConfirmAccount);
+
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("Invalid token");
+                ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
             }
 
@@ -161,11 +163,11 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
-            var result = await _userAccountService.HandleVerificationKey(key, VerificationKeyPurpose.ConfirmAccount);
+            var result = await _userAccountService.HandleVerificationKeyAsync(key, VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
             {
-                ModelState.AddModelError("Invalid token");
+                ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
             }
 
@@ -180,7 +182,7 @@ namespace IdentityBase.Public.Actions.Register
             var userAccount = await GetUserAccountFromCoockyValue();
             if (userAccount == null)
             {
-                ModelState.AddModelError("Invalid token");
+                ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
             }
 
@@ -193,7 +195,7 @@ namespace IdentityBase.Public.Actions.Register
 
             return View(vm);
         }
-        
+
         [HttpPost("register/complete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Complete(RegisterCompleteInputModel model)
@@ -205,6 +207,9 @@ namespace IdentityBase.Public.Actions.Register
             var userAccount = await GetUserAccountFromCoockyValue();
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
 
+            throw new NotImplementedException(); 
+
+            /*
             // TODO: cleanup
             userAccount.ClearVerification();
             var now = DateTime.UtcNow;
@@ -212,9 +217,11 @@ namespace IdentityBase.Public.Actions.Register
             userAccount.IsEmailVerified = true;
             userAccount.EmailVerifiedAt = now;
             userAccount.UpdatedAt = now;
-            await _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
 
-            await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+            await Task.WhenAll(
+                _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password),
+                _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null)
+            ); */
 
             // && _interaction.IsValidReturnUrl(returnUrl)
 
@@ -308,7 +315,7 @@ namespace IdentityBase.Public.Actions.Register
                 }
                 else
                 {
-                    return await this.RedirectToSuccessAsync(userAccount, model.ReturnUrl);
+                    return await RedirectToSuccessAsync(userAccount, model.ReturnUrl);
                 }
             }
             // Ask user if he wants to merge accounts

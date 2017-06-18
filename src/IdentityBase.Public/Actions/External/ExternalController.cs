@@ -128,11 +128,8 @@ namespace IdentityBase.Public.Actions.Login
                 provider, subject);
             if (userAccount != null)
             {
-                await _userAccountService.UpdateLastUsedExternalAccountAsync(
-                    userAccount, provider, subject);
-
-                return await IssueCookieAndRedirectAsync(userAccount, provider,
-                    returnUrl, info, claims);
+                await _userAccountService.UpdateLastUsedExternalAccountAsync(userAccount, provider, subject);
+                return await IssueCookieAndRedirectAsync(userAccount, provider, returnUrl, info, claims);
             }
             else
             {

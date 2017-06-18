@@ -9,6 +9,7 @@ namespace IdentityBase.Public.Actions.Recover
         [Required]
         public string Email { get; set; }
 
+        [Required]
         [StringLength(2000)]
         public string ReturnUrl { get; set; }
     }

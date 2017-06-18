@@ -11,7 +11,12 @@ namespace IdentityBase.Public
     public static class StartupMvc
     {
         public static void AddMvc(this IServiceCollection services, ApplicationOptions appOptions)
-        {   
+        {
+            services.AddRouting((options) =>
+            {
+                options.LowercaseUrls = true; 
+            });
+
             services.AddMvc(mvcOptions =>
                 {
                     mvcOptions.OutputFormatters.ReplaceJsonOutputFormatter(); 

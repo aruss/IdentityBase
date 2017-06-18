@@ -207,15 +207,15 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             return Task.FromResult<ExternalAccount>(null);
         }
-        
-        public async Task<PagedList<UserAccount>> LoadInvitedUserAccounts(int take, int skip = 0, Guid? invitedBy = null)
+
+        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(int take, int skip = 0, Guid? invitedBy = null)
         {
             var baseQuery = _context.UserAccounts
-                .Where(c => c.CreationKind == (int)CreationKind.Invitation); 
+                .Where(c => c.CreationKind == (int)CreationKind.Invitation);
 
             if (invitedBy.HasValue)
             {
-                baseQuery = baseQuery.Where(c => c.CreatedBy == invitedBy); 
+                baseQuery = baseQuery.Where(c => c.CreatedBy == invitedBy);
             }
 
             var result = new PagedList<UserAccount>
@@ -233,9 +233,9 @@ namespace IdentityBase.Public.EntityFramework.Stores
                 Sort = new List<SortInfo>
                 {
                     new SortInfo("CreatedAt".Camelize(), SortDirection.Descending)
-                }                
-            }; 
-            
+                }
+            };
+
             // _logger.LogDebug("{email} found in database: {userAccountFound}", email, model != null);
 
             return result;

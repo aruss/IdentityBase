@@ -1,4 +1,5 @@
-﻿using AngleSharp.Dom.Html;
+﻿using FluentAssertions;
+using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,6 +11,15 @@ namespace IdentityBase.Public.IntegrationTests
 
     public static class IHtmlDocumentExtensions
     {
+        public static void ShouldContainErrors(this IHtmlDocument doc, params string[] errors)
+        {
+            var elm = doc.QuerySelector(".alert.alert-danger");
+            foreach (var item in errors)
+            {
+                elm.TextContent.Contains(item).Should().BeTrue(); 
+            }          
+        }
+
         public static async Task<IHtmlDocument> ReadAsHtmlDocumentAsync(this HttpContent content)
         {
             var html = await content.ReadAsStringAsync();

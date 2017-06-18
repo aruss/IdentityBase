@@ -65,29 +65,29 @@ namespace IdentityBase.Public.Actions.Login
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
-            // NOTE: since the theme does not renders the local login form 
+            // NOTE: since the theme does not renders the local login form
             // it is not possible to post this if local login is disabled
-            // due to missing anti forgery token. 
-            
+            // due to missing anti forgery token.
+
             if (ModelState.IsValid)
             {
                 var result = await _userAccountService
-                    .VerifyByEmailAndPasswordAsyc(model.Email, model.Password);
+                    .VerifyByEmailAndPasswordAsync(model.Email, model.Password);
 
                 if (result.UserAccount != null)
                 {
-                    await _userAccountService.UpdateLastUsedLocalAccountAsync(
-                        result.UserAccount, result.IsPasswordValid);
-
                     if (!result.IsLoginAllowed)
                     {
-                        ModelState.AddModelError("", "User account is diactivated");
+                        ModelState.AddModelError("User account is diactivated");
                     }
                     else if (result.IsLocalAccount)
                     {
                         if (!result.IsPasswordValid)
                         {
-                            ModelState.AddModelError("", "Invalid credentials");
+                            ModelState.AddModelError("Invalid credentials");
+
+                            // TODO: Account locking on failed login attempts is not supported yet
+                            //await _userAccountService.UpdateFailedLoginAsync(result.UserAccount);
                         }
                         else
                         {
@@ -104,6 +104,7 @@ namespace IdentityBase.Public.Actions.Login
                             };
 
                             await HttpContext.Authentication.SignInAsync(result.UserAccount, props);
+                            await _userAccountService.UpdateSuccessfulLoginAsync(result.UserAccount);
 
                             // Make sure the returnUrl is still valid, and if yes -
                             // redirect back to authorize endpoint
@@ -117,17 +118,15 @@ namespace IdentityBase.Public.Actions.Login
                     }
                     else
                     {
-                        var vm = await this.CreateViewModelAsync(model, result.UserAccount);
-                        return View(vm);
+                        return View(await CreateViewModelAsync(model, result.UserAccount));
                     }
                 }
 
-                ModelState.AddModelError("", "Invalid username or password.");
+                ModelState.AddModelError("Invalid username or password.");
             }
 
             // Something went wrong, show form with error
-            var vmx = await this.CreateViewModelAsync(model);
-            return View(vmx);
+            return View(await CreateViewModelAsync(model));
         }
 
         [NonAction]

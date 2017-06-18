@@ -132,7 +132,7 @@ namespace IdentityBase.Public
             else
             {
                 app.UseExceptionHandler("/error");
-            }
+            }            
 
             app.UseCors("CorsPolicy");
             app.UseMiddleware<RequestIdMiddleware>();

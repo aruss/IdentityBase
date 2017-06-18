@@ -25,6 +25,7 @@ namespace IdentityBase.Extensions
             return !userAccount.LastLoginAt.HasValue;
         }
 
+        [Obsolete("Use new UserAccountService")]
         public static void SetVerification(this UserAccount userAccount,
             string key,
             VerificationKeyPurpose purpose,
@@ -40,6 +41,7 @@ namespace IdentityBase.Extensions
             userAccount.VerificationStorage = storage;
         }
 
+        [Obsolete("Use new UserAccountService")]
         public static void ClearVerification(this UserAccount userAccount)
         {
             userAccount.VerificationKey = null;

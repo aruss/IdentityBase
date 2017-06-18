@@ -8,7 +8,7 @@ using Xunit;
 
 namespace IdentityBase.Public.IntegrationTests.Tests
 {
-
+    [Collection("Login Tests")]
     public class Login2Tests
     {
         private HttpClient _client;
@@ -40,8 +40,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
         }
     }
 
-
-    [Collection("General Tests")]
+    [Collection("Login Tests")]
     public class LoginTests
     {
         private HttpClient _client;
@@ -83,39 +82,38 @@ namespace IdentityBase.Public.IntegrationTests.Tests
         [Theory(DisplayName = "Try_Login_With_Local_Account")]
 
         // Valid user do not remember login
-        [InlineData("alice@localhost", "alice@localhost", false, HttpStatusCode.Found, false)]
+        [InlineData("alice@localhost", "alice@localhost", false, false)]
 
         // Valid user remember login
-        [InlineData("alice@localhost", "alice@localhost", true, HttpStatusCode.Found, false)]
+        [InlineData("alice@localhost", "alice@localhost", true, false)]
 
         // Valid user with wrong password, should get an error
-        [InlineData("alice@localhost", "test", false, HttpStatusCode.OK, true)]
+        [InlineData("alice@localhost", "test", false, true)]
 
         // User does not exists, should get an error
-        [InlineData("notexists@localhost", "test", false, HttpStatusCode.OK, true)]
+        [InlineData("notexists@localhost", "test", false, true)]
 
         // Inactive user account , should get an error
-        [InlineData("jim@localhost", "jim@localhost", false, HttpStatusCode.OK, true)]
+        [InlineData("jim@localhost", "jim@localhost", false, true)]
 
         // Not verified user account, should get an error
-        [InlineData("paul@localhost", "paul@localhost", false, HttpStatusCode.OK, true)]
+        [InlineData("paul@localhost", "paul@localhost", false, true)]
 
         // Only external, has no local account, should receive a hint that he should use his facebook account
-        [InlineData("bill@localhost", "doesnothaveone", false, HttpStatusCode.OK, true)]
+        [InlineData("bill@localhost", "doesnothaveone", false, true)]
 
         // Missing password
-        [InlineData("alice@localhost", "", false, HttpStatusCode.OK, true)]
+        [InlineData("alice@localhost", "", false, true)]
 
         // Missing email
-        [InlineData("", "password", false, HttpStatusCode.OK, true)]
+        [InlineData("", "password", false, true)]
 
         // Wrong mail 
-        [InlineData("thats_not_a_mail", "foobar", false, HttpStatusCode.OK, true)]
+        [InlineData("thats_not_a_mail", "foobar", false, true)]
         public async Task Try_Login_With_Local_Account(
             string email,
             string password,
             bool rememberMe,
-            HttpStatusCode statusCode,
             bool isError)
         {
             // Call the login page 
@@ -129,12 +127,12 @@ namespace IdentityBase.Public.IntegrationTests.Tests
                 { "Email", email },
                 { "Password", password},
                 { "RememberLogin", rememberMe ? "true" : "false" },
-                { "__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                { "ReturnUrl", doc.GetReturnUrl() }
+                { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
             };
 
             var response2 = await _client.PostFormAsync(doc.GetFormAction(), form, response);
 
+            var statusCode = isError ? HttpStatusCode.OK : HttpStatusCode.Found; 
             if (statusCode == HttpStatusCode.Found)
             {
                 // After successfull login user should be redirect to IdentityServer4 authorize endpoint
@@ -144,11 +142,11 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             else
             {
                 response2.StatusCode.Should().Be(statusCode);
-                var doc2 = await response2.Content.ReadAsHtmlDocumentAsync();
-
+                
                 // Check for error 
                 if (isError)
                 {
+                    var doc2 = await response2.Content.ReadAsHtmlDocumentAsync();
                     var elm = doc2.QuerySelector(".alert.alert-danger");
 
                     // TODO: check the error message 

@@ -8,8 +8,5 @@ namespace IdentityBase.Public.Actions
         string ReturnUrl { get; set; }
         IEnumerable<ExternalProvider> ExternalProviders { get; set; }
         IEnumerable<string> ExternalProviderHints { get; set; }
-
-        //bool EnableLocalLogin { get; set; }
-        //
     }
 }

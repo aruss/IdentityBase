@@ -40,7 +40,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         [ScopeAuthorize("useraccount.read")]
         public async Task<UserAccoutInviteListRespose> Get(UserAccoutInviteListRequest request)
         {
-            var list = await _userAccountService.LoadInvitedUserAccounts(request.Take, request.Skip);
+            var list = await _userAccountService.LoadInvitedUserAccountsAsync(request.Take, request.Skip);
             var result = new UserAccoutInviteListRespose
             {
                 Success = true,
@@ -147,12 +147,10 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
     public class UserAccoutInviteListRequest : PagedListRequest
     {
-
     }
 
     public class UserAccoutInviteListRespose : ApiResult<PagedList<object>>
     {
-
     }
 
     public class UserAccountInviteCreateRequest
@@ -171,7 +169,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         public Guid? InvitedBy { get; set; }
 
         /// <summary>
-        /// Client id of the application where the user gets redirected 
+        /// Client id of the application where the user gets redirected
         /// </summary>
         [Required]
         public string ClientId { get; set; }
@@ -181,6 +179,5 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
     public class UserAccountInviteCreateRespose
     {
-
     }
 }
