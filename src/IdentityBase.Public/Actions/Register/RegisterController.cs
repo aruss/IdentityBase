@@ -147,11 +147,17 @@ namespace IdentityBase.Public.Actions.Register
             }
         }
 
+        // Currently is only used for invitations 
         [HttpPost("register/confirm/{key}")]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
+            if (!_applicationOptions.EnableUserInviteEndpoint)
+            {
+                return NotFound(); 
+            }
+
             var result = await _userAccountService.HandleVerificationKeyAsync(model.Key,
-               VerificationKeyPurpose.ResetPassword);
+               VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || result.TokenExpired || !result.PurposeValid)
             {
@@ -162,22 +168,29 @@ namespace IdentityBase.Public.Actions.Register
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
-
             _userAccountService.SetEmailVerified(result.UserAccount);
             _userAccountService.AddLocalCredentials(result.UserAccount, model.Password);
             await _userAccountService.UpdateUserAccountAsync(result.UserAccount);
             
-            if (_applicationOptions.LoginAfterAccountRecovery)
+            if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
-                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
-
-                if (_interaction.IsValidReturnUrl(returnUrl))
-                {
-                    return Redirect(returnUrl);
-                }
+                // TODO: validate 
+                return Redirect(returnUrl);
             }
+            else
+            {
+                if (_applicationOptions.LoginAfterAccountRecovery)
+                {
+                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
 
-            return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
+                    if (_interaction.IsValidReturnUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                }
+
+                return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
+            }       
         }
 
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
