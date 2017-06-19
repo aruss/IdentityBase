@@ -45,7 +45,7 @@ namespace IdentityBase.Public.Actions.Login
             if (vm == null)
             {
                 _logger.LogError("Login attempt with missing returnUrl parameter");
-                return Redirect("/");
+                return Redirect(Url.Action("Index", "Error"));
             }
 
             if (vm.IsExternalLoginOnly)
