@@ -11,27 +11,21 @@ namespace IdentityBase.Public.IntegrationTests.Tests
     [Collection("Login Tests")]
     public class Login2Tests
     {
-        private HttpClient _client;
-        private TestServer _server;
-
-        public Login2Tests()
-        {
-            var config = ConfigBuilder
-                .Default
-                .RemoveAuthFacebook() // left only one identity provider
-                .Alter("App:EnableLocalLogin", "false") // disable local login
-                .Build();
-
-            _server = TestServerBuilder.BuildServer<Startup>(config);
-            _client = _server.CreateClient();
-        }
-
         // This will force user directly to thirdparty auth server
         [Fact(DisplayName = "Get_LoginPage_With_IsExternalLoginOnly_Option")]
         public async Task Get_LoginPage_With_IsExternalLoginOnly_Option()
         {
+            var config = ConfigBuilder
+               .Default
+               .RemoveAuthFacebook() // left only one identity provider
+               .Alter("App:EnableLocalLogin", "false") // disable local login
+               .Build();
+
+            var server = TestServerBuilder.BuildServer<Startup>(config);
+            var client = server.CreateClient();
+
             // Act
-            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
+            var response = await client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Found);
@@ -43,21 +37,15 @@ namespace IdentityBase.Public.IntegrationTests.Tests
     [Collection("Login Tests")]
     public class LoginTests
     {
-        private HttpClient _client;
-        private TestServer _server;
-
-        public LoginTests()
-        {
-            var config = ConfigBuilder.Default.Build();
-            _server = TestServerBuilder.BuildServer<Startup>(config);
-            _client = _server.CreateClient();
-        }
-
         [Fact(DisplayName = "Get_LoginPage_Without_Args_Should_Redirect_To_LandingPage")]
         public async Task Get_LoginPage_Without_Args_Should_Redirect_To_LandingPage()
         {
+            var config = ConfigBuilder.Default.Build();
+            var server = TestServerBuilder.BuildServer<Startup>(config);
+            var client = server.CreateClient();
+
             // Act
-            var response = await _client.GetAsync("/login");
+            var response = await client.GetAsync("/login");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Found);
@@ -71,8 +59,12 @@ namespace IdentityBase.Public.IntegrationTests.Tests
         [Fact(DisplayName = "Post_LoginPage_With_IsExternalLoginOnly_Option_Should_Be_Disabled")]
         public async Task Post_LoginPage_With_IsExternalLoginOnly_Option_Should_Be_Disabled()
         {
+            var config = ConfigBuilder.Default.Build();
+            var server = TestServerBuilder.BuildServer<Startup>(config);
+            var client = server.CreateClient();
+
             // Act
-            var response = await _client.PostFormAsync("/login");
+            var response = await client.PostFormAsync("/login");
 
             // Assert
             Assert.True(response.StatusCode == System.Net.HttpStatusCode.BadRequest,
@@ -116,8 +108,12 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             bool rememberMe,
             bool isError)
         {
+            var config = ConfigBuilder.Default.Build();
+            var server = TestServerBuilder.BuildServer<Startup>(config);
+            var client = server.CreateClient();
+
             // Call the login page 
-            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
+            var response = await client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
             response.EnsureSuccessStatusCode();
 
             // Fill out the form and submit 
@@ -130,9 +126,9 @@ namespace IdentityBase.Public.IntegrationTests.Tests
                 { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
             };
 
-            var response2 = await _client.PostFormAsync(doc.GetFormAction(), form, response);
+            var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
 
-            var statusCode = isError ? HttpStatusCode.OK : HttpStatusCode.Found; 
+            var statusCode = isError ? HttpStatusCode.OK : HttpStatusCode.Found;
             if (statusCode == HttpStatusCode.Found)
             {
                 // After successfull login user should be redirect to IdentityServer4 authorize endpoint
@@ -142,7 +138,7 @@ namespace IdentityBase.Public.IntegrationTests.Tests
             else
             {
                 response2.StatusCode.Should().Be(statusCode);
-                
+
                 // Check for error 
                 if (isError)
                 {
@@ -158,8 +154,12 @@ namespace IdentityBase.Public.IntegrationTests.Tests
         [Fact(DisplayName = "Try_Login_With_Local_Account_Manipulate_ReturnUri")]
         public async Task Try_Login_With_Local_Account_Manipulate_ReturnUri()
         {
+            var config = ConfigBuilder.Default.Build();
+            var server = TestServerBuilder.BuildServer<Startup>(config);
+            var client = server.CreateClient();
+
             // Call the login page 
-            var response = await _client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
+            var response = await client.GetAsync($"/login?returnUrl={Constants.ReturnUrl}");
             response.EnsureSuccessStatusCode();
 
             // Fill out the form and submit 
@@ -169,11 +169,10 @@ namespace IdentityBase.Public.IntegrationTests.Tests
                 { "Email", "alice@localhost" },
                 { "Password", "alice@localhost"},
                 { "RememberLogin", "false" },
-                { "__RequestVerificationToken", doc.GetAntiForgeryToken() },
-                { "ReturnUrl", "http%3A%2F%2Fmalicous.com" }
+                { "__RequestVerificationToken", doc.GetAntiForgeryToken() }
             };
 
-            var response2 = await _client.PostFormAsync(doc.GetFormAction(), form, response);
+            var response2 = await client.PostFormAsync(doc.GetFormAction(), form, response);
 
             // Should redirect to startpage, end of journey 
             response2.StatusCode.Should().Be(HttpStatusCode.Found);
