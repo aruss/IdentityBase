@@ -39,19 +39,19 @@ namespace IdentityBase.Public.Api.UserAccountInvite
 
         [HttpGet("invitations")]
         //[ScopeAuthorize("useraccount.read")]
-        public async Task<UserAccoutInviteListRespose> Get(UserAccoutInviteListRequest request)
+        public async Task<ApiResult<PagedList<UserAccountDto>>> Get(PagedListRequest request)
         {
             var list = await _userAccountService.LoadInvitedUserAccountsAsync(request.Take, request.Skip);
-            var result = new UserAccoutInviteListRespose
+            var result = new ApiResult<PagedList<UserAccountDto>>
             {
                 Success = true,
-                Result = new PagedList<object>
+                Result = new PagedList<UserAccountDto>
                 {
                     Skip = list.Skip,
                     Take = list.Take,
                     Total = list.Total,
                     Sort = list.Sort,
-                    Items = list.Items.Select(s => new
+                    Items = list.Items.Select(s => new UserAccountDto
                     {
                         Id = s.Id,
                         Email = s.Email,
@@ -107,10 +107,18 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inputModel.InvitedBy, returnUri);
             SendEmailAsync(userAccount);
 
-            this.Response.StatusCode = (int)HttpStatusCode.Created; 
-            return new ApiResult
+            this.Response.StatusCode = (int)HttpStatusCode.Created;
+            return new ApiResult<UserAccountDto>
             {
-                Success = true
+                Success = true,
+                Result = new UserAccountDto
+                {
+                    Id = userAccount.Id,
+                    Email = userAccount.Email,
+                    CreatedAt = userAccount.CreatedAt,
+                    CreatedBy = userAccount.CreatedBy,
+                    VerificationKeySentAt = userAccount.VerificationKeySentAt
+                }
             };
         }
 
@@ -148,14 +156,6 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
     }
 
-    public class UserAccoutInviteListRequest : PagedListRequest
-    {
-    }
-
-    public class UserAccoutInviteListRespose : ApiResult<PagedList<object>>
-    {
-    }
-
     public class UserAccountInviteCreateRequest
     {
         /// <summary>
@@ -177,10 +177,18 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         [Required]
         public string ClientId { get; set; }
 
+        /// <summary>
+        /// Return URI is used to redirect back to client, must be one of the clients white listed URIs
+        /// </summary>
         public string ReturnUri { get; set; }
     }
 
-    public class UserAccountInviteCreateRespose
+    public class UserAccountDto
     {
+        public Guid Id { get; set; }
+        public string Email { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? VerificationKeySentAt { get; set; }
     }
 }
