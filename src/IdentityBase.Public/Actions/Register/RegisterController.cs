@@ -122,7 +122,8 @@ namespace IdentityBase.Public.Actions.Register
                 var vm = new ConfirmViewModel
                 {
                     Key = key,
-                    RequiresPassword = !result.UserAccount.HasPassword()
+                    RequiresPassword = !result.UserAccount.HasPassword(),
+                    Email = result.UserAccount.Email
                 };
 
                 return View(vm);
