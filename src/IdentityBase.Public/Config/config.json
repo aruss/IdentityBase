@@ -1,8 +1,7 @@
 ﻿{
   "Host": {
     "Urls": "http://*:5000",
-    "UseIISIntegration": false,
-    "Cors": "http://localhost:8080"
+    "UseIISIntegration": false
   },
   "Serilog": {
     "Using": [ "Serilog.Sinks.RollingFile" ],
@@ -13,7 +12,8 @@
         "Microsoft": "Information",
         "IdentityModel": "Information",
         "IdentityServer4": "Information",
-        "IdentityBase": "Information"
+        "IdentityBase": "Debug",
+        "ServiceBase": "Debug"
       }
     },
     "WriteTo": [
@@ -35,7 +35,7 @@
     "MigrateDatabase": false,
     "SeedExampleData": true,
     "EnsureDeleted": false,
-    "SeedExampleDataPath": "./config",
+    "SeedExampleDataPath": "./Config",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
@@ -85,7 +85,7 @@
   "Services": {
     "modules": [
       { "type": "IdentityBase.Public.EntityFramework.InMemoryModule, IdentityBase.Public.EntityFramework" },
-      { "type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+      { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
       { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
       { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
