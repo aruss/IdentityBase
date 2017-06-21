@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using IdentityBase.Configuration;
+using IdentityBase.Extensions;
 using IdentityBase.Models;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Mappers;
@@ -50,7 +51,9 @@ namespace IdentityBase.Public.EntityFramework
 
         public void InitializeStores()
         {
-            _logger.LogDebug($"Initialize Stores, MigrateDatabase: {_options.MigrateDatabase}, SeedExampleData: {_options.SeedExampleData}");
+            _logger
+                .LogDebug($"Initialize Stores, MigrateDatabase: " +
+                $"{_options.MigrateDatabase}, SeedExampleData: {_options.SeedExampleData}");
 
             // Only a leader may migrate or seed 
             if (_appOptions.Leader)
@@ -73,7 +76,9 @@ namespace IdentityBase.Public.EntityFramework
 
         public void CleanupStores()
         {
-            _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}, EnsureDeleted: {_options.EnsureDeleted}");
+            _logger
+                .LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}, " +
+                $"EnsureDeleted: {_options.EnsureDeleted}");
 
             // Only leader may delete the database 
             if (_appOptions.Leader && _options.EnsureDeleted)
@@ -88,24 +93,22 @@ namespace IdentityBase.Public.EntityFramework
         {
             _logger.LogDebug("Ensure Seed Data");
 
-            var rootPath = _options.SeedExampleDataPath;
-            if (!Path.IsPathRooted(_options.SeedExampleDataPath))
-            {
-                rootPath = Path.GetFullPath(Path.Combine(_environment.ContentRootPath, _options.SeedExampleDataPath)); 
-            }
+            var rootPath = _options.SeedExampleDataPath.GetFullPath(_environment.ContentRootPath);
 
             if (!_configurationDbContext.IdentityResources.Any())
             {
                 var path = Path.Combine(rootPath, "data_resources_identity.json");
+
                 _logger.LogDebug($"Loading file: {path}");
 
-                var resources = JsonConvert.DeserializeObject<List<IdentityResource>>(
-                    File.ReadAllText(path));
+                var resources = JsonConvert
+                    .DeserializeObject<List<IdentityResource>>(File.ReadAllText(path));
 
                 foreach (var resource in resources)
                 {
                     _configurationDbContext.IdentityResources.Add(resource.ToEntity());
                 }
+
                 _configurationDbContext.SaveChanges();
                 _logger.LogDebug("Saved Resource Identities");
             }
@@ -115,13 +118,14 @@ namespace IdentityBase.Public.EntityFramework
                 var path = Path.Combine(rootPath, "data_resources_api.json");
                 _logger.LogDebug($"Loading file: {path}");
 
-                var resources = JsonConvert.DeserializeObject<List<ApiResource>>(
-                    File.ReadAllText(path));
+                var resources = JsonConvert
+                    .DeserializeObject<List<ApiResource>>(File.ReadAllText(path));
 
                 foreach (var resource in resources)
                 {
                     _configurationDbContext.ApiResources.Add(resource.ToEntity());
                 }
+
                 _configurationDbContext.SaveChanges();
                 _logger.LogDebug("Saved Resource API");
             }
@@ -131,8 +135,8 @@ namespace IdentityBase.Public.EntityFramework
                 var path = Path.Combine(rootPath, "data_clients.json");
                 _logger.LogDebug($"Loading file: {path}");
 
-                var clients = JsonConvert.DeserializeObject<List<Client>>(
-                    File.ReadAllText(path));
+                var clients = JsonConvert
+                    .DeserializeObject<List<Client>>(File.ReadAllText(path));
 
                 foreach (var client in clients)
                 {
@@ -147,13 +151,14 @@ namespace IdentityBase.Public.EntityFramework
                 var path = Path.Combine(rootPath, "data_users.json");
                 _logger.LogDebug($"Loading file: {path}");
 
-                var userAccounts = JsonConvert.DeserializeObject<List<UserAccount>>(
-                    File.ReadAllText(path));
+                var userAccounts = JsonConvert
+                    .DeserializeObject<List<UserAccount>>(File.ReadAllText(path));
 
                 foreach (var userAccount in userAccounts)
                 {
                     _userAccountDbContext.UserAccounts.Add(userAccount.ToEntity());
                 }
+
                 _userAccountDbContext.SaveChanges();
                 _logger.LogDebug("Saved Users");
             }

@@ -1,4 +1,5 @@
-﻿using IdentityBase.Configuration;
+﻿using System.Linq;
+using IdentityBase.Configuration;
 using IdentityBase.Crypto;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Mappers;
@@ -6,7 +7,6 @@ using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace IdentityBase.Public.EntityFramework
 {
@@ -38,7 +38,7 @@ namespace IdentityBase.Public.EntityFramework
             _configurationDbContext = configurationDbContext;
             _persistedGrantDbContext = persistedGrantDbContext;
             _userAccountDbContext = userAccountDbContext;
-            _crypto = crypto; 
+            _crypto = crypto;
         }
 
         public void InitializeStores()
@@ -72,7 +72,7 @@ namespace IdentityBase.Public.EntityFramework
 
         internal virtual void EnsureSeedData()
         {
-            var exampleData = new ExampleData(); 
+            var exampleData = new ExampleData();
 
             if (!_configurationDbContext.IdentityResources.Any())
             {

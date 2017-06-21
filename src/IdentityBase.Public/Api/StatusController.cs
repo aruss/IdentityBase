@@ -1,9 +1,9 @@
-﻿using IdentityBase.Configuration;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using IdentityBase.Configuration;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Api
 {
@@ -27,7 +27,8 @@ namespace IdentityBase.Public.Api
 
             if (_options.EnableUserInviteEndpoint)
             {
-                status.Add("UserInviteEndpoint", $"{HttpContext.GetIdentityServerBaseUrl()}/api/users/_invite");
+                status.Add("UserInviteEndpoint", 
+                    $"{HttpContext.GetIdentityServerBaseUrl()}/api/invitations");
             }
 
             return await Task.FromResult(status); 

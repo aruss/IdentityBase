@@ -1,16 +1,21 @@
-﻿using IdentityBase.Configuration;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using IdentityBase.Configuration;
+using IdentityBase.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceBase.Api;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace IdentityBase.Public
 {
     public static class StartupMvc
     {
-        public static void AddMvc(this IServiceCollection services, ApplicationOptions appOptions)
+        public static void AddMvc(
+            this IServiceCollection services, 
+            ApplicationOptions appOptions,
+            IHostingEnvironment environment)
         {
             services.AddRouting((options) =>
             {
@@ -24,7 +29,10 @@ namespace IdentityBase.Public
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
-                        new Razor.CustomViewLocationExpander(appOptions.ThemePath));
+                        new Razor.CustomViewLocationExpander(
+                            appOptions.ThemePath.GetFullPath(environment.ContentRootPath)
+                        )
+                    );
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
@@ -36,11 +44,16 @@ namespace IdentityBase.Public
                         manager.FeatureProviders.Remove(item);
                     }
 
-                    // Register new IApplicationFeatureProvider with a blacklist depending on current configuration
-                    manager.FeatureProviders.Add(new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-                        .AddIf<Api.UserAccountInvite.InvitationsController>(!appOptions.EnableUserInviteEndpoint)
-                        .AddIf<Actions.Recover.RecoverController>(!appOptions.EnableAccountRecover)
-                        .AddIf<Actions.Register.RegisterController>(!appOptions.EnableAccountRegistration)
+                    // Register new IApplicationFeatureProvider with a blacklist depending on 
+                    // current configuration
+                    manager.FeatureProviders.Add(
+                        new BlackListedControllerFeatureProvider(new List<TypeInfo>()
+                        .AddIf<Api.UserAccountInvite.InvitationsController>(
+                            !appOptions.EnableUserInviteEndpoint)
+                        .AddIf<Actions.Recover.RecoverController>(
+                            !appOptions.EnableAccountRecover)
+                        .AddIf<Actions.Register.RegisterController>(
+                            !appOptions.EnableAccountRegistration)
                     ));
                 });
         }

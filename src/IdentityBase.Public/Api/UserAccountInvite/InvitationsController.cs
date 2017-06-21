@@ -1,4 +1,8 @@
-﻿using IdentityBase.Models;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using IdentityBase.Models;
 using IdentityBase.Services;
 using IdentityServer4.Extensions;
 using IdentityServer4.Stores;
@@ -8,11 +12,6 @@ using ServiceBase.Api;
 using ServiceBase.Authorization;
 using ServiceBase.Collections;
 using ServiceBase.Notification.Email;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Api.UserAccountInvite
 {
@@ -38,10 +37,12 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpGet("invitations")]
-        //[ScopeAuthorize("useraccount.read")]
+        [ScopeAuthorize("useraccount.read")]
         public async Task<ApiResult<PagedList<UserAccountDto>>> Get(PagedListRequest request)
         {
-            var list = await _userAccountService.LoadInvitedUserAccountsAsync(request.Take, request.Skip);
+            var list = await _userAccountService
+                .LoadInvitedUserAccountsAsync(request.Take, request.Skip);
+
             var result = new ApiResult<PagedList<UserAccountDto>>
             {
                 Success = true,
@@ -66,14 +67,15 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpPut("invitations")]
-        //[ScopeAuthorize("useraccount.write")]
+        [ScopeAuthorize("useraccount.write")]
         public async Task<object> Put([FromBody]UserAccountInviteCreateRequest inputModel)
         {
             var client = await _clientStore.FindClientByIdAsync(inputModel.ClientId);
 
             if (client == null)
             {
-                return BadRequest(new InvalidStateApiResult("The ClientId field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ClientId)));
+                return BadRequest(new InvalidStateApiResult("The ClientId field is invalid.",
+                    ResponseMessageKind.Error, nameof(inputModel.ClientId)));
             }
 
             string returnUri;
@@ -87,24 +89,31 @@ namespace IdentityBase.Public.Api.UserAccountInvite
             }
             else
             {
-                return BadRequest(new InvalidStateApiResult("The ReturnUri field is invalid.", ResponseMessageKind.Error, nameof(inputModel.ReturnUri)));
+                return BadRequest(new InvalidStateApiResult("The ReturnUri field is invalid.", 
+                    ResponseMessageKind.Error, nameof(inputModel.ReturnUri)));
             }
 
             if (inputModel.InvitedBy.HasValue)
             {
                 if (await _userAccountService.LoadByEmailAsync(inputModel.Email) == null)
                 {
-                    return BadRequest(new InvalidStateApiResult("The InvitedBy field is invalid, UserAccount does not exists.", ResponseMessageKind.Error, nameof(inputModel.InvitedBy)));
+                    return BadRequest(new InvalidStateApiResult(
+                        "The InvitedBy field is invalid, UserAccount does not exists.", 
+                        ResponseMessageKind.Error, nameof(inputModel.InvitedBy)));
                 }
             }
 
             var userAccount = await _userAccountService.LoadByEmailAsync(inputModel.Email);
             if (userAccount != null)
             {
-                return BadRequest(new InvalidStateApiResult("The Email field is invalid, UserAccount does not exists.", ResponseMessageKind.Error, nameof(inputModel.Email)));
+                return BadRequest(new InvalidStateApiResult(
+                    "The Email field is invalid, UserAccount does not exists.", 
+                    ResponseMessageKind.Error, nameof(inputModel.Email)));
             }
 
-            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(inputModel.Email, inputModel.InvitedBy, returnUri);
+            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(
+                inputModel.Email, inputModel.InvitedBy, returnUri);
+
             SendEmailAsync(userAccount);
 
             this.Response.StatusCode = (int)HttpStatusCode.Created;
@@ -123,7 +132,7 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         }
 
         [HttpDelete("invitations/{UserAccountId}")]
-        //[ScopeAuthorize("useraccount.delete")]
+        [ScopeAuthorize("useraccount.delete")]
         public async Task<object> Delete([FromRoute]Guid userAccountId)
         {
             var userAccount = await _userAccountService.LoadByIdAsync(userAccountId);
@@ -147,48 +156,15 @@ namespace IdentityBase.Public.Api.UserAccountInvite
         [NonAction]
         internal async Task SendEmailAsync(UserAccount userAccount)
         {
-            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
-            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates.UserAccountInvited, userAccount.Email, new
+            var baseUrl = ServiceBase.Extensions.StringExtensions.EnsureTrailingSlash(
+                _httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+
+            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates
+                .UserAccountInvited, userAccount.Email, new
             {
                 ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
                 CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
             }, true);
         }
-    }
-
-    public class UserAccountInviteCreateRequest
-    {
-        /// <summary>
-        /// Email address of a invited user
-        /// </summary>
-        [Required]
-        [EmailAddress]
-        [StringLength(254)]
-        public string Email { get; set; }
-
-        /// <summary>
-        /// UserAccount id of the user who creates a invitation
-        /// </summary>
-        public Guid? InvitedBy { get; set; }
-
-        /// <summary>
-        /// Client id of the application where the user gets redirected
-        /// </summary>
-        [Required]
-        public string ClientId { get; set; }
-
-        /// <summary>
-        /// Return URI is used to redirect back to client, must be one of the clients white listed URIs
-        /// </summary>
-        public string ReturnUri { get; set; }
-    }
-
-    public class UserAccountDto
-    {
-        public Guid Id { get; set; }
-        public string Email { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? VerificationKeySentAt { get; set; }
     }
 }

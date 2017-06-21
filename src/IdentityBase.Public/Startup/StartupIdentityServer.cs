@@ -1,4 +1,8 @@
-﻿using IdentityBase.Configuration;
+﻿using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using IdentityBase.Configuration;
+using IdentityBase.Extensions;
 using IdentityBase.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Hosting;
@@ -6,18 +10,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ServiceBase.Events;
-using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityBase.Public
 {
     public static class StartupIdentityServer
     {
-        public static void AddIdentityServer(this IServiceCollection services, IConfigurationRoot config, ILogger logger, IHostingEnvironment environment)
+        public static void AddIdentityServer(
+            this IServiceCollection services,
+            IConfigurationRoot config,
+            ILogger logger,
+            IHostingEnvironment environment)
         {
-            var eventOptions = config.GetSection("Events").Get<EventOptions>() ?? new EventOptions();
-            var appOptions = config.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
+            var eventOptions = config.GetSection("Events")
+                .Get<EventOptions>() ?? new EventOptions();
+
+            var appOptions = config.GetSection("App")
+                .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
             var builder = services.AddIdentityServer((options) =>
             {
@@ -50,15 +58,9 @@ namespace IdentityBase.Public
 
             if (environment.IsDevelopment())
             {
-                if (!Path.IsPathRooted(appOptions.TempFolder))
-                {
-                    builder.AddDeveloperSigningCredential(
-                        Path.Combine(environment.ContentRootPath, appOptions.TempFolder, "tempkey.rsa"));
-                }
-                else
-                {
-                    builder.AddDeveloperSigningCredential(Path.Combine(appOptions.TempFolder, "tempkey.rsa"));
-                }
+                builder.AddDeveloperSigningCredential(
+                    Path.Combine(appOptions.TempFolder.GetFullPath(environment.ContentRootPath),
+                    "tempkey.rsa"));
             }
             else
             {
@@ -67,22 +69,24 @@ namespace IdentityBase.Public
                     var section = config.GetSection("IdentityServer");
                     if (section.ContainsSection("SigningCredentialFromPfx"))
                     {
-                        var filePath = section.GetValue<string>("SigningCredentialFromPfx:Path");
-                        if (!Path.IsPathRooted(filePath))
-                        {
-                            filePath = Path.Combine(environment.ContentRootPath, filePath);
-                        }
+                        var filePath = section.GetValue<string>("SigningCredentialFromPfx:Path")
+                            .GetFullPath(environment.ContentRootPath);
+
                         if (!File.Exists(filePath))
                         {
-                            throw new FileNotFoundException("Signing certificate file not found", filePath);
+                            throw new FileNotFoundException(
+                                "Signing certificate file not found", filePath);
                         }
+
                         var password = section.GetValue<string>("SigningCredentialFromPfx:Password");
                         builder.AddSigningCredential(new X509Certificate2(filePath, password));
                     }
+
                     if (section.ContainsSection("SigningCredentialFromStore"))
                     {
                         throw new NotImplementedException();
-                        // builder.AddSigningCredential("98D3ACF057299C3745044BE918986AD7ED0AD4A2", StoreLocation.LocalMachine, nameType: NameType.Thumbprint);
+                        // builder.AddSigningCredential("98D3ACF057299C3745044BE918986AD7ED0AD4A2",
+                        // StoreLocation.LocalMachine, nameType: NameType.Thumbprint);
                     }
                     else
                     {

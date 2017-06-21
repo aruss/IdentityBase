@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using ServiceBase.Extensions;
 
 namespace IdentityBase.Extensions
 {
     public static class StringExtensions
     {
         static readonly string[] UglyBase64 = { "+", "/", "=" };
+
+        [DebuggerStepThrough]
         public static string StripUglyBase64(this string s)
         {
             if (String.IsNullOrWhiteSpace(s))
@@ -18,6 +23,18 @@ namespace IdentityBase.Extensions
             }
 
             return s;
+        }
+
+        [DebuggerStepThrough]
+        public static string GetFullPath(this string path, string rootPath)
+        {
+            if (!Path.IsPathRooted(path))
+            {
+                return Path.GetFullPath(
+                    Path.Combine(rootPath.RemoveTrailingSlash(), path.RemoveLeadingSlash()));
+            }
+
+            return Path.GetFullPath(path);
         }
     }
 }

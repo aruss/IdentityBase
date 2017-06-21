@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Configuration;
 using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Configuration;
@@ -14,7 +15,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using ServiceBase;
 using ServiceBase.Configuration;
-using System;
 
 //var myService = (IService)DependencyResolver.Current.GetService(typeof(IService));
 
@@ -62,7 +62,9 @@ namespace IdentityBase.Public
 
             _logger.LogInformation("Services Configure");
 
-            var options = Configuration.GetSection("App").Get<ApplicationOptions>() ?? new ApplicationOptions();
+            var options = Configuration.GetSection("App")
+                .Get<ApplicationOptions>() ?? new ApplicationOptions();
+
             services.AddSingleton(Configuration);
             services.AddSingleton(options);
             services.AddIdentityServer(Configuration, _logger, _environment);
@@ -79,7 +81,7 @@ namespace IdentityBase.Public
             });
 
             services.AddRestApi(options);
-            services.AddMvc(options);
+            services.AddMvc(options, _environment);
 
             // Update current instances
             Current.Configuration = Configuration;
@@ -90,7 +92,8 @@ namespace IdentityBase.Public
             builder.Populate(services);
             if (Configuration.ContainsSection("Services"))
             {
-                builder.RegisterModule(new ConfigurationModule(Configuration.GetSection("Services")));
+                builder.RegisterModule(
+                    new ConfigurationModule(Configuration.GetSection("Services")));
             }
             _applicationContainer = builder.Build();
             _applicationContainer.ValidateDataLayerServices(_logger);
@@ -132,7 +135,7 @@ namespace IdentityBase.Public
             else
             {
                 app.UseExceptionHandler("/error");
-            }            
+            }
 
             app.UseCors("CorsPolicy");
             app.UseMiddleware<RequestIdMiddleware>();

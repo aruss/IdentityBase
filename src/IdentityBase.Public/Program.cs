@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using ServiceBase.Configuration;
 using ServiceBase.Extensions;
-using System;
-using System.IO;
 
 namespace IdentityBase.Public
 {
@@ -17,10 +17,15 @@ namespace IdentityBase.Public
 
         public static Serilog.Core.Logger Logger; 
 
-        public static void RunIdentityBase<TStartup>(string contentRoot, string[] args) where TStartup : Startup
+        public static void RunIdentityBase<TStartup>(
+            string contentRoot,
+            string[] args) where TStartup : Startup
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var configuration = ConfigurationSetup.Configure(contentRoot, environment, (confBuilder) =>
+            var environment = Environment
+                .GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var configuration = ConfigurationSetup
+                .Configure(contentRoot, environment, (confBuilder) =>
             {
                 if ("Development".Equals(environment, StringComparison.OrdinalIgnoreCase))
                 {
