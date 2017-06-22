@@ -95,7 +95,7 @@ namespace IdentityBase.Configuration
 
     public static class ApplicationOptionsExtensions
     {
-        public static bool IsRestApiEnabled(this ApplicationOptions options)
+        public static bool IsWebApiEnabled(this ApplicationOptions options)
         {
             return options.EnableUserInviteEndpoint; 
         }

@@ -8,22 +8,24 @@ using System.Linq;
 
 namespace IdentityBase.Public
 {
-    public static class StartupRestApi
+    public static class StartupWebApi
     {
-        public static void AddRestApi(this IServiceCollection services, ApplicationOptions options)
+        public static void AddWebApi(this IServiceCollection services, ApplicationOptions options)
         {
-            if (options.IsRestApiEnabled())
+            if (options.IsWebApiEnabled())
             {
                 services.AddAuthorization(authOptions =>
                 {
-                    authOptions.AddScopePolicies<ApiController>(options.PublicUrl);
+                    authOptions.AddScopePolicies<ApiController>(
+                        options.PublicUrl,
+                        fromReferenced: true);
                 });
             }
         }
 
-        public static void UseRestApi(this IApplicationBuilder app, ApplicationOptions options)
+        public static void UseWebApi(this IApplicationBuilder app, ApplicationOptions options)
         {
-            if (options.IsRestApiEnabled())
+            if (options.IsWebApiEnabled())
             {
                 app.Map("/api", appApi =>
                 {
@@ -34,7 +36,7 @@ namespace IdentityBase.Public
                         Authority = options.PublicUrl,
                         RequireHttpsMetadata = false,
                         AllowedScopes = ScopeAuthorizeHelper
-                            .GetAllScopeAuthorizeAttributes<ApiController>()
+                            .GetAllScopeAuthorizeAttributes<ApiController>(fromReferenced: true)
                             .Select(s => s.Scope).ToArray(),
                         AutomaticAuthenticate = true
                     });

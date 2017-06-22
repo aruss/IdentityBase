@@ -12,7 +12,7 @@
     <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
-        <dependency id="ServiceBase" version="1.0.83" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase" version="1.0.85" exclude="Build,Analyzers" />
         <dependency id="Autofac.Extensions.DependencyInjection" version="4.1.0" exclude="Build,Analyzers" />
         <dependency id="IdentityServer4" version="1.5.2" exclude="Build,Analyzers" />
       </group>

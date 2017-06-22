@@ -80,7 +80,7 @@ namespace IdentityBase.Public
                         Configuration.GetValue<string>("Host:Cors")));
             });
 
-            services.AddRestApi(options);
+            services.AddWebApi(options);
             services.AddMvc(options, _environment);
 
             // Update current instances
@@ -180,7 +180,7 @@ namespace IdentityBase.Public
 
             #endregion Use third party authentication
 
-            app.UseRestApi(options);
+            app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
 
             appLifetime.ApplicationStarted.Register(() =>
