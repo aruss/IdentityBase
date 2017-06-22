@@ -30,7 +30,7 @@ namespace IdentityBase.Public
                 {
                     razor.ViewLocationExpanders.Add(
                         new Razor.CustomViewLocationExpander(
-                            appOptions.ThemePath.GetFullPath(environment.ContentRootPath)
+                            appOptions.ThemePath?.GetFullPath(environment.ContentRootPath)
                         )
                     );
                 })

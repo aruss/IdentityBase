@@ -17,7 +17,7 @@ namespace IdentityBase.Public.Razor
         // http://benfoster.io/blog/asp-net-core-themes-and-multi-tenancy
         public CustomViewLocationExpander(string themePath = null)
         {
-            _themePath = themePath.EnsureTrailingSlash();
+            _themePath = themePath?.EnsureTrailingSlash();
         }
 
         public IEnumerable<string> ExpandViewLocations(
