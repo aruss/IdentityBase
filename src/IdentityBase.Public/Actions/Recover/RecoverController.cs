@@ -110,7 +110,8 @@ namespace IdentityBase.Public.Actions.Recover
 
             var vm = new ConfirmViewModel
             {
-                Key = key
+                Key = key,
+                Email = result.UserAccount.Email
             };
 
             return View(vm);
