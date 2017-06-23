@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading.Tasks;
 using IdentityBase.Public.EntityFramework.Entities;
 using IdentityBase.Public.EntityFramework.Extensions;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Options;
-using System;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityBase.Public.EntityFramework.DbContexts
 {
@@ -12,11 +12,13 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
     {
         private readonly EntityFrameworkOptions _options;
 
-        public UserAccountDbContext(DbContextOptions<UserAccountDbContext> dbContextOptions, EntityFrameworkOptions options)
+        public UserAccountDbContext(
+            DbContextOptions<UserAccountDbContext> dbContextOptions, 
+            EntityFrameworkOptions options)
             : base(dbContextOptions)
         {
-            if (options == null) throw new ArgumentNullException(nameof(_options));
-            _options = options;
+            _options = options ?? 
+                throw new ArgumentNullException(nameof(_options));
         }
 
         public DbSet<UserAccount> UserAccounts { get; set; }

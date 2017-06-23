@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 using IdentityBase.Public.EntityFramework.Entities;
 using IdentityBase.Public.EntityFramework.Extensions;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Options;
-using System;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityBase.Public.EntityFramework.DbContexts
 {
@@ -15,11 +15,13 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
     {
         private readonly EntityFrameworkOptions _storeOptions;
 
-        public PersistedGrantDbContext(DbContextOptions<PersistedGrantDbContext> options, EntityFrameworkOptions storeOptions)
+        public PersistedGrantDbContext(
+            DbContextOptions<PersistedGrantDbContext> options,
+            EntityFrameworkOptions storeOptions)
             : base(options)
         {
-            if (storeOptions == null) throw new ArgumentNullException(nameof(storeOptions));
-            _storeOptions = storeOptions;
+            _storeOptions = storeOptions ??
+                throw new ArgumentNullException(nameof(storeOptions));
         }
 
         public DbSet<PersistedGrant> PersistedGrants { get; set; }

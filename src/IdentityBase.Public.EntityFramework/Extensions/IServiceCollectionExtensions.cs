@@ -1,19 +1,21 @@
-﻿using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System;
 using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Public.EntityFramework.Services;
 using IdentityBase.Public.EntityFramework.Stores;
 using IdentityBase.Services;
-using System;
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityBase.Public.EntityFramework
 {
     public static class IServiceCollectionExtensions
     {
-        public static void AddEntityFrameworkStores(this IServiceCollection services, Action<EntityFrameworkOptions> configure = null)
+        public static void AddEntityFrameworkStores(
+            this IServiceCollection services,
+            Action<EntityFrameworkOptions> configure = null)
         {
             // services.Configure<EntityFrameworkOptions>(configure);
             var options = new EntityFrameworkOptions();
@@ -22,8 +24,13 @@ namespace IdentityBase.Public.EntityFramework
             services.AddEntityFrameworkStores(options);
         }
 
-        public static void AddEntityFrameworkStores(this IServiceCollection services, EntityFrameworkOptions options)
+        public static void AddEntityFrameworkStores(
+            this IServiceCollection services,
+            EntityFrameworkOptions options)
         {
+            // TODO: add only if migration is activated
+            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
+
             services.AddConfigurationStore(options);
             services.AddOperationalStore(options);
             services.AddUserAccountStore(options);
@@ -31,21 +38,23 @@ namespace IdentityBase.Public.EntityFramework
             services.AddSingleton(options);
         }
 
-        public static void AddConfigBasedStoreInitializer(this IServiceCollection services, EntityFrameworkOptions options)
-        {
-            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
-            services.AddScoped<ConfigurationDbContext>();
+        public static void AddConfigBasedStoreInitializer(
+            this IServiceCollection services,
+            EntityFrameworkOptions options)
+        {   
             services.AddTransient<IStoreInitializer, ConfigBasedStoreInitializer>();
         }
 
-        public static void AddExampleDataStoreInitializer(this IServiceCollection services, EntityFrameworkOptions options)
+        public static void AddExampleDataStoreInitializer(
+            this IServiceCollection services, 
+            EntityFrameworkOptions options)
         {
-            services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
-            services.AddScoped<ConfigurationDbContext>();
             services.AddTransient<IStoreInitializer, ExampleDataStoreInitializer>();
         }
 
-        public static void AddExample(this IServiceCollection services, EntityFrameworkOptions options)
+        public static void AddExample(
+            this IServiceCollection services, 
+            EntityFrameworkOptions options)
         {
             services.AddDbContext<MigrationDbContext>(options.DbContextOptions);
             services.AddScoped<ConfigurationDbContext>();
@@ -53,7 +62,9 @@ namespace IdentityBase.Public.EntityFramework
         }
 
 
-        internal static void AddConfigurationStore(this IServiceCollection services, EntityFrameworkOptions options)
+        internal static void AddConfigurationStore(
+            this IServiceCollection services,
+            EntityFrameworkOptions options)
         {
             services.AddDbContext<ConfigurationDbContext>(options.DbContextOptions);
             services.AddScoped<IConfigurationDbContext, ConfigurationDbContext>();
@@ -63,7 +74,9 @@ namespace IdentityBase.Public.EntityFramework
             services.AddTransient<ICorsPolicyService, CorsPolicyService>();
         }
 
-        internal static void AddOperationalStore(this IServiceCollection services, EntityFrameworkOptions options)
+        internal static void AddOperationalStore(
+            this IServiceCollection services, 
+            EntityFrameworkOptions options)
         {
             services.AddDbContext<PersistedGrantDbContext>(options.DbContextOptions);
             services.AddScoped<IPersistedGrantDbContext, PersistedGrantDbContext>();
@@ -75,7 +88,9 @@ namespace IdentityBase.Public.EntityFramework
             }
         }
 
-        internal static void AddUserAccountStore(this IServiceCollection services, EntityFrameworkOptions options)
+        internal static void AddUserAccountStore(
+            this IServiceCollection services, 
+            EntityFrameworkOptions options)
         {
             services.AddDbContext<UserAccountDbContext>(options.DbContextOptions);
             services.AddScoped<IUserAccountDbContext, UserAccountDbContext>();

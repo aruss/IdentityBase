@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using IdentityBase.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityBase.Services;
 
 namespace IdentityBase.Extensions
 {
@@ -8,7 +8,8 @@ namespace IdentityBase.Extensions
     {
         public static IApplicationBuilder InitializeStores(this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var initializer = serviceScope.ServiceProvider.GetService<IStoreInitializer>();
                 if (initializer != null)
@@ -22,7 +23,8 @@ namespace IdentityBase.Extensions
 
         public static IApplicationBuilder CleanupStores(this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var initializer = serviceScope.ServiceProvider.GetService<IStoreInitializer>();
                 if (initializer != null)
