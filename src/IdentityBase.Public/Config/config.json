@@ -21,15 +21,13 @@
       {
         "Name": "RollingFile",
         "Args": {
-          "pathFormat": "./TempData/log-{Date}.txt",
+          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+          "pathFormat": "./TempData/log-identity.json",
           "fileSizeLimitBytes": 1234567
         }
       }
     ],
-    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
-    "Properties": {
-      "Application": "IdentityBase"
-    }
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
   },
   "EntityFramework": {
     "MigrateDatabase": false,

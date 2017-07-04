@@ -47,7 +47,7 @@ namespace IdentityBase.Public
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
             if (Configuration == null)
             {
@@ -108,7 +108,7 @@ namespace IdentityBase.Public
             return new AutofacServiceProvider(_applicationContainer);
         }
 
-        public void Configure(IApplicationBuilder app)
+        public virtual void Configure(IApplicationBuilder app)
         {
             _logger.LogInformation("Application Configure");
 
@@ -116,6 +116,8 @@ namespace IdentityBase.Public
             var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
             var appLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
             var options = app.ApplicationServices.GetRequiredService<ApplicationOptions>();
+
+            app.UseMiddleware<RequestIdMiddleware>();
 
             if (Program.Logger != null)
             {
@@ -127,7 +129,16 @@ namespace IdentityBase.Public
                    .ReadFrom.ConfigurationSection(Configuration.GetSection("Serilog"))
                    .CreateLogger());
             }
-
+            
+            app.Use(async (ctx, next) =>
+            {
+                using (Serilog.Context.LogContext
+                    .PushProperty("CorelationId", ctx.TraceIdentifier))
+                {
+                    await next();
+                }
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -138,7 +149,6 @@ namespace IdentityBase.Public
             }
 
             app.UseCors("CorsPolicy");
-            app.UseMiddleware<RequestIdMiddleware>();
             app.UseStaticFiles(Configuration, _logger, _environment);
 
             app.UseIdentityServer();
