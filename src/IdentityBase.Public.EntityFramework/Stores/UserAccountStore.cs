@@ -23,6 +23,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
         public UserAccountStore(UserAccountDbContext context, ILogger<UserAccountStore> logger)
         {
+
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             _context = context;

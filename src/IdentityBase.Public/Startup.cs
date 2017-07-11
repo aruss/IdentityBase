@@ -113,31 +113,12 @@ namespace IdentityBase.Public
             _logger.LogInformation("Application Configure");
 
             var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
-            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
             var appLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
             var options = app.ApplicationServices.GetRequiredService<ApplicationOptions>();
 
             app.UseMiddleware<RequestIdMiddleware>();
 
-            if (Program.Logger != null)
-            {
-                loggerFactory.AddSerilog(Program.Logger);
-            }
-            else if (Configuration.ContainsSection("Serilog"))
-            {
-                loggerFactory.AddSerilog(new LoggerConfiguration()
-                   .ReadFrom.ConfigurationSection(Configuration.GetSection("Serilog"))
-                   .CreateLogger());
-            }
-            
-            app.Use(async (ctx, next) =>
-            {
-                using (Serilog.Context.LogContext
-                    .PushProperty("CorelationId", ctx.TraceIdentifier))
-                {
-                    await next();
-                }
-            });
+            app.UseLogging(Configuration); 
             
             if (env.IsDevelopment())
             {
