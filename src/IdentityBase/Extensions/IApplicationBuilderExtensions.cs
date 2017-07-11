@@ -34,6 +34,6 @@ namespace IdentityBase.Extensions
             }
 
             return app;
-        }        
+        }
     }
 }

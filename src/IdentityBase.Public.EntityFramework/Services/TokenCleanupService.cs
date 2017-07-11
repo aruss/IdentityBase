@@ -10,16 +10,18 @@ using IdentityBase.Public.EntityFramework.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityBase.Public.EntityFramework
+namespace IdentityBase.Public.EntityFramework.Services
 {
-    internal class TokenCleanup
+    internal class TokenCleanupService
     {
-        private readonly ILogger<TokenCleanup> _logger;
+        private readonly ILogger<TokenCleanupService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly TimeSpan _interval;
         private CancellationTokenSource _source;
 
-        public TokenCleanup(IServiceProvider serviceProvider, ILogger<TokenCleanup> logger,
+        public TokenCleanupService(
+            IServiceProvider serviceProvider,
+            ILogger<TokenCleanupService> logger,
             EntityFrameworkOptions options)
         {
             if (options == null)

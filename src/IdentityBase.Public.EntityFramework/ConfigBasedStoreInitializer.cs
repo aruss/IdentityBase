@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IdentityBase.Configuration;
@@ -7,10 +8,12 @@ using IdentityBase.Models;
 using IdentityBase.Public.EntityFramework.Interfaces;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
+using IdentityBase.Public.EntityFramework.Services;
 using IdentityBase.Services;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -26,6 +29,7 @@ namespace IdentityBase.Public.EntityFramework
         private readonly IPersistedGrantDbContext _persistedGrantDbContext;
         private readonly IUserAccountDbContext _userAccountDbContext;
         private readonly IHostingEnvironment _environment;
+        private readonly IServiceProvider _serviceProvider;
 
         public ConfigBasedStoreInitializer(
             EntityFrameworkOptions options,
@@ -35,7 +39,8 @@ namespace IdentityBase.Public.EntityFramework
             IConfigurationDbContext configurationDbContext,
             IPersistedGrantDbContext persistedGrantDbContext,
             IUserAccountDbContext userAccountDbContext,
-            IHostingEnvironment environment)
+            IHostingEnvironment environment,
+            IServiceProvider serviceProvider)
         {
             _options = options;
             _appOptions = appOptions;
@@ -46,14 +51,19 @@ namespace IdentityBase.Public.EntityFramework
             _userAccountDbContext = userAccountDbContext;
             _environment = environment;
 
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(
+               nameof(serviceProvider));
+
             _logger.LogDebug("ConfigBasedStoreInitializer initialized");
         }
 
+        /// <summary>
+        /// Creates a database tables and seeds example data if needed
+        /// </summary>
         public void InitializeStores()
         {
-            _logger
-                .LogDebug($"Initialize Stores, MigrateDatabase: " +
-                $"{_options.MigrateDatabase}, SeedExampleData: {_options.SeedExampleData}");
+            _logger.LogDebug($"Initialize Stores, MigrateDatabase: " +
+                "${ _options.MigrateDatabase}, SeedExampleData: { _options.SeedExampleData}");
 
             // Only a leader may migrate or seed 
             if (_appOptions.Leader)
@@ -71,21 +81,43 @@ namespace IdentityBase.Public.EntityFramework
                     this.EnsureSeedData();
                     _logger.LogDebug("Initial data seeded");
                 }
+
+                if (_options.CleanupTokens)
+                {
+                    using (var serviceScope = _serviceProvider
+                        .GetRequiredService<IServiceScopeFactory>().CreateScope())
+                    {
+                        serviceScope.ServiceProvider
+                            .GetService<TokenCleanupService>().Start();
+                    }
+                }
             }
         }
 
         public void CleanupStores()
         {
-            _logger
-                .LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}, " +
+            _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}, " +
                 $"EnsureDeleted: {_options.EnsureDeleted}");
 
             // Only leader may delete the database 
-            if (_appOptions.Leader && _options.EnsureDeleted)
+            if (_appOptions.Leader)
             {
-                _logger.LogDebug("Ensure deleting database");
-                _migrationDbContext.Database.EnsureDeleted();
-                _logger.LogDebug("Database deleted");
+                if (_options.EnsureDeleted)
+                {
+                    _logger.LogDebug("Ensure deleting database");
+                    _migrationDbContext.Database.EnsureDeleted();
+                    _logger.LogDebug("Database deleted");
+                }
+
+                if (_options.CleanupTokens)
+                {
+                    using (var serviceScope = _serviceProvider
+                        .GetRequiredService<IServiceScopeFactory>().CreateScope())
+                    {
+                        serviceScope.ServiceProvider
+                            .GetService<TokenCleanupService>().Stop();
+                    }
+                }
             }
         }
 

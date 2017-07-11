@@ -84,7 +84,8 @@ namespace IdentityBase.Public.EntityFramework
 
             if (options.CleanupTokens)
             {
-                services.AddSingleton<TokenCleanup>();
+                // Adding as singleton since it has internal clock work
+                services.AddSingleton<TokenCleanupService>();
             }
         }
 

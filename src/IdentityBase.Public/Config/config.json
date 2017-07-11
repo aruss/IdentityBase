@@ -33,6 +33,7 @@
     "MigrateDatabase": false,
     "SeedExampleData": true,
     "EnsureDeleted": false,
+    "CleanupTokens": true,
     "SeedExampleDataPath": "./Config",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
