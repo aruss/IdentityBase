@@ -1,0 +1,12 @@
+version: "2.0"
+
+# starts identitybase with exposed ports for local development use
+
+services:
+  identitybase-svc:  
+    container_name: identitybase
+    image: docker.econduct.de/identitybase/identitybase
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
