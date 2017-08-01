@@ -24,33 +24,36 @@ IdentityBase is a [Secure Token Service (STS)](https://en.wikipedia.org/wiki/Sec
 #### Upcoming features
 * Authentication API
 * Multitenancy
-* Administration dashboard
+* Administration dashboard (WIP: [UiBase](https://github.com/aruss/UiBase))
 * Localization
 * Configuration wizzard
 * Two-Factor authentication
 * SMS OTP authentication
 * MySQL support
-* Event Messaging Support for pache Kafka, RabbitMQ
+* Event Messaging Support for Apache Kafka, RabbitMQ
 * Plugin support
 
 ### Requirements
 
 * MSSQL or PostgreSQL (Can also run in memory only)
-* SMTP or SendGrid
+* SMTP or SendGrid Account
 * HTTPS
 
 ### Platform
 
 IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
-    
+
 ### How to build
 
 * [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1
-* Run `sh ./build.sh`
+* Use Visual Studio 2017 to build it
 
 ### Docker support
 
-After you run the `build.sh` script navigate to `./docker` directory and run `sh ./build-identitybase-public.sh` then you can start the container by running `docker run -it --rm -p 5000:5000 servicebase/identitybase` it will start the IdentiIdentityBase on port `http://localhost:5000`
+You can either build it from source code or just start it from [Docker Hub](https://hub.docker.com/r/econduct/identitybase/)
+Run the `build.sh` script in `./docker` directory and then run following Docker command.
+
+  `docker run -it --rm -p 5000:5000 econduct/identitybase`
 
 ### Acknowledgements
 
