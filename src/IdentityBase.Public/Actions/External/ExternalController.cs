@@ -1,19 +1,17 @@
-﻿using IdentityBase.Configuration;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using IdentityBase.Configuration;
 using IdentityBase.Models;
 using IdentityBase.Services;
 using IdentityModel;
-using IdentityServer4;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using IdentityServer4;
 
 namespace IdentityBase.Public.Actions.Login
 {
@@ -68,16 +66,16 @@ namespace IdentityBase.Public.Actions.Login
                     Name = "id_token", Value = id_token } });
             }
 
-            // issue authentication cookie for user
-            await HttpContext.Authentication.SignInAsync(
+            // Issue authentication cookie for user
+            await HttpContext.SignInAsync(
                 userAccount.Id.ToString(), userAccount.Email, provider, props,
                 additionalClaims.ToArray());
 
-            // delete temporary cookie used during external authentication
+            // Delete temporary cookie used during external authentication
             await HttpContext.Authentication.SignOutAsync(
                 IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
-            // validate return URL and redirect back to authorization endpoint
+            // Validate return URL and redirect back to authorization endpoint
             if (_interaction.IsValidReturnUrl(returnUrl))
             {
                 return Redirect(returnUrl);
@@ -89,7 +87,7 @@ namespace IdentityBase.Public.Actions.Login
         [HttpGet("external-callback")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var info = await HttpContext.Authentication.GetAuthenticateInfoAsync(
+            var info = await HttpContext.GetAuthenticateInfoAsync(
                 IdentityServerConstants.ExternalCookieAuthenticationScheme);
             var tempUser = info?.Principal;
             if (tempUser == null)

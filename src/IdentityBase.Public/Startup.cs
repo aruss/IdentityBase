@@ -9,13 +9,15 @@ using IdentityBase.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using ServiceBase;
 using ServiceBase.Configuration;
-
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection;
 //var myService = (IService)DependencyResolver.Current.GetService(typeof(IService));
 
 namespace IdentityBase.Public
@@ -72,6 +74,7 @@ namespace IdentityBase.Public
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddCors(corsOpts =>
             {
@@ -82,6 +85,12 @@ namespace IdentityBase.Public
 
             services.AddWebApi(options);
             services.AddMvc(options, _environment);
+            
+            // https://github.com/aspnet/Security/issues/1310
+            services
+                .AddAuthentication(
+                    IdentityServerConstants.ExternalCookieAuthenticationScheme)
+                .AddCookie(); 
 
             // Update current instances
             Current.Configuration = Configuration;
@@ -118,8 +127,8 @@ namespace IdentityBase.Public
 
             app.UseMiddleware<RequestIdMiddleware>();
 
-            app.UseLogging(Configuration); 
-            
+            app.UseLogging(Configuration);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -131,46 +140,8 @@ namespace IdentityBase.Public
 
             app.UseCors("CorsPolicy");
             app.UseStaticFiles(Configuration, _logger, _environment);
-
             app.UseIdentityServer();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                AutomaticAuthenticate = false,
-                AutomaticChallenge = false
-            });
-
-            #region Use third party authentication
-
-            if (!String.IsNullOrWhiteSpace(Configuration["Authentication:Google:ClientId"]))
-            {
-                _logger.LogInformation("Registering Google authentication scheme");
-
-                app.UseGoogleAuthentication(new GoogleOptions
-                {
-                    AuthenticationScheme = "Google",
-                    SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                    ClientId = Configuration["Authentication:Google:ClientId"],
-                    ClientSecret = Configuration["Authentication:Google:ClientSecret"]
-                });
-            }
-
-            if (!String.IsNullOrWhiteSpace(Configuration["Authentication:Facebook:AppId"]))
-            {
-                _logger.LogInformation("Registering Facebook authentication scheme");
-
-                app.UseFacebookAuthentication(new FacebookOptions()
-                {
-                    AuthenticationScheme = "Facebook",
-                    SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                    AppId = Configuration["Authentication:Facebook:AppId"],
-                    AppSecret = Configuration["Authentication:Facebook:AppSecret"]
-                });
-            }
-
-            #endregion Use third party authentication
-
+            app.UseAuthentication();
             app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
 

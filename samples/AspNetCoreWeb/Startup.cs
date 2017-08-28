@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿//using ServiceBase.Notification.Email;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-//using ServiceBase.Notification.Email;
-using System;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace AspNetCoreWeb
 {
@@ -18,10 +19,15 @@ namespace AspNetCoreWeb
 
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()            
+            var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
-               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+               .AddJsonFile("appsettings.json",
+                    optional: true,
+                    reloadOnChange: true
+                )
+               .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
+                    optional: true
+                );
 
             /*if (env.IsDevelopment())
             {
@@ -41,13 +47,81 @@ namespace AspNetCoreWeb
                 .AddMvc()
                 .AddRazorOptions(razor =>
                 {
-                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander());
+                    razor.ViewLocationExpanders
+                        .Add(new UI.CustomViewLocationExpander());
                 });
 
-           //services.AddTransient<IEmailService, DefaultEmailService>();
+            services
+                .AddAuthentication(authOptions =>
+                {
+                    authOptions.DefaultScheme =
+                        CookieAuthenticationDefaults.AuthenticationScheme;
+
+                    authOptions.DefaultChallengeScheme =
+                        OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie(cookieOptions =>
+                {
+
+                })
+                .AddOpenIdConnect(oidcOptions =>
+                {
+                    // oidcOptions.AuthenticationScheme = "oidc";
+                    oidcOptions.SignInScheme = "Cookies";
+                    oidcOptions.Authority = "http://localhost:5000";
+                    oidcOptions.RequireHttpsMetadata = false;
+                    oidcOptions.SignedOutRedirectUri = "http://localhost:3308/";
+                    oidcOptions.ClientId = "mvc";
+                    oidcOptions.ClientSecret = "secret";
+                    oidcOptions.ResponseType = "code id_token";
+                    oidcOptions.GetClaimsFromUserInfoEndpoint = true;
+                    oidcOptions.SaveTokens = true;
+                    oidcOptions.Events = new OpenIdConnectEvents
+                    {
+                        OnTicketReceived = async context =>
+                        {
+                            var profileId = Guid.Parse(context.Principal
+                                .FindFirst("sub").Value);
+
+                            var emailClaim = context?.Principal?
+                                .FindFirst("email");
+
+                            // Load current domain profile/user object if dont
+                            // find any create one                       
+                        },
+
+                        // Provide idTokenHint and PostLogoutRedirectUri for
+                        // better logout flow
+                        OnRedirectToIdentityProviderForSignOut
+                            = async context =>
+                        {
+                            var idTokenHint = await context.HttpContext
+                                .GetTokenAsync("id_token");
+
+                            if (idTokenHint != null)
+                            {
+                                context.ProtocolMessage
+                                    .IdTokenHint = idTokenHint;
+
+                                context.ProtocolMessage
+                                    .PostLogoutRedirectUri = "http://localhost:3308/";
+                            }
+                        }
+                    };
+
+                    oidcOptions.Scope.Clear();
+                    oidcOptions.Scope.Add("openid");
+                    oidcOptions.Scope.Add("profile");
+                    oidcOptions.Scope.Add("api1");
+                });
+
+            //services.AddTransient<IEmailService, DefaultEmailService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -56,55 +130,6 @@ namespace AspNetCoreWeb
 
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationScheme = "Cookies",
-                AutomaticAuthenticate = true
-            });
-
-            // https://github.com/IdentityServer/IdentityServer3/issues/841
-            var oidcOptions = new OpenIdConnectOptions
-            {
-                AuthenticationScheme = "oidc",
-                SignInScheme = "Cookies",
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
-                PostLogoutRedirectUri = "http://localhost:3308/",
-                ClientId = "mvc",
-                ClientSecret = "secret",
-                ResponseType = "code id_token",
-                GetClaimsFromUserInfoEndpoint = true,
-                SaveTokens = true,
-                Events = new OpenIdConnectEvents
-                {
-                    OnTicketReceived = async context =>
-                    {
-                        var profileId = Guid.Parse(context.Ticket.Principal.FindFirst("sub").Value);
-                        var emailClaim = context?.Ticket?.Principal?.FindFirst("email");
-
-                        // Load current domain profile/user object if dont find any create one
-                    },
-                    // Provide idTokenHint and PostLogoutRedirectUri for better logout flow
-                    OnRedirectToIdentityProviderForSignOut = async context =>
-                    {
-                        var idTokenHint = await context.HttpContext.Authentication.GetTokenAsync("id_token");
-                        if (idTokenHint != null)
-                        {
-                            context.ProtocolMessage.IdTokenHint = idTokenHint;
-                            context.ProtocolMessage.PostLogoutRedirectUri = "http://localhost:3308/";
-                        }
-                    }
-                }
-            };
-
-            oidcOptions.Scope.Clear();
-            oidcOptions.Scope.Add("openid");
-            oidcOptions.Scope.Add("profile");
-            oidcOptions.Scope.Add("api1");
-
-            app.UseOpenIdConnectAuthentication(oidcOptions);
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

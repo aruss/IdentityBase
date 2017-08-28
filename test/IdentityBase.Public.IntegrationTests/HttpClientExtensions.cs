@@ -24,7 +24,7 @@ namespace IdentityBase.Public.IntegrationTests
             }
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            return await client.PutAsync("/api/invitations", content);
+            return await client.PutAsync(requestUri, content);
         }
 
         public static async Task<HttpResponseMessage> PostFormAsync(

@@ -18,8 +18,8 @@ namespace AspNetCoreWeb.Controllers
         [Authorize]
         public async Task<IActionResult> Secure()
         {
-            ViewBag.IdentityToken = await HttpContext.Authentication.GetTokenAsync("id_token");
-            ViewBag.AccessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            ViewBag.IdentityToken = await HttpContext.GetTokenAsync("id_token");
+            ViewBag.AccessToken = await HttpContext.GetTokenAsync("access_token");
 
             return View();
         }
@@ -27,7 +27,7 @@ namespace AspNetCoreWeb.Controllers
         [Authorize]
         public async Task<IActionResult> CallApi()
         {
-            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
@@ -40,7 +40,7 @@ namespace AspNetCoreWeb.Controllers
         [Authorize]
         public async Task<IActionResult> CallIdentityPublicApi()
         {
-            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 

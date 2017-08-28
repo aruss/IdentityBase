@@ -41,11 +41,11 @@ IdentityBase is a [Secure Token Service (STS)](https://en.wikipedia.org/wiki/Sec
 
 ### Platform
 
-IdentityBase is built against ASP.NET Core 1.1 using the RTM tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
+IdentityBase is built against ASP.NET Core 2.0 using the RTM tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
 
 ### How to build
 
-* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 1.1
+* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 2.0
 * Use Visual Studio 2017 to build it
 
 ### Docker support

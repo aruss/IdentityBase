@@ -68,6 +68,8 @@ namespace IdentityBase.Public.IntegrationTests.Tests
                 {
                     var elm = doc2.QuerySelector(".alert.alert-danger");
 
+                    throw new NotImplementedException();
+
                     // TODO: check the error message 
                     // elm.TextContent.Contains()
                 }

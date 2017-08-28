@@ -23,7 +23,7 @@ namespace AspNetCoreWeb.UI.InviteUser
         [Authorize]
         public async Task<IActionResult> Invited(InviteInputModel inputModel)
         {
-            var accessToken = await HttpContext.Authentication.GetTokenAsync("access_token");
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 

@@ -8,6 +8,7 @@ using ServiceBase.Logging;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 
 namespace IdentityBase.Public.IntegrationTests
 {
@@ -59,15 +60,21 @@ namespace IdentityBase.Public.IntegrationTests
 
             var logger = new NullLogger<Startup>();
 
-            var startup = new Startup(environment, logger);
-            startup.Configuration = configuration;
+            var startup = new Startup(environment, logger)
+            {
+                Configuration = configuration
+            };
+
             var builder = new WebHostBuilder()
                 .UseContentRoot(contentRoot)
                 .ConfigureServices(services =>
                 {
                     configureServices?.Invoke(services);
                     services.AddSingleton<IStartup>(startup);
-                });
+                })
+            // WORKARROUND: https://github.com/aspnet/Hosting/issues/1137#issuecomment-323234886
+                .UseSetting(WebHostDefaults.ApplicationKey,
+                    typeof(Startup).GetTypeInfo().Assembly.FullName);
 
             return new TestServer(builder);
         }
