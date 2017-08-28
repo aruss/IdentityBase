@@ -78,7 +78,7 @@ namespace IdentityBase.Public.Actions.Recover
                         {
                             ReturnUrl = model.ReturnUrl,
                             Provider = userAccount.Email.Split('@').LastOrDefault()
-                        }); 
+                        });
                     }
                     else
                     {
@@ -118,6 +118,7 @@ namespace IdentityBase.Public.Actions.Recover
         }
 
         [HttpPost("recover/confirm/{key}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
             var result = await _userAccountService.HandleVerificationKeyAsync(model.Key,
@@ -129,6 +130,15 @@ namespace IdentityBase.Public.Actions.Recover
 
                 ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new ConfirmViewModel
+                {
+                    Key = model.Key,
+                    Email = result.UserAccount.Email
+                }); 
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
@@ -198,7 +208,7 @@ namespace IdentityBase.Public.Actions.Recover
 
             return vm;
         }
-              
+
         [NonAction]
         internal async Task SendEmailAsync(UserAccount userAccount)
         {
