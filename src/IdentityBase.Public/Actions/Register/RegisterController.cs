@@ -60,47 +60,47 @@ namespace IdentityBase.Public.Actions.Register
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RegisterInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var email = model.Email.ToLower();
-
-                // Check if user with same email exists
-                var userAccount = await _userAccountService.LoadByEmailWithExternalAsync(email);
-
-                // If user dont exists create a new one
-                if (userAccount == null)
-                {
-                    return await this.TryCreateNewUserAccount(userAccount, model);
-                }
-                // User is just disabled by whatever reason
-                else if (!userAccount.IsLoginAllowed)
-                {
-                    ModelState.AddModelError("Your user account has be disabled");
-                }
-                // If user has a password then its a local account
-                else if (userAccount.HasPassword())
-                {
-                    // User has to follow a link in confirmation mail
-                    if (_applicationOptions.RequireLocalAccountVerification && !userAccount.IsEmailVerified)
-                    {
-                        ModelState.AddModelError("Please confirm your email account");
-
-                        // TODO: show link for resent confirmation link
-                    }
-
-                    // If user has a password then its a local account
-                    ModelState.AddModelError("User already exists");
-                }
-                else
-                {
-                    // External account with same email
-                    return await TryMergeWithExistingUserAccount(userAccount, model);
-                }
-
-                return View(await CreateViewModelAsync(model, userAccount));
+                return View(await CreateViewModelAsync(model));
             }
 
-            return View(await CreateViewModelAsync(model));
+            var email = model.Email.ToLower();
+
+            // Check if user with same email exists
+            var userAccount = await _userAccountService.LoadByEmailWithExternalAsync(email);
+
+            // If user dont exists create a new one
+            if (userAccount == null)
+            {
+                return await this.TryCreateNewUserAccount(userAccount, model);
+            }
+            // User is just disabled by whatever reason
+            else if (!userAccount.IsLoginAllowed)
+            {
+                ModelState.AddModelError("Your user account has be disabled");
+            }
+            // If user has a password then its a local account
+            else if (userAccount.HasPassword())
+            {
+                // User has to follow a link in confirmation mail
+                if (_applicationOptions.RequireLocalAccountVerification && !userAccount.IsEmailVerified)
+                {
+                    ModelState.AddModelError("Please confirm your email account");
+
+                    // TODO: show link for resent confirmation link
+                }
+
+                // If user has a password then its a local account
+                ModelState.AddModelError("User already exists");
+            }
+            else
+            {
+                // External account with same email
+                return await TryMergeWithExistingUserAccount(userAccount, model);
+            }
+
+            return View(await CreateViewModelAsync(model, userAccount));
         }
 
         [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
@@ -154,7 +154,7 @@ namespace IdentityBase.Public.Actions.Register
         {
             if (!_applicationOptions.EnableUserInviteEndpoint)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var result = await _userAccountService.HandleVerificationKeyAsync(model.Key,
@@ -172,7 +172,7 @@ namespace IdentityBase.Public.Actions.Register
             _userAccountService.SetEmailVerified(result.UserAccount);
             _userAccountService.AddLocalCredentials(result.UserAccount, model.Password);
             await _userAccountService.UpdateUserAccountAsync(result.UserAccount);
-            
+
             if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 // TODO: validate 
@@ -191,7 +191,7 @@ namespace IdentityBase.Public.Actions.Register
                 }
 
                 return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
-            }       
+            }
         }
 
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
@@ -349,7 +349,7 @@ namespace IdentityBase.Public.Actions.Register
                 }
                 else
                 {
-                    return View("Success", CreateSuccessViewModel(userAccount, model.ReturnUrl)); 
+                    return View("Success", CreateSuccessViewModel(userAccount, model.ReturnUrl));
                 }
             }
             // Ask user if he wants to merge accounts
