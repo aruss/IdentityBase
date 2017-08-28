@@ -150,6 +150,7 @@ namespace IdentityBase.Public.Actions.Register
 
         // Currently is only used for invitations 
         [HttpPost("register/confirm/{key}")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
             if (!_applicationOptions.EnableUserInviteEndpoint)
@@ -166,6 +167,15 @@ namespace IdentityBase.Public.Actions.Register
 
                 ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return View(new ConfirmViewModel
+                {
+                    Key = model.Key,
+                    Email = result.UserAccount.Email
+                });
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
