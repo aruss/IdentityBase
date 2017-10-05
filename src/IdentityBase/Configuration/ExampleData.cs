@@ -177,7 +177,7 @@ namespace IdentityBase.Configuration
                         new Secret("secret".Sha256())
                     },
 
-                    AllowedGrantTypes = GrantTypes.List("custom"),
+                    AllowedGrantTypes = { "custom", "custom.nosubject" },
                     AllowedScopes = { "api1", "api2.read_only" }
                 },
 
@@ -277,7 +277,7 @@ namespace IdentityBase.Configuration
                     AllowAccessTokensViaBrowser = true,
 
                     RedirectUris =  { "http://localhost:44077/signin-oidc" },
-                    LogoutUri = "http://localhost:44077/signout-oidc",
+                    FrontChannelLogoutUri = "http://localhost:44077/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:44077/signout-callback-oidc" },
 
                     AllowedScopes =
@@ -301,7 +301,7 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.Implicit,
 
                     RedirectUris = { "http://localhost:44077/home/callback" },
-                    LogoutUri = "http://localhost:44077/signout-oidc",
+                    FrontChannelLogoutUri = "http://localhost:44077/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:44077/" },
 
                     AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId },
@@ -325,7 +325,7 @@ namespace IdentityBase.Configuration
                     AllowAccessTokensViaBrowser = false,
 
                     RedirectUris = { "http://localhost:21402/signin-oidc" },
-                    LogoutUri = "http://localhost:21402/signout-oidc",
+                    FrontChannelLogoutUri = "http://localhost:21402/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:21402/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
@@ -402,15 +402,14 @@ namespace IdentityBase.Configuration
                     {
                         new Secret("secret".Sha256())
                     },
-
-                    PrefixClientClaims = true,
+                   
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowAccessTokensViaBrowser = false,
 
                     RequireConsent = false,
 
                     RedirectUris = { "http://localhost:3308/signin-oidc" },
-                    LogoutUri = "http://localhost:3308/signout-oidc",
+                    FrontChannelLogoutUri = "http://localhost:3308/signout-oidc",
                     PostLogoutRedirectUris = { "http://localhost:3308/" },
 
                     AllowedScopes =

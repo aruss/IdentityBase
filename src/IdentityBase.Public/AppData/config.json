@@ -22,7 +22,7 @@
         "Name": "RollingFile",
         "Args": {
           "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-          "pathFormat": "./TempData/log-identity.json",
+          "pathFormat": "./AppData/Logs/log-identity.json",
           "fileSizeLimitBytes": 1234567
         }
       }
@@ -34,7 +34,7 @@
     "SeedExampleData": true,
     "EnsureDeleted": false,
     "CleanupTokens": true,
-    "SeedExampleDataPath": "./Config",
+    "SeedExampleDataPath": "./AppData",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
@@ -50,13 +50,13 @@
   },
   "IdentityServer": {
     "SigningCredentialFromPfx": {
-      "Path": "./Config/idsvr3test.pfx",
+      "Path": "./AppData/idsvr3test.pfx",
       "Password": "idsrv3test"
     }
   },
   "App": {
     "PublicUrl": "http://localhost:5000",
-    "TempFolder": "./TempData",
+    "TempFolder": "./AppData/Temp",
     "EnableLocalLogin": true,
     "EnableRememberLogin": true,
     "PasswordHashingIterationCount": 0,

@@ -25,8 +25,8 @@ namespace IdentityBase.Public
         {
             builder.RegisterType<DefaultSmsService>().As<ISmsService>();
             builder.RegisterInstance(Current.Configuration.GetSection("Sms").Get<DefaultSmsServiceOptions>());
-            builder.RegisterType<TwillioSmsSender>().As<ISmsSender>();
-            builder.RegisterInstance(Current.Configuration.GetSection("Sms:Twillio").Get<TwillioOptions>());
+            builder.RegisterType<TwilioSmsSender>().As<ISmsSender>();
+            builder.RegisterInstance(Current.Configuration.GetSection("Sms:Twillio").Get<TwilioOptions>());
         }
     }
 

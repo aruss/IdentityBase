@@ -1,23 +1,24 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using IdentityBase.Configuration;
-using IdentityBase.Extensions;
-using IdentityBase.Services;
-using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using ServiceBase.Events;
-
-namespace IdentityBase.Public
+﻿namespace IdentityBase.Public
 {
+    using System;
+    using System.IO;
+    using System.Security.Cryptography.X509Certificates;
+    using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
+    using IdentityBase.Services;
+    using IdentityServer4.Validation;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using ServiceBase.Events;
+
+    // https://github.com/IdentityServer/IdentityServer4/blob/dev/src/Host/Startup.cs
     public static class StartupIdentityServer
     {
         public static void AddIdentityServer(
             this IServiceCollection services,
-            IConfigurationRoot config,
+            IConfiguration config,
             ILogger logger,
             IHostingEnvironment environment)
         {
@@ -31,10 +32,17 @@ namespace IdentityBase.Public
             {
                 config.GetSection("IdentityServer").Bind(options);
 
-                options.Events.RaiseErrorEvents = eventOptions.RaiseErrorEvents;
-                options.Events.RaiseFailureEvents = eventOptions.RaiseFailureEvents;
-                options.Events.RaiseInformationEvents = eventOptions.RaiseInformationEvents;
-                options.Events.RaiseSuccessEvents = eventOptions.RaiseSuccessEvents;
+                options.Events.RaiseErrorEvents =
+                    eventOptions.RaiseErrorEvents;
+
+                options.Events.RaiseFailureEvents =
+                    eventOptions.RaiseFailureEvents;
+
+                options.Events.RaiseInformationEvents =
+                    eventOptions.RaiseInformationEvents;
+
+                options.Events.RaiseSuccessEvents =
+                    eventOptions.RaiseSuccessEvents;
 
                 options.UserInteraction.LoginUrl = "/login";
                 options.UserInteraction.LogoutUrl = "/logout";
@@ -43,24 +51,37 @@ namespace IdentityBase.Public
 
                 options.Cors.CorsPolicyName = "CorsPolicy";
 
-                options.Authentication.FederatedSignOutPaths.Add("/signout-oidc");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-aad");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-idsrv");
-                options.Authentication.FederatedSignOutPaths.Add("/signout-callback-adfs");
+                // options.Authentication
+                //     .FederatedSignOutPaths.Add("/signout-oidc");
+                // 
+                // options.Authentication
+                //     .FederatedSignOutPaths.Add("/signout-callback-aad");
+                // 
+                // options.Authentication
+                //     .FederatedSignOutPaths.Add("/signout-callback-idsrv");
+                // 
+                // options.Authentication
+                //     .FederatedSignOutPaths.Add("/signout-callback-adfs");
             })
             .AddProfileService<ProfileService>()
-            .AddSecretParser<ClientAssertionSecretParser>()
+            .AddSecretParser<JwtBearerClientAssertionSecretParser>()
             .AddSecretValidator<PrivateKeyJwtSecretValidator>();
             //.AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
 
             // AppAuth enabled redirect URI validator
-            services.AddTransient<IRedirectUriValidator, StrictRedirectUriValidatorAppAuth>();
+            services.AddTransient<IRedirectUriValidator,
+                StrictRedirectUriValidatorAppAuth>();
 
             if (environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential(
-                    Path.Combine(appOptions.TempFolder.GetFullPath(environment.ContentRootPath),
-                    "tempkey.rsa"));
+                    false,
+                    Path.Combine(
+                        appOptions.TempFolder.GetFullPath(
+                            environment.ContentRootPath),
+                        "tempkey.rsa"
+                    )
+                );
             }
             else
             {
@@ -69,17 +90,23 @@ namespace IdentityBase.Public
                     var section = config.GetSection("IdentityServer");
                     if (section.ContainsSection("SigningCredentialFromPfx"))
                     {
-                        var filePath = section.GetValue<string>("SigningCredentialFromPfx:Path")
+                        string filePath = section
+                            .GetValue<string>("SigningCredentialFromPfx:Path")
                             .GetFullPath(environment.ContentRootPath);
 
                         if (!File.Exists(filePath))
                         {
                             throw new FileNotFoundException(
-                                "Signing certificate file not found", filePath);
+                                "Signing certificate file not found",
+                                filePath
+                            );
                         }
 
-                        var password = section.GetValue<string>("SigningCredentialFromPfx:Password");
-                        builder.AddSigningCredential(new X509Certificate2(filePath, password));
+                        string password = section.GetValue<string>(
+                            "SigningCredentialFromPfx:Password");
+
+                        builder.AddSigningCredential(
+                            new X509Certificate2(filePath, password));
                     }
 
                     if (section.ContainsSection("SigningCredentialFromStore"))
@@ -90,12 +117,12 @@ namespace IdentityBase.Public
                     }
                     else
                     {
-                        builder.AddTemporarySigningCredential();
+                        builder.AddDeveloperSigningCredential();
                     }
                 }
                 else
                 {
-                    builder.AddTemporarySigningCredential();
+                    builder.AddDeveloperSigningCredential();
                 }
             }
         }

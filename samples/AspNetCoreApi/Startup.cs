@@ -17,13 +17,13 @@ namespace AspNetCoreApi
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            {
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
-                AllowedScopes = { "api1" },
-                AutomaticAuthenticate = true
-            });
+            // app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            // {
+            //     Authority = "http://localhost:5000",
+            //     RequireHttpsMetadata = false,
+            //     AllowedScopes = { "api1" },
+            //     AutomaticAuthenticate = true
+            // });
 
             app.UseMvc();
         }

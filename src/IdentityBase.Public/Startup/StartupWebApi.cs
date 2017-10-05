@@ -1,16 +1,19 @@
-﻿using IdentityBase.Configuration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using ServiceBase.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-
+﻿
 namespace IdentityBase.Public
 {
+    using IdentityBase.Configuration;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Authorization;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+
     public static class StartupWebApi
     {
-        public static void AddWebApi(this IServiceCollection services, ApplicationOptions options)
+        public static void AddWebApi(
+            this IServiceCollection services,
+            ApplicationOptions options)
         {
             if (options.IsWebApiEnabled())
             {
@@ -23,7 +26,9 @@ namespace IdentityBase.Public
             }
         }
 
-        public static void UseWebApi(this IApplicationBuilder app, ApplicationOptions options)
+        public static void UseWebApi(
+            this IApplicationBuilder app,
+            ApplicationOptions options)
         {
             if (options.IsWebApiEnabled())
             {
@@ -31,15 +36,15 @@ namespace IdentityBase.Public
                 {
                     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-                    appApi.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-                    {
-                        Authority = options.PublicUrl,
-                        RequireHttpsMetadata = false,
-                        AllowedScopes = ScopeAuthorizeHelper
-                            .GetAllScopeAuthorizeAttributes<ApiController>(fromReferenced: true)
-                            .Select(s => s.Scope).ToArray(),
-                        AutomaticAuthenticate = true
-                    });
+                    // appApi.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+                    // {
+                    //     Authority = options.PublicUrl,
+                    //     RequireHttpsMetadata = false,
+                    //     AllowedScopes = ScopeAuthorizeHelper
+                    //         .GetAllScopeAuthorizeAttributes<ApiController>(fromReferenced: true)
+                    //         .Select(s => s.Scope).ToArray(),
+                    //     AutomaticAuthenticate = true
+                    // });
 
                     appApi.UseMvc();
                 });

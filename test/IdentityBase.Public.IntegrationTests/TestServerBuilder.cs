@@ -59,11 +59,7 @@ namespace IdentityBase.Public.IntegrationTests
             };
 
             var logger = new NullLogger<Startup>();
-
-            var startup = new Startup(environment, logger)
-            {
-                Configuration = configuration
-            };
+            var startup = new Startup(configuration, environment, logger); 
 
             var builder = new WebHostBuilder()
                 .UseContentRoot(contentRoot)

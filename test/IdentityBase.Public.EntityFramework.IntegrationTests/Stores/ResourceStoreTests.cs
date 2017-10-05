@@ -166,7 +166,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
                 var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.GetAllResources().Result;
+                resources = store.GetAllResourcesAsync().Result;
             }
 
             Assert.NotNull(resources);

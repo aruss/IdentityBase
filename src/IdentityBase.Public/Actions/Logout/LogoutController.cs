@@ -1,14 +1,13 @@
-﻿using IdentityBase.Configuration;
+﻿using System;
+using System.Threading.Tasks;
+using IdentityBase.Configuration;
 using IdentityModel;
 using IdentityServer4;
-using IdentityServer4.Extensions;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace IdentityBase.Public.Actions.Logout
 {
@@ -38,10 +37,10 @@ namespace IdentityBase.Public.Actions.Logout
             if (!vm.ShowLogoutPrompt)
             {
                 // no need to show prompt
-                return await Logout(vm);
+                return await this.Logout(vm);
             }
 
-            return View(vm);
+            return this.View(vm);
         }
 
         private async Task<LogoutViewModel> CreateLogoutViewModelAsync(string logoutId)
@@ -52,7 +51,7 @@ namespace IdentityBase.Public.Actions.Logout
                 ShowLogoutPrompt = _applicationOptions.ShowLogoutPrompt
             };
 
-            var user = await this.HttpContext.GetIdentityServerUserAsync();
+            var user = this.HttpContext.User;
             if (user == null || user.Identity.IsAuthenticated == false)
             {
                 // Ff the user is not authenticated, then just show logged out page
@@ -81,14 +80,31 @@ namespace IdentityBase.Public.Actions.Logout
         public async Task<IActionResult> Logout(LogoutViewModel model)
         {
             var vm = await this.CreateLoggedOutViewModelAsync(model.LogoutId);
+
+
+            var user = HttpContext.User;
+            if (user?.Identity.IsAuthenticated == true)
+            {
+                // delete local authentication cookie
+                await HttpContext.SignOutAsync();
+
+                // raise the logout event
+                // await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
+            }
+
+            // check if we need to trigger sign-out at an upstream identity provider
             if (vm.TriggerExternalSignout)
             {
-                var url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+                // build a return URL so the upstream provider will redirect back
+                // to us after the user has logged out. this allows us to then
+                // complete our single sign-out processing.
+                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+
+                // Hack: try/catch to handle social providers that throw
                 try
                 {
-                    // Hack: try/catch to handle social providers that throw
-                    await HttpContext.Authentication.SignOutAsync(vm.ExternalAuthenticationScheme,
-                        new AuthenticationProperties { RedirectUri = url });
+                    // this triggers a redirect to the external provider for sign-out
+                    return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
                 }
                 // This is for the external providers that don't have signout
                 catch (NotSupportedException)
@@ -99,9 +115,6 @@ namespace IdentityBase.Public.Actions.Logout
                 {
                 }
             }
-
-            // delete local authentication cookie
-            await HttpContext.Authentication.SignOutAsync();
 
             return View("LoggedOut", vm);
         }
@@ -120,7 +133,7 @@ namespace IdentityBase.Public.Actions.Logout
                 LogoutId = logoutId
             };
 
-            var user = await HttpContext.GetIdentityServerUserAsync();
+            var user = HttpContext.User;
             if (user != null)
             {
                 var idp = user.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;

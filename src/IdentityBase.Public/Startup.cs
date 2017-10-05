@@ -1,27 +1,23 @@
-﻿using System;
-using Autofac;
-using Autofac.Configuration;
-using Autofac.Extensions.DependencyInjection;
-using IdentityBase.Configuration;
-using IdentityBase.Crypto;
-using IdentityBase.Extensions;
-using IdentityBase.Services;
-using IdentityServer4;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using ServiceBase;
-using ServiceBase.Configuration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.DependencyInjection;
-//var myService = (IService)DependencyResolver.Current.GetService(typeof(IService));
-
-namespace IdentityBase.Public
+﻿namespace IdentityBase.Public
 {
+    using System;
+    using Autofac;
+    using Autofac.Configuration;
+    using Autofac.Extensions.DependencyInjection;
+    using IdentityBase.Configuration;
+    using IdentityBase.Crypto;
+    using IdentityBase.Extensions;
+    using IdentityBase.Services;
+    using IdentityServer4;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using ServiceBase;
+
     /// <summary>
     /// Application startup class
     /// </summary>
@@ -29,19 +25,25 @@ namespace IdentityBase.Public
     {
         private readonly Microsoft.Extensions.Logging.ILogger _logger;
         private readonly IHostingEnvironment _environment;
-        private IContainer _applicationContainer;
-
-        public IConfigurationRoot Configuration { get; set; }
+        private readonly IConfiguration _configuration;
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="environment"></param>
-        /// <param name="logger"></param>
-        public Startup(IHostingEnvironment environment, ILogger<Startup> logger)
+        /// <param name="configuration">Instance of <see cref="configuration"/>
+        /// </param>
+        /// <param name="environment">Instance of
+        /// <see cref="IHostingEnvironment"/></param>
+        /// <param name="logger">Instance of <see cref="ILogger{Startup}"/>
+        /// </param>
+        public Startup(
+             IConfiguration configuration,
+             IHostingEnvironment environment,
+             ILogger<Startup> logger)
         {
-            _logger = logger;
-            _environment = environment;
+            this._logger = logger;
+            this._environment = environment;
+            this._configuration = configuration;
         }
 
         /// <summary>
@@ -49,27 +51,21 @@ namespace IdentityBase.Public
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            if (Configuration == null)
-            {
-                Configuration = ConfigurationSetup.Configure(_environment, (confBuilder) =>
-                {
-                    if (_environment.IsDevelopment())
-                    {
-                        confBuilder.AddUserSecrets<Startup>();
-                    }
-                });
-            }
+            this._logger.LogInformation("Services Configure");
 
-            _logger.LogInformation("Services Configure");
-
-            var options = Configuration.GetSection("App")
+            ApplicationOptions options = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
-            services.AddSingleton(Configuration);
+            services.AddSingleton(this._configuration);
             services.AddSingleton(options);
-            services.AddIdentityServer(Configuration, _logger, _environment);
+
+            services.AddIdentityServer(
+                this._configuration,
+                this._logger,
+                this._environment);
+
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
@@ -80,54 +76,61 @@ namespace IdentityBase.Public
             {
                 corsOpts.AddPolicy("CorsPolicy",
                     corsBuilder => corsBuilder.WithOrigins(
-                        Configuration.GetValue<string>("Host:Cors")));
+                        this._configuration.GetValue<string>("Host:Cors")));
             });
 
             services.AddWebApi(options);
             services.AddMvc(options, _environment);
-            
+
             // https://github.com/aspnet/Security/issues/1310
             services
                 .AddAuthentication(
                     IdentityServerConstants.ExternalCookieAuthenticationScheme)
-                .AddCookie(); 
+                .AddCookie();
 
             // Update current instances
-            Current.Configuration = Configuration;
+            Current.Configuration = this._configuration;
             Current.Logger = _logger;
 
             // Add AutoFac continer and register modules form config
-            var builder = new ContainerBuilder();
+            ContainerBuilder builder = new ContainerBuilder();
             builder.Populate(services);
-            if (Configuration.ContainsSection("Services"))
+
+            if (this._configuration.ContainsSection("Services"))
             {
                 builder.RegisterModule(
-                    new ConfigurationModule(Configuration.GetSection("Services")));
+                    new ConfigurationModule(
+                        this._configuration.GetSection("Services")));
             }
-            _applicationContainer = builder.Build();
-            _applicationContainer.ValidateDataLayerServices(_logger);
-            _applicationContainer.ValidateEmailSenderServices(_logger);
-            _applicationContainer.ValidateSmsServices(_logger);
-            _applicationContainer.ValidateEventServices(_logger);
 
-            Current.Container = _applicationContainer;
+            IContainer container = builder.Build();
+            container.ValidateDataLayerServices(this._logger);
+            container.ValidateEmailSenderServices(this._logger);
+            container.ValidateSmsServices(this._logger);
+            container.ValidateEventServices(this._logger);
+
+            Current.Container = container;
 
             _logger.LogInformation("Services Configured");
 
-            return new AutofacServiceProvider(_applicationContainer);
+            return new AutofacServiceProvider(container);
         }
 
         public virtual void Configure(IApplicationBuilder app)
         {
             _logger.LogInformation("Application Configure");
 
-            var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
-            var appLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
-            var options = app.ApplicationServices.GetRequiredService<ApplicationOptions>();
+            IHostingEnvironment env = app.ApplicationServices
+                .GetRequiredService<IHostingEnvironment>();
+
+            IApplicationLifetime appLifetime = app.ApplicationServices
+                .GetRequiredService<IApplicationLifetime>();
+
+            ApplicationOptions options = app.ApplicationServices
+                .GetRequiredService<ApplicationOptions>();
 
             app.UseMiddleware<RequestIdMiddleware>();
-
-            app.UseLogging(Configuration);
+            app.UseLogging();            
 
             if (env.IsDevelopment())
             {
@@ -139,7 +142,12 @@ namespace IdentityBase.Public
             }
 
             app.UseCors("CorsPolicy");
-            app.UseStaticFiles(Configuration, _logger, _environment);
+
+            app.UseStaticFiles(
+                this._configuration,
+                this._logger,
+                this._environment);
+
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseWebApi(options);
