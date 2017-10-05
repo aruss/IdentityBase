@@ -1,33 +1,28 @@
-﻿{
+{
   "Host": {
     "Urls": "http://*:5000",
     "UseIISIntegration": false
   },
   "Serilog": {
-    "Using": [ "Serilog.Sinks.RollingFile" ],
     "MinimumLevel": {
-      "Default": "Information",
+      "Default": "Verbose",
       "Override": {
         "System": "Information",
-        "Microsoft": "Information",
-        "IdentityModel": "Information",
-        "IdentityServer4": "Information",
-        "IdentityBase": "Debug",
-        "ServiceBase": "Debug"
+        "Microsoft": "Information"
       }
     },
     "WriteTo": [
-      { "Name": "LiterateConsole" },
+      { "Name": "Console" },
       {
         "Name": "RollingFile",
         "Args": {
           "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-          "pathFormat": "./AppData/Logs/log-identity.json",
+          "pathFormat": "./AppData/Logs/log.json",
           "fileSizeLimitBytes": 1234567
         }
       }
     ],
-    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
   },
   "EntityFramework": {
     "MigrateDatabase": false,
