@@ -1,141 +1,69 @@
-﻿//using ServiceBase.Notification.Email;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
 namespace AspNetCoreWeb
 {
+    using System;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+    using System.IdentityModel.Tokens.Jwt;
+    using IdentityModel;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+
     public class Startup
     {
-        private readonly IHostingEnvironment _environment;
-        private readonly IConfigurationRoot _configuration;
-
-        public Startup(IHostingEnvironment env)
+        public Startup()
         {
-            var builder = new ConfigurationBuilder()
-               .SetBasePath(env.ContentRootPath)
-               .AddJsonFile("appsettings.json",
-                    optional: true,
-                    reloadOnChange: true
-                )
-               .AddJsonFile($"appsettings.{env.EnvironmentName}.json",
-                    optional: true
-                );
-
-            /*if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }*/
-
-            builder.AddEnvironmentVariables();
-
-            _configuration = builder.Build();
-            _environment = env;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc()
-                .AddRazorOptions(razor =>
-                {
-                    razor.ViewLocationExpanders
-                        .Add(new UI.CustomViewLocationExpander());
-                });
+            services.AddMvc();
 
-            services
-                .AddAuthentication(authOptions =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie(options =>
                 {
-                    authOptions.DefaultScheme =
-                        CookieAuthenticationDefaults.AuthenticationScheme;
-
-                    authOptions.DefaultChallengeScheme =
-                        OpenIdConnectDefaults.AuthenticationScheme;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.Cookie.Name = "mvchybrid";
                 })
-                .AddCookie(cookieOptions =>
+                .AddOpenIdConnect("oidc", options =>
                 {
+                    options.Authority = "http://localhost:5000";
+                    options.RequireHttpsMetadata = false;
 
-                })
-                .AddOpenIdConnect(oidcOptions =>
-                {
-                    // oidcOptions.AuthenticationScheme = "oidc";
-                    oidcOptions.SignInScheme = "Cookies";
-                    oidcOptions.Authority = "http://localhost:5000";
-                    oidcOptions.RequireHttpsMetadata = false;
-                    oidcOptions.SignedOutRedirectUri = "http://localhost:3308/";
-                    oidcOptions.ClientId = "mvc";
-                    oidcOptions.ClientSecret = "secret";
-                    oidcOptions.ResponseType = "code id_token";
-                    oidcOptions.GetClaimsFromUserInfoEndpoint = true;
-                    oidcOptions.SaveTokens = true;
-                    oidcOptions.Events = new OpenIdConnectEvents
-                    {
-                        OnTicketReceived = async context =>
+                    options.ClientSecret = "secret";
+                    options.ClientId = "mvc.hybrid";
+
+                    options.ResponseType = "code id_token";
+
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
+                    options.Scope.Add("api1");
+                    options.Scope.Add("offline_access");
+
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.SaveTokens = true;
+
+                    options.TokenValidationParameters =
+                        new TokenValidationParameters
                         {
-                            var profileId = Guid.Parse(context.Principal
-                                .FindFirst("sub").Value);
-
-                            var emailClaim = context?.Principal?
-                                .FindFirst("email");
-
-                            // Load current domain profile/user object if dont
-                            // find any create one                       
-                        },
-
-                        // Provide idTokenHint and PostLogoutRedirectUri for
-                        // better logout flow
-                        OnRedirectToIdentityProviderForSignOut
-                            = async context =>
-                        {
-                            var idTokenHint = await context.HttpContext
-                                .GetTokenAsync("id_token");
-
-                            if (idTokenHint != null)
-                            {
-                                context.ProtocolMessage
-                                    .IdTokenHint = idTokenHint;
-
-                                context.ProtocolMessage
-                                    .PostLogoutRedirectUri = "http://localhost:3308/";
-                            }
-                        }
-                    };
-
-                    oidcOptions.Scope.Clear();
-                    oidcOptions.Scope.Add("openid");
-                    oidcOptions.Scope.Add("profile");
-                    oidcOptions.Scope.Add("api1");
+                            NameClaimType = JwtClaimTypes.Name,
+                            RoleClaimType = JwtClaimTypes.Role,
+                        };
                 });
-
-            //services.AddTransient<IEmailService, DefaultEmailService>();
         }
 
-        public void Configure(
-            IApplicationBuilder app,
-            IHostingEnvironment env,
-            ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            //loggerFactory.AddConsole();
-            //loggerFactory.AddDebug();
-
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseAuthentication();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

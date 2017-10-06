@@ -1,17 +1,20 @@
-﻿using IdentityBase.Crypto;
-using IdentityBase.Models;
-using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.Models;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-
 namespace IdentityBase.Configuration
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
+    using IdentityBase.Crypto;
+    using IdentityBase.Models;
+    using IdentityModel;
+    using IdentityServer4;
+    using IdentityServer4.Models;
+
     public class ExampleData
     {
-        private IEnumerable<UserAccountClaim> CreateClaims(string name, string givenName, string familyName)
+        private IEnumerable<UserAccountClaim> CreateClaims(
+            string name,
+            string givenName,
+            string familyName)
         {
             return new List<UserAccountClaim>
             {
@@ -21,7 +24,9 @@ namespace IdentityBase.Configuration
             };
         }
 
-        public IEnumerable<UserAccount> GetUserAccounts(ICrypto crypto, ApplicationOptions options)
+        public IEnumerable<UserAccount> GetUserAccounts(
+            ICrypto crypto,
+            ApplicationOptions options)
         {
             var now = DateTime.UtcNow;
 
@@ -32,7 +37,9 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("0c2954d2-4c73-44e3-b0f2-c00403e4adef"),
                     Email = "alice@localhost",
-                    PasswordHash  = crypto.HashPassword("alice@localhost", options.PasswordHashingIterationCount),
+                    PasswordHash  = crypto.HashPassword(
+                        "alice@localhost",
+                        options.PasswordHashingIterationCount),
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
@@ -144,7 +151,7 @@ namespace IdentityBase.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api1", "api2.read_only" },
+                    AllowedScopes = { "api1", "api2.read_only" }
                 },
 
                 ///////////////////////////////////////////
@@ -234,7 +241,7 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     RequirePkce = true,
 
-                    RedirectUris = { "http://127.0.0.1:7890/" },
+                    RedirectUris = { "http://127.0.0.1" },
 
                     AllowOfflineAccess = true,
 
@@ -243,8 +250,8 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only",
-                    },
+                        "api1", "api2.read_only"
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -286,7 +293,7 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "api1", "api2.read_only"
-                    },
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -300,11 +307,11 @@ namespace IdentityBase.Configuration
 
                     AllowedGrantTypes = GrantTypes.Implicit,
 
-                    RedirectUris = { "http://localhost:44077/home/callback" },
-                    FrontChannelLogoutUri = "http://localhost:44077/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:44077/" },
+                    RedirectUris = { "http://localhost:44078/home/callback" },
+                    FrontChannelLogoutUri = "http://localhost:44078/signout-oidc",
+                    PostLogoutRedirectUris = { "http://localhost:44078/" },
 
-                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId },
+                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
                 },
 
                 ///////////////////////////////////////////
@@ -315,6 +322,7 @@ namespace IdentityBase.Configuration
                     ClientId = "mvc.hybrid",
                     ClientName = "MVC Hybrid",
                     ClientUri = "http://identityserver.io",
+                    //LogoUri = "https://pbs.twimg.com/profile_images/1612989113/Ki-hanja_400x400.png",
 
                     ClientSecrets =
                     {
@@ -324,9 +332,13 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowAccessTokensViaBrowser = false,
 
-                    RedirectUris = { "http://localhost:21402/signin-oidc" },
+                    RedirectUris = {
+                        "http://localhost:21402/signin-oidc"
+                    },
                     FrontChannelLogoutUri = "http://localhost:21402/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:21402/signout-callback-oidc" },
+                    PostLogoutRedirectUris = {
+                        "http://localhost:21402/signout-callback-oidc"
+                    },
 
                     AllowOfflineAccess = true,
 
@@ -335,8 +347,8 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only",
-                    },
+                        "api1", "api2.read_only"
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -347,14 +359,15 @@ namespace IdentityBase.Configuration
                     ClientId = "js_oauth",
                     ClientName = "JavaScript OAuth 2.0 Client",
                     ClientUri = "http://identityserver.io",
+                    //LogoUri = "https://pbs.twimg.com/profile_images/1612989113/Ki-hanja_400x400.png",
 
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
 
                     RedirectUris = { "http://localhost:28895/index.html" },
-                    AllowedScopes = { "api1", "api2.read_only" },
+                    AllowedScopes = { "api1", "api2.read_only" }
                 },
-
+                
                 ///////////////////////////////////////////
                 // JS OIDC Sample
                 //////////////////////////////////////////
@@ -363,18 +376,19 @@ namespace IdentityBase.Configuration
                     ClientId = "js_oidc",
                     ClientName = "JavaScript OIDC Client",
                     ClientUri = "http://identityserver.io",
+                    //LogoUri = "https://pbs.twimg.com/profile_images/1612989113/Ki-hanja_400x400.png",
 
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false,
-                    AccessTokenType = AccessTokenType.Reference,
+                    AccessTokenType = AccessTokenType.Jwt,
 
                     RedirectUris =
                     {
                         "http://localhost:7017/index.html",
                         "http://localhost:7017/callback.html",
                         "http://localhost:7017/silent.html",
-                        "http://localhost:7017/popup.html",
+                        "http://localhost:7017/popup.html"
                     },
 
                     PostLogoutRedirectUris = { "http://localhost:7017/index.html" },
@@ -385,42 +399,9 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only"
-                    },
-                },
-
-                ///////////////////////////////////////////
-                // MVC client for identity base samples
-                //////////////////////////////////////////
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientName = "MVC Hybrid Client",
-                    ClientUri = "http://localhost:3308",
-
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                   
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    AllowAccessTokensViaBrowser = false,
-
-                    RequireConsent = false,
-
-                    RedirectUris = { "http://localhost:3308/signin-oidc" },
-                    FrontChannelLogoutUri = "http://localhost:3308/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:3308/" },
-
-                    AllowedScopes =
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "api1"
-                    },
-                },
+                        "api1", "api2.read_only", "api2.full_access"
+                    }
+                }
             };
         }
 

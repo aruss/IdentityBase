@@ -1,9 +1,5 @@
 [
   {
-    "Enabled": true,
-    "Name": "api1",
-    "DisplayName": "Some API 1",
-    "Description": null,
     "ApiSecrets": [
       {
         "Description": null,
@@ -12,7 +8,6 @@
         "Type": "SharedSecret"
       }
     ],
-    "UserClaims": [],
     "Scopes": [
       {
         "Name": "api1",
@@ -23,13 +18,14 @@
         "ShowInDiscoveryDocument": true,
         "UserClaims": []
       }
-    ]
+    ],
+    "Enabled": true,
+    "Name": "api1",
+    "DisplayName": "Some API 1",
+    "Description": null,
+    "UserClaims": []
   },
   {
-    "Enabled": true,
-    "Name": "api2",
-    "DisplayName": null,
-    "Description": null,
     "ApiSecrets": [
       {
         "Description": null,
@@ -38,7 +34,6 @@
         "Type": "SharedSecret"
       }
     ],
-    "UserClaims": [ "name", "email" ],
     "Scopes": [
       {
         "Name": "api2.full_access",
@@ -58,6 +53,14 @@
         "ShowInDiscoveryDocument": true,
         "UserClaims": []
       }
+    ],
+    "Enabled": true,
+    "Name": "api2",
+    "DisplayName": null,
+    "Description": null,
+    "UserClaims": [
+      "name",
+      "email"
     ]
   }
 ]

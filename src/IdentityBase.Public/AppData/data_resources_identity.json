@@ -1,42 +1,66 @@
 [
   {
+    "Required": true,
+    "Emphasize": false,
+    "ShowInDiscoveryDocument": true,
     "Enabled": true,
     "Name": "openid",
     "DisplayName": "Your user identifier",
     "Description": null,
-    "Required": true,
-    "Emphasize": false,
-    "ShowInDiscoveryDocument": true,
-    "UserClaims": [ "sub" ]
+    "UserClaims": [
+      "sub"
+    ]
   },
   {
+    "Required": false,
+    "Emphasize": true,
+    "ShowInDiscoveryDocument": true,
     "Enabled": true,
     "Name": "profile",
     "DisplayName": "User profile",
     "Description": "Your user profile information (first name, last name, etc.)",
+    "UserClaims": [
+      "name",
+      "family_name",
+      "given_name",
+      "middle_name",
+      "nickname",
+      "preferred_username",
+      "profile",
+      "picture",
+      "website",
+      "gender",
+      "birthdate",
+      "zoneinfo",
+      "locale",
+      "updated_at"
+    ]
+  },
+  {
     "Required": false,
     "Emphasize": true,
     "ShowInDiscoveryDocument": true,
-    "UserClaims": [ "name", "family_name", "given_name", "middle_name", "nickname", "preferred_username", "profile", "picture", "website", "gender", "birthdate", "zoneinfo", "locale", "updated_at" ]
-  },
-  {
     "Enabled": true,
     "Name": "email",
     "DisplayName": "Your email address",
     "Description": null,
-    "Required": false,
-    "Emphasize": true,
-    "ShowInDiscoveryDocument": true,
-    "UserClaims": [ "email", "email_verified" ]
+    "UserClaims": [
+      "email",
+      "email_verified"
+    ]
   },
   {
+    "Required": false,
+    "Emphasize": false,
+    "ShowInDiscoveryDocument": true,
     "Enabled": true,
     "Name": "custom.profile",
     "DisplayName": "custom.profile",
     "Description": null,
-    "Required": false,
-    "Emphasize": false,
-    "ShowInDiscoveryDocument": true,
-    "UserClaims": [ "name", "email", "location" ]
+    "UserClaims": [
+      "name",
+      "email",
+      "location"
+    ]
   }
 ]

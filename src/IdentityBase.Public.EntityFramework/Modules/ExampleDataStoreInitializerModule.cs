@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityBase.Public.EntityFramework.Options;
 using Microsoft.Extensions.Configuration;

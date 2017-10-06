@@ -1,20 +1,21 @@
-﻿using Microsoft.AspNetCore.Http.Authentication;
-using IdentityBase.Models;
-using System.Threading.Tasks;
-
 namespace IdentityBase.Extensions
 {
+    using System.Threading.Tasks;
+    using IdentityBase.Models;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
+
     public static class AuthenticationManagerExtensions
     {
         public static async Task SignInAsync(
-            this AuthenticationManager manager,
+            this HttpContext context,
             UserAccount userAccount,
             AuthenticationProperties properties)
         {
-            // await manager.SignInAsync(
-            //     userAccount.Id.ToString(),
-            //     userAccount.Email,
-            //     properties);
+            await context.SignInAsync(
+                userAccount.Id.ToString(),
+                userAccount.Email,
+                properties);
         }
-    }
+    }    
 }

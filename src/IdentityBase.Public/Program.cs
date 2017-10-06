@@ -1,4 +1,4 @@
-﻿// [assembly: UserSecretsId("IdentityBase.Public")]
+// [assembly: UserSecretsId("IdentityBase.Public")]
 
 namespace IdentityBase.Public
 {
@@ -19,6 +19,9 @@ namespace IdentityBase.Public
                 basePath: Directory.GetCurrentDirectory(),
                 args: args
             );
+
+            // Use in case you changed the example data in ExampleData.cs file
+            // Configuration.ExampleDataWriter.Write(config); 
 
             IConfigurationSection configHost = config.GetSection("Host");
 

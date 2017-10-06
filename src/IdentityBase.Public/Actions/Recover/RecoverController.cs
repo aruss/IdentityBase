@@ -1,4 +1,4 @@
-﻿using IdentityBase.Configuration;
+using IdentityBase.Configuration;
 using IdentityBase.Extensions;
 using IdentityBase.Models;
 using IdentityBase.Services;
@@ -146,7 +146,7 @@ namespace IdentityBase.Public.Actions.Recover
 
             if (_applicationOptions.LoginAfterAccountRecovery)
             {
-                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
+                await _httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
 
                 if (_interaction.IsValidReturnUrl(returnUrl))
                 {

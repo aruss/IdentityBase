@@ -52,6 +52,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.Pl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Events.RabbitMQ", "submodules\ServiceBase\src\ServiceBase.Events.RabbitMQ\ServiceBase.Events.RabbitMQ.csproj", "{B92FCEFC-C5B6-4F7B-9AB1-1D2001B055A6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBase.Notification.SendGrid", "submodules\ServiceBase\src\ServiceBase.Notification.SendGrid\ServiceBase.Notification.SendGrid.csproj", "{D0BB53EA-3C06-4E95-88C7-089B7690FBE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +116,10 @@ Global
 		{B92FCEFC-C5B6-4F7B-9AB1-1D2001B055A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B92FCEFC-C5B6-4F7B-9AB1-1D2001B055A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B92FCEFC-C5B6-4F7B-9AB1-1D2001B055A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0BB53EA-3C06-4E95-88C7-089B7690FBE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0BB53EA-3C06-4E95-88C7-089B7690FBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0BB53EA-3C06-4E95-88C7-089B7690FBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0BB53EA-3C06-4E95-88C7-089B7690FBE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +139,7 @@ Global
 		{CB3C6BE8-C6C8-4F80-B9DC-AB33F0C7EEC4} = {8F88793C-6FCB-4689-A0CE-33B77F6E2586}
 		{9259FEE2-9C6E-4957-B9FF-9B62A37142F5} = {8F88793C-6FCB-4689-A0CE-33B77F6E2586}
 		{B92FCEFC-C5B6-4F7B-9AB1-1D2001B055A6} = {8F88793C-6FCB-4689-A0CE-33B77F6E2586}
+		{D0BB53EA-3C06-4E95-88C7-089B7690FBE4} = {8F88793C-6FCB-4689-A0CE-33B77F6E2586}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF96F7A7-679F-4B34-8009-8BF15588794C}

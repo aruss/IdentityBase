@@ -17,22 +17,30 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "client_credentials" ],
+    "AllowedGrantTypes": [
+      "client_credentials"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -42,8 +50,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -63,22 +73,30 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "client_credentials" ],
+    "AllowedGrantTypes": [
+      "client_credentials"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -88,8 +106,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -109,22 +129,31 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "custom" ],
+    "AllowedGrantTypes": [
+      "custom",
+      "custom.nosubject"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -134,8 +163,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -155,22 +186,32 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "password" ],
+    "AllowedGrantTypes": [
+      "password"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "custom.profile", "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "openid",
+      "custom.profile",
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -180,8 +221,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -194,22 +237,32 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "password" ],
+    "AllowedGrantTypes": [
+      "password"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "email", "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "openid",
+      "email",
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -219,8 +272,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -233,22 +288,35 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "hybrid" ],
+    "AllowedGrantTypes": [
+      "hybrid"
+    ],
     "RequirePkce": true,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [ "http://127.0.0.1:7890/" ],
+    "RedirectUris": [
+      "http://127.0.0.1"
+    ],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "profile", "email", "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "openid",
+      "profile",
+      "email",
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -258,8 +326,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -279,22 +349,30 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "password" ],
+    "AllowedGrantTypes": [
+      "password"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -304,8 +382,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -318,22 +398,37 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "implicit" ],
+    "AllowedGrantTypes": [
+      "implicit"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": true,
-    "RedirectUris": [ "http://localhost:44077/signin-oidc" ],
-    "PostLogoutRedirectUris": [ "http://localhost:44077/signout-callback-oidc" ],
-    "LogoutUri": "http://localhost:44077/signout-oidc",
-    "LogoutSessionRequired": true,
+    "RedirectUris": [
+      "http://localhost:44077/signin-oidc"
+    ],
+    "PostLogoutRedirectUris": [
+      "http://localhost:44077/signout-callback-oidc"
+    ],
+    "FrontChannelLogoutUri": "http://localhost:44077/signout-oidc",
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "openid", "profile", "email", "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "openid",
+      "profile",
+      "email",
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -343,8 +438,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -357,22 +454,33 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "implicit" ],
+    "AllowedGrantTypes": [
+      "implicit"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [ "http://localhost:44077/home/callback" ],
-    "PostLogoutRedirectUris": [ "http://localhost:44077/" ],
-    "LogoutUri": "http://localhost:44077/signout-oidc",
-    "LogoutSessionRequired": true,
+    "RedirectUris": [
+      "http://localhost:44078/home/callback"
+    ],
+    "PostLogoutRedirectUris": [
+      "http://localhost:44078/"
+    ],
+    "FrontChannelLogoutUri": "http://localhost:44078/signout-oidc",
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "openid" ],
+    "AllowedScopes": [
+      "openid"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -382,8 +490,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -403,22 +513,37 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "hybrid" ],
+    "AllowedGrantTypes": [
+      "hybrid"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [ "http://localhost:21402/signin-oidc" ],
-    "PostLogoutRedirectUris": [ "http://localhost:21402/signout-callback-oidc" ],
-    "LogoutUri": "http://localhost:21402/signout-oidc",
-    "LogoutSessionRequired": true,
+    "RedirectUris": [
+      "http://localhost:21402/signin-oidc"
+    ],
+    "PostLogoutRedirectUris": [
+      "http://localhost:21402/signout-callback-oidc"
+    ],
+    "FrontChannelLogoutUri": "http://localhost:21402/signout-oidc",
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "profile", "email", "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "openid",
+      "profile",
+      "email",
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -428,8 +553,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -442,22 +569,32 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "implicit" ],
+    "AllowedGrantTypes": [
+      "implicit"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": true,
-    "RedirectUris": [ "http://localhost:28895/index.html" ],
+    "RedirectUris": [
+      "http://localhost:28895/index.html"
+    ],
     "PostLogoutRedirectUris": [],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
     "AllowOfflineAccess": false,
-    "AllowedScopes": [ "api1", "api2.read_only" ],
+    "AllowedScopes": [
+      "api1",
+      "api2.read_only"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -467,8 +604,10 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [],
+    "Properties": {}
   },
   {
     "Enabled": true,
@@ -481,68 +620,41 @@
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "implicit" ],
+    "AllowedGrantTypes": [
+      "implicit"
+    ],
     "RequirePkce": false,
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": true,
-    "RedirectUris": [ "http://localhost:7017/index.html", "http://localhost:7017/callback.html", "http://localhost:7017/silent.html", "http://localhost:7017/popup.html" ],
-    "PostLogoutRedirectUris": [ "http://localhost:7017/index.html" ],
-    "LogoutUri": null,
-    "LogoutSessionRequired": true,
-    "AllowOfflineAccess": false,
-    "AllowedScopes": [ "openid", "profile", "email", "api1", "api2.read_only" ],
-    "AlwaysIncludeUserClaimsInIdToken": false,
-    "IdentityTokenLifetime": 300,
-    "AccessTokenLifetime": 3600,
-    "AuthorizationCodeLifetime": 300,
-    "AbsoluteRefreshTokenLifetime": 2592000,
-    "SlidingRefreshTokenLifetime": 1296000,
-    "RefreshTokenUsage": 1,
-    "UpdateAccessTokenClaimsOnRefresh": false,
-    "RefreshTokenExpiration": 1,
-    "AccessTokenType": 1,
-    "EnableLocalLogin": true,
-    "IdentityProviderRestrictions": [],
-    "IncludeJwtId": false,
-    "Claims": [],
-    "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": [ "http://localhost:7017" ]
-  },
-  {
-    "Enabled": true,
-    "ClientId": "mvc",
-    "ProtocolType": "oidc",
-    "ClientSecrets": [
-      {
-        "Description": null,
-        "Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
-        "Expiration": null,
-        "Type": "SharedSecret"
-      }
+    "RedirectUris": [
+      "http://localhost:7017/index.html",
+      "http://localhost:7017/callback.html",
+      "http://localhost:7017/silent.html",
+      "http://localhost:7017/popup.html"
     ],
-    "RequireClientSecret": true,
-    "ClientName": "MVC Hybrid Client",
-    "ClientUri": "http://localhost:3308",
-    "LogoUri": null,
-    "RequireConsent": false,
-    "AllowRememberConsent": true,
-    "AllowedGrantTypes": [ "hybrid" ],
-    "RequirePkce": false,
-    "AllowPlainTextPkce": false,
-    "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [ "http://localhost:3308/signin-oidc" ],
-    "PostLogoutRedirectUris": [ "http://localhost:3308/" ],
-    "LogoutUri": "http://localhost:3308/signout-oidc",
-    "LogoutSessionRequired": true,
-    "AllowOfflineAccess": true,
-    "AllowedScopes": [ "openid", "profile", "email", "offline_access", "api1" ],
+    "PostLogoutRedirectUris": [
+      "http://localhost:7017/index.html"
+    ],
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
+    "AllowOfflineAccess": false,
+    "AllowedScopes": [
+      "openid",
+      "profile",
+      "email",
+      "api1",
+      "api2.read_only",
+      "api2.full_access"
+    ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
     "AccessTokenLifetime": 3600,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
     "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
     "RefreshTokenUsage": 1,
     "UpdateAccessTokenClaimsOnRefresh": false,
     "RefreshTokenExpiration": 1,
@@ -552,7 +664,11 @@
     "IncludeJwtId": false,
     "Claims": [],
     "AlwaysSendClientClaims": false,
-    "PrefixClientClaims": true,
-    "AllowedCorsOrigins": []
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [
+      "http://localhost:7017"
+    ],
+    "Properties": {}
   }
 ]

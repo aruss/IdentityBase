@@ -1,4 +1,4 @@
-﻿namespace IdentityBase.Public
+namespace IdentityBase.Public
 {
     using System;
     using System.IO;
@@ -65,13 +65,9 @@
             })
             .AddProfileService<ProfileService>()
             .AddSecretParser<JwtBearerClientAssertionSecretParser>()
-            .AddSecretValidator<PrivateKeyJwtSecretValidator>();
-            //.AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
-
-            // AppAuth enabled redirect URI validator
-            services.AddTransient<IRedirectUriValidator,
-                StrictRedirectUriValidatorAppAuth>();
-
+            .AddSecretValidator<PrivateKeyJwtSecretValidator>()
+            .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
+            
             if (environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential(

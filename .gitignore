@@ -204,3 +204,4 @@ samples/AspNetCoreWeb/wwwroot/lib/
 coverage/
 docker/identitybase-public-ctx/
 src/IdentityBase.Public/TempData/
+src/IdentityBase.Public/AppData/Logs/

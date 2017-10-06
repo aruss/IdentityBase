@@ -1,4 +1,4 @@
-﻿using IdentityBase.Configuration;
+using IdentityBase.Configuration;
 using IdentityBase.Extensions;
 using IdentityBase.Models;
 using IdentityBase.Services;
@@ -136,7 +136,7 @@ namespace IdentityBase.Public.Actions.Register
 
                 if (_applicationOptions.LoginAfterAccountConfirmation)
                 {
-                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
+                    await _httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
 
                     if (returnUrl != null && _interaction.IsValidReturnUrl(returnUrl))
                     {
@@ -192,7 +192,7 @@ namespace IdentityBase.Public.Actions.Register
             {
                 if (_applicationOptions.LoginAfterAccountRecovery)
                 {
-                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(result.UserAccount, null);
+                    await _httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
 
                     if (_interaction.IsValidReturnUrl(returnUrl))
                     {
@@ -350,7 +350,7 @@ namespace IdentityBase.Public.Actions.Register
 
                 if (_applicationOptions.LoginAfterAccountCreation)
                 {
-                    await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+                    await _httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
 
                     if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
                     {
@@ -406,7 +406,7 @@ namespace IdentityBase.Public.Actions.Register
 
             if (_applicationOptions.LoginAfterAccountCreation)
             {
-                await _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null);
+                await _httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
 
                 if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
                 {

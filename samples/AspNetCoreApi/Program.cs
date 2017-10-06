@@ -1,21 +1,21 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
-
 namespace AspNetCoreApi
 {
+    using System;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+
     public class Program
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls("http://localhost:1773")
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+            Console.Title = "Sample API";
+
+            BuildWebHost(args).Run();
+        }
+
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build();
-
-            host.Run();
-        }
     }
 }

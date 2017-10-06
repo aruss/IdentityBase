@@ -111,14 +111,14 @@
 
             Current.Container = container;
 
-            _logger.LogInformation("Services Configured");
+            this._logger.LogInformation("Services Configured");
 
             return new AutofacServiceProvider(container);
         }
 
         public virtual void Configure(IApplicationBuilder app)
         {
-            _logger.LogInformation("Application Configure");
+            this._logger.LogInformation("Application Configure");
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
@@ -160,21 +160,21 @@
 
                 app.InitializeStores();
 
-                _logger.LogInformation("Application Started");
+                this._logger.LogInformation("Application Started");
             });
 
             appLifetime.ApplicationStopping.Register(() =>
             {
-                _logger.LogInformation("Application Stopping");
+                this._logger.LogInformation("Application Stopping");
                 app.CleanupStores();
             });
 
             appLifetime.ApplicationStopped.Register(() =>
             {
-                _logger.LogInformation("Application Stopped");
+                this._logger.LogInformation("Application Stopped");
             });
 
-            _logger.LogInformation("Application Configured");
+            this._logger.LogInformation("Application Configured");
         }
     }
 }

@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using IdentityBase.Configuration;
-using IdentityBase.Extensions;
-using IdentityBase.Models;
-using IdentityBase.Public.EntityFramework.Interfaces;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Public.EntityFramework.Options;
-using IdentityBase.Public.EntityFramework.Services;
-using IdentityBase.Services;
-using IdentityServer4.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
 namespace IdentityBase.Public.EntityFramework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
+    using IdentityBase.Models;
+    using IdentityBase.Public.EntityFramework.Interfaces;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Services;
+    using IdentityBase.Services;
+    using IdentityServer4.Models;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
+
     public class ConfigBasedStoreInitializer : IStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
@@ -51,8 +51,8 @@ namespace IdentityBase.Public.EntityFramework
             _userAccountDbContext = userAccountDbContext;
             _environment = environment;
 
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(
-               nameof(serviceProvider));
+            _serviceProvider = serviceProvider ??
+                throw new ArgumentNullException(nameof(serviceProvider));
 
             _logger.LogDebug("ConfigBasedStoreInitializer initialized");
         }
@@ -62,8 +62,9 @@ namespace IdentityBase.Public.EntityFramework
         /// </summary>
         public void InitializeStores()
         {
-            _logger.LogDebug($"Initialize Stores, MigrateDatabase: " +
-                "${ _options.MigrateDatabase}, SeedExampleData: { _options.SeedExampleData}");
+            _logger.LogDebug("Initialize Stores, MigrateDatabase: " +
+                $"{_options.MigrateDatabase}, SeedExampleData: " +
+                $"{_options.SeedExampleData}");
 
             // Only a leader may migrate or seed 
             if (_appOptions.Leader)
@@ -85,7 +86,8 @@ namespace IdentityBase.Public.EntityFramework
                 if (_options.CleanupTokens)
                 {
                     using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>().CreateScope())
+                        .GetRequiredService<IServiceScopeFactory>()
+                        .CreateScope())
                     {
                         serviceScope.ServiceProvider
                             .GetService<TokenCleanupService>().Start();
@@ -96,8 +98,8 @@ namespace IdentityBase.Public.EntityFramework
 
         public void CleanupStores()
         {
-            _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}, " +
-                $"EnsureDeleted: {_options.EnsureDeleted}");
+            _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}," +
+                $" EnsureDeleted: {_options.EnsureDeleted}");
 
             // Only leader may delete the database 
             if (_appOptions.Leader)
@@ -112,7 +114,8 @@ namespace IdentityBase.Public.EntityFramework
                 if (_options.CleanupTokens)
                 {
                     using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>().CreateScope())
+                        .GetRequiredService<IServiceScopeFactory>()
+                        .CreateScope())
                     {
                         serviceScope.ServiceProvider
                             .GetService<TokenCleanupService>().Stop();
@@ -125,20 +128,24 @@ namespace IdentityBase.Public.EntityFramework
         {
             _logger.LogDebug("Ensure Seed Data");
 
-            var rootPath = _options.SeedExampleDataPath.GetFullPath(_environment.ContentRootPath);
+            var rootPath = _options.SeedExampleDataPath.GetFullPath(
+                _environment.ContentRootPath);
 
             if (!_configurationDbContext.IdentityResources.Any())
             {
-                var path = Path.Combine(rootPath, "data_resources_identity.json");
+                var path = Path.Combine(rootPath,
+                    "data_resources_identity.json");
 
                 _logger.LogDebug($"Loading file: {path}");
 
                 var resources = JsonConvert
-                    .DeserializeObject<List<IdentityResource>>(File.ReadAllText(path));
+                    .DeserializeObject<List<IdentityResource>>(
+                        File.ReadAllText(path));
 
                 foreach (var resource in resources)
                 {
-                    _configurationDbContext.IdentityResources.Add(resource.ToEntity());
+                    _configurationDbContext.IdentityResources
+                        .Add(resource.ToEntity());
                 }
 
                 _configurationDbContext.SaveChanges();
@@ -151,11 +158,13 @@ namespace IdentityBase.Public.EntityFramework
                 _logger.LogDebug($"Loading file: {path}");
 
                 var resources = JsonConvert
-                    .DeserializeObject<List<ApiResource>>(File.ReadAllText(path));
+                    .DeserializeObject<List<ApiResource>>(
+                        File.ReadAllText(path));
 
                 foreach (var resource in resources)
                 {
-                    _configurationDbContext.ApiResources.Add(resource.ToEntity());
+                    _configurationDbContext.ApiResources
+                        .Add(resource.ToEntity());
                 }
 
                 _configurationDbContext.SaveChanges();
@@ -184,11 +193,13 @@ namespace IdentityBase.Public.EntityFramework
                 _logger.LogDebug($"Loading file: {path}");
 
                 var userAccounts = JsonConvert
-                    .DeserializeObject<List<UserAccount>>(File.ReadAllText(path));
+                    .DeserializeObject<List<UserAccount>>(
+                        File.ReadAllText(path));
 
                 foreach (var userAccount in userAccounts)
                 {
-                    _userAccountDbContext.UserAccounts.Add(userAccount.ToEntity());
+                    _userAccountDbContext.UserAccounts
+                        .Add(userAccount.ToEntity());
                 }
 
                 _userAccountDbContext.SaveChanges();
