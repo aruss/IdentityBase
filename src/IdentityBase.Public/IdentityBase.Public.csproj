@@ -18,12 +18,16 @@
 
   <ItemGroup>
     <Compile Remove="Actions\External\**" />
+    <Compile Remove="AppData\Logs\**" />
     <Compile Remove="TempData\**" />
     <Content Remove="Actions\External\**" />
+    <Content Remove="AppData\Logs\**" />
     <Content Remove="TempData\**" />
     <EmbeddedResource Remove="Actions\External\**" />
+    <EmbeddedResource Remove="AppData\Logs\**" />
     <EmbeddedResource Remove="TempData\**" />
     <None Remove="Actions\External\**" />
+    <None Remove="AppData\Logs\**" />
     <None Remove="TempData\**" />
   </ItemGroup>
 

@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace IdentityBase.Configuration
 {
     /// <summary>
@@ -7,8 +5,9 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ApplicationOptions
     {
-        [Obsolete]
+        // TODO: Find another way to get the current public URI, while application start.
         public string PublicUrl { get; set; }
+
         public string TempFolder { get; set; } = "./TempData";
         public bool Leader { get; set; } = true;
 
@@ -19,14 +18,16 @@ namespace IdentityBase.Configuration
         public int AccountLockoutDuration { get; set; } = 600; // 10 minutes
 
         /// <summary>
-        /// If enabled users have to confirm the registration by clicking in the link in the mail in order to login.
+        /// If enabled users have to confirm the registration by clicking in
+        /// the link in the mail in order to login.
         /// </summary>
         public bool RequireLocalAccountVerification { get; set; } = true;
 
         // External account options
 
         /// <summary>
-        /// If enabled users have to confirm the registration if the come from third party IDP
+        /// If enabled users have to confirm the registration if the come from
+        /// third party IDP
         /// </summary>
         public bool RequireExternalAccountVerification { get; set; } = false;
 
@@ -38,7 +39,8 @@ namespace IdentityBase.Configuration
         public bool EnableAccountDeletion { get; set; } = false;
 
         /// <summary>
-        /// If user has trouble with login IdSrv will show all possible accounts which are
+        /// If user has trouble with login IdSrv will show all possible
+        /// accounts which are
         /// </summary>
         public bool EnableLoginHints { get; set; } = false;
 
@@ -64,10 +66,11 @@ namespace IdentityBase.Configuration
 
         public bool EnableAccountRegistration { get; set; } = true;
 
-        public bool EnableAccountRecover { get; set; } = true;
+        public bool EnableAccountRecovery { get; set; } = true;
 
         /// <summary>
-        /// Automatically merges third party accounts with local account if email matches
+        /// Automatically merges third party accounts with local account if
+        /// email matches
         /// </summary>
         public bool AutomaticAccountMerge { get; set; } = true;
 
@@ -84,20 +87,35 @@ namespace IdentityBase.Configuration
         public bool AutomaticRedirectAfterSignOut { get; set; } = true;
 
         public bool WindowsAuthenticationEnabled { get; set; } = false;
+
         // specify the Windows authentication schemes you want to use for authentication
-        public string[] WindowsAuthenticationSchemes { get; set; } = new string[] { "Negotiate", "NTLM" };
-        public string WindowsAuthenticationDisplayName { get; set; } = "Windows";
+        public string[] WindowsAuthenticationSchemes { get; set; } =
+            new string[] { "Negotiate", "NTLM" };
+
+        public string WindowsAuthenticationDisplayName { get; set; } =
+            "Windows";
         
         public string ThemePath { get; set; }
 
-        public bool EnableUserInviteEndpoint { get; set; } = false;
-    }
+        /// <summary>
+        /// Enbales invitation get API 
+        /// </summary>
+        public bool EnableInvitationGetEndpoint { get; set; } = false;
 
-    public static class ApplicationOptionsExtensions
-    {
-        public static bool IsWebApiEnabled(this ApplicationOptions options)
-        {
-            return options.EnableUserInviteEndpoint; 
-        }
+        /// <summary>
+        /// Enbales invitation create API 
+        /// </summary>
+        public bool EnableInvitationCreateEndpoint { get; set; } = false;
+
+        /// <summary>
+        /// Enbales invitation delete API 
+        /// </summary>
+        public bool EnableInvitationDeleteEndpoint { get; set; } = false;
+        
+        /// <summary>
+        /// In case idbase API is active, this will be used as secret for
+        /// authentication
+        /// </summary>
+        public string ApiSecret { get; set; } = "secret";
     }
 }

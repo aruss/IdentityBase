@@ -116,7 +116,7 @@ namespace IdentityBase.Public.Actions.Register
             }
 
             // User account requires completion 
-            if (_applicationOptions.EnableUserInviteEndpoint &&
+            if (_applicationOptions.EnableInvitationCreateEndpoint &&
                 result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 var vm = new ConfirmViewModel
@@ -153,7 +153,7 @@ namespace IdentityBase.Public.Actions.Register
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
-            if (!_applicationOptions.EnableUserInviteEndpoint)
+            if (!this._applicationOptions.EnableInvitationCreateEndpoint)
             {
                 return NotFound();
             }
@@ -318,7 +318,7 @@ namespace IdentityBase.Public.Actions.Register
 
             var vm = new RegisterViewModel(inputModel)
             {
-                EnableAccountRecover = _applicationOptions.EnableAccountRecover,
+                EnableAccountRecover = _applicationOptions.EnableAccountRecovery,
                 EnableLocalLogin = (client != null ? client.EnableLocalLogin : false) &&
                     _applicationOptions.EnableLocalLogin,
                 ExternalProviders = providers.ToArray(),

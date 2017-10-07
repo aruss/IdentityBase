@@ -194,7 +194,7 @@ namespace IdentityBase.Public.Actions.Login
                     .EnableAccountRegistration,
 
                 EnableAccountRecover = this._applicationOptions
-                    .EnableAccountRecover,
+                    .EnableAccountRecovery,
 
                 LoginHint = context.LoginHint,
             };

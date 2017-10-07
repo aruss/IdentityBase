@@ -151,7 +151,10 @@ namespace IdentityBase.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api1", "api2.read_only" }
+                    AllowedScopes = {
+                        "api1",
+                        "api2.read_only"
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -170,7 +173,10 @@ namespace IdentityBase.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api1", "api2.read_only" }
+                    AllowedScopes = {
+                        "api1",
+                        "api2.read_only"
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -184,8 +190,14 @@ namespace IdentityBase.Configuration
                         new Secret("secret".Sha256())
                     },
 
-                    AllowedGrantTypes = { "custom", "custom.nosubject" },
-                    AllowedScopes = { "api1", "api2.read_only" }
+                    AllowedGrantTypes = {
+                        "custom",
+                        "custom.nosubject"
+                    },
+                    AllowedScopes = {
+                        "api1",
+                        "api2.read_only"
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -206,7 +218,8 @@ namespace IdentityBase.Configuration
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         "custom.profile",
-                        "api1", "api2.read_only"
+                        "api1",
+                        "api2.read_only"
                     }
                 },
 
@@ -225,7 +238,8 @@ namespace IdentityBase.Configuration
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only"
+                        "api1",
+                        "api2.read_only"
                     }
                 },
 
@@ -250,7 +264,8 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only"
+                        "api1",
+                        "api2.read_only"
                     }
                 },
 
@@ -266,7 +281,10 @@ namespace IdentityBase.Configuration
                     },
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes = { "api1", "api2.read_only" },
+                    AllowedScopes = {
+                        "api1",
+                        "api2.read_only"
+                    },
 
                     AccessTokenType = AccessTokenType.Reference
                 },
@@ -292,7 +310,8 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only"
+                        "api1",
+                        "api2.read_only"
                     }
                 },
 
@@ -321,7 +340,7 @@ namespace IdentityBase.Configuration
                 {
                     ClientId = "mvc.hybrid",
                     ClientName = "MVC Hybrid",
-                    ClientUri = "http://identityserver.io",
+                    ClientUri = "http://localhost:21402",
                     //LogoUri = "https://pbs.twimg.com/profile_images/1612989113/Ki-hanja_400x400.png",
 
                     ClientSecrets =
@@ -347,7 +366,9 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only"
+                        "api1",
+                        "api2.read_only",
+                        "idbase.invitations"
                     }
                 },
 
@@ -364,8 +385,13 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
 
-                    RedirectUris = { "http://localhost:28895/index.html" },
-                    AllowedScopes = { "api1", "api2.read_only" }
+                    RedirectUris = {
+                        "http://localhost:28895/index.html"
+                    },
+                    AllowedScopes = {
+                        "api1",
+                        "api2.read_only"
+                    }
                 },
                 
                 ///////////////////////////////////////////
@@ -399,7 +425,9 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
-                        "api1", "api2.read_only", "api2.full_access"
+                        "api1",
+                        "api2.read_only",
+                        "api2.full_access"
                     }
                 }
             };
@@ -415,7 +443,11 @@ namespace IdentityBase.Configuration
                 new IdentityResources.Email(),
 
                 // custom identity resource with some consolidated claims
-                new IdentityResource("custom.profile", new[] { JwtClaimTypes.Name, JwtClaimTypes.Email, "location" })
+                new IdentityResource("custom.profile", new[] {
+                    JwtClaimTypes.Name,
+                    JwtClaimTypes.Email,
+                    "location"
+                })
             };
         }
 
@@ -457,6 +489,26 @@ namespace IdentityBase.Configuration
                         {
                             Name = "api2.read_only",
                             DisplayName = "Read only access to API 2"
+                        }
+                    }
+                },
+
+                new ApiResource
+                {
+                    Name = "idbase",
+                    DisplayName = "IdentityBase",
+
+                    ApiSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    Scopes =
+                    {
+                        new Scope()
+                        {
+                            Name = "idbase.invitations",
+                            DisplayName = "Full access to IdentityBase invitations API",
                         }
                     }
                 }

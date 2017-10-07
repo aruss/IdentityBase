@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using IdentityBase.Configuration;
-using IdentityBase.Extensions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Extensions.DependencyInjection;
-using ServiceBase.Api;
-
 namespace IdentityBase.Public
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.ApplicationParts;
+    using Microsoft.AspNetCore.Mvc.Controllers;
+    using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Api;
+
     public static class StartupMvc
     {
         public static void AddMvc(
@@ -30,15 +31,18 @@ namespace IdentityBase.Public
                 {
                     razor.ViewLocationExpanders.Add(
                         new Razor.CustomViewLocationExpander(
-                            appOptions.ThemePath?.GetFullPath(environment.ContentRootPath)
+                            appOptions.ThemePath?
+                                .GetFullPath(environment.ContentRootPath)
                         )
                     );
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
                     // Remove default ControllerFeatureProvider 
-                    var item = manager.FeatureProviders.FirstOrDefault(c => c.GetType()
-                        .Equals(typeof(ControllerFeatureProvider)));
+                    IApplicationFeatureProvider item = manager.FeatureProviders
+                        .FirstOrDefault(c => c.GetType()
+                            .Equals(typeof(ControllerFeatureProvider)));
+
                     if (item != null)
                     {
                         manager.FeatureProviders.Remove(item);
@@ -48,10 +52,14 @@ namespace IdentityBase.Public
                     // current configuration
                     manager.FeatureProviders.Add(
                         new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-                        .AddIf<Api.UserAccountInvite.InvitationsController>(
-                            !appOptions.EnableUserInviteEndpoint)
+                        .AddIf<Api.Invitations.InvitationsGetController>(
+                            !appOptions.EnableInvitationGetEndpoint)
+                        .AddIf<Api.Invitations.InvitationsPutController>(
+                            !appOptions.EnableInvitationCreateEndpoint)
+                        .AddIf<Api.Invitations.InvitationsDeleteController>(
+                            !appOptions.EnableInvitationDeleteEndpoint)
                         .AddIf<Actions.Recover.RecoverController>(
-                            !appOptions.EnableAccountRecover)
+                            !appOptions.EnableAccountRecovery)
                         .AddIf<Actions.Register.RegisterController>(
                             !appOptions.EnableAccountRegistration)
                     ));

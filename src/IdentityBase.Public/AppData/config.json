@@ -65,10 +65,12 @@
     "VerificationKeyLifetime": 1440,
     "AutomaticAccountMerge": true,
     "EnableAccountRegistration": true,
-    "EnableAccountRecover": true,
+    "EnableAccountRecovery": true,
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
-    "EnableUserInviteEndpoint": true
+    "EnableInvitationGetEndpoint": true,
+    "EnableInvitationCreateEndpoint": true,
+    "EnableInvitationDeleteEndpoint": true
   },
   "Email": {
     "TemplateDirectoryPath": "./Templates/Email"

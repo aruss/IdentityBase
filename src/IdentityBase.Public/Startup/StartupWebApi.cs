@@ -1,4 +1,3 @@
-﻿
 namespace IdentityBase.Public
 {
     using IdentityBase.Configuration;
@@ -6,49 +5,45 @@ namespace IdentityBase.Public
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Authorization;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
 
     public static class StartupWebApi
     {
         public static void AddWebApi(
             this IServiceCollection services,
-            ApplicationOptions options)
+            ApplicationOptions applicationOptions)
         {
-            if (options.IsWebApiEnabled())
+            if (!applicationOptions.IsWebApiEnabled())
             {
-                services.AddAuthorization(authOptions =>
-                {
-                    authOptions.AddScopePolicies<ApiController>(
-                        options.PublicUrl,
-                        fromReferenced: true);
-                });
+                return;
             }
+
+            services.AddAuthorization(options =>
+            {
+                options.AddScopePolicies<ApiController>(
+                    applicationOptions.PublicUrl,
+                    fromReferenced: true
+                );
+            });
+
+            services
+                .AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = applicationOptions.PublicUrl;
+                    options.RequireHttpsMetadata = applicationOptions
+                        .PublicUrl.IndexOf("https") > -1;
+
+                    options.ApiName = "idbase";
+                    options.ApiSecret = applicationOptions.ApiSecret;
+                });
+
         }
 
         public static void UseWebApi(
             this IApplicationBuilder app,
-            ApplicationOptions options)
+            ApplicationOptions applicationOptions)
         {
-            if (options.IsWebApiEnabled())
-            {
-                app.Map("/api", appApi =>
-                {
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-                    // appApi.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-                    // {
-                    //     Authority = options.PublicUrl,
-                    //     RequireHttpsMetadata = false,
-                    //     AllowedScopes = ScopeAuthorizeHelper
-                    //         .GetAllScopeAuthorizeAttributes<ApiController>(fromReferenced: true)
-                    //         .Select(s => s.Scope).ToArray(),
-                    //     AutomaticAuthenticate = true
-                    // });
-
-                    appApi.UseMvc();
-                });
-            }
+            
         }
     }
 }
