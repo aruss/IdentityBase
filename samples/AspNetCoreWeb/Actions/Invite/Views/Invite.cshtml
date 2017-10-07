@@ -1,0 +1,15 @@
+@model AspNetCoreWeb.Actions.Invite.InviteViewModel
+@{
+    ViewData["Title"] = "User account invitation";
+}
+
+<h1>Invite User</h1> 
+
+<form action="/invite" method="post" >
+
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+
+    <br/>
+    <button class="btn btn-primary" type="submit">Invite</button>
+</form>

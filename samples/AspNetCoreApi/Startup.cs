@@ -17,8 +17,9 @@ namespace AspNetCoreApi
             services.AddDistributedMemoryCache();
 
             services
-                .AddAuthentication(IdentityServerAuthenticationDefaults
-                    .AuthenticationScheme)
+                .AddAuthentication(
+                    IdentityServerAuthenticationDefaults.AuthenticationScheme)
+
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "http://localhost:5000";
@@ -34,7 +35,7 @@ namespace AspNetCoreApi
             app.UseCors(policy =>
             {
                 policy.WithOrigins(
-                    "http://localhost:28895", 
+                    "http://localhost:28895",
                     "http://localhost:7017");
 
                 policy.AllowAnyHeader();

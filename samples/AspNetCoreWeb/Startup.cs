@@ -1,12 +1,12 @@
 namespace AspNetCoreWeb
 {
     using System;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.DependencyInjection;
     using System.IdentityModel.Tokens.Jwt;
     using IdentityModel;
-    using Microsoft.IdentityModel.Tokens;
     using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
 
     public class Startup
     {
@@ -17,11 +17,16 @@ namespace AspNetCoreWeb
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddRazorOptions(razor =>
+            {
+                razor.ViewLocationExpanders.Add(new LocationExpander());
+            });
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme =
+                    CookieAuthenticationDefaults.AuthenticationScheme;
+
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie(options =>
@@ -44,15 +49,17 @@ namespace AspNetCoreWeb
                     options.Scope.Add("profile");
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
+                    options.Scope.Add("idbase.invitations");
                     options.Scope.Add("offline_access");
 
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.SaveTokens = true;
 
+                    // Map here the claims for name and role 
                     options.TokenValidationParameters =
                         new TokenValidationParameters
                         {
-                            NameClaimType = JwtClaimTypes.Name,
+                            NameClaimType = JwtClaimTypes.Email,
                             RoleClaimType = JwtClaimTypes.Role,
                         };
                 });

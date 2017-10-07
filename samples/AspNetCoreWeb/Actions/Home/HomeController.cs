@@ -1,4 +1,4 @@
-namespace AspNetCoreWeb.Controllers
+namespace AspNetCoreWeb.Actions.Home
 {
     using System;
     using System.Collections.Generic;

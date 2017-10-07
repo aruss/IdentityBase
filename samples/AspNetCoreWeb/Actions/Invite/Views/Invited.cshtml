@@ -1,0 +1,9 @@
+@model AspNetCoreWeb.Actions.Invite.InviteViewModel
+@{
+    ViewData["Title"] = "User account invitation";
+}
+
+<h1>User @Model.Email has been successfully invited, he will receive
+    a email with a confirmation link.</h1> 
+
+<a href="/invite" class="btn btn-primary">Invite another one</a>
