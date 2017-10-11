@@ -9,7 +9,7 @@ namespace IdentityBase.Public
     using Microsoft.AspNetCore.Mvc.ApplicationParts;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Api;
+    using ServiceBase.Mvc;
 
     public static class StartupMvc
     {
@@ -25,7 +25,8 @@ namespace IdentityBase.Public
 
             services.AddMvc(mvcOptions =>
                 {
-                    mvcOptions.OutputFormatters.ReplaceJsonOutputFormatter(); 
+                    mvcOptions.OutputFormatters
+                        .AddDefaultJsonOutputFormatter(); 
                 })
                 .AddRazorOptions(razor =>
                 {
@@ -38,35 +39,45 @@ namespace IdentityBase.Public
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
-                    // Remove default ControllerFeatureProvider 
-                    IApplicationFeatureProvider item = manager.FeatureProviders
-                        .FirstOrDefault(c => c.GetType()
-                            .Equals(typeof(ControllerFeatureProvider)));
-
-                    if (item != null)
-                    {
-                        manager.FeatureProviders.Remove(item);
-                    }
-
-                    // Register new IApplicationFeatureProvider with a blacklist depending on 
-                    // current configuration
-                    manager.FeatureProviders.Add(
-                        new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-                        .AddIf<Api.Invitations.InvitationsGetController>(
-                            !appOptions.EnableInvitationGetEndpoint)
-                        .AddIf<Api.Invitations.InvitationsPutController>(
-                            !appOptions.EnableInvitationCreateEndpoint)
-                        .AddIf<Api.Invitations.InvitationsDeleteController>(
-                            !appOptions.EnableInvitationDeleteEndpoint)
-                        .AddIf<Actions.Recover.RecoverController>(
-                            !appOptions.EnableAccountRecovery)
-                        .AddIf<Actions.Register.RegisterController>(
-                            !appOptions.EnableAccountRegistration)
-                    ));
+                    StartupMvc
+                        .ConfigureApplicationPartManager(appOptions, manager);
                 });
         }
 
-        private static List<TypeInfo> AddIf<TController>(this List<TypeInfo> list, bool assertion)
+        private static void ConfigureApplicationPartManager(
+            ApplicationOptions appOptions,
+            ApplicationPartManager manager)
+        {
+            // Remove default ControllerFeatureProvider 
+            IApplicationFeatureProvider item = manager.FeatureProviders
+                .FirstOrDefault(c => c.GetType()
+                    .Equals(typeof(ControllerFeatureProvider)));
+
+            if (item != null)
+            {
+                manager.FeatureProviders.Remove(item);
+            }
+
+            // Register new IApplicationFeatureProvider with a blacklist
+            // depending on current configuration
+            manager.FeatureProviders.Add(
+                new BlackListedControllerFeatureProvider(new List<TypeInfo>()
+                .AddIf<Api.Invitations.InvitationsGetController>(
+                    !appOptions.EnableInvitationGetEndpoint)
+                .AddIf<Api.Invitations.InvitationsPutController>(
+                    !appOptions.EnableInvitationCreateEndpoint)
+                .AddIf<Api.Invitations.InvitationsDeleteController>(
+                    !appOptions.EnableInvitationDeleteEndpoint)
+                .AddIf<Actions.Recover.RecoverController>(
+                    !appOptions.EnableAccountRecovery)
+                .AddIf<Actions.Register.RegisterController>(
+                    !appOptions.EnableAccountRegistration)
+            ));
+        }
+
+        private static List<TypeInfo> AddIf<TController>(
+            this List<TypeInfo> list,
+            bool assertion)
         {
             if (assertion)
             {

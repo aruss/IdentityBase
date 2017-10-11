@@ -1,10 +1,10 @@
-﻿using Microsoft.Net.Http.Headers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-
 namespace IdentityBase.Public.IntegrationTests
 {
+    using Microsoft.Net.Http.Headers;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Http;
+
     public static class HttpResponseMessageExtensions
     {
         // Inspired from:
@@ -15,12 +15,19 @@ namespace IdentityBase.Public.IntegrationTests
         {
             var result = new Dictionary<string, string>();
 
-            if (response.Headers.TryGetValues("Set-Cookie", out IEnumerable<string> values))
+            if (response.Headers
+                .TryGetValues("Set-Cookie", out IEnumerable<string> values))
             {
-                SetCookieHeaderValue.ParseList(values.ToList()).ToList().ForEach(cookie =>
-                {
-                    result.Add(cookie.Name.ToString(), cookie.Value.ToString());
-                });
+                SetCookieHeaderValue
+                    .ParseList(values.ToList())
+                    .ToList()
+                    .ForEach(cookie =>
+                    {
+                        result.Add(
+                            cookie.Name.ToString(),
+                            cookie.Value.ToString()
+                        );
+                    });
             }
 
             return result;

@@ -7,13 +7,13 @@ namespace IdentityBase.Public.Api.Invitations
     using IdentityServer4.AccessTokenValidation;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
-    using ServiceBase.Api;
     using ServiceBase.Authorization;
     using ServiceBase.Collections;
+    using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    [TypeFilter(typeof(ApiResultExceptionFilterAttribute))]
-    [TypeFilter(typeof(ApiResultValidateModelAttribute))]
+    [TypeFilter(typeof(ExceptionFilter))]
+    [TypeFilter(typeof(ModelStateFilter))]
     public class InvitationsGetController : ApiController
     {
         private readonly UserAccountService _userAccountService;
@@ -29,33 +29,28 @@ namespace IdentityBase.Public.Api.Invitations
         [HttpGet("invitations")]
         [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<ApiResult<PagedList<InvitationsPutResultModel>>> Get(
-            PagedListRequest request)
+        public async Task<IActionResult> Get(PagedListInputModel request)
         {
             PagedList<UserAccount> list = await this._userAccountService
                 .LoadInvitedUserAccountsAsync(request.Take, request.Skip);
 
-            var result = new ApiResult<PagedList<InvitationsPutResultModel>>
+            var result = new PagedList<InvitationsPutResultModel>
             {
-                Success = true,
-                Result = new PagedList<InvitationsPutResultModel>
+                Skip = list.Skip,
+                Take = list.Take,
+                Total = list.Total,
+                Sort = list.Sort,
+                Items = list.Items.Select(s => new InvitationsPutResultModel
                 {
-                    Skip = list.Skip,
-                    Take = list.Take,
-                    Total = list.Total,
-                    Sort = list.Sort,
-                    Items = list.Items.Select(s => new InvitationsPutResultModel
-                    {
-                        Id = s.Id,
-                        Email = s.Email,
-                        CreatedAt = s.CreatedAt,
-                        CreatedBy = s.CreatedBy,
-                        VerificationKeySentAt = s.VerificationKeySentAt
-                    }).ToArray()
-                }
-            };
+                    Id = s.Id,
+                    Email = s.Email,
+                    CreatedAt = s.CreatedAt,
+                    CreatedBy = s.CreatedBy,
+                    VerificationKeySentAt = s.VerificationKeySentAt
+                }).ToArray()
+            }; 
 
-            return result;
+            return new ObjectResult(result);
         }
     }
 }

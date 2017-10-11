@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace IdentityBase.Public.IntegrationTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.Extensions.Configuration;
+
     public static class ConfigBuilder
     {
         public static Dictionary<string, string> Default
@@ -13,10 +13,12 @@ namespace IdentityBase.Public.IntegrationTests
             {
                 var configData = new Dictionary<string, string>()
                 {
+                    { "App:PublicUrl", "http://localhost" },
+
                     { "EntityFramework:MigrateDatabase", "false" },
                     { "EntityFramework:SeedExampleData", "true" },
                     { "EntityFramework:EnsureDeleted", "true" },
-
+                    
                     { "Email:TemplateDirectoryPath", "./Templates/Email" },
                     { "Sms:TemplateDirectoryPath", "./Templates/Sms" },
 
@@ -36,28 +38,36 @@ namespace IdentityBase.Public.IntegrationTests
             }
         }
 
-        public static Dictionary<string, string> RemoveAuthFacebook(this Dictionary<string, string> config)
+        public static Dictionary<string, string> RemoveAuthFacebook(
+            this Dictionary<string, string> config)
         {
             return config
                 .RemoveByKey("Authentication:Google:AppId")
                 .RemoveByKey("Authentication:Google:AppSecret");
         }
 
-        public static Dictionary<string, string> RemoveAuthGoogle(this Dictionary<string, string> config)
+        public static Dictionary<string, string> RemoveAuthGoogle(
+            this Dictionary<string, string> config)
         {
             return config
                 .RemoveByKey("Authentication:Google:ClientId")
                 .RemoveByKey("Authentication:Google:ClientSecret");
         }
 
-        public static Dictionary<string, string> RemoveDefaultMailService(this Dictionary<string, string> config)
+        public static Dictionary<string, string> RemoveDefaultMailService(
+            this Dictionary<string, string> config)
         {
-            return config.RemoveByValue("IdentityBase.Public.DebugEmailModule, IdentityBase.Public").ReorderServices();
+            return config
+                .RemoveByValue("IdentityBase.Public.DebugEmailModule, IdentityBase.Public")
+                .ReorderServices();
         }
 
-        private static Dictionary<string, string> ReorderServices(this Dictionary<string, string> config)
+        private static Dictionary<string, string> ReorderServices(
+            this Dictionary<string, string> config)
         {
-            var items = config.Where(c => c.Key.StartsWith("Services:modules:")).ToArray();
+            var items = config
+                .Where(c => c.Key.StartsWith("Services:modules:"))
+                .ToArray();
 
             foreach (var item in items)
             {
@@ -80,7 +90,9 @@ namespace IdentityBase.Public.IntegrationTests
         /// <param name="value"></param>
         /// <returns></returns>
         public static Dictionary<string, string> Alter(
-            this Dictionary<string, string> config, string key, string value)
+            this Dictionary<string, string> config,
+            string key,
+            string value)
         {
             if (config.ContainsKey(key))
             {
@@ -101,7 +113,9 @@ namespace IdentityBase.Public.IntegrationTests
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Dictionary<string, string> RemoveByKey(this Dictionary<string, string> config, string key)
+        public static Dictionary<string, string> RemoveByKey(
+            this Dictionary<string, string> config,
+            string key)
         {
             if (config.ContainsKey(key))
             {
@@ -111,11 +125,15 @@ namespace IdentityBase.Public.IntegrationTests
             return config;
         }
 
-        public static Dictionary<string, string> RemoveByValue(this Dictionary<string, string> config, string value)
+        public static Dictionary<string, string> RemoveByValue(
+            this Dictionary<string, string> config,
+            string value)
         {
-            var item = config.Where(e => e.Value.Equals(value, StringComparison.OrdinalIgnoreCase))
-               .Select(e => (KeyValuePair<string, string>?)e)
-               .FirstOrDefault();
+            var item = config
+                .Where(e => e.Value
+                    .Equals(value, StringComparison.OrdinalIgnoreCase))
+                .Select(e => (KeyValuePair<string, string>?)e)
+                .FirstOrDefault();
 
             if (item.HasValue)
             {
@@ -130,7 +148,8 @@ namespace IdentityBase.Public.IntegrationTests
         /// </summary>
         /// <param name="config">Configuration data</param>
         /// <returns><see cref="IConfigurationRoot"/></returns>
-        public static IConfigurationRoot Build(this Dictionary<string, string> config)
+        public static IConfigurationRoot Build(
+            this Dictionary<string, string> config)
         {
             return new ConfigurationBuilder()
                 .AddInMemoryCollection(config)

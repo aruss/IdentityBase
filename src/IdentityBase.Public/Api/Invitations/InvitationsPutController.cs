@@ -11,12 +11,12 @@ namespace IdentityBase.Public.Api.Invitations
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
-    using ServiceBase.Api;
     using ServiceBase.Authorization;
+    using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    [TypeFilter(typeof(ApiResultExceptionFilterAttribute))]
-    [TypeFilter(typeof(ApiResultValidateModelAttribute))]
+    [TypeFilter(typeof(ExceptionFilter))]
+    [TypeFilter(typeof(ModelStateFilter))]
     public class InvitationsPutController : ApiController
     {
         private readonly UserAccountService _userAccountService;
@@ -32,11 +32,11 @@ namespace IdentityBase.Public.Api.Invitations
             this._emailService = emailService;
             this._clientStore = clientStore;
         }
-        
+
         [HttpPut("invitations")]
         [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<object> Put(
+        public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)
         {
             Client client = await this._clientStore
@@ -44,10 +44,9 @@ namespace IdentityBase.Public.Api.Invitations
 
             if (client == null)
             {
-                return this.BadRequest(new InvalidStateApiResult(
-                    "The ClientId field is invalid.",
-                    ResponseMessageKind.Error,
-                    nameof(inputModel.ClientId))
+                return this.BadRequest(
+                    nameof(inputModel.ClientId),
+                    "The ClientId field is invalid."
                 );
             }
 
@@ -63,10 +62,9 @@ namespace IdentityBase.Public.Api.Invitations
             }
             else
             {
-                return this.BadRequest(new InvalidStateApiResult(
-                    "The ReturnUri field is invalid.",
-                    ResponseMessageKind.Error,
-                    nameof(inputModel.ReturnUri))
+                return this.BadRequest(
+                    nameof(inputModel.ReturnUri),
+                    "The ReturnUri field is invalid."
                 );
             }
 
@@ -75,10 +73,9 @@ namespace IdentityBase.Public.Api.Invitations
                 if (await this._userAccountService
                     .LoadByEmailAsync(inputModel.Email) == null)
                 {
-                    return this.BadRequest(new InvalidStateApiResult(
-                        "The InvitedBy field is invalid, UserAccount does not exists.",
-                        ResponseMessageKind.Error,
-                        nameof(inputModel.InvitedBy))
+                    return this.BadRequest(
+                        nameof(inputModel.InvitedBy),
+                        "The InvitedBy field is invalid, UserAccount does not exists."
                     );
                 }
             }
@@ -88,9 +85,10 @@ namespace IdentityBase.Public.Api.Invitations
 
             if (userAccount != null)
             {
-                return BadRequest(new InvalidStateApiResult(
-                    "The Email field is invalid, UserAccount already exists.",
-                    ResponseMessageKind.Error, nameof(inputModel.Email)));
+                return this.BadRequest(
+                    nameof(inputModel.Email),
+                    "The Email field is invalid, UserAccount already exists."
+                );
             }
 
             userAccount = await this._userAccountService
@@ -103,20 +101,16 @@ namespace IdentityBase.Public.Api.Invitations
             await this.SendEmailAsync(userAccount);
 
             this.Response.StatusCode = (int)HttpStatusCode.Created;
-            return new ApiResult<InvitationsPutResultModel>
+            return new ObjectResult(new InvitationsPutResultModel
             {
-                Success = true,
-                Result = new InvitationsPutResultModel
-                {
-                    Id = userAccount.Id,
-                    Email = userAccount.Email,
-                    CreatedAt = userAccount.CreatedAt,
-                    CreatedBy = userAccount.CreatedBy,
-                    VerificationKeySentAt = userAccount.VerificationKeySentAt
-                }
-            };
+                Id = userAccount.Id,
+                Email = userAccount.Email,
+                CreatedAt = userAccount.CreatedAt,
+                CreatedBy = userAccount.CreatedBy,
+                VerificationKeySentAt = userAccount.VerificationKeySentAt
+            });
         }
-        
+
         [NonAction]
         internal async Task SendEmailAsync(UserAccount userAccount)
         {

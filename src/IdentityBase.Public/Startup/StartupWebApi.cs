@@ -1,5 +1,6 @@
 namespace IdentityBase.Public
 {
+    using System.Reflection;
     using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace IdentityBase.Public
             {
                 options.AddScopePolicies<ApiController>(
                     applicationOptions.PublicUrl,
+                    assembly: typeof(Startup).GetTypeInfo().Assembly,
                     fromReferenced: true
                 );
             });
@@ -31,7 +33,7 @@ namespace IdentityBase.Public
                 {
                     options.Authority = applicationOptions.PublicUrl;
                     options.RequireHttpsMetadata = applicationOptions
-                        .PublicUrl.IndexOf("https") > -1;
+                        ?.PublicUrl.IndexOf("https") > -1;
 
                     options.ApiName = "idbase";
                     options.ApiSecret = applicationOptions.ApiSecret;

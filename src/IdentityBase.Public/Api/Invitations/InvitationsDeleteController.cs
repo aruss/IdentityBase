@@ -6,11 +6,11 @@ namespace IdentityBase.Public.Api.Invitations
     using IdentityBase.Services;
     using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Mvc;
-    using ServiceBase.Api;
     using ServiceBase.Authorization;
+    using ServiceBase.Mvc;
 
-    [TypeFilter(typeof(ApiResultExceptionFilterAttribute))]
-    [TypeFilter(typeof(ApiResultValidateModelAttribute))]
+    [TypeFilter(typeof(ExceptionFilter))]
+    [TypeFilter(typeof(ModelStateFilter))]
     public class InvitationsDeleteController : ApiController
     {
         private readonly UserAccountService _userAccountService;
@@ -24,7 +24,7 @@ namespace IdentityBase.Public.Api.Invitations
         [HttpDelete("invitations/{UserAccountId}")]
         [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<object> Delete([FromRoute]Guid userAccountId)
+        public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {
             UserAccount userAccount = await this._userAccountService
                 .LoadByIdAsync(userAccountId);
@@ -43,10 +43,7 @@ namespace IdentityBase.Public.Api.Invitations
 
             await this._userAccountService.DeleteByIdAsync(userAccountId);
 
-            return new ApiResult
-            {
-                Success = true
-            };
+            return this.Ok(); 
         }
     }
 }

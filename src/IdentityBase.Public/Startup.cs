@@ -1,4 +1,4 @@
-﻿namespace IdentityBase.Public
+namespace IdentityBase.Public
 {
     using System;
     using Autofac;
@@ -90,7 +90,7 @@
 
             // Update current instances
             Current.Configuration = this._configuration;
-            Current.Logger = _logger;
+            Current.Logger = this._logger;
 
             // Add AutoFac continer and register modules form config
             ContainerBuilder builder = new ContainerBuilder();
