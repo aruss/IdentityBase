@@ -11,6 +11,7 @@ namespace IdentityBase.Public.Api.Invitations
 
     [TypeFilter(typeof(ExceptionFilter))]
     [TypeFilter(typeof(ModelStateFilter))]
+    [TypeFilter(typeof(BadRequestFilter))]
     public class InvitationsDeleteController : ApiController
     {
         private readonly UserAccountService _userAccountService;
