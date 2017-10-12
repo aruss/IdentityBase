@@ -1,9 +1,9 @@
-﻿using IdentityBase.Crypto;
-using System;
-using Xunit;
-
 namespace IdentityBase.UnitTests
 {
+    using System;
+    using IdentityBase.Crypto;
+    using Xunit;
+
     [Collection("ICrypto")]
     public class DefaultCryptoTests : IDisposable
     {
