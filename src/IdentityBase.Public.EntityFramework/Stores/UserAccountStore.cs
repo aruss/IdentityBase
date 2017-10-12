@@ -1,19 +1,20 @@
-﻿using IdentityBase.Models;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ServiceBase;
-using ServiceBase.Collections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace IdentityBase.Public.EntityFramework.Stores
 {
-    // TODO: make use of value type  System.Security.Claims.ClaimValueTypes while create UserClaim
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using IdentityBase.Models;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using ServiceBase;
+    using ServiceBase.Collections;
+
+    // TODO: make use of value type  System.Security.Claims.ClaimValueTypes
+    // while create UserClaim
     // http://www.npgsql.org/doc/faq.html
 
     public class UserAccountStore : IUserAccountStore
@@ -21,12 +22,13 @@ namespace IdentityBase.Public.EntityFramework.Stores
         private readonly UserAccountDbContext _context;
         private readonly ILogger<UserAccountStore> _logger;
 
-        public UserAccountStore(UserAccountDbContext context, ILogger<UserAccountStore> logger)
+        public UserAccountStore(
+            UserAccountDbContext context,
+            ILogger<UserAccountStore> logger)
         {
+            _context = context ?? throw
+                new ArgumentNullException(nameof(context));
 
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            _context = context;
             _logger = logger;
         }
 
@@ -56,11 +58,15 @@ namespace IdentityBase.Public.EntityFramework.Stores
             var userAccount = _context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
-                .FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(x => x.Email
+                    .Equals(email, StringComparison.OrdinalIgnoreCase));
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug("{email} found in database: {userAccountFound}", email, model != null);
+            _logger.LogDebug(
+                "{email} found in database: {userAccountFound}",
+                email,
+                model != null);
 
             return Task.FromResult(model);
         }
@@ -70,30 +76,41 @@ namespace IdentityBase.Public.EntityFramework.Stores
             var userAccount = _context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
-                .FirstOrDefault(x =>
-                    x.Email.Equals(email, StringComparison.OrdinalIgnoreCase) ||
-                    x.Accounts.Any(c => c.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
+                .FirstOrDefault(x => x.Email
+                    .Equals(email, StringComparison.OrdinalIgnoreCase) ||
+                         x.Accounts.Any(c => c.Email
+                        .Equals(email, StringComparison.OrdinalIgnoreCase)));
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug("{email} found in database: {userAccountFound}", email, model != null);
+            _logger.LogDebug(
+                "{email} found in database: {userAccountFound}",
+                email,
+                model != null);
 
             return Task.FromResult(model);
         }
 
-        public Task<UserAccount> LoadByExternalProviderAsync(string provider, string subject)
+        public Task<UserAccount> LoadByExternalProviderAsync(
+            string provider,
+            string subject)
         {
             var userAccount = _context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
                 .FirstOrDefault(x =>
-                    x.Accounts.Any(c => c.Provider.Equals(provider, StringComparison.OrdinalIgnoreCase)) ||
-                    x.Accounts.Any(c => c.Subject.Equals(subject, StringComparison.OrdinalIgnoreCase)));
+                    x.Accounts.Any(c => c.Provider.Equals(
+                        provider, StringComparison.OrdinalIgnoreCase)) ||
+                    x.Accounts.Any(c => c.Subject.Equals(
+                        subject, StringComparison.OrdinalIgnoreCase)));
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug("{provider}, {subject} found in database: {userAccountFound}",
-                provider, subject, model != null);
+            _logger.LogDebug(
+                "{provider}, {subject} found in database: {userAccountFound}",
+                provider,
+                subject,
+                model != null);
 
             return Task.FromResult(model);
         }
@@ -107,7 +124,10 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug("{id} found in database: {userAccountFound}", id, model != null);
+            _logger.LogDebug(
+                "{id} found in database: {userAccountFound}",
+                id,
+                model != null);
 
             return Task.FromResult(model);
         }
@@ -121,25 +141,35 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug("{key} found in database: {userAccountFound}", key, model != null);
+            _logger.LogDebug(
+                "{key} found in database: {userAccountFound}",
+                key, model != null);
 
             return Task.FromResult(model);
         }
 
         public Task<UserAccount> WriteAsync(UserAccount userAccount)
         {
-            if (userAccount == null) throw new ArgumentNullException(nameof(userAccount));
+            if (userAccount == null) throw
+                    new ArgumentNullException(nameof(userAccount));
 
-            var userAccountEntity = _context.UserAccounts.SingleOrDefault(x => x.Id == userAccount.Id);
+            var userAccountEntity = _context.UserAccounts
+                .SingleOrDefault(x => x.Id == userAccount.Id);
+
             if (userAccountEntity == null)
             {
-                _logger.LogDebug("{userAccountId} not found in database", userAccount.Id);
+                _logger.LogDebug(
+                    "{userAccountId} not found in database",
+                    userAccount.Id);
 
-                userAccountEntity = _context.UserAccounts.Add(userAccount.ToEntity()).Entity;
+                userAccountEntity = _context.UserAccounts
+                    .Add(userAccount.ToEntity()).Entity;
             }
             else
             {
-                _logger.LogDebug("{userAccountId} found in database", userAccount.Id);
+                _logger.LogDebug(
+                    "{userAccountId} found in database",
+                    userAccount.Id);
 
                 userAccount.UpdateEntity(userAccountEntity);
 
@@ -164,7 +194,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
             return Task.FromResult<UserAccount>(null);
         }
 
-        public Task<ExternalAccount> WriteExternalAccountAsync(ExternalAccount externalAccount)
+        public Task<ExternalAccount> WriteExternalAccountAsync(
+            ExternalAccount externalAccount)
         {
             var userAccountId = externalAccount.UserAccount != null ?
                 externalAccount.UserAccount.Id : externalAccount.UserAccountId;
@@ -173,12 +204,17 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             if (userAccountEntity == null)
             {
-                _logger.LogError("{existingUserAccountId} not found in database", userAccountId);
+                _logger.LogError(
+                    "{existingUserAccountId} not found in database",
+
+                    userAccountId);
                 return null;
             }
 
-            var externalAccountEntity = _context.ExternalAccounts.SingleOrDefault(x =>
-                x.Provider == externalAccount.Provider && x.Subject == externalAccount.Subject);
+            var externalAccountEntity = _context.ExternalAccounts
+                .SingleOrDefault(x =>
+                    x.Provider == externalAccount.Provider &&
+                    x.Subject == externalAccount.Subject);
 
             if (externalAccountEntity == null)
             {
@@ -191,7 +227,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
             else
             {
                 _logger.LogDebug("{0} {1} found in database",
-                    externalAccountEntity.Provider, externalAccountEntity.Subject);
+                    externalAccountEntity.Provider,
+                    externalAccountEntity.Subject);
 
                 externalAccount.UpdateEntity(externalAccountEntity);
             }
@@ -209,7 +246,10 @@ namespace IdentityBase.Public.EntityFramework.Stores
             return Task.FromResult<ExternalAccount>(null);
         }
 
-        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(int take, int skip = 0, Guid? invitedBy = null)
+        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(
+            int take,
+            int skip = 0,
+            Guid? invitedBy = null)
         {
             var baseQuery = _context.UserAccounts
                 .Where(c => c.CreationKind == (int)CreationKind.Invitation);
@@ -233,11 +273,14 @@ namespace IdentityBase.Public.EntityFramework.Stores
                      .Select(s => s.ToModel()).ToArray(),
                 Sort = new List<SortInfo>
                 {
-                    new SortInfo("CreatedAt".Camelize(), SortDirection.Descending)
+                    new SortInfo("CreatedAt".Camelize(),
+                        SortDirection.Descending)
                 }
             };
 
-            // _logger.LogDebug("{email} found in database: {userAccountFound}", email, model != null);
+            //_logger.LogDebug("{email} found in database: {userAccountFound}",
+            //    email,
+            //    model != null);
 
             return result;
         }

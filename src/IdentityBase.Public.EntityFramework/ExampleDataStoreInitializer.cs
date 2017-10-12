@@ -1,15 +1,15 @@
-﻿using System.Linq;
-using IdentityBase.Configuration;
-using IdentityBase.Crypto;
-using IdentityBase.Public.EntityFramework.Interfaces;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Public.EntityFramework.Options;
-using IdentityBase.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-
 namespace IdentityBase.Public.EntityFramework
 {
+    using System.Linq;
+    using IdentityBase.Configuration;
+    using IdentityBase.Crypto;
+    using IdentityBase.Public.EntityFramework.Interfaces;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+
     public class ExampleDataStoreInitializer : IStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
@@ -43,7 +43,7 @@ namespace IdentityBase.Public.EntityFramework
 
         public void InitializeStores()
         {
-            // Only a leader may migrate or seed 
+            // Only a leader may migrate or seed
             if (_appOptions.Leader)
             {
                 if (_options.MigrateDatabase)
@@ -62,7 +62,7 @@ namespace IdentityBase.Public.EntityFramework
 
         public void CleanupStores()
         {
-            // Only leader may delete the database 
+            // Only leader may delete the database
             if (_appOptions.Leader && _options.EnsureDeleted)
             {
                 _logger.LogInformation("Ensure deleting database");
@@ -78,7 +78,8 @@ namespace IdentityBase.Public.EntityFramework
             {
                 foreach (var resource in exampleData.GetIdentityResources())
                 {
-                    _configurationDbContext.IdentityResources.Add(resource.ToEntity());
+                    _configurationDbContext.IdentityResources
+                        .Add(resource.ToEntity());
                 }
                 _configurationDbContext.SaveChanges();
             }
@@ -87,7 +88,8 @@ namespace IdentityBase.Public.EntityFramework
             {
                 foreach (var resource in exampleData.GetApiResources())
                 {
-                    _configurationDbContext.ApiResources.Add(resource.ToEntity());
+                    _configurationDbContext.ApiResources
+                        .Add(resource.ToEntity());
                 }
                 _configurationDbContext.SaveChanges();
             }
@@ -103,9 +105,11 @@ namespace IdentityBase.Public.EntityFramework
 
             if (!_userAccountDbContext.UserAccounts.Any())
             {
-                foreach (var userAccount in exampleData.GetUserAccounts(_crypto, _appOptions))
+                foreach (var userAccount in exampleData
+                    .GetUserAccounts(_crypto, _appOptions))
                 {
-                    _userAccountDbContext.UserAccounts.Add(userAccount.ToEntity());
+                    _userAccountDbContext.UserAccounts
+                        .Add(userAccount.ToEntity());
                 }
                 _userAccountDbContext.SaveChanges();
             }

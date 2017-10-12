@@ -1,17 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using IdentityBase.Public.EntityFramework.Entities;
-using IdentityBase.Public.EntityFramework.Extensions;
-using IdentityBase.Public.EntityFramework.Interfaces;
-using IdentityBase.Public.EntityFramework.Options;
-using Microsoft.EntityFrameworkCore;
-
 namespace IdentityBase.Public.EntityFramework
 {
+    using System;
+    using System.Threading.Tasks;
+    using IdentityBase.Public.EntityFramework.Entities;
+    using IdentityBase.Public.EntityFramework.Extensions;
+    using IdentityBase.Public.EntityFramework.Interfaces;
+    using IdentityBase.Public.EntityFramework.Options;
+    using Microsoft.EntityFrameworkCore;
+
     public class MigrationDbContext :
         DbContext,
-        IConfigurationDbContext, 
-        IPersistedGrantDbContext, 
+        IConfigurationDbContext,
+        IPersistedGrantDbContext,
         IUserAccountDbContext
     {
         private readonly EntityFrameworkOptions storeOptions;
@@ -26,13 +26,19 @@ namespace IdentityBase.Public.EntityFramework
         }
 
         public DbSet<Client> Clients { get; set; }
+
         public DbSet<IdentityResource> IdentityResources { get; set; }
+
         public DbSet<ApiResource> ApiResources { get; set; }
+
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
+
         public DbSet<UserAccount> UserAccounts { get; set; }
+
         public DbSet<ExternalAccount> ExternalAccounts { get; set; }
+
         public DbSet<UserAccountClaim> UserAccountClaims { get; set; }
-        
+
         public Task<int> SaveChangesAsync()
         {
             return base.SaveChangesAsync();
@@ -42,8 +48,8 @@ namespace IdentityBase.Public.EntityFramework
         {
             modelBuilder.ConfigureClientContext(storeOptions);
             modelBuilder.ConfigureResourcesContext(storeOptions);
-            modelBuilder.PersistedGrantDbContext(storeOptions);
-            modelBuilder.UserAccountDbContext(storeOptions);
+            modelBuilder.ConfigurePersistedGrantContext(storeOptions);
+            modelBuilder.ConfigureUserAccountContext(storeOptions);
 
             base.OnModelCreating(modelBuilder);
         }

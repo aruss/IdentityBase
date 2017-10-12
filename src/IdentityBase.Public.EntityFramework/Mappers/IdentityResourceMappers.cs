@@ -1,29 +1,44 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using AutoMapper;
-using IdentityBase.Public.EntityFramework.Entities;
 
 namespace IdentityBase.Public.EntityFramework.Mappers
 {
+    using AutoMapper;
+    using IdentityBase.Public.EntityFramework.Entities;
+
+    /// <summary>
+    /// Extension methods to map to/from entity/model for identity resources.
+    /// </summary>
     public static class IdentityResourceMappers
     {
         static IdentityResourceMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<IdentityResourceMapperProfile>())
-                .CreateMapper();
+            Mapper = new MapperConfiguration(cfg => cfg
+                .AddProfile<IdentityResourceMapperProfile>()).CreateMapper();
         }
 
         internal static IMapper Mapper { get; }
 
-        public static IdentityServer4.Models.IdentityResource ToModel(this IdentityResource resource)
+        /// <summary>
+        /// Maps an entity to a model.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public static IdentityServer4.Models.IdentityResource ToModel(
+            this IdentityResource entity)
         {
-            return resource == null ? null : Mapper.Map<IdentityServer4.Models.IdentityResource>(resource);
+            return entity == null ? null : Mapper
+                .Map<IdentityServer4.Models.IdentityResource>(entity);
         }
 
-        public static IdentityResource ToEntity(this IdentityServer4.Models.IdentityResource resource)
+        /// <summary>
+        /// Maps a model to an entity.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public static IdentityResource ToEntity(this IdentityServer4.Models.IdentityResource model)
         {
-            return resource == null ? null : Mapper.Map<IdentityResource>(resource);
+            return model == null ? null : Mapper.Map<IdentityResource>(model);
         }
     }
 }

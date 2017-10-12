@@ -1,14 +1,16 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore;
+
+using System.Linq;
+using FluentAssertions;
 using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Public.EntityFramework.Stores;
+using IdentityServer4.Models;
+using Microsoft.EntityFrameworkCore;
 using ServiceBase.Logging;
-using System.Linq;
 using Xunit;
 
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
@@ -16,7 +18,6 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
     public class ClientStoreTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
         private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-
         public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
             DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(ClientStoreTests), StoreOptions),
@@ -53,6 +54,41 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             }
 
             Assert.NotNull(client);
+        }
+
+        [Theory, MemberData(nameof(TestDatabaseProviders))]
+        public void FindClientByIdAsync_WhenClientExists_ExpectClientPropertiesRetured(DbContextOptions<ConfigurationDbContext> options)
+        {
+            var testClient = new Client
+            {
+                ClientId = "properties_test_client",
+                ClientName = "Properties Test Client",
+                Properties =
+                {
+                    { "foo1", "bar1" },
+                    { "foo2", "bar2" },
+                }
+            };
+
+            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            {
+                context.Clients.Add(testClient.ToEntity());
+                context.SaveChanges();
+            }
+
+            Client client;
+            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            {
+                var store = new ClientStore(context, NullLogger<ClientStore>.Create());
+                client = store.FindClientByIdAsync(testClient.ClientId).Result;
+            }
+
+            client.Properties.Should().NotBeNull();
+            client.Properties.Count.Should().Be(2);
+            client.Properties.ContainsKey("foo1").Should().BeTrue();
+            client.Properties.ContainsKey("foo2").Should().BeTrue();
+            client.Properties["foo1"].Should().Be("bar1");
+            client.Properties["foo2"].Should().Be("bar2");
         }
     }
 }

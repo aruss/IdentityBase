@@ -1,5 +1,9 @@
-﻿using IdentityBase.Public.EntityFramework.Entities;
+﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+
 using IdentityBase.Public.EntityFramework.Mappers;
+using IdentityServer4.Models;
 using Xunit;
 
 namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
@@ -7,29 +11,11 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
     public class ScopesMappersTests
     {
         [Fact]
-        public void IdentityResourceModelToEntityConfigurationIsValid()
-        {
-            var model = new IdentityServer4.Models.IdentityResource();
-
-            // TODO: set references
-
-            var mappedEntity = model.ToEntity();
-            var mappedModel = mappedEntity.ToModel();
-
-            Assert.NotNull(mappedModel);
-            Assert.NotNull(mappedEntity);
-            IdentityResourceMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
-        public void IdentityResourceEntityToModelConfigurationIsValid()
+        public void IdentityResourceAutomapperConfigurationIsValid()
         {
             var model = new IdentityResource();
-
-            // TODO: set references
-
-            var mappedModel = model.ToModel();
-            var mappedEntity = mappedModel.ToEntity();
+            var mappedEntity = model.ToEntity();
+            var mappedModel = mappedEntity.ToModel();
 
             Assert.NotNull(mappedModel);
             Assert.NotNull(mappedEntity);
@@ -37,29 +23,11 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
         }
 
         [Fact]
-        public void ApiResourceModelToEntityConfigurationIsValid()
-        {
-            var model = new IdentityServer4.Models.ApiResource();
-
-            // TODO: set references
-
-            var mappedEntity = model.ToEntity();
-            var mappedModel = mappedEntity.ToModel();
-
-            Assert.NotNull(mappedModel);
-            Assert.NotNull(mappedEntity);
-            ApiResourceMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
-        }
-
-        [Fact]
-        public void ApiResourceEntityToModelConfigurationIsValid()
+        public void ApiResourceAutomapperConfigurationIsValid()
         {
             var model = new ApiResource();
-
-            // TODO: set references
-
-            var mappedModel = model.ToModel();
-            var mappedEntity = mappedModel.ToEntity();
+            var mappedEntity = model.ToEntity();
+            var mappedModel = mappedEntity.ToModel();
 
             Assert.NotNull(mappedModel);
             Assert.NotNull(mappedEntity);

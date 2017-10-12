@@ -1,19 +1,18 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using Microsoft.EntityFrameworkCore;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Entities;
-using IdentityBase.Public.EntityFramework.Options;
-using System.Linq;
-using Xunit;
 
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
 {
+    using System.Linq;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Entities;
+    using IdentityBase.Public.EntityFramework.Options;
+    using Microsoft.EntityFrameworkCore;
+    using Xunit;
+
     public class ClientDbContextTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
         private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-
         public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
             DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(ClientDbContextTests), StoreOptions),

@@ -1,21 +1,22 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace IdentityBase.Public.EntityFramework
 {
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class InMemoryModule : Autofac.Module
     {
         /// <summary>
-        /// Loads dependencies 
+        /// Loads dependencies
         /// </summary>
-        /// <param name="builder">The builder through which components can be registered.</param>
+        /// <param name="builder">The builder through which components can
+        /// be registered.</param>
         protected override void Load(ContainerBuilder builder)
         {
-            var services = new ServiceCollection();
-            var config = Current.Configuration;
+            ServiceCollection services = new ServiceCollection();
+            IConfiguration config = Current.Configuration;
 
             services.AddEntityFrameworkStores((options) =>
             {

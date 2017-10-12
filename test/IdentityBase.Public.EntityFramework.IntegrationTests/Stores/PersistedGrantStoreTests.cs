@@ -1,16 +1,17 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Public.EntityFramework.Stores;
+using IdentityServer4.Models;
+using Microsoft.EntityFrameworkCore;
 using ServiceBase.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
@@ -18,22 +19,16 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
     public class PersistedGrantStoreTests : IClassFixture<DatabaseProviderFixture<PersistedGrantDbContext>>
     {
         private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-
         public static readonly TheoryData<DbContextOptions<PersistedGrantDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<PersistedGrantDbContext>>
         {
-            DatabaseProviderBuilder.BuildInMemory<PersistedGrantDbContext>(
-                nameof(PersistedGrantStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlite<PersistedGrantDbContext>(
-                nameof(PersistedGrantStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlServer<PersistedGrantDbContext>(
-                nameof(PersistedGrantStoreTests), StoreOptions)
+            DatabaseProviderBuilder.BuildInMemory<PersistedGrantDbContext>(nameof(PersistedGrantStoreTests), StoreOptions),
+            DatabaseProviderBuilder.BuildSqlite<PersistedGrantDbContext>(nameof(PersistedGrantStoreTests), StoreOptions),
+            DatabaseProviderBuilder.BuildSqlServer<PersistedGrantDbContext>(nameof(PersistedGrantStoreTests), StoreOptions)
         };
 
         public PersistedGrantStoreTests(DatabaseProviderFixture<PersistedGrantDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders
-                .SelectMany(x => x.Select(
-                    y => (DbContextOptions<PersistedGrantDbContext>)y)).ToList();
+            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<PersistedGrantDbContext>)y)).ToList();
             fixture.StoreOptions = StoreOptions;
         }
 
@@ -122,7 +117,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 context.PersistedGrants.Add(persistedGrant.ToEntity());
                 context.SaveChanges();
             }
-
+            
             using (var context = new PersistedGrantDbContext(options, StoreOptions))
             {
                 var store = new PersistedGrantStore(context, NullLogger<PersistedGrantStore>.Create());

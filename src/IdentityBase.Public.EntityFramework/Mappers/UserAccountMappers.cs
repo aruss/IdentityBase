@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using IdentityBase.Public.EntityFramework.Entities;
-
 namespace IdentityBase.Public.EntityFramework.Mappers
 {
+    using AutoMapper;
+    using IdentityBase.Public.EntityFramework.Entities;
+
     public static class UserAccountMappers
     {
         static UserAccountMappers()
@@ -16,12 +16,14 @@ namespace IdentityBase.Public.EntityFramework.Mappers
 
         public static Models.UserAccount ToModel(this UserAccount entity)
         {
-            return entity == null ? null : Mapper.Map<Models.UserAccount>(entity);
+            return entity == null ? null : Mapper
+                .Map<Models.UserAccount>(entity);
         }
 
         public static UserAccount ToEntity(this Models.UserAccount model)
         {
-            return model == null ? null : Mapper.Map<UserAccount>(model);
+            return model == null ? null : Mapper
+                .Map<UserAccount>(model);
         }
 
         public static void UpdateEntity(
@@ -30,14 +32,18 @@ namespace IdentityBase.Public.EntityFramework.Mappers
             Mapper.Map(model, entity);
         }
 
-        public static Models.ExternalAccount ToModel(this ExternalAccount entity)
+        public static Models.ExternalAccount ToModel(
+            this ExternalAccount entity)
         {
-            return entity == null ? null : Mapper.Map<Models.ExternalAccount>(entity);
+            return entity == null ? null : Mapper
+                .Map<Models.ExternalAccount>(entity);
         }
 
-        public static ExternalAccount ToEntity(this Models.ExternalAccount model)
+        public static ExternalAccount ToEntity(
+            this Models.ExternalAccount model)
         {
-            return model == null ? null : Mapper.Map<ExternalAccount>(model);
+            return model == null ? null : Mapper
+                .Map<ExternalAccount>(model);
         }
 
         public static void UpdateEntity(

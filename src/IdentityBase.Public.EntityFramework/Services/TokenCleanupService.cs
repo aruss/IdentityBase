@@ -1,17 +1,17 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Options;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace IdentityBase.Public.EntityFramework.Services
 {
+    using System;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Options;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
     internal class TokenCleanupService
     {
         private readonly ILogger<TokenCleanupService> _logger;
@@ -24,43 +24,46 @@ namespace IdentityBase.Public.EntityFramework.Services
             ILogger<TokenCleanupService> logger,
             EntityFrameworkOptions options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            if (options == null) throw
+                    new ArgumentNullException(nameof(options));
 
-            if (options.TokenCleanupInterval < 1)
-            {
-                throw new ArgumentException("interval must be more than 1 second");
-            }
+            if (options.TokenCleanupInterval < 1) throw
+                    new ArgumentException(
+                        "interval must be more than 1 second");
 
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger ?? throw
+                new ArgumentNullException(nameof(logger));
 
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(
-                nameof(serviceProvider));
+            _serviceProvider = serviceProvider ?? throw
+                new ArgumentNullException(nameof(serviceProvider));
 
             _interval = TimeSpan.FromSeconds(options.TokenCleanupInterval);
         }
 
         public void Start()
         {
-            if (_source != null)
-            {
-                throw new InvalidOperationException("Already started. Call Stop first.");
-            }
+            Start(CancellationToken.None);
+        }
+
+        public void Start(CancellationToken cancellationToken)
+        {
+            if (_source != null) throw
+                    new InvalidOperationException(
+                        "Already started. Call Stop first.");
 
             _logger.LogDebug("Starting token cleanup");
 
-            _source = new CancellationTokenSource();
-            Task.Factory.StartNew(() => Start(_source.Token));
+            _source = CancellationTokenSource
+                .CreateLinkedTokenSource(cancellationToken);
+
+            Task.Factory.StartNew(() => StartInternal(_source.Token));
         }
 
         public void Stop()
         {
-            if (_source == null)
-            {
-                throw new InvalidOperationException("Not started. Call Start first.");
-            }
+            if (_source == null) throw
+                    new InvalidOperationException(
+                        "Not started. Call Start first.");
 
             _logger.LogDebug("Stopping token cleanup");
 
@@ -68,13 +71,13 @@ namespace IdentityBase.Public.EntityFramework.Services
             _source = null;
         }
 
-        private async Task Start(CancellationToken cancellationToken)
+        private async Task StartInternal(CancellationToken cancellationToken)
         {
             while (true)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    _logger.LogDebug("CancellationRequested");
+                    _logger.LogDebug("CancellationRequested. Exiting.");
                     break;
                 }
 
@@ -82,35 +85,44 @@ namespace IdentityBase.Public.EntityFramework.Services
                 {
                     await Task.Delay(_interval, cancellationToken);
                 }
-                catch
+                catch (TaskCanceledException)
                 {
-                    _logger.LogDebug("Task.Delay exception. exiting.");
+                    _logger.LogDebug("TaskCanceledException. Exiting.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(
+                        "Task.Delay exception: {0}. Exiting.",
+                        ex.Message);
                     break;
                 }
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    _logger.LogDebug("CancellationRequested");
+                    _logger.LogDebug("CancellationRequested. Exiting.");
                     break;
                 }
 
-                TryClearTokens();
+                this.TryClearTokens();
             }
         }
 
-        private void TryClearTokens()
+        public void TryClearTokens()
         {
             try
             {
-                ClearTokens(); 
+                this.ClearTokens();
             }
             catch (Exception ex)
             {
-                _logger.LogError("Exception cleaning tokens {exception}", ex.Message);
+                _logger.LogError(
+                    "Exception clearing tokens: {exception}",
+                    ex.Message);
             }
         }
 
-        private void ClearTokens()
+        public void ClearTokens()
         {
             _logger.LogTrace("Querying for tokens to clear");
 
@@ -121,9 +133,12 @@ namespace IdentityBase.Public.EntityFramework.Services
                     .GetService<PersistedGrantDbContext>())
                 {
                     var expired = context.PersistedGrants
-                        .Where(x => x.Expiration < DateTimeOffset.UtcNow).ToArray();
+                        .Where(x => x.Expiration < DateTimeOffset.UtcNow)
+                        .ToArray();
 
-                    _logger.LogDebug("Clearing {tokenCount} tokens", expired.Length);
+                    _logger.LogInformation(
+                        "Clearing {tokenCount} tokens",
+                        expired.Length);
 
                     if (expired.Length > 0)
                     {

@@ -66,7 +66,7 @@ namespace IdentityBase.Public.EntityFramework
                 $"{_options.MigrateDatabase}, SeedExampleData: " +
                 $"{_options.SeedExampleData}");
 
-            // Only a leader may migrate or seed 
+            // Only a leader may migrate or seed
             if (_appOptions.Leader)
             {
                 if (_options.MigrateDatabase)
@@ -83,7 +83,7 @@ namespace IdentityBase.Public.EntityFramework
                     _logger.LogDebug("Initial data seeded");
                 }
 
-                if (_options.CleanupTokens)
+                if (_options.EnableTokenCleanup)
                 {
                     using (var serviceScope = _serviceProvider
                         .GetRequiredService<IServiceScopeFactory>()
@@ -101,7 +101,7 @@ namespace IdentityBase.Public.EntityFramework
             _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}," +
                 $" EnsureDeleted: {_options.EnsureDeleted}");
 
-            // Only leader may delete the database 
+            // Only leader may delete the database
             if (_appOptions.Leader)
             {
                 if (_options.EnsureDeleted)
@@ -111,7 +111,7 @@ namespace IdentityBase.Public.EntityFramework
                     _logger.LogDebug("Database deleted");
                 }
 
-                if (_options.CleanupTokens)
+                if (_options.EnableTokenCleanup)
                 {
                     using (var serviceScope = _serviceProvider
                         .GetRequiredService<IServiceScopeFactory>()

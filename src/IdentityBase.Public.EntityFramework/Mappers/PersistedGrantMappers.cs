@@ -1,34 +1,55 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using AutoMapper;
-using IdentityServer4.Models;
 
 namespace IdentityBase.Public.EntityFramework.Mappers
 {
+    using AutoMapper;
+    using IdentityServer4.Models;
+
     public static class PersistedGrantMappers
     {
         static PersistedGrantMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<PersistedGrantMapperProfile>())
-                .CreateMapper();
+            Mapper = new MapperConfiguration(cfg => cfg
+                .AddProfile<PersistedGrantMapperProfile>()).CreateMapper();
         }
 
         internal static IMapper Mapper { get; }
 
-        public static PersistedGrant ToModel(this Entities.PersistedGrant token)
+        /// <summary>
+        /// Maps an entity to a model.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public static PersistedGrant ToModel(
+            this Entities.PersistedGrant entity)
         {
-            return token == null ? null : Mapper.Map<PersistedGrant>(token);
+            return entity == null ? null : Mapper
+                .Map<PersistedGrant>(entity);
         }
 
-        public static Entities.PersistedGrant ToEntity(this PersistedGrant token)
+        /// <summary>
+        /// Maps a model to an entity.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public static Entities.PersistedGrant ToEntity(
+            this PersistedGrant model)
         {
-            return token == null ? null : Mapper.Map<Entities.PersistedGrant>(token);
+            return model == null ? null : Mapper
+                .Map<Entities.PersistedGrant>(model);
         }
 
-        public static void UpdateEntity(this PersistedGrant token, Entities.PersistedGrant target)
+        /// <summary>
+        /// Updates an entity from a model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="entity">The entity.</param>
+        public static void UpdateEntity(
+            this PersistedGrant model,
+            Entities.PersistedGrant entity)
         {
-            Mapper.Map(token, target);
+            Mapper.Map(model, entity);
         }
     }
 }

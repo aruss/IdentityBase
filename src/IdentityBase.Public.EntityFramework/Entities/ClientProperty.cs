@@ -7,11 +7,13 @@ namespace IdentityBase.Public.EntityFramework.Entities
 {
     using System;
 
-    public class ClientScope
+    public class ClientProperty
     {
         public Guid Id { get; set; }
 
-        public string Scope { get; set; }
+        public string Key { get; set; }
+
+        public string Value { get; set; }
 
         public Client Client { get; set; }
     }

@@ -1,24 +1,26 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Public.EntityFramework.Options;
-using IdentityBase.Public.EntityFramework.Services;
-using ServiceBase.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Interfaces;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Services;
+    using IdentityServer4.Models;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Logging;
+    using Xunit;
+
     public class CorsPolicyServiceTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
         private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-
         public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
             DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(CorsPolicyServiceTests), StoreOptions),
@@ -57,7 +59,14 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
             bool result;
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
-                var service = new CorsPolicyService(context, NullLogger<CorsPolicyService>.Create());
+                var ctx = new DefaultHttpContext();
+                var svcs = new ServiceCollection();
+                svcs.AddSingleton<IConfigurationDbContext>(context);
+                ctx.RequestServices = svcs.BuildServiceProvider();
+                var ctxAccessor = new HttpContextAccessor();
+                ctxAccessor.HttpContext = ctx;
+
+                var service = new CorsPolicyService(ctxAccessor, NullLogger<CorsPolicyService>.Create());
                 result = service.IsOriginAllowedAsync(testCorsOrigin).Result;
             }
 
@@ -81,7 +90,14 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
             bool result;
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
-                var service = new CorsPolicyService(context, NullLogger<CorsPolicyService>.Create());
+                var ctx = new DefaultHttpContext();
+                var svcs = new ServiceCollection();
+                svcs.AddSingleton<IConfigurationDbContext>(context);
+                ctx.RequestServices = svcs.BuildServiceProvider();
+                var ctxAccessor = new HttpContextAccessor();
+                ctxAccessor.HttpContext = ctx;
+
+                var service = new CorsPolicyService(ctxAccessor, NullLogger<CorsPolicyService>.Create());
                 result = service.IsOriginAllowedAsync("InvalidOrigin").Result;
             }
 

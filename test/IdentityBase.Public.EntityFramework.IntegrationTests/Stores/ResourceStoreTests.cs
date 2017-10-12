@@ -1,26 +1,26 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using IdentityModel;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using Microsoft.EntityFrameworkCore;
 using IdentityBase.Public.EntityFramework.DbContexts;
 using IdentityBase.Public.EntityFramework.Mappers;
 using IdentityBase.Public.EntityFramework.Options;
 using IdentityBase.Public.EntityFramework.Stores;
-using ServiceBase.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using IdentityServer4.Models;
+using IdentityServer4.Stores;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
+using ServiceBase.Logging;
 
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
 {
     public class ScopeStoreTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
         private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-
         public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
             DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(ScopeStoreTests), StoreOptions),
@@ -42,7 +42,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 DisplayName = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
                 ShowInDiscoveryDocument = true,
-                UserClaims =
+                UserClaims = 
                 {
                     JwtClaimTypes.Subject,
                     JwtClaimTypes.Name,
@@ -55,7 +55,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             return new ApiResource()
             {
                 Name = Guid.NewGuid().ToString(),
-                ApiSecrets = new List<Secret> { new Secret("secret".Sha256()) },
+                ApiSecrets = new List<Secret> {new Secret("secret".Sha256())},
                 Scopes =
                     new List<Scope>
                     {
@@ -65,7 +65,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                             UserClaims = {Guid.NewGuid().ToString()}
                         }
                     },
-                UserClaims =
+                UserClaims = 
                 {
                     Guid.NewGuid().ToString(),
                     Guid.NewGuid().ToString(),
@@ -105,7 +105,6 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Assert.NotNull(resources.IdentityResources.FirstOrDefault(x => x.Name == testIdentityResource.Name));
             Assert.NotNull(resources.ApiResources.FirstOrDefault(x => x.Name == testApiResource.Name));
         }
-
         [Theory, MemberData(nameof(TestDatabaseProviders))]
         public void FindResourcesAsync_WhenResourcesExist_ExpectOnlyResourcesRequestedReturned(DbContextOptions<ConfigurationDbContext> options)
         {
@@ -146,11 +145,11 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         {
             var visibleIdentityResource = CreateIdentityTestResource();
             var visibleApiResource = CreateApiTestResource();
-            var hiddenIdentityResource = new IdentityResource { Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false };
+            var hiddenIdentityResource = new IdentityResource{Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false};
             var hiddenApiResource = new ApiResource
             {
                 Name = Guid.NewGuid().ToString(),
-                Scopes = new List<Scope> { new Scope { Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false } }
+                Scopes = new List<Scope> {new Scope {Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false}}
             };
 
             using (var context = new ConfigurationDbContext(options, StoreOptions))
@@ -278,7 +277,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
                 var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindApiResourcesByScopeAsync(new List<string> { resource.Scopes.First().Name }).Result.ToList();
+                resources = store.FindApiResourcesByScopeAsync(new List<string> {resource.Scopes.First().Name}).Result.ToList();
             }
 
             Assert.NotEmpty(resources);
@@ -310,7 +309,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
                 var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindApiResourcesByScopeAsync(new List<string> { resource.Scopes.First().Name }).Result.ToList();
+                resources = store.FindApiResourcesByScopeAsync(new List<string> {resource.Scopes.First().Name}).Result.ToList();
             }
 
             Assert.NotNull(resources);

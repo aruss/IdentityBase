@@ -1,28 +1,44 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using AutoMapper;
-
 namespace IdentityBase.Public.EntityFramework.Mappers
 {
+    using AutoMapper;
+
+    /// <summary>
+    /// Extension methods to map to/from entity/model for clients.
+    /// </summary>
     public static class ClientMappers
     {
         static ClientMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ClientMapperProfile>())
-                .CreateMapper();
+            Mapper = new MapperConfiguration(cfg => cfg
+                .AddProfile<ClientMapperProfile>()).CreateMapper();
         }
 
         internal static IMapper Mapper { get; }
 
-        public static IdentityServer4.Models.Client ToModel(this Entities.Client client)
+        /// <summary>
+        /// Maps an entity to a model.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public static IdentityServer4.Models.Client ToModel(
+            this Entities.Client entity)
         {
-            return Mapper.Map<IdentityServer4.Models.Client>(client);
+            return entity == null ? null : Mapper
+                .Map<IdentityServer4.Models.Client>(entity);
         }
 
-        public static Entities.Client ToEntity(this IdentityServer4.Models.Client client)
+        /// <summary>
+        /// Maps a model to an entity.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public static Entities.Client ToEntity(
+            this IdentityServer4.Models.Client model)
         {
-            return Mapper.Map<Entities.Client>(client);
+            return model == null ? null : Mapper
+                .Map<Entities.Client>(model);
         }
     }
 }

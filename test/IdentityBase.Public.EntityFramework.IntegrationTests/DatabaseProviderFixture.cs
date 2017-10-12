@@ -17,7 +17,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests
     {
         public object StoreOptions;
         public List<DbContextOptions<T>> Options;
-
+        
         public void Dispose()
         {
             foreach (var option in Options.ToList())
