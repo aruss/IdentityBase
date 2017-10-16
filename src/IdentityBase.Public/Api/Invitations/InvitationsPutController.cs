@@ -17,6 +17,7 @@ namespace IdentityBase.Public.Api.Invitations
 
     [TypeFilter(typeof(ExceptionFilter))]
     [TypeFilter(typeof(ModelStateFilter))]
+    [TypeFilter(typeof(BadRequestFilter))]
     public class InvitationsPutController : ApiController
     {
         private readonly UserAccountService _userAccountService;
@@ -35,7 +36,7 @@ namespace IdentityBase.Public.Api.Invitations
 
         [HttpPut("invitations")]
         [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)
         {

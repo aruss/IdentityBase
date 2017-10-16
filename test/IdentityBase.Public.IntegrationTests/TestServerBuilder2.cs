@@ -69,6 +69,7 @@ namespace IdentityBase.Public.IntegrationTests
 
             var builder = new WebHostBuilder()
                 .UseContentRoot(contentRoot)
+                .UseEnvironment(environmentName)
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<IStartup>(startup);

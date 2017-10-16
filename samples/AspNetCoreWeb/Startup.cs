@@ -43,7 +43,7 @@ namespace AspNetCoreWeb
                     options.ClientId = "mvc.hybrid";
 
                     options.ResponseType = "code id_token";
-
+                    
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");

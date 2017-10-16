@@ -30,3 +30,4 @@ namespace IdentityBase.Public.IntegrationTests
         }
     }
 }
+

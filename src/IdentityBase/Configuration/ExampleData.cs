@@ -153,7 +153,8 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = {
                         "api1",
-                        "api2.read_only"
+                        "api2.read_only",
+                        "idbase.invitations"
                     }
                 },
 
