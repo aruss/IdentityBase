@@ -4,37 +4,34 @@ namespace IdentityBase.Public
     using System.Linq;
     using System.Reflection;
     using IdentityBase.Configuration;
-    using IdentityBase.Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.ApplicationParts;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Mvc;
+    using ServiceBase.Razor;
 
     public static class StartupMvc
     {
         public static void AddMvc(
-            this IServiceCollection services, 
+            this IServiceCollection services,
             ApplicationOptions appOptions,
             IHostingEnvironment environment)
         {
             services.AddRouting((options) =>
             {
-                options.LowercaseUrls = true; 
+                options.LowercaseUrls = true;
             });
 
             services.AddMvc(mvcOptions =>
                 {
                     mvcOptions.OutputFormatters
-                        .AddDefaultJsonOutputFormatter(); 
+                        .AddDefaultJsonOutputFormatter();
                 })
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
-                        new Razor.CustomViewLocationExpander(
-                            appOptions.ThemePath?
-                                .GetFullPath(environment.ContentRootPath)
-                        )
+                        new ThemeViewLocationExpander(appOptions.ThemePath)
                     );
                 })
                 .ConfigureApplicationPartManager(manager =>

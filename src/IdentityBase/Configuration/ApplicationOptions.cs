@@ -94,8 +94,8 @@ namespace IdentityBase.Configuration
 
         public string WindowsAuthenticationDisplayName { get; set; } =
             "Windows";
-        
-        public string ThemePath { get; set; }
+
+        public string ThemePath { get; set; } = "./Themes/Default";
 
         /// <summary>
         /// Enbales invitation get API 

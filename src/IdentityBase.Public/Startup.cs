@@ -130,7 +130,7 @@ namespace IdentityBase.Public
                 .GetRequiredService<ApplicationOptions>();
 
             app.UseMiddleware<RequestIdMiddleware>();
-            app.UseLogging();            
+            app.UseLogging();
 
             if (env.IsDevelopment())
             {
@@ -142,12 +142,7 @@ namespace IdentityBase.Public
             }
 
             app.UseCors("CorsPolicy");
-
-            app.UseStaticFiles(
-                this._configuration,
-                this._logger,
-                this._environment);
-
+            app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseWebApi(options);
