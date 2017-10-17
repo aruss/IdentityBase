@@ -32,7 +32,8 @@
     "AllowOfflineAccess": false,
     "AllowedScopes": [
       "api1",
-      "api2.read_only"
+      "api2.read_only",
+      "idbase.invitations"
     ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
@@ -509,7 +510,7 @@
     ],
     "RequireClientSecret": true,
     "ClientName": "MVC Hybrid",
-    "ClientUri": "http://identityserver.io",
+    "ClientUri": "http://localhost:21402",
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
@@ -535,7 +536,8 @@
       "profile",
       "email",
       "api1",
-      "api2.read_only"
+      "api2.read_only",
+      "idbase.invitations"
     ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,

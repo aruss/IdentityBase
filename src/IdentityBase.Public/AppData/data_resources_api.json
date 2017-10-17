@@ -62,5 +62,31 @@
       "name",
       "email"
     ]
+  },
+  {
+    "ApiSecrets": [
+      {
+        "Description": null,
+        "Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
+        "Expiration": null,
+        "Type": "SharedSecret"
+      }
+    ],
+    "Scopes": [
+      {
+        "Name": "idbase.invitations",
+        "DisplayName": "Full access to IdentityBase invitations API",
+        "Description": null,
+        "Required": false,
+        "Emphasize": false,
+        "ShowInDiscoveryDocument": true,
+        "UserClaims": []
+      }
+    ],
+    "Enabled": true,
+    "Name": "idbase",
+    "DisplayName": "IdentityBase",
+    "Description": null,
+    "UserClaims": []
   }
 ]
