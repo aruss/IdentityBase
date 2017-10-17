@@ -168,7 +168,7 @@ namespace IdentityBase.Public.Actions.Register
                 ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
                 return View("InvalidToken");
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(new ConfirmViewModel
@@ -221,7 +221,15 @@ namespace IdentityBase.Public.Actions.Register
             var returnUrl = result.UserAccount.VerificationStorage;
             await _userAccountService.ClearVerificationAsync(result.UserAccount);
 
-            return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
+
+            if (_interaction.IsValidReturnUrl(returnUrl))
+            {
+                return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
         }
 
         //   [HttpGet("register/complete")]
