@@ -19,7 +19,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.dll" target="lib\netcoreapp1.1\IdentityBase.dll" />
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.pdb" target="lib\netcoreapp1.1\IdentityBase.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
   </files>
 </package>

@@ -48,8 +48,8 @@
     </contentFiles>
   </metadata>
   <files>
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp1.1\IdentityBase.Public.runtimeconfig.json" />
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.dll" target="lib\netcoreapp1.1\IdentityBase.Public.dll" />
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.pdb" target="lib\netcoreapp1.1\IdentityBase.Public.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.dll" target="lib\netcoreapp2.0\IdentityBase.Public.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.pdb" />
   </files>
 </package>

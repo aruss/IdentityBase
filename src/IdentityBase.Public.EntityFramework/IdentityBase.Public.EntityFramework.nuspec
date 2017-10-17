@@ -27,7 +27,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp1.1\IdentityBase.Public.EntityFramework.dll" />
-    <file src="bin\Release\netcoreapp1.1\IdentityBase.Public.EntityFramework.pdb" target="lib\netcoreapp1.1\IdentityBase.Public.EntityFramework.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" />
   </files>
 </package>
