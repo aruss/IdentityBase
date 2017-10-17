@@ -70,7 +70,8 @@
     "EnableLoginHints": false,
     "EnableInvitationGetEndpoint": true,
     "EnableInvitationCreateEndpoint": true,
-    "EnableInvitationDeleteEndpoint": true
+    "EnableInvitationDeleteEndpoint": true,
+    "ThemePath": "./Themes/Default"
   },
   "Email": {
     "TemplateDirectoryPath": "./Templates/Email"
