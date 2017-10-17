@@ -23,11 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
-    <PackageReference Include="IdentityServer4" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
+    <PackageReference Include="IdentityServer4" Version="2.0.1" />
+    <PackageReference Include="ServiceBase" Version="1.1.9" />
   </ItemGroup>
 
 </Project>

@@ -13,17 +13,16 @@
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
         <dependency id="IdentityBase" version="$version$" exclude="Build,Analyzers" />
-        <dependency id="ServiceBase" version="1.0.85" exclude="Build,Analyzers" />
-        <dependency id="Autofac.Extensions.DependencyInjection" version="4.2.0"  exclude="Build,Analyzers" />
-        <dependency id="AutoMapper" version="6.1.1"  exclude="Build,Analyzers" />
-        <dependency id="IdentityServer4" version="1.5.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore" version="1.1.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="1.1.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="1.1.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore.Sqlite" version="1.1.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="1.1.2"  exclude="Build,Analyzers" />
-        <dependency id="Microsoft.EntityFrameworkCore.Tools" version="1.1.1"  exclude="Build,Analyzers" />
-        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="1.1.1"  exclude="Build,Analyzers" />
+		<dependency id="Autofac.Extensions.DependencyInjection" Version="4.2.0" exclude="Build,Analyzers"/>
+		<dependency id="AutoMapper" Version="6.1.1" exclude="Build,Analyzers"/>
+		<dependency id="IdentityServer4" Version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore.Relational" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
   </metadata>

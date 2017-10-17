@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>IdentityBase.Public</id>
@@ -12,33 +12,35 @@
     <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
-        <dependency id="IdentityBase" version="$version$" exclude="Build,Analyzers" />
-        <dependency id="ServiceBase" version="1.0.85" exclude="Build,Analyzers" />
-        <dependency id="Autofac.Configuration" version="4.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Autofac.Extensions.DependencyInjection" version="4.2.0" exclude="Build,Analyzers"/>
-        <dependency id="IdentityServer4" version="1.5.2" exclude="Build,Analyzers"/>
-        <dependency id="IdentityServer4.AccessTokenValidation" version="1.2.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Google" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Diagnostics" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Hosting" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Mvc" version="1.1.3" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Server.IISIntegration" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Server.Kestrel" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.StaticFiles" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.CommandLine" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.FileExtensions" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.Json" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.UserSecrets" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Logging.Console" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Logging.Debug" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" version="1.1.2" exclude="Build,Analyzers"/>
-        <dependency id="Newtonsoft.Json" version="10.0.2" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Extensions.Logging" version="1.4.0" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Sinks.Literate" version="2.1.0" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
+        <dependency id="IdentityBase" version="$version$" exclude="Build,Analyzers" />		
+		<dependency id="Autofac.Configuration" Version="4.0.1" exclude="Build,Analyzers" />
+		<dependency id="Autofac.Extensions.DependencyInjection" Version="4.2.0" exclude="Build,Analyzers" />
+		<dependency id="IdentityServer4" Version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="IdentityServer4.AccessTokenValidation" Version="2.0.0" exclude="Build,Analyzers" />
+		<dependency id="Microsoft.AspNetCore" Version="2.0.0" exclude="Build,Analyzers" />
+		<dependency id="Microsoft.AspNetCore.Authentication" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Google" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Diagnostics" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Hosting" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Mvc" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.Json" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Logging.Console" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Logging.Debug" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Newtonsoft.Json" Version="10.0.3" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Extensions.Logging" Version="2.0.2" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Settings.Configuration" Version="2.4.0" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Sinks.Literate" Version="3.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Sinks.RollingFile" Version="3.3.0" exclude="Build,Analyzers"/>
+		<dependency id="ServiceBase" Version="1.1.9" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
     <contentFiles>
