@@ -1,18 +1,19 @@
-﻿using IdentityBase.Configuration;
-using IdentityBase.Crypto;
-using IdentityBase.Events;
-using IdentityBase.Extensions;
-using IdentityBase.Models;
-using IdentityServer4;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Http;
-using ServiceBase.Collections;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityBase.Services
 {
+    using IdentityBase.Configuration;
+    using IdentityBase.Crypto;
+    using IdentityBase.Events;
+    using IdentityBase.Extensions;
+    using IdentityBase.Models;
+    using IdentityServer4;
+    using IdentityServer4.Services;
+    using Microsoft.AspNetCore.Http;
+    using ServiceBase.Collections;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class UserAccountService
     {
         private readonly ApplicationOptions _applicationOptions;
@@ -41,7 +42,10 @@ namespace IdentityBase.Services
         /// <param name="email">Local user account email</param>
         /// <param name="password">Password</param>
         /// <returns><see cref="UserAccountVerificationResult"/></returns>
-        public async Task<UserAccountVerificationResult> VerifyByEmailAndPasswordAsync(string email, string password)
+        public async Task<UserAccountVerificationResult>
+            VerifyByEmailAndPasswordAsync(
+            string email,
+            string password)
         {
             if (String.IsNullOrWhiteSpace(email))
             {
@@ -49,7 +53,9 @@ namespace IdentityBase.Services
             }
 
             var result = new UserAccountVerificationResult();
-            var userAccount = await _userAccountStore.LoadByEmailAsync(email.ToLower());
+
+            UserAccount userAccount = await _userAccountStore
+                .LoadByEmailAsync(email.ToLower());
 
             if (userAccount == null)
             {
@@ -59,8 +65,12 @@ namespace IdentityBase.Services
             if (userAccount.HasPassword())
             {
                 result.IsLocalAccount = true;
-                result.IsPasswordValid = _crypto.VerifyPasswordHash(userAccount.PasswordHash, password,
-                    _applicationOptions.PasswordHashingIterationCount);
+
+                result.IsPasswordValid = _crypto.VerifyPasswordHash(
+                    userAccount.PasswordHash,
+                    password,
+                    _applicationOptions.PasswordHashingIterationCount
+                );
             }
 
             result.UserAccount = userAccount;
@@ -69,30 +79,37 @@ namespace IdentityBase.Services
 
             if (!result.IsPasswordValid && !result.IsLocalAccount)
             {
-                var hints = userAccount.Accounts.Select(s => s.Provider).ToArray();
+                string[] hints = userAccount.Accounts
+                    .Select(s => s.Provider).ToArray();
             }
 
             return result;
         }
 
-        public async Task<UserAccount> LoadByIdAsync(Guid id)
+        public async Task<UserAccount> LoadByIdAsync(
+            Guid id)
         {
             return await _userAccountStore.LoadByIdAsync(id);
         }
 
-        public async Task<UserAccount> LoadByEmailAsync(string email)
+        public async Task<UserAccount> LoadByEmailAsync(
+            string email)
         {
             return await _userAccountStore.LoadByEmailAsync(email);
         }
 
-        public async Task<UserAccount> LoadByEmailWithExternalAsync(string email)
+        public async Task<UserAccount> LoadByEmailWithExternalAsync(
+            string email)
         {
             return await _userAccountStore.LoadByEmailWithExternalAsync(email);
         }
 
-        public async Task<UserAccount> LoadByExternalProviderAsync(string provider, string subject)
+        public async Task<UserAccount> LoadByExternalProviderAsync(
+            string provider,
+            string subject)
         {
-            return await _userAccountStore.LoadByExternalProviderAsync(provider, subject);
+            return await _userAccountStore
+                .LoadByExternalProviderAsync(provider, subject);
         }
 
         public async Task DeleteByIdAsync(Guid id)
@@ -115,17 +132,21 @@ namespace IdentityBase.Services
             await WriteUserAccountAsync(userAccount);
         }
 
-        public UserAccount CreateNewLocalUserAccount(string email, string password = null, string returnUrl = null)
+        public UserAccount CreateNewLocalUserAccount(
+            string email,
+            string password = null,
+            string returnUrl = null)
         {
-            var now = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
 
-            var userAccount = new UserAccount
+            UserAccount userAccount = new UserAccount
             {
                 Id = Guid.NewGuid(),
                 Email = email,
                 FailedLoginCount = 0,
                 IsEmailVerified = false,
-                IsLoginAllowed = _applicationOptions.RequireLocalAccountVerification,
+                IsLoginAllowed = _applicationOptions
+                    .RequireLocalAccountVerification,
                 PasswordChangedAt = now,
                 CreatedAt = now,
                 UpdatedAt = now
@@ -133,25 +154,38 @@ namespace IdentityBase.Services
 
             if (!String.IsNullOrWhiteSpace(password))
             {
-                userAccount.PasswordHash = _crypto.HashPassword(password,
-                    _applicationOptions.PasswordHashingIterationCount);
+                userAccount.PasswordHash = _crypto.HashPassword(
+                    password,
+                    _applicationOptions.PasswordHashingIterationCount
+                );
             }
 
             if (_applicationOptions.RequireLocalAccountVerification &&
                 !String.IsNullOrWhiteSpace(returnUrl))
             {
-                SetVerification(userAccount,
+                this.SetVerification(
+                    userAccount,
                     VerificationKeyPurpose.ConfirmAccount,
-                    returnUrl, now);
+                    returnUrl,
+                    now
+                );
             }
 
             return userAccount;
         }
 
-        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, string password, string returnUrl = null)
+        public async Task<UserAccount> CreateNewLocalUserAccountAsync(
+            string email,
+            string password,
+            string returnUrl = null)
         {
-            var userAccount = CreateNewLocalUserAccount(email, password, returnUrl);
-            return await WriteUserAccountAsync(userAccount);
+            UserAccount userAccount = this.CreateNewLocalUserAccount(
+                email,
+                password,
+                returnUrl
+            );
+
+            return await this.WriteUserAccountAsync(userAccount);
         }
 
         public void ClearVerification(UserAccount userAccount)
@@ -164,43 +198,54 @@ namespace IdentityBase.Services
 
         public async Task ClearVerificationAsync(UserAccount userAccount)
         {
-            ClearVerification(userAccount);
+            this.ClearVerification(userAccount);
             await UpdateUserAccountAsync(userAccount);
         }
 
-   
-        public void SetVerification(UserAccount userAccount,
+        public void SetVerification(
+            UserAccount userAccount,
             VerificationKeyPurpose purpose,
             string storage = null,
             DateTime? sentAt = null)
         {
-            userAccount.VerificationKey = _crypto.Hash(_crypto.GenerateSalt()).StripUglyBase64().ToLowerInvariant();
+            userAccount.VerificationKey = _crypto
+                .Hash(_crypto.GenerateSalt())
+                .StripUglyBase64()
+                .ToLowerInvariant();
+
             userAccount.VerificationPurpose = (int)purpose;
             userAccount.VerificationKeySentAt = sentAt ?? DateTime.UtcNow;
             userAccount.VerificationStorage = storage;
         }
 
-        public async Task<UserAccount> WriteUserAccountAsync(UserAccount userAccount)
+        public async Task<UserAccount> WriteUserAccountAsync(
+            UserAccount userAccount)
         {
             var now = DateTime.UtcNow;
             userAccount.CreatedAt = now;
             userAccount.UpdatedAt = now;
 
-            var userAccount2 = await _userAccountStore.WriteAsync(userAccount);
+            var userAccount2 = await _userAccountStore
+                .WriteAsync(userAccount);
 
-            _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(userAccount.Id,
+            await _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
+                userAccount.Id,
                 IdentityServerConstants.LocalIdentityProvider);
 
             return userAccount2;
         }
 
-        public async Task<UserAccount> UpdateUserAccountAsync(UserAccount userAccount)
+        public async Task<UserAccount> UpdateUserAccountAsync(
+            UserAccount userAccount)
         {
             // Update user account
             userAccount.UpdatedAt = DateTime.UtcNow;
-            var userAccount2 = await _userAccountStore.WriteAsync(userAccount);
 
-            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(userAccount.Id);
+            var userAccount2 = await _userAccountStore
+                .WriteAsync(userAccount);
+
+            await _eventService
+                .RaiseSuccessfulUserAccountUpdatedEventAsync(userAccount.Id);
 
             return userAccount2;
         }
@@ -232,19 +277,27 @@ namespace IdentityBase.Services
             VerificationKeyPurpose purpose)
         {
             var result = new TokenVerificationResult();
-            var userAccount = await _userAccountStore.LoadByVerificationKeyAsync(key.ToLowerInvariant());
+
+            var userAccount = await _userAccountStore
+                .LoadByVerificationKeyAsync(key.ToLowerInvariant());
+
             if (userAccount == null)
             {
                 return result;
             }
 
             result.UserAccount = userAccount;
-            result.PurposeValid = userAccount.VerificationPurpose == (int)purpose;
+
+            result.PurposeValid = userAccount
+                .VerificationPurpose == (int)purpose;
 
             if (userAccount.VerificationKeySentAt.HasValue)
             {
                 var validTill = userAccount.VerificationKeySentAt.Value +
-                    TimeSpan.FromMinutes(_applicationOptions.VerificationKeyLifetime);
+                    TimeSpan.FromMinutes(
+                        _applicationOptions.VerificationKeyLifetime
+                    );
+
                 var now = DateTime.Now;
 
                 result.TokenExpired = now > validTill;
@@ -253,7 +306,9 @@ namespace IdentityBase.Services
             return result;
         }
 
-        public void AddLocalCredentials(UserAccount userAccount, string password)
+        public void AddLocalCredentials(
+            UserAccount userAccount,
+            string password)
         {
             var now = DateTime.UtcNow; // TODO: user time service
 
@@ -264,16 +319,25 @@ namespace IdentityBase.Services
             userAccount.PasswordChangedAt = DateTime.UtcNow;
         }
 
-        public async Task AddLocalCredentialsAsync(UserAccount userAccount, string password)
+        public async Task AddLocalCredentialsAsync(
+            UserAccount userAccount,
+            string password)
         {
             AddLocalCredentials(userAccount, password);
 
             await UpdateUserAccountAsync(userAccount);
         }
 
-        public async Task UpdateLastUsedExternalAccountAsync(UserAccount userAccount, string provider, string subject)
+        public async Task UpdateLastUsedExternalAccountAsync(
+            UserAccount userAccount,
+            string provider,
+            string subject)
         {
-            var externalAccount = userAccount.Accounts.FirstOrDefault(c => c.Provider.Equals(provider) && c.Subject.Equals(subject));
+            var externalAccount = userAccount.Accounts
+                .FirstOrDefault(c =>
+                    c.Provider.Equals(provider) &&
+                    c.Subject.Equals(subject)
+                );
 
             // TODO: user time service
             var now = DateTime.UtcNow;
@@ -284,10 +348,15 @@ namespace IdentityBase.Services
             await _userAccountStore.WriteExternalAccountAsync(externalAccount);
 
             // Emit event
-            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(externalAccount.UserAccountId);
+            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
+                externalAccount.UserAccountId);
         }
 
-        public async Task<UserAccount> CreateNewExternalUserAccountAsync(string email, string provider, string subject, string returnUrl = null)
+        public async Task<UserAccount> CreateNewExternalUserAccountAsync(
+            string email,
+            string provider,
+            string subject,
+            string returnUrl = null)
         {
             var userAccount = CreateNewLocalUserAccount(email);
             userAccount.Accounts = new ExternalAccount[]
@@ -308,10 +377,15 @@ namespace IdentityBase.Services
             return await WriteUserAccountAsync(userAccount);
         }
 
-        public async Task<ExternalAccount> AddExternalAccountAsync(Guid userAccountId, string email, string provider, string subject)
+        public async Task<ExternalAccount> AddExternalAccountAsync(
+            Guid userAccountId,
+            string email,
+            string provider,
+            string subject)
         {
             var now = DateTime.UtcNow; // TODO: user time service
-            var externalAccount = await _userAccountStore.WriteExternalAccountAsync(new ExternalAccount
+            var externalAccount = await _userAccountStore
+                .WriteExternalAccountAsync(new ExternalAccount
             {
                 UserAccountId = userAccountId,
                 Email = email,
@@ -324,14 +398,18 @@ namespace IdentityBase.Services
             });
 
             // Emit event
-            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(userAccountId);
+            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
+                userAccountId);
 
             return externalAccount;
         }
 
-        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(int take, int skip)
+        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(
+            int take,
+            int skip)
         {
-            return await _userAccountStore.LoadInvitedUserAccountsAsync(take, skip);
+            return await _userAccountStore
+                .LoadInvitedUserAccountsAsync(take, skip);
         }
 
         /// <summary>
@@ -340,7 +418,10 @@ namespace IdentityBase.Services
         /// <param name="email"></param>
         /// <param name="invitedBy"></param>
         /// <returns><see cref="UserAccount"/></returns>
-        public async Task<UserAccount> CreateNewLocalUserAccountAsync(string email, Guid? invitedBy, string returnUrl)
+        public async Task<UserAccount> CreateNewLocalUserAccountAsync(
+            string email,
+            Guid? invitedBy,
+            string returnUrl)
         {
             var foo = CreateNewLocalUserAccount(email);
             foo.CreationKind = CreationKind.Invitation;
@@ -349,8 +430,11 @@ namespace IdentityBase.Services
             var userAccount = await _userAccountStore.WriteAsync(foo);
 
             // Emit events
-            _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(userAccount.Id, IdentityServerConstants.LocalIdentityProvider);
-            _eventService.RaiseSuccessfulUserAccountInvitedEventAsync(userAccount.Id, invitedBy);
+            _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
+                userAccount.Id, IdentityServerConstants.LocalIdentityProvider);
+
+            _eventService.RaiseSuccessfulUserAccountInvitedEventAsync(
+                userAccount.Id, invitedBy);
 
             return userAccount;
         }
@@ -362,7 +446,9 @@ namespace IdentityBase.Services
         /// <param name="userAccount"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
-        public async Task SetResetPasswordVirificationKeyAsync(UserAccount userAccount, string returnUrl = null)
+        public async Task SetResetPasswordVirificationKeyAsync(
+            UserAccount userAccount,
+            string returnUrl = null)
         {
             // Set verification key
             SetVerification(userAccount,
@@ -373,7 +459,9 @@ namespace IdentityBase.Services
             await UpdateUserAccountAsync(userAccount);
         }
 
-        public async Task SetNewPasswordAsync(UserAccount userAccount, string password)
+        public async Task SetNewPasswordAsync(
+            UserAccount userAccount,
+            string password)
         {
             ClearVerification(userAccount);
 
