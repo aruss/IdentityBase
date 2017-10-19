@@ -1,0 +1,89 @@
+{
+  "Host": {
+    "Urls": "http://*:5000",
+    "UseIISIntegration": true
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Verbose",
+      "Override": {
+        "System": "Information",
+        "Microsoft": "Information"
+      }
+    },
+    "WriteTo": [
+      { "Name": "Console" },
+      {
+        "Name": "RollingFile",
+        "Args": {
+          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+          "pathFormat": "./AppData/Logs/log.json",
+          "fileSizeLimitBytes": 1234567
+        }
+      }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
+  },
+  "EntityFramework": {
+    "MigrateDatabase": false, // Set it to true if using SqlServerModule
+    "SeedExampleData": true,
+    "EnsureDeleted": false,
+    "CleanupTokens": true,
+    "SeedExampleDataPath": "./AppData",
+    "Npgsql": {
+      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+    },
+    "SqlServer": {
+      "ConnectionString": "Data Source=.\\SQLEXPRESS;Initial Catalog=IdentityBase;Persist Security Info=True;User ID=devuser;Password=devuser;MultipleActiveResultSets=True"
+    }
+  },
+  "Events": {
+    "RaiseErrorEvents": true,
+    "RaiseFailureEvents": true,
+    "RaiseInformationEvents": true,
+    "RaiseSuccessEvents": true
+  },
+  "IdentityServer": {
+    "SigningCredentialFromPfx": {
+      "Path": "./AppData/idsvr3test.pfx",
+      "Password": "idsrv3test"
+    }
+  },
+  "App": {
+    "PublicUrl": "http://localhost:5000",
+    "TempFolder": "./AppData/Temp",
+    "EnableLocalLogin": true,
+    "EnableRememberLogin": true,
+    "PasswordHashingIterationCount": 0,
+    "AccountLockoutFailedLoginAttempts": 5,
+    "AccountLockoutDuration": 600,
+    "RequireLocalAccountVerification": true,
+    "RequireExternalAccountVerification": false,
+    "LoginAfterAccountCreation": true,
+    "LoginAfterAccountConfirmation": true,
+    "LoginAfterAccountRecovery": true,
+    "VerificationKeyLifetime": 525600,
+    "AutomaticAccountMerge": true,
+    "EnableAccountRegistration": true,
+    "EnableAccountRecovery": true,
+    "EnableAccountDeletion": false,
+    "EnableLoginHints": false,
+    "EnableInvitationGetEndpoint": true,
+    "EnableInvitationCreateEndpoint": true,
+    "EnableInvitationDeleteEndpoint": true,
+    "ThemePath": "./Themes/Custom"
+  },
+  "Email": {
+    "TemplateDirectoryPath": "./Templates/Email"
+  },
+  "Services": {
+    "modules": [
+      // can use here InMemoryModule or SqlServerModule, set MigrateDatabase to true if using SqlServerModule
+      { "type": "IdentityBase.Public.EntityFramework.InMemoryModule, IdentityBase.Public.EntityFramework" },
+      { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+      { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
+      { "type": "IdentityBase.Public.SmtpEmailSenderModule, IdentityBase.Public" },
+      { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
+    ]
+  }
+}
