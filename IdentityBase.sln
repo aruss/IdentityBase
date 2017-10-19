@@ -40,6 +40,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWeb", "samples\As
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApi", "samples\AspNetCoreApi\AspNetCoreApi.csproj", "{800E97A2-6012-4816-B9B8-64F409028A70}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomTheme", "samples\CustomTheme\CustomTheme.csproj", "{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{800E97A2-6012-4816-B9B8-64F409028A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{800E97A2-6012-4816-B9B8-64F409028A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{800E97A2-6012-4816-B9B8-64F409028A70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{C9217BE8-60DD-40EC-9B11-C8BA6CA58833} = {C47B5EFB-92B9-412D-834D-32FFE16FCFB7}
 		{19D7E836-2FEC-49A7-BC90-D581A5D9D60D} = {F0015D43-954F-45EF-B89A-5DE580CAC948}
 		{800E97A2-6012-4816-B9B8-64F409028A70} = {F0015D43-954F-45EF-B89A-5DE580CAC948}
+		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5} = {F0015D43-954F-45EF-B89A-5DE580CAC948}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF96F7A7-679F-4B34-8009-8BF15588794C}
