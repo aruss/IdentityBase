@@ -1,8 +1,8 @@
 namespace IdentityBase.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Threading.Tasks;
     using IdentityBase.Crypto;
     using IdentityBase.Models;
     using Microsoft.Extensions.Configuration;
@@ -12,60 +12,65 @@ namespace IdentityBase.Configuration
     {
         public static void Write(IConfiguration config)
         {
-            var crypto = new Crypto.DefaultCrypto();
-            var options = config.GetSection("App")
-                .Get<Configuration.ApplicationOptions>();
-            var writer = new Configuration.ExampleDataWriter(crypto, options);
+            ICrypto crypto = new DefaultCrypto();
+
+            ApplicationOptions options = config.GetSection("App")
+                .Get<ApplicationOptions>();
+
+            ExampleDataWriter writer = new ExampleDataWriter(crypto, options);
+
             writer.WriteConfigFiles("./AppData");
         }
 
-        private readonly ICrypto _crypto;
-        private readonly ApplicationOptions _applicationOptions;
+        private readonly ICrypto crypto;
+        private readonly ApplicationOptions applicationOptions;
 
         public ExampleDataWriter(
             ICrypto crypto,
             ApplicationOptions applicationOptions)
         {
-            this._crypto = crypto;
-            this._applicationOptions = applicationOptions;
+            this.crypto = crypto;
+            this.applicationOptions = applicationOptions;
         }
 
         public void WriteConfigFiles(string path)
         {
-            var data = new ExampleData();
+            ExampleData data = new ExampleData();
 
             File.WriteAllText(
                 Path.Combine(path, "data_clients.json"),
                 JsonConvert.SerializeObject(data.GetClients(),
-                    Formatting.Indented));
+                Formatting.Indented)
+            );
 
             File.WriteAllText(
                 Path.Combine(path, "data_resources_api.json"),
                 JsonConvert.SerializeObject(data.GetApiResources(),
-                    Formatting.Indented));
+                Formatting.Indented)
+            );
 
             File.WriteAllText(
                 Path.Combine(path, "data_resources_identity.json"),
                 JsonConvert.SerializeObject(data.GetIdentityResources(),
-                    Formatting.Indented));
+                Formatting.Indented)
+            );
 
+            IEnumerable<UserAccount> users = data.GetUserAccounts(
+                       this.crypto,
+                       this.applicationOptions);
 
-            var users = data.GetUserAccounts(
-                       this._crypto,
-                       this._applicationOptions);
-
-            foreach (var user in users)
+            foreach (UserAccount user in users)
             {
                 user.Accounts = user.Accounts ?? new ExternalAccount[0];
 
-                foreach (var account in user.Accounts)
+                foreach (ExternalAccount account in user.Accounts)
                 {
                     account.UserAccountId = user.Id;
                 }
 
                 user.Claims = user.Claims ?? new UserAccountClaim[0];
 
-                foreach (var claim in user.Claims)
+                foreach (UserAccountClaim claim in user.Claims)
                 {
                     claim.UserAccountId = user.Id;
                     claim.Id = Guid.NewGuid();
@@ -74,8 +79,8 @@ namespace IdentityBase.Configuration
 
             File.WriteAllText(
                 Path.Combine(path, "data_users.json"),
-                    JsonConvert.SerializeObject(users, Formatting.Indented)
-                );
+                JsonConvert.SerializeObject(users, Formatting.Indented)
+            );
         }
     }
 }

@@ -1,17 +1,20 @@
-﻿using IdentityBase.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace IdentityBase.Extensions
 {
+    using IdentityBase.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+
     public static class IApplicationBuilderExtensions
     {
-        public static IApplicationBuilder InitializeStores(this IApplicationBuilder app)
+        public static IApplicationBuilder InitializeStores(
+            this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices
+            using (IServiceScope serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var initializer = serviceScope.ServiceProvider.GetService<IStoreInitializer>();
+                IStoreInitializer initializer = serviceScope.ServiceProvider
+                    .GetService<IStoreInitializer>();
+
                 if (initializer != null)
                 {
                     initializer.InitializeStores();
@@ -21,12 +24,15 @@ namespace IdentityBase.Extensions
             return app;
         }
 
-        public static IApplicationBuilder CleanupStores(this IApplicationBuilder app)
+        public static IApplicationBuilder CleanupStores(
+            this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices
+            using (IServiceScope serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var initializer = serviceScope.ServiceProvider.GetService<IStoreInitializer>();
+                IStoreInitializer initializer = serviceScope.ServiceProvider
+                    .GetService<IStoreInitializer>();
+
                 if (initializer != null)
                 {
                     initializer.CleanupStores();

@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class ExternalAccount
     {
         public Guid UserAccountId { get; set; }

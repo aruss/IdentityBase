@@ -23,9 +23,9 @@ namespace IdentityBase.Public
     /// </summary>
     public class Startup : IStartup
     {
-        private readonly Microsoft.Extensions.Logging.ILogger _logger;
-        private readonly IHostingEnvironment _environment;
-        private readonly IConfiguration _configuration;
+        private readonly ILogger logger;
+        private readonly IHostingEnvironment environment;
+        private readonly IConfiguration configuration;
 
         /// <summary>
         ///
@@ -41,9 +41,9 @@ namespace IdentityBase.Public
              IHostingEnvironment environment,
              ILogger<Startup> logger)
         {
-            this._logger = logger;
-            this._environment = environment;
-            this._configuration = configuration;
+            this.logger = logger;
+            this.environment = environment;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -53,18 +53,18 @@ namespace IdentityBase.Public
         /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            this._logger.LogInformation("Services Configure");
+            this.logger.LogInformation("Services Configure");
 
-            ApplicationOptions options = this._configuration.GetSection("App")
+            ApplicationOptions options = this.configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
-            services.AddSingleton(this._configuration);
+            services.AddSingleton(this.configuration);
             services.AddSingleton(options);
 
             services.AddIdentityServer(
-                this._configuration,
-                this._logger,
-                this._environment);
+                this.configuration,
+                this.logger,
+                this.environment);
 
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
@@ -76,11 +76,11 @@ namespace IdentityBase.Public
             {
                 corsOpts.AddPolicy("CorsPolicy",
                     corsBuilder => corsBuilder.WithOrigins(
-                        this._configuration.GetValue<string>("Host:Cors")));
+                        this.configuration.GetValue<string>("Host:Cors")));
             });
 
             services.AddWebApi(options);
-            services.AddMvc(options, _environment);
+            services.AddMvc(options, this.environment);
 
             // https://github.com/aspnet/Security/issues/1310
             services
@@ -89,36 +89,36 @@ namespace IdentityBase.Public
                 .AddCookie();
 
             // Update current instances
-            Current.Configuration = this._configuration;
-            Current.Logger = this._logger;
+            Current.Configuration = this.configuration;
+            Current.Logger = this.logger;
 
             // Add AutoFac continer and register modules form config
             ContainerBuilder builder = new ContainerBuilder();
             builder.Populate(services);
 
-            if (this._configuration.ContainsSection("Services"))
+            if (this.configuration.ContainsSection("Services"))
             {
                 builder.RegisterModule(
                     new ConfigurationModule(
-                        this._configuration.GetSection("Services")));
+                        this.configuration.GetSection("Services")));
             }
 
             IContainer container = builder.Build();
-            container.ValidateDataLayerServices(this._logger);
-            container.ValidateEmailSenderServices(this._logger);
-            container.ValidateSmsServices(this._logger);
-            container.ValidateEventServices(this._logger);
+            container.ValidateDataLayerServices(this.logger);
+            container.ValidateEmailSenderServices(this.logger);
+            container.ValidateSmsServices(this.logger);
+            container.ValidateEventServices(this.logger);
 
             Current.Container = container;
 
-            this._logger.LogInformation("Services Configured");
+            this.logger.LogInformation("Services Configured");
 
             return new AutofacServiceProvider(container);
         }
 
         public virtual void Configure(IApplicationBuilder app)
         {
-            this._logger.LogInformation("Application Configure");
+            this.logger.LogInformation("Application Configure");
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
@@ -142,7 +142,7 @@ namespace IdentityBase.Public
             }
 
             app.UseCors("CorsPolicy");
-            app.UseStaticFiles(options, this._environment);
+            app.UseStaticFiles(options, this.environment);
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseWebApi(options);
@@ -155,21 +155,21 @@ namespace IdentityBase.Public
 
                 app.InitializeStores();
 
-                this._logger.LogInformation("Application Started");
+                this.logger.LogInformation("Application Started");
             });
 
             appLifetime.ApplicationStopping.Register(() =>
             {
-                this._logger.LogInformation("Application Stopping");
+                this.logger.LogInformation("Application Stopping");
                 app.CleanupStores();
             });
 
             appLifetime.ApplicationStopped.Register(() =>
             {
-                this._logger.LogInformation("Application Stopped");
+                this.logger.LogInformation("Application Stopped");
             });
 
-            this._logger.LogInformation("Application Configured");
+            this.logger.LogInformation("Application Configured");
         }
     }
 }

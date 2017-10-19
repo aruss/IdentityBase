@@ -1,8 +1,8 @@
-﻿using IdentityBase.Models;
-using System.Collections.Generic;
-
 namespace IdentityBase.Public.Actions.Recover
 {
+    using IdentityBase.Models;
+    using System.Collections.Generic;
+
     public class RecoverViewModel : RecoverInputModel, IExternalLoginsViewModel
     {
         public bool EnableLocalLogin { get; set; }
@@ -14,8 +14,8 @@ namespace IdentityBase.Public.Actions.Recover
         
         public RecoverViewModel(RecoverInputModel inputModel)
         {
-            Email = inputModel.Email;
-            ReturnUrl = inputModel.ReturnUrl;
+            this.Email = inputModel.Email;
+            this.ReturnUrl = inputModel.ReturnUrl;
         }  
     }
 }

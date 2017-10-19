@@ -1,4 +1,3 @@
-
 namespace IdentityBase.Services
 {
     using IdentityBase.Configuration;
@@ -16,11 +15,11 @@ namespace IdentityBase.Services
 
     public class UserAccountService
     {
-        private readonly ApplicationOptions _applicationOptions;
-        private readonly ICrypto _crypto;
-        private readonly IUserAccountStore _userAccountStore;
-        private readonly IEventService _eventService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationOptions applicationOptions;
+        private readonly ICrypto crypto;
+        private readonly IUserAccountStore userAccountStore;
+        private readonly IEventService eventService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public UserAccountService(
             ApplicationOptions applicationOptions,
@@ -29,11 +28,11 @@ namespace IdentityBase.Services
             IEventService eventService,
             IHttpContextAccessor httpContextAccessor)
         {
-            _applicationOptions = applicationOptions;
-            _crypto = crypto;
-            _userAccountStore = userAccountStore;
-            _eventService = eventService;
-            _httpContextAccessor = httpContextAccessor;
+            this.applicationOptions = applicationOptions;
+            this.crypto = crypto;
+            this.userAccountStore = userAccountStore;
+            this.eventService = eventService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace IdentityBase.Services
 
             var result = new UserAccountVerificationResult();
 
-            UserAccount userAccount = await _userAccountStore
+            UserAccount userAccount = await userAccountStore
                 .LoadByEmailAsync(email.ToLower());
 
             if (userAccount == null)
@@ -66,10 +65,10 @@ namespace IdentityBase.Services
             {
                 result.IsLocalAccount = true;
 
-                result.IsPasswordValid = _crypto.VerifyPasswordHash(
+                result.IsPasswordValid = crypto.VerifyPasswordHash(
                     userAccount.PasswordHash,
                     password,
-                    _applicationOptions.PasswordHashingIterationCount
+                    applicationOptions.PasswordHashingIterationCount
                 );
             }
 
@@ -86,35 +85,55 @@ namespace IdentityBase.Services
             return result;
         }
 
+        /// <summary>
+        /// Loads user by its primary key 
+        /// </summary>
+        /// <param name="id">UserId</param>
+        /// <returns></returns>
         public async Task<UserAccount> LoadByIdAsync(
             Guid id)
         {
-            return await _userAccountStore.LoadByIdAsync(id);
+            return await userAccountStore.LoadByIdAsync(id);
         }
 
-        public async Task<UserAccount> LoadByEmailAsync(
-            string email)
+        /// <summary>
+        /// Loads user by email 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task<UserAccount> LoadByEmailAsync(string email)
         {
-            return await _userAccountStore.LoadByEmailAsync(email);
+            return await userAccountStore.LoadByEmailAsync(email);
         }
 
+        /// <summary>
+        /// Loads user by email and with all external accounts 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public async Task<UserAccount> LoadByEmailWithExternalAsync(
             string email)
         {
-            return await _userAccountStore.LoadByEmailWithExternalAsync(email);
+            return await userAccountStore.LoadByEmailWithExternalAsync(email);
         }
 
+        /// <summary>
+        /// Get by external provider information, 
+        /// </summary>
+        /// <param name="provider">Provider name (facebook, twitter, ...)</param>
+        /// <param name="subject">Provider account ID</param>
+        /// <returns></returns>
         public async Task<UserAccount> LoadByExternalProviderAsync(
             string provider,
             string subject)
         {
-            return await _userAccountStore
+            return await userAccountStore
                 .LoadByExternalProviderAsync(provider, subject);
         }
 
         public async Task DeleteByIdAsync(Guid id)
         {
-            await _userAccountStore.DeleteByIdAsync(id);
+            await userAccountStore.DeleteByIdAsync(id);
         }
 
         public void UpdateSuccessfulLogin(UserAccount userAccount)
@@ -145,7 +164,7 @@ namespace IdentityBase.Services
                 Email = email,
                 FailedLoginCount = 0,
                 IsEmailVerified = false,
-                IsLoginAllowed = _applicationOptions
+                IsLoginAllowed = applicationOptions
                     .RequireLocalAccountVerification,
                 PasswordChangedAt = now,
                 CreatedAt = now,
@@ -154,13 +173,13 @@ namespace IdentityBase.Services
 
             if (!String.IsNullOrWhiteSpace(password))
             {
-                userAccount.PasswordHash = _crypto.HashPassword(
+                userAccount.PasswordHash = crypto.HashPassword(
                     password,
-                    _applicationOptions.PasswordHashingIterationCount
+                    applicationOptions.PasswordHashingIterationCount
                 );
             }
 
-            if (_applicationOptions.RequireLocalAccountVerification &&
+            if (applicationOptions.RequireLocalAccountVerification &&
                 !String.IsNullOrWhiteSpace(returnUrl))
             {
                 this.SetVerification(
@@ -208,8 +227,8 @@ namespace IdentityBase.Services
             string storage = null,
             DateTime? sentAt = null)
         {
-            userAccount.VerificationKey = _crypto
-                .Hash(_crypto.GenerateSalt())
+            userAccount.VerificationKey = crypto
+                .Hash(crypto.GenerateSalt())
                 .StripUglyBase64()
                 .ToLowerInvariant();
 
@@ -225,10 +244,10 @@ namespace IdentityBase.Services
             userAccount.CreatedAt = now;
             userAccount.UpdatedAt = now;
 
-            var userAccount2 = await _userAccountStore
+            var userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            await _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
+            await eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
                 userAccount.Id,
                 IdentityServerConstants.LocalIdentityProvider);
 
@@ -241,10 +260,10 @@ namespace IdentityBase.Services
             // Update user account
             userAccount.UpdatedAt = DateTime.UtcNow;
 
-            var userAccount2 = await _userAccountStore
+            var userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            await _eventService
+            await eventService
                 .RaiseSuccessfulUserAccountUpdatedEventAsync(userAccount.Id);
 
             return userAccount2;
@@ -278,7 +297,7 @@ namespace IdentityBase.Services
         {
             var result = new TokenVerificationResult();
 
-            var userAccount = await _userAccountStore
+            var userAccount = await userAccountStore
                 .LoadByVerificationKeyAsync(key.ToLowerInvariant());
 
             if (userAccount == null)
@@ -295,7 +314,7 @@ namespace IdentityBase.Services
             {
                 var validTill = userAccount.VerificationKeySentAt.Value +
                     TimeSpan.FromMinutes(
-                        _applicationOptions.VerificationKeyLifetime
+                        applicationOptions.VerificationKeyLifetime
                     );
 
                 var now = DateTime.Now;
@@ -313,8 +332,8 @@ namespace IdentityBase.Services
             var now = DateTime.UtcNow; // TODO: user time service
 
             // Set user account password
-            userAccount.PasswordHash = _crypto.HashPassword(password,
-                _applicationOptions.PasswordHashingIterationCount);
+            userAccount.PasswordHash = crypto.HashPassword(password,
+                applicationOptions.PasswordHashingIterationCount);
 
             userAccount.PasswordChangedAt = DateTime.UtcNow;
         }
@@ -345,10 +364,10 @@ namespace IdentityBase.Services
             externalAccount.LastLoginAt = now;
             externalAccount.UpdatedAt = now;
 
-            await _userAccountStore.WriteExternalAccountAsync(externalAccount);
+            await userAccountStore.WriteExternalAccountAsync(externalAccount);
 
             // Emit event
-            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
+            eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
                 externalAccount.UserAccountId);
         }
 
@@ -384,21 +403,21 @@ namespace IdentityBase.Services
             string subject)
         {
             var now = DateTime.UtcNow; // TODO: user time service
-            var externalAccount = await _userAccountStore
+            var externalAccount = await userAccountStore
                 .WriteExternalAccountAsync(new ExternalAccount
-            {
-                UserAccountId = userAccountId,
-                Email = email,
-                Provider = provider,
-                Subject = subject,
-                CreatedAt = now,
-                UpdatedAt = now,
-                LastLoginAt = null,
-                IsLoginAllowed = true
-            });
+                {
+                    UserAccountId = userAccountId,
+                    Email = email,
+                    Provider = provider,
+                    Subject = subject,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    LastLoginAt = null,
+                    IsLoginAllowed = true
+                });
 
             // Emit event
-            _eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
+            eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
                 userAccountId);
 
             return externalAccount;
@@ -408,7 +427,7 @@ namespace IdentityBase.Services
             int take,
             int skip)
         {
-            return await _userAccountStore
+            return await userAccountStore
                 .LoadInvitedUserAccountsAsync(take, skip);
         }
 
@@ -427,13 +446,13 @@ namespace IdentityBase.Services
             foo.CreationKind = CreationKind.Invitation;
             SetVerification(foo, VerificationKeyPurpose.ConfirmAccount, returnUrl);
 
-            var userAccount = await _userAccountStore.WriteAsync(foo);
+            var userAccount = await userAccountStore.WriteAsync(foo);
 
             // Emit events
-            _eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
+            eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
                 userAccount.Id, IdentityServerConstants.LocalIdentityProvider);
 
-            _eventService.RaiseSuccessfulUserAccountInvitedEventAsync(
+            eventService.RaiseSuccessfulUserAccountInvitedEventAsync(
                 userAccount.Id, invitedBy);
 
             return userAccount;
@@ -467,8 +486,8 @@ namespace IdentityBase.Services
 
             // TODO: reset failed login attempts
 
-            userAccount.PasswordHash = _crypto.HashPassword(password,
-                      _applicationOptions.PasswordHashingIterationCount);
+            userAccount.PasswordHash = crypto.HashPassword(password,
+                      applicationOptions.PasswordHashingIterationCount);
             userAccount.PasswordChangedAt = DateTime.UtcNow;
 
             await UpdateUserAccountAsync(userAccount);

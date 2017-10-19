@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
 namespace IdentityBase.Public.Actions.Consent
 {
+    using System.Collections.Generic;
+
     public class ConsentViewModel : ConsentInputModel
     {
         public string ClientName { get; set; }

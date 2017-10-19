@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Public.Actions.Consent
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class ConsentInputModel
     {
         [StringLength(50)]

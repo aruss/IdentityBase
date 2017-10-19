@@ -1,4 +1,4 @@
-﻿namespace Microsoft.AspNetCore.Mvc
+namespace Microsoft.AspNetCore.Mvc
 {
     using System.Text.Encodings.Web;
     using Microsoft.AspNetCore.Authentication;

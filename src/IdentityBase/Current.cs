@@ -1,10 +1,11 @@
-﻿using Autofac;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
 namespace IdentityBase
 {
-    // Workarround, since I dont really know how to pass custom parameters to Autofac.Module Load method 
+    using Autofac;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+
+    // Workarround, since I dont really know how to pass custom parameters
+    // to Autofac.Module Load method 
     public static class Current
     {
         public static IConfiguration Configuration { get; set; }

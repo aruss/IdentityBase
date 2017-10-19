@@ -20,18 +20,18 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(BadRequestFilter))]
     public class InvitationsPutController : ApiController
     {
-        private readonly UserAccountService _userAccountService;
-        private readonly IEmailService _emailService;
-        private readonly IClientStore _clientStore;
+        private readonly UserAccountService userAccountService;
+        private readonly IEmailService emailService;
+        private readonly IClientStore clientStore;
 
         public InvitationsPutController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore)
         {
-            this._userAccountService = userAccountService;
-            this._emailService = emailService;
-            this._clientStore = clientStore;
+            this.userAccountService = userAccountService;
+            this.emailService = emailService;
+            this.clientStore = clientStore;
         }
 
         [HttpPut("invitations")]
@@ -40,7 +40,7 @@ namespace IdentityBase.Public.Api.Invitations
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)
         {
-            Client client = await this._clientStore
+            Client client = await this.clientStore
                 .FindClientByIdAsync(inputModel.ClientId);
 
             if (client == null)
@@ -71,7 +71,7 @@ namespace IdentityBase.Public.Api.Invitations
 
             if (inputModel.InvitedBy.HasValue)
             {
-                if (await this._userAccountService
+                if (await this.userAccountService
                     .LoadByEmailAsync(inputModel.Email) == null)
                 {
                     return this.BadRequest(
@@ -81,7 +81,7 @@ namespace IdentityBase.Public.Api.Invitations
                 }
             }
 
-            UserAccount userAccount = await _userAccountService
+            UserAccount userAccount = await userAccountService
                 .LoadByEmailAsync(inputModel.Email);
 
             if (userAccount != null)
@@ -92,7 +92,7 @@ namespace IdentityBase.Public.Api.Invitations
                 );
             }
 
-            userAccount = await this._userAccountService
+            userAccount = await this.userAccountService
                 .CreateNewLocalUserAccountAsync(
                     inputModel.Email,
                     inputModel.InvitedBy,
@@ -119,7 +119,7 @@ namespace IdentityBase.Public.Api.Invitations
                 .EnsureTrailingSlash(this.HttpContext
                     .GetIdentityServerBaseUrl());
 
-            await this._emailService.SendEmailAsync(
+            await this.emailService.SendEmailAsync(
                 IdentityBaseConstants.EmailTemplates.UserAccountInvited,
                 userAccount.Email,
                 new

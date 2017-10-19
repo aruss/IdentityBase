@@ -25,10 +25,10 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
             this IHtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)
         {
-            var expressionText =
+            string expressionText =
                 ExpressionHelper.GetExpressionText(expression);
 
-            var fullHtmlFieldName = htmlHelper.ViewContext.ViewData
+            string fullHtmlFieldName = htmlHelper.ViewContext.ViewData
                 .TemplateInfo.GetFullHtmlFieldName(expressionText);
 
             return htmlHelper.ViewData.ModelState[fullHtmlFieldName];

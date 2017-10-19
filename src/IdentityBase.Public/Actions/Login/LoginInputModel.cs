@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Public.Actions.Login
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class LoginInputModel
     {
         [EmailAddress]

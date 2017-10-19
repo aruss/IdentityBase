@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Public.Actions.Recover
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class SuccessInputModel
     {
         [StringLength(254)]

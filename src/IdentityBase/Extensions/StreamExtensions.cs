@@ -1,12 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
 namespace IdentityBase.Extensions
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     internal static class StreamExtensions
     {
-        internal static readonly Encoding DefaultEncoding = new UTF8Encoding(false, true);
+        internal static readonly Encoding DefaultEncoding =
+            new UTF8Encoding(false, true);
 
         public static BinaryReader CreateReader(this Stream stream)
         {
@@ -18,12 +19,17 @@ namespace IdentityBase.Extensions
             return new BinaryWriter(stream, DefaultEncoding, true);
         }
 
-        public static DateTimeOffset ReadDateTimeOffset(this BinaryReader reader)
+        public static DateTimeOffset ReadDateTimeOffset(
+            this BinaryReader reader)
         {
-            return new DateTimeOffset(reader.ReadInt64(), TimeSpan.Zero);
+            return new DateTimeOffset(
+                reader.ReadInt64(),
+                TimeSpan.Zero);
         }
 
-        public static void Write(this BinaryWriter writer, DateTimeOffset value)
+        public static void Write(
+            this BinaryWriter writer,
+            DateTimeOffset value)
         {
             writer.Write(value.UtcTicks);
         }

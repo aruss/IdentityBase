@@ -16,14 +16,14 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(ModelStateFilter))]
     public class InvitationsGetController : ApiController
     {
-        private readonly UserAccountService _userAccountService;
+        private readonly UserAccountService userAccountService;
 
         public InvitationsGetController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore)
         {
-            this._userAccountService = userAccountService;
+            this.userAccountService = userAccountService;
         }
 
         [HttpGet("invitations")]
@@ -31,7 +31,7 @@ namespace IdentityBase.Public.Api.Invitations
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(PagedListInputModel request)
         {
-            PagedList<UserAccount> list = await this._userAccountService
+            PagedList<UserAccount> list = await this.userAccountService
                 .LoadInvitedUserAccountsAsync(request.Take, request.Skip);
 
             var result = new PagedList<InvitationsPutResultModel>

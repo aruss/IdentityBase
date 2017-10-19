@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Public.Actions.Logout
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class LogoutInputModel
     {
         [StringLength(50)]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using IdentityServer4.Events;
 using IdentityServer4.Services;

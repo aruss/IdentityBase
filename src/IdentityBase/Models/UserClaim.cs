@@ -1,7 +1,7 @@
-﻿using System;
-
 namespace IdentityBase.Models
 {
+    using System;
+
     public class UserAccountClaim
     {
         public UserAccountClaim()
@@ -9,7 +9,10 @@ namespace IdentityBase.Models
 
         }
 
-        public UserAccountClaim(string type, string value, string valueType = null)
+        public UserAccountClaim(
+            string type,
+            string value,
+            string valueType = null)
         {
             this.Type = type;
             this.Value = value;

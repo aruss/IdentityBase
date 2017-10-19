@@ -1,30 +1,30 @@
-﻿using System;
-using System.Threading.Tasks;
-using IdentityBase.Configuration;
-using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
 namespace IdentityBase.Public.Actions.Logout
 {
+    using System;
+    using System.Threading.Tasks;
+    using IdentityBase.Configuration;
+    using IdentityModel;
+    using IdentityServer4;
+    using IdentityServer4.Services;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
     public class LogoutController : Controller
     {
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<LogoutController> _logger;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly ApplicationOptions applicationOptions;
+        private readonly ILogger<LogoutController> logger;
 
         public LogoutController(
             IIdentityServerInteractionService interaction,
             ApplicationOptions applicationOptions,
             ILogger<LogoutController> logger)
         {
-            _interaction = interaction;
-            _applicationOptions = applicationOptions;
-            _logger = logger;
+            this.interaction = interaction;
+            this.applicationOptions = applicationOptions;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace IdentityBase.Public.Actions.Logout
             var vm = new LogoutViewModel
             {
                 LogoutId = logoutId,
-                ShowLogoutPrompt = _applicationOptions.ShowLogoutPrompt
+                ShowLogoutPrompt = applicationOptions.ShowLogoutPrompt
             };
 
             var user = this.HttpContext.User;
@@ -59,7 +59,7 @@ namespace IdentityBase.Public.Actions.Logout
                 return vm;
             }
 
-            var context = await _interaction.GetLogoutContextAsync(logoutId);
+            var context = await interaction.GetLogoutContextAsync(logoutId);
             if (context?.ShowSignoutPrompt == false)
             {
                 // it's safe to automatically sign-out
@@ -89,7 +89,7 @@ namespace IdentityBase.Public.Actions.Logout
                 await HttpContext.SignOutAsync();
 
                 // raise the logout event
-                // await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
+                // await events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
@@ -122,11 +122,11 @@ namespace IdentityBase.Public.Actions.Logout
         private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(string logoutId)
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
-            var logout = await _interaction.GetLogoutContextAsync(logoutId);
+            var logout = await interaction.GetLogoutContextAsync(logoutId);
 
             var vm = new LoggedOutViewModel
             {
-                AutomaticRedirectAfterSignOut = _applicationOptions.AutomaticRedirectAfterSignOut,
+                AutomaticRedirectAfterSignOut = applicationOptions.AutomaticRedirectAfterSignOut,
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
                 ClientName = logout?.ClientId,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
@@ -144,7 +144,7 @@ namespace IdentityBase.Public.Actions.Logout
                         // if there's no current logout context, we need to create one
                         // this captures necessary info from the current logged in user
                         // before we signout and redirect away to the external IdP for signout
-                        vm.LogoutId = await _interaction.CreateLogoutContextAsync();
+                        vm.LogoutId = await interaction.CreateLogoutContextAsync();
                     }
 
                     vm.ExternalAuthenticationScheme = idp;

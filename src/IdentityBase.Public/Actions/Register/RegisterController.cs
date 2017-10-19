@@ -1,29 +1,29 @@
-using IdentityBase.Configuration;
-using IdentityBase.Extensions;
-using IdentityBase.Models;
-using IdentityBase.Services;
-using IdentityServer4.Extensions;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ServiceBase.Notification.Email;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace IdentityBase.Public.Actions.Register
 {
+    using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
+    using IdentityBase.Models;
+    using IdentityBase.Services;
+    using IdentityServer4.Extensions;
+    using IdentityServer4.Services;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using ServiceBase.Notification.Email;
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class RegisterController : Controller
     {
-        private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<RegisterController> _logger;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IEmailService _emailService;
-        private readonly UserAccountService _userAccountService;
-        private readonly ClientService _clientService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationOptions applicationOptions;
+        private readonly ILogger<RegisterController> logger;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IEmailService emailService;
+        private readonly UserAccountService userAccountService;
+        private readonly ClientService clientService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public RegisterController(
             ApplicationOptions applicationOptions,
@@ -34,22 +34,22 @@ namespace IdentityBase.Public.Actions.Register
             ClientService clientService,
             IHttpContextAccessor httpContextAccessor)
         {
-            _applicationOptions = applicationOptions;
-            _logger = logger;
-            _interaction = interaction;
-            _emailService = emailService;
-            _userAccountService = userAccountService;
-            _clientService = clientService;
-            _httpContextAccessor = httpContextAccessor;
+            this.applicationOptions = applicationOptions;
+            this.logger = logger;
+            this.interaction = interaction;
+            this.emailService = emailService;
+            this.userAccountService = userAccountService;
+            this.clientService = clientService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("register", Name = "Register")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = await CreateViewModelAsync(returnUrl);
+            var vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
-                _logger.LogError("Register attempt with missing returnUrl parameter");
+                logger.LogError("Register attempt with missing returnUrl parameter");
                 return Redirect(Url.Action("Index", "Error"));
             }
 
@@ -62,13 +62,14 @@ namespace IdentityBase.Public.Actions.Register
         {
             if (!ModelState.IsValid)
             {
-                return View(await CreateViewModelAsync(model));
+                return this.View(await this.CreateViewModelAsync(model));
             }
 
             var email = model.Email.ToLower();
 
             // Check if user with same email exists
-            var userAccount = await _userAccountService.LoadByEmailWithExternalAsync(email);
+            var userAccount = await userAccountService
+                .LoadByEmailWithExternalAsync(email);
 
             // If user dont exists create a new one
             if (userAccount == null)
@@ -84,7 +85,8 @@ namespace IdentityBase.Public.Actions.Register
             else if (userAccount.HasPassword())
             {
                 // User has to follow a link in confirmation mail
-                if (_applicationOptions.RequireLocalAccountVerification && !userAccount.IsEmailVerified)
+                if (applicationOptions.RequireLocalAccountVerification &&
+                    !userAccount.IsEmailVerified)
                 {
                     ModelState.AddModelError("Please confirm your email account");
 
@@ -106,7 +108,7 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
-            var result = await _userAccountService.HandleVerificationKeyAsync(key,
+            var result = await userAccountService.HandleVerificationKeyAsync(key,
                 VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
@@ -116,7 +118,7 @@ namespace IdentityBase.Public.Actions.Register
             }
 
             // User account requires completion 
-            if (_applicationOptions.EnableInvitationCreateEndpoint &&
+            if (applicationOptions.EnableInvitationCreateEndpoint &&
                 result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 var vm = new ConfirmViewModel
@@ -132,13 +134,13 @@ namespace IdentityBase.Public.Actions.Register
             else
             {
                 var returnUrl = result.UserAccount.VerificationKey;
-                await _userAccountService.SetEmailVerifiedAsync(result.UserAccount);
+                await userAccountService.SetEmailVerifiedAsync(result.UserAccount);
 
-                if (_applicationOptions.LoginAfterAccountConfirmation)
+                if (applicationOptions.LoginAfterAccountConfirmation)
                 {
-                    await _httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
+                    await httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
 
-                    if (returnUrl != null && _interaction.IsValidReturnUrl(returnUrl))
+                    if (returnUrl != null && interaction.IsValidReturnUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -153,12 +155,12 @@ namespace IdentityBase.Public.Actions.Register
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
-            if (!this._applicationOptions.EnableInvitationCreateEndpoint)
+            if (!this.applicationOptions.EnableInvitationCreateEndpoint)
             {
                 return NotFound();
             }
 
-            var result = await _userAccountService.HandleVerificationKeyAsync(model.Key,
+            var result = await userAccountService.HandleVerificationKeyAsync(model.Key,
                VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || result.TokenExpired || !result.PurposeValid)
@@ -179,9 +181,9 @@ namespace IdentityBase.Public.Actions.Register
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
-            _userAccountService.SetEmailVerified(result.UserAccount);
-            _userAccountService.AddLocalCredentials(result.UserAccount, model.Password);
-            await _userAccountService.UpdateUserAccountAsync(result.UserAccount);
+            userAccountService.SetEmailVerified(result.UserAccount);
+            userAccountService.AddLocalCredentials(result.UserAccount, model.Password);
+            await userAccountService.UpdateUserAccountAsync(result.UserAccount);
 
             if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
@@ -190,11 +192,11 @@ namespace IdentityBase.Public.Actions.Register
             }
             else
             {
-                if (_applicationOptions.LoginAfterAccountRecovery)
+                if (applicationOptions.LoginAfterAccountRecovery)
                 {
-                    await _httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
+                    await httpContextAccessor.HttpContext.SignInAsync(result.UserAccount, null);
 
-                    if (_interaction.IsValidReturnUrl(returnUrl))
+                    if (interaction.IsValidReturnUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -207,7 +209,7 @@ namespace IdentityBase.Public.Actions.Register
         [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
-            var result = await _userAccountService.HandleVerificationKeyAsync(key,
+            var result = await userAccountService.HandleVerificationKeyAsync(key,
                 VerificationKeyPurpose.ConfirmAccount);
 
             if (result.UserAccount == null || !result.PurposeValid || result.TokenExpired)
@@ -219,10 +221,10 @@ namespace IdentityBase.Public.Actions.Register
             }
 
             var returnUrl = result.UserAccount.VerificationStorage;
-            await _userAccountService.ClearVerificationAsync(result.UserAccount);
+            await userAccountService.ClearVerificationAsync(result.UserAccount);
 
 
-            if (_interaction.IsValidReturnUrl(returnUrl))
+            if (interaction.IsValidReturnUrl(returnUrl))
             {
                 return Redirect(Url.Action("Index", "Login", new { ReturnUrl = returnUrl }));
             }
@@ -261,7 +263,7 @@ namespace IdentityBase.Public.Actions.Register
         //       // redirect to return url
         //
         //       var userAccount = await GetUserAccountFromCoockyValue();
-        //       _httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
+        //       httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
         //
         //       throw new NotImplementedException();
         //
@@ -275,11 +277,11 @@ namespace IdentityBase.Public.Actions.Register
         //       userAccount.UpdatedAt = now;
         //
         //       await Task.WhenAll(
-        //           _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password),
-        //           _httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null)
+        //           userAccountService.AddLocalCredentialsAsync(userAccount, model.Password),
+        //           httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null)
         //       ); */
         //
-        //       // && _interaction.IsValidReturnUrl(returnUrl)
+        //       // && interaction.IsValidReturnUrl(returnUrl)
         //
         //       if (model.ReturnUrl != null)
         //       {
@@ -292,12 +294,12 @@ namespace IdentityBase.Public.Actions.Register
         //   [NonAction]
         //   internal async Task<UserAccount> GetUserAccountFromCoockyValue()
         //   {
-        //       if (_httpContextAccessor.HttpContext.Request.Cookies
+        //       if (httpContextAccessor.HttpContext.Request.Cookies
         //           .TryGetValue("ConfirmUserAccountId", out string userIdStr))
         //       {
         //           if (Guid.TryParse(userIdStr, out Guid userId))
         //           {
-        //               return await _userAccountService.LoadByIdAsync(userId);
+        //               return await userAccountService.LoadByIdAsync(userId);
         //           }
         //       }
         //
@@ -315,20 +317,20 @@ namespace IdentityBase.Public.Actions.Register
             RegisterInputModel inputModel,
             UserAccount userAccount = null)
         {
-            var context = await _interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
+            var context = await interaction.GetAuthorizationContextAsync(inputModel.ReturnUrl);
             if (context == null)
             {
                 return null;
             }
 
-            var client = await _clientService.FindEnabledClientByIdAsync(context.ClientId);
-            var providers = await _clientService.GetEnabledProvidersAsync(client);
+            var client = await clientService.FindEnabledClientByIdAsync(context.ClientId);
+            var providers = await clientService.GetEnabledProvidersAsync(client);
 
             var vm = new RegisterViewModel(inputModel)
             {
-                EnableAccountRecover = _applicationOptions.EnableAccountRecovery,
+                EnableAccountRecover = applicationOptions.EnableAccountRecovery,
                 EnableLocalLogin = (client != null ? client.EnableLocalLogin : false) &&
-                    _applicationOptions.EnableLocalLogin,
+                    applicationOptions.EnableLocalLogin,
                 ExternalProviders = providers.ToArray(),
                 ExternalProviderHints = userAccount?.Accounts?.Select(c => c.Provider)
             };
@@ -352,15 +354,15 @@ namespace IdentityBase.Public.Actions.Register
             RegisterInputModel model)
         {
             // Merge accounts without user consent
-            if (_applicationOptions.AutomaticAccountMerge)
+            if (applicationOptions.AutomaticAccountMerge)
             {
-                await _userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
+                await userAccountService.AddLocalCredentialsAsync(userAccount, model.Password);
 
-                if (_applicationOptions.LoginAfterAccountCreation)
+                if (applicationOptions.LoginAfterAccountCreation)
                 {
-                    await _httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
+                    await httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
 
-                    if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
+                    if (model.ReturnUrl != null && interaction.IsValidReturnUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
                     }
@@ -388,9 +390,9 @@ namespace IdentityBase.Public.Actions.Register
         internal async Task SendEmailAsync(UserAccount userAccount)
         {
             var baseUrl = ServiceBase.Extensions.StringExtensions
-                .EnsureTrailingSlash(_httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
+                .EnsureTrailingSlash(httpContextAccessor.HttpContext.GetIdentityServerBaseUrl());
 
-            await _emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates
+            await emailService.SendEmailAsync(IdentityBaseConstants.EmailTemplates
                 .UserAccountCreated, userAccount.Email, new
                 {
                     ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
@@ -403,20 +405,20 @@ namespace IdentityBase.Public.Actions.Register
             UserAccount userAccount,
             RegisterInputModel model)
         {
-            userAccount = await _userAccountService.CreateNewLocalUserAccountAsync(
+            userAccount = await userAccountService.CreateNewLocalUserAccountAsync(
                         model.Email, model.Password, model.ReturnUrl);
 
             // Send confirmation mail
-            if (_applicationOptions.RequireLocalAccountVerification)
+            if (applicationOptions.RequireLocalAccountVerification)
             {
                 await SendEmailAsync(userAccount);
             }
 
-            if (_applicationOptions.LoginAfterAccountCreation)
+            if (applicationOptions.LoginAfterAccountCreation)
             {
-                await _httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
+                await httpContextAccessor.HttpContext.SignInAsync(userAccount, null);
 
-                if (model.ReturnUrl != null && _interaction.IsValidReturnUrl(model.ReturnUrl))
+                if (model.ReturnUrl != null && interaction.IsValidReturnUrl(model.ReturnUrl))
                 {
                     return Redirect(model.ReturnUrl);
                 }

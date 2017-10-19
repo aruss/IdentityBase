@@ -1,20 +1,20 @@
-﻿using IdentityServer4;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-
 namespace IdentityBase.Public.Actions.Consent
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using IdentityServer4;
+    using IdentityServer4.Models;
+    using IdentityServer4.Services;
+    using IdentityServer4.Stores;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
     public class ConsentController : Controller
     {
-        private readonly ILogger<ConsentController> _logger;
-        private readonly IClientStore _clientStore;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IResourceStore _resourceStore;
+        private readonly ILogger<ConsentController> logger;
+        private readonly IClientStore clientStore;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IResourceStore resourceStore;
 
         public ConsentController(
             ILogger<ConsentController> logger,
@@ -22,29 +22,30 @@ namespace IdentityBase.Public.Actions.Consent
             IClientStore clientStore,
             IResourceStore resourceStore)
         {
-            _logger = logger;
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _resourceStore = resourceStore;
+            this.logger = logger;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.resourceStore = resourceStore;
         }
 
         [HttpGet("consent", Name = "Consent")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = await BuildViewModelAsync(returnUrl);
+            ConsentViewModel vm = await this.BuildViewModelAsync(returnUrl);
+
             if (vm != null)
             {
-                return View("Index", vm);
+                return this.View("Index", vm);
             }
 
-            return View("Error");
+            return this.View("Error");
         }
 
         [HttpPost("consent")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(string button, ConsentInputModel model)
         {
-            var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            var request = await interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             ConsentResponse response = null;
 
             if (button == "no")
@@ -73,7 +74,7 @@ namespace IdentityBase.Public.Actions.Consent
 
             if (response != null)
             {
-                await _interaction.GrantConsentAsync(request, response);
+                await interaction.GrantConsentAsync(request, response);
                 return Redirect(model.ReturnUrl);
             }
 
@@ -88,30 +89,30 @@ namespace IdentityBase.Public.Actions.Consent
 
         private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
         {
-            var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            var request = await interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId);
+                var client = await clientStore.FindEnabledClientByIdAsync(request.ClientId);
                 if (client != null)
                 {
-                    var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
+                    var resources = await resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
                     if (resources != null && (resources.IdentityResources.Any() || resources.ApiResources.Any()))
                     {
                         return CreateConsentViewModel(model, returnUrl, request, client, resources);
                     }
                     else
                     {
-                        _logger.LogError("No scopes matching: {0}", request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
+                        logger.LogError("No scopes matching: {0}", request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
                     }
                 }
                 else
                 {
-                    _logger.LogError("Invalid client id: {0}", request.ClientId);
+                    logger.LogError("Invalid client id: {0}", request.ClientId);
                 }
             }
             else
             {
-                _logger.LogError("No consent request matching request: {0}", returnUrl);
+                logger.LogError("No consent request matching request: {0}", returnUrl);
             }
 
             return null;

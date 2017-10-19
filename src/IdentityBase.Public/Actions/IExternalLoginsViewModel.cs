@@ -1,8 +1,8 @@
-﻿using IdentityBase.Models;
-using System.Collections.Generic;
-
 namespace IdentityBase.Public.Actions
 {
+    using IdentityBase.Models;
+    using System.Collections.Generic;
+    
     public interface IExternalLoginsViewModel
     {
         string ReturnUrl { get; set; }

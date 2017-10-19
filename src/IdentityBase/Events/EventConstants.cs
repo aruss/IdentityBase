@@ -1,4 +1,4 @@
-﻿namespace IdentityBase.Events
+namespace IdentityBase.Events
 {
     public static class EventConstants
     {

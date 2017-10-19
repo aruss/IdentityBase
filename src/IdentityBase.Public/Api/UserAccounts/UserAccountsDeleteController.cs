@@ -12,36 +12,29 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(ExceptionFilter))]
     [TypeFilter(typeof(ModelStateFilter))]
     [TypeFilter(typeof(BadRequestFilter))]
-    public class InvitationsDeleteController : ApiController
+    public class UserAccountDeleteController : ApiController
     {
         private readonly UserAccountService userAccountService;
 
-        public InvitationsDeleteController(
+        public UserAccountDeleteController(
             UserAccountService userAccountService)
         {
             this.userAccountService = userAccountService;
         }
         
-        [HttpDelete("invitations/{UserAccountId}")]
-        [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
+        [HttpDelete("useraccounts/{UserAccountId}")]
+        [ScopeAuthorize("idbase.useraccounts", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {
             UserAccount userAccount = await this.userAccountService
                 .LoadByIdAsync(userAccountId);
 
-            if (userAccount == null ||
-                userAccount.CreationKind != CreationKind.Invitation)
+            if (userAccount == null)
             {
                 return this.NotFound();
             }
-
-            if (userAccount.IsEmailVerified)
-            {
-                return this.BadRequest(
-                    "Invitation is already confirmed and cannot be deleted");
-            }
-
+            
             await this.userAccountService.DeleteByIdAsync(userAccountId);
 
             return this.Ok(); 

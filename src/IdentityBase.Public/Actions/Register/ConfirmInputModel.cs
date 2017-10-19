@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Public.Actions.Register
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class ConfirmInputModel
     {
         [Required]
@@ -9,7 +9,8 @@ namespace IdentityBase.Public.Actions.Register
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage =
+            "The password and confirmation password do not match.")]
         [StringLength(100)]
         public string PasswordConfirm { get; set; }
 

@@ -1,26 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
 namespace IdentityBase.Models
 {
-    public enum VerificationKeyPurpose
-    {
-        ResetPassword,
-        ChangeEmail,
-        ChangeMobile,
-        ConfirmAccount,
-        MergeAccount
-    }
-
-    public enum CreationKind
-    {
-        SelfService,
-        Invitation
-    }
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class UserAccount
-    {
+    {        
         public Guid Id { get; set; }
 
         // Maximum length of a valid email address is 254 characters.

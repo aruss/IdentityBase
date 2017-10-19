@@ -1,5 +1,6 @@
-﻿namespace IdentityBase.Public
+namespace IdentityBase.Public
 {
+    using System.Net;
     using Microsoft.AspNetCore.Builder;
 
     public static class StartupLogging
@@ -9,7 +10,7 @@
             // Add additional fields to logging context 
             app.Use(async (ctx, next) =>
             {
-                var remoteIpAddress = ctx.Request
+                IPAddress remoteIpAddress = ctx.Request
                     .HttpContext.Connection.RemoteIpAddress;
 
                 using (Serilog.Context.LogContext

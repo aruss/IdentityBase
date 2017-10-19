@@ -15,14 +15,14 @@ namespace IdentityBase.Public.Actions.Login
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5_HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
+    // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
     public class LoginController : Controller
     {
-        private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<LoginController> _logger;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly UserAccountService _userAccountService;
-        private readonly ClientService _clientService;
+        private readonly ApplicationOptions applicationOptions;
+        private readonly ILogger<LoginController> logger;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly UserAccountService userAccountService;
+        private readonly ClientService clientService;
 
         public LoginController(
             ApplicationOptions applicationOptions,
@@ -31,11 +31,11 @@ namespace IdentityBase.Public.Actions.Login
             UserAccountService userAccountService,
             ClientService clientService)
         {
-            this._applicationOptions = applicationOptions;
-            this._logger = logger;
-            this._interaction = interaction;
-            this._userAccountService = userAccountService;
-            this._clientService = clientService;
+            this.applicationOptions = applicationOptions;
+            this.logger = logger;
+            this.interaction = interaction;
+            this.userAccountService = userAccountService;
+            this.clientService = clientService;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace IdentityBase.Public.Actions.Login
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
-                this._logger.LogError(
+                this.logger.LogError(
                     "Login attempt with missing returnUrl parameter");
 
                 return this.Redirect(Url.Action("Index", "Error"));
@@ -76,7 +76,7 @@ namespace IdentityBase.Public.Actions.Login
 
             if (this.ModelState.IsValid)
             {
-                var result = await this._userAccountService
+                var result = await this.userAccountService
                     .VerifyByEmailAndPasswordAsync(
                         model.Email,
                         model.Password
@@ -98,7 +98,7 @@ namespace IdentityBase.Public.Actions.Login
 
                             // TODO: Account locking on failed login attempts
                             // is not supported yet
-                            // await _userAccountService
+                            // await userAccountService
                             //     .UpdateFailedLoginAsync(result.UserAccount);
                         }
                         else
@@ -132,7 +132,7 @@ namespace IdentityBase.Public.Actions.Login
         {
             AuthenticationProperties props = null;
 
-            if (this._applicationOptions.EnableRememberLogin &&
+            if (this.applicationOptions.EnableRememberLogin &&
                 model.RememberLogin)
             {
                 props = new AuthenticationProperties
@@ -141,7 +141,7 @@ namespace IdentityBase.Public.Actions.Login
                     // TODO: use DateTimeAccessor
                     ExpiresUtc = DateTimeOffset.UtcNow.Add( 
                         TimeSpan.FromDays(
-                            this._applicationOptions.RememberMeLoginDuration
+                            this.applicationOptions.RememberMeLoginDuration
                         )
                     )
                 };
@@ -149,12 +149,12 @@ namespace IdentityBase.Public.Actions.Login
 
             await this.HttpContext.SignInAsync(result.UserAccount, props);
 
-            await this._userAccountService
+            await this.userAccountService
                 .UpdateSuccessfulLoginAsync(result.UserAccount);
 
             // Make sure the returnUrl is still valid, and if yes -
             // redirect back to authorize endpoint
-            if (_interaction.IsValidReturnUrl(model.ReturnUrl))
+            if (interaction.IsValidReturnUrl(model.ReturnUrl))
             {
                 return Redirect(model.ReturnUrl);
             }
@@ -177,7 +177,7 @@ namespace IdentityBase.Public.Actions.Login
             LoginInputModel inputModel,
             UserAccount userAccount = null)
         {
-            AuthorizationRequest context = await this._interaction
+            AuthorizationRequest context = await this.interaction
                 .GetAuthorizationContextAsync(inputModel.ReturnUrl);
 
             if (context == null)
@@ -187,13 +187,13 @@ namespace IdentityBase.Public.Actions.Login
 
             LoginViewModel vm = new LoginViewModel(inputModel)
             {
-                EnableRememberLogin = this._applicationOptions
+                EnableRememberLogin = this.applicationOptions
                     .EnableRememberLogin,
 
-                EnableAccountRegistration = this._applicationOptions
+                EnableAccountRegistration = this.applicationOptions
                     .EnableAccountRegistration,
 
-                EnableAccountRecover = this._applicationOptions
+                EnableAccountRecover = this.applicationOptions
                     .EnableAccountRecovery,
 
                 LoginHint = context.LoginHint,
@@ -204,7 +204,7 @@ namespace IdentityBase.Public.Actions.Login
             if (context?.IdP != null)
             {
                 // This is meant to short circuit the UI and only trigger the one external IdP
-                vm.EnableLocalLogin = _applicationOptions.EnableLocalLogin;
+                vm.EnableLocalLogin = applicationOptions.EnableLocalLogin;
                 vm.ExternalProviders = new ExternalProvider[] {
                     new ExternalProvider { AuthenticationScheme = context.IdP }
                 };
@@ -212,17 +212,17 @@ namespace IdentityBase.Public.Actions.Login
                 return vm;
             }*/
 
-            Client client = await this._clientService
+            Client client = await this.clientService
                 .FindEnabledClientByIdAsync(context.ClientId);
 
-            IEnumerable<ExternalProvider> providers = await this._clientService
+            IEnumerable<ExternalProvider> providers = await this.clientService
                 .GetEnabledProvidersAsync(client);
 
             vm.ExternalProviders = providers.ToArray();
 
             vm.EnableLocalLogin = (client != null ?
                 client.EnableLocalLogin : false) &&
-                this._applicationOptions.EnableLocalLogin;
+                this.applicationOptions.EnableLocalLogin;
 
             if (userAccount != null)
             {

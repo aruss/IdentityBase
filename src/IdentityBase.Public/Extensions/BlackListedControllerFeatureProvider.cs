@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
 namespace Microsoft.AspNetCore.Mvc.Controllers
 {
-    public class BlackListedControllerFeatureProvider : ControllerFeatureProvider
-    {
-        IEnumerable<TypeInfo> _blackList;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
-        public BlackListedControllerFeatureProvider(IEnumerable<TypeInfo> blackList)
+    public class BlackListedControllerFeatureProvider :
+        ControllerFeatureProvider
+    {
+        IEnumerable<TypeInfo> blackList;
+
+        public BlackListedControllerFeatureProvider(
+            IEnumerable<TypeInfo> blackList)
         {
-            _blackList = blackList;
+            this.blackList = blackList;
         }
 
         protected override bool IsController(TypeInfo typeInfo)
         {
-            return base.IsController(typeInfo) && !_blackList.Contains(typeInfo);
+            return base.IsController(typeInfo) &&
+                !this.blackList.Contains(typeInfo);
         }
     }
 }

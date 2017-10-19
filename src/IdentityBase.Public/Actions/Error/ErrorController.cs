@@ -1,33 +1,36 @@
-﻿using IdentityServer4.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-
 namespace IdentityBase.Public.Actions.Error
 {
+    using System.Threading.Tasks;
+    using IdentityServer4.Models;
+    using IdentityServer4.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     public class ErrorController : Controller
     {
-        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IIdentityServerInteractionService interaction;
 
         public ErrorController(IIdentityServerInteractionService interaction)
         {
-            _interaction = interaction;
+            this.interaction = interaction;
         }
 
         [Route("error", Name ="Error")]
         public async Task<IActionResult> Index(string errorId)
         {
-            var vm = new ErrorViewModel();
+            ErrorViewModel vm = new ErrorViewModel();
 
             if (errorId != null)
             {
-                var message = await _interaction.GetErrorContextAsync(errorId);
+                ErrorMessage message = await this.interaction
+                    .GetErrorContextAsync(errorId);
+
                 if (message != null)
                 {
                     vm.Error = message;
                 }
             }
 
-            return View("Error", vm);
+            return this.View("Error", vm);
         }
     }
 }

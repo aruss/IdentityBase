@@ -59,14 +59,19 @@ namespace IdentityBase.Public
             // depending on current configuration
             manager.FeatureProviders.Add(
                 new BlackListedControllerFeatureProvider(new List<TypeInfo>()
+
                 .AddIf<Api.Invitations.InvitationsGetController>(
                     !appOptions.EnableInvitationGetEndpoint)
+
                 .AddIf<Api.Invitations.InvitationsPutController>(
                     !appOptions.EnableInvitationCreateEndpoint)
+
                 .AddIf<Api.Invitations.InvitationsDeleteController>(
                     !appOptions.EnableInvitationDeleteEndpoint)
+
                 .AddIf<Actions.Recover.RecoverController>(
                     !appOptions.EnableAccountRecovery)
+
                 .AddIf<Actions.Register.RegisterController>(
                     !appOptions.EnableAccountRegistration)
             ));
