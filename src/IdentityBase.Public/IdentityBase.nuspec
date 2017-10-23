@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>IdentityBase.Public</id>
+    <id>IdentityBase</id>
     <version>$version$</version>
     <authors>Russlan Akiev</authors>
     <owners>Russlan Akiev</owners>
@@ -9,10 +9,9 @@
     <projectUrl>https://github.com/aruss/IdentityBase</projectUrl>
     <description>Secure Token Service, IdentityBase web interface</description>
     <copyright>Copyright (c) Russlan Akiev. All rights reserved.</copyright>
-    <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</tags>
+    <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security sso</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
-        <dependency id="IdentityBase" version="$version$" exclude="Build,Analyzers" />
         <dependency id="Autofac.Configuration" version="4.0.1" exclude="Build,Analyzers" />
         <dependency id="Autofac.Extensions.DependencyInjection" version="4.2.0" exclude="Build,Analyzers" />
         <dependency id="IdentityServer4" version="2.0.1" exclude="Build,Analyzers"/>
@@ -20,8 +19,6 @@
         <dependency id="Microsoft.AspNetCore" version="2.0.0" exclude="Build,Analyzers" />
         <dependency id="Microsoft.AspNetCore.Authentication" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Hosting" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.0" exclude="Build,Analyzers"/>
@@ -40,7 +37,25 @@
         <dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
         <dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers"/>
         <dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
+
+        <!-- service base -->
         <dependency id="ServiceBase" version="1.1.9" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.9" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.9" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Smtp" version="1.1.9" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Twilio" version="1.1.9" exclude="Build,Analyzers"/>
+        
+        <!-- entity framework -->
+        <dependency id="AutoMapper" version="6.1.1" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.EntityFrameworkCore" version="2.0.0" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="2.0.0" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.0.0" exclude="Build,Analyzers"/>
+
+        <!-- entity framework sqlserver -->
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="2.0.0" exclude="Build,Analyzers"/>
+
+        <!-- entity framework npgsql -->
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.0" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
     <contentFiles>
@@ -51,5 +66,17 @@
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.dll" target="lib\netcoreapp2.0\IdentityBase.Public.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" />
   </files>
 </package>
