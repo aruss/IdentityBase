@@ -1,6 +1,3 @@
-// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Threading;
@@ -11,31 +8,31 @@ namespace Microsoft.Extensions.DependencyInjection
 
     internal class TokenCleanupHostedService : IHostedService
     {
-        private readonly TokenCleanupService _tokenCleanup;
-        private readonly EntityFrameworkOptions _options;
+        private readonly TokenCleanupService tokenCleanup;
+        private readonly EntityFrameworkOptions options;
 
         public TokenCleanupHostedService(
             TokenCleanupService tokenCleanup,
             EntityFrameworkOptions options)
         {
-            _tokenCleanup = tokenCleanup;
-            _options = options;
+            this.tokenCleanup = tokenCleanup;
+            this.options = options;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (_options.EnableTokenCleanup)
+            if (this.options.EnableTokenCleanup)
             {
-                _tokenCleanup.Start(cancellationToken);
+                this.tokenCleanup.Start(cancellationToken);
             }
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (_options.EnableTokenCleanup)
+            if (this.options.EnableTokenCleanup)
             {
-                _tokenCleanup.Stop();
+                this.tokenCleanup.Stop();
             }
             return Task.CompletedTask;
         }

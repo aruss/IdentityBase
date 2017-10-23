@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.EntityFramework
+namespace IdentityBase.Public.EntityFramework.SqlServer
 {
     using System.Reflection;
     using Autofac;
@@ -7,13 +7,13 @@ namespace IdentityBase.Public.EntityFramework
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class NpgsqlModule : Autofac.Module
+    public class SqlServerModule : Autofac.Module
     {
         /// <summary>
         /// Loads dependencies
         /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
+        /// <param name="builder">The builder through which components can
+        /// be registered.</param>
         protected override void Load(ContainerBuilder builder)
         {
             ServiceCollection services = new ServiceCollection();
@@ -22,13 +22,13 @@ namespace IdentityBase.Public.EntityFramework
             services.AddEntityFrameworkStores((options) =>
             {
                 string migrationsAssembly =
-                    typeof(IServiceCollectionExtensions)
+                    typeof(SqlServerModule)
                     .GetTypeInfo().Assembly.GetName().Name;
 
                 options.DbContextOptions = (dbBuilder) =>
                 {
-                    dbBuilder.UseNpgsql(
-                        config["EntityFramework:Npgsql:ConnectionString"],
+                    dbBuilder.UseSqlServer(
+                        config["EntityFramework:SqlServer:ConnectionString"],
                         o => o.MigrationsAssembly(migrationsAssembly)
                     );
                 };

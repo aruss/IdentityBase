@@ -1,0 +1,26 @@
+version: "2.0"
+
+services:
+  postgres-svc:  
+    container_name: idbase-dev-postgres
+    image: postgres:9.6.3-alpine
+    restart: always
+    ports:
+      - 5432:5432
+      - 5433:5433
+    environment:
+      - POSTGRES_PASSWORD=root
+  
+  rabbitmq-svc:
+    container_name: idbase-dev-rabbitmq
+    restart: always
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+      - RABBITMQ_DEFAULT_VHOST=/
+      

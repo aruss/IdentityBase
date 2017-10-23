@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace IdentityBase.Public.EntityFramework.Migrations
+namespace IdentityBase.Public.EntityFramework.Npgsql.Migrations
 {
     public partial class init : Migration
     {

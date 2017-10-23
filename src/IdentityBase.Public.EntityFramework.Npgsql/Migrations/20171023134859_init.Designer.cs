@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace IdentityBase.Public.EntityFramework.Migrations
+namespace IdentityBase.Public.EntityFramework.Npgsql.Migrations
 {
     [DbContext(typeof(MigrationDbContext))]
-    [Migration("20171012170425_init")]
+    [Migration("20171023134859_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

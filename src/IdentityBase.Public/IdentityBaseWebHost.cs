@@ -72,7 +72,7 @@ namespace IdentityBase.Public
             {
                 configBuilder.AddJsonFile(
                     "./AppData/config.development.json",
-                    false,
+                    true,
                     false
                 );
 

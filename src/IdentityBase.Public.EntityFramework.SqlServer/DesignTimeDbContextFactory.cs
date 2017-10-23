@@ -1,11 +1,11 @@
-namespace IdentityBase.Public.EntityFramework.DbContexts
+#if DEBUG
+
+namespace IdentityBase.Public.EntityFramework.SqlServer
 {
-    using System.IO;
     using System.Reflection;
     using IdentityBase.Public.EntityFramework.Options;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
-    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// DesignTimeDbContextFactory required for the EF Migration tools 
@@ -14,23 +14,24 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
         IDesignTimeDbContextFactory<MigrationDbContext>
     {
         public MigrationDbContext CreateDbContext(string[] args)
-
         {
             DbContextOptionsBuilder<MigrationDbContext> dbBuilder
                 = new DbContextOptionsBuilder<MigrationDbContext>();
 
             string connString =
-                "Host=localhost;Database=identitybase;Username=postgres;Password=root";
+                "Server=.\\MSSQL;Database=IdentityBase;User ID=dev;Password=dev";
 
             string migrationsAssembly = typeof(DesignTimeDbContextFactory)
                 .GetTypeInfo().Assembly.GetName().Name;
 
-            dbBuilder.UseNpgsql(connString,
+            dbBuilder.UseSqlServer(connString,
                 o => o.MigrationsAssembly(migrationsAssembly));
 
-            var options = new EntityFrameworkOptions(); 
+            var options = new EntityFrameworkOptions();
 
             return new MigrationDbContext(dbBuilder.Options, options);
         }
     }
 }
+
+#endif

@@ -130,6 +130,8 @@
     <PackageReference Include="ServiceBase.Notification.Twilio" Version="1.1.9" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IdentityBase.Public.EntityFramework.Npgsql\IdentityBase.Public.EntityFramework.Npgsql.csproj" />
+    <ProjectReference Include="..\IdentityBase.Public.EntityFramework.SqlServer\IdentityBase.Public.EntityFramework.SqlServer.csproj" />
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework\IdentityBase.Public.EntityFramework.csproj" />
     <ProjectReference Include="..\IdentityBase\IdentityBase.csproj" />
   </ItemGroup>

@@ -1,6 +1,3 @@
-// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
 namespace IdentityBase.Public.EntityFramework.Stores
 {
     using System;
@@ -19,8 +16,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
     /// <seealso cref="IdentityServer4.Stores.IClientStore" />
     public class ClientStore : IClientStore
     {
-        private readonly IConfigurationDbContext _context;
-        private readonly ILogger<ClientStore> _logger;
+        private readonly IConfigurationDbContext context;
+        private readonly ILogger<ClientStore> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientStore"/> class.
@@ -32,10 +29,10 @@ namespace IdentityBase.Public.EntityFramework.Stores
             IConfigurationDbContext context,
             ILogger<ClientStore> logger)
         {
-            _context = context ?? throw
+            this.context = context ?? throw
                 new ArgumentNullException(nameof(context));
 
-            _logger = logger;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -47,7 +44,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// </returns>
         public Task<Client> FindClientByIdAsync(string clientId)
         {
-            var client = _context.Clients
+            Entities.Client client = this.context.Clients
                 .Include(x => x.AllowedGrantTypes)
                 .Include(x => x.RedirectUris)
                 .Include(x => x.PostLogoutRedirectUris)
@@ -58,9 +55,10 @@ namespace IdentityBase.Public.EntityFramework.Stores
                 .Include(x => x.AllowedCorsOrigins)
                 .Include(x => x.Properties)
                 .FirstOrDefault(x => x.ClientId == clientId);
-            var model = client?.ToModel();
 
-            _logger.LogDebug(
+            Client model = client?.ToModel();
+
+            this.logger.LogDebug(
                 "{clientId} found in database: {clientIdFound}",
                 clientId, model != null);
 

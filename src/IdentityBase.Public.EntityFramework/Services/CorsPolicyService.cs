@@ -1,9 +1,7 @@
-// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
 namespace IdentityBase.Public.EntityFramework.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Public.EntityFramework.Interfaces;
@@ -19,8 +17,8 @@ namespace IdentityBase.Public.EntityFramework.Services
     /// <seealso cref="IdentityServer4.Services.ICorsPolicyService" />
     public class CorsPolicyService : ICorsPolicyService
     {
-        private readonly IHttpContextAccessor _context;
-        private readonly ILogger<CorsPolicyService> _logger;
+        private readonly IHttpContextAccessor context;
+        private readonly ILogger<CorsPolicyService> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CorsPolicyService"/>
@@ -33,10 +31,10 @@ namespace IdentityBase.Public.EntityFramework.Services
             IHttpContextAccessor context,
             ILogger<CorsPolicyService> logger)
         {
-            _context = context ?? throw
+            this.context = context ?? throw
                 new ArgumentNullException(nameof(context));
 
-            _logger = logger;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -48,19 +46,21 @@ namespace IdentityBase.Public.EntityFramework.Services
         {
             // Doing this here and not in the ctor
             // because: https://github.com/aspnet/CORS/issues/105
-            var dbContext = _context.HttpContext.RequestServices
-                .GetRequiredService<IConfigurationDbContext>();
+            IConfigurationDbContext dbContext = context.HttpContext
+                .RequestServices.GetRequiredService<IConfigurationDbContext>();
 
-            var origins = dbContext.Clients
+            IEnumerable<string> origins = dbContext.Clients
                 .SelectMany(x => x.AllowedCorsOrigins.Select(y => y.Origin))
                 .ToList();
 
-            var distinctOrigins = origins.Where(x => x != null).Distinct();
+            IEnumerable<string> distinctOrigins = origins
+                .Where(x => x != null)
+                .Distinct();
 
-            var isAllowed = distinctOrigins
+            bool isAllowed = distinctOrigins
                 .Contains(origin, StringComparer.OrdinalIgnoreCase);
 
-            _logger.LogDebug(
+            logger.LogDebug(
                 "Origin {origin} is allowed: {originAllowed}",
                 origin,
                 isAllowed);

@@ -12,14 +12,14 @@ namespace IdentityBase.Public.EntityFramework
 
     public class ExampleDataStoreInitializer : IStoreInitializer
     {
-        private readonly EntityFrameworkOptions _options;
-        private readonly ApplicationOptions _appOptions;
-        private readonly ILogger<ConfigBasedStoreInitializer> _logger;
-        private readonly MigrationDbContext _migrationDbContext;
-        private readonly IConfigurationDbContext _configurationDbContext;
-        private readonly IPersistedGrantDbContext _persistedGrantDbContext;
-        private readonly IUserAccountDbContext _userAccountDbContext;
-        private readonly ICrypto _crypto;
+        private readonly EntityFrameworkOptions options;
+        private readonly ApplicationOptions appOptions;
+        private readonly ILogger<ConfigBasedStoreInitializer> logger;
+        private readonly MigrationDbContext migrationDbContext;
+        private readonly IConfigurationDbContext configurationDbContext;
+        private readonly IPersistedGrantDbContext persistedGrantDbContext;
+        private readonly IUserAccountDbContext userAccountDbContext;
+        private readonly ICrypto crypto;
 
         public ExampleDataStoreInitializer(
             EntityFrameworkOptions options,
@@ -31,30 +31,30 @@ namespace IdentityBase.Public.EntityFramework
             IUserAccountDbContext userAccountDbContext,
             ICrypto crypto)
         {
-            _options = options;
-            _appOptions = appOptions;
-            _logger = logger;
-            _migrationDbContext = migrationDbContext;
-            _configurationDbContext = configurationDbContext;
-            _persistedGrantDbContext = persistedGrantDbContext;
-            _userAccountDbContext = userAccountDbContext;
-            _crypto = crypto;
+            this.options = options;
+            this.appOptions = appOptions;
+            this.logger = logger;
+            this.migrationDbContext = migrationDbContext;
+            this.configurationDbContext = configurationDbContext;
+            this.persistedGrantDbContext = persistedGrantDbContext;
+            this.userAccountDbContext = userAccountDbContext;
+            this.crypto = crypto;
         }
 
         public void InitializeStores()
         {
             // Only a leader may migrate or seed
-            if (_appOptions.Leader)
+            if (this.appOptions.Leader)
             {
-                if (_options.MigrateDatabase)
+                if (this.options.MigrateDatabase)
                 {
-                    _logger.LogInformation("Try migrate database");
-                    _migrationDbContext.Database.Migrate();
+                    this.logger.LogInformation("Try migrate database");
+                    this.migrationDbContext.Database.Migrate();
                 }
 
-                if (_options.SeedExampleData)
+                if (this.options.SeedExampleData)
                 {
-                    _logger.LogInformation("Try seed initial data");
+                    this.logger.LogInformation("Try seed initial data");
                     this.EnsureSeedData();
                 }
             }
@@ -63,10 +63,10 @@ namespace IdentityBase.Public.EntityFramework
         public void CleanupStores()
         {
             // Only leader may delete the database
-            if (_appOptions.Leader && _options.EnsureDeleted)
+            if (this.appOptions.Leader && this.options.EnsureDeleted)
             {
-                _logger.LogInformation("Ensure deleting database");
-                _migrationDbContext.Database.EnsureDeleted();
+                this.logger.LogInformation("Ensure deleting database");
+                this.migrationDbContext.Database.EnsureDeleted();
             }
         }
 
@@ -74,44 +74,44 @@ namespace IdentityBase.Public.EntityFramework
         {
             var exampleData = new ExampleData();
 
-            if (!_configurationDbContext.IdentityResources.Any())
+            if (!this.configurationDbContext.IdentityResources.Any())
             {
                 foreach (var resource in exampleData.GetIdentityResources())
                 {
-                    _configurationDbContext.IdentityResources
+                    this.configurationDbContext.IdentityResources
                         .Add(resource.ToEntity());
                 }
-                _configurationDbContext.SaveChanges();
+                this.configurationDbContext.SaveChanges();
             }
 
-            if (!_configurationDbContext.ApiResources.Any())
+            if (!this.configurationDbContext.ApiResources.Any())
             {
                 foreach (var resource in exampleData.GetApiResources())
                 {
-                    _configurationDbContext.ApiResources
+                    this.configurationDbContext.ApiResources
                         .Add(resource.ToEntity());
                 }
-                _configurationDbContext.SaveChanges();
+                this.configurationDbContext.SaveChanges();
             }
 
-            if (!_configurationDbContext.Clients.Any())
+            if (!this.configurationDbContext.Clients.Any())
             {
                 foreach (var client in exampleData.GetClients())
                 {
-                    _configurationDbContext.Clients.Add(client.ToEntity());
+                    this.configurationDbContext.Clients.Add(client.ToEntity());
                 }
-                _configurationDbContext.SaveChanges();
+                this.configurationDbContext.SaveChanges();
             }
 
-            if (!_userAccountDbContext.UserAccounts.Any())
+            if (!this.userAccountDbContext.UserAccounts.Any())
             {
                 foreach (var userAccount in exampleData
-                    .GetUserAccounts(_crypto, _appOptions))
+                    .GetUserAccounts(this.crypto, this.appOptions))
                 {
-                    _userAccountDbContext.UserAccounts
+                    this.userAccountDbContext.UserAccounts
                         .Add(userAccount.ToEntity());
                 }
-                _userAccountDbContext.SaveChanges();
+                this.userAccountDbContext.SaveChanges();
             }
         }
     }
