@@ -28,7 +28,7 @@ namespace IdentityBase.Public
             where TStartup : class
         {
             IConfiguration config = IdentityBaseWebHost
-                .LoadConfig<TStartup>(args, basePath); 
+                .LoadConfig<TStartup>(args, basePath);
 
             // Use in case you changed the example data in ExampleData.cs file
             // Configuration.ExampleDataWriter.Write(config); 
@@ -57,6 +57,20 @@ namespace IdentityBase.Public
                 .Run();
         }
 
+        private static string GetConfigFilePath(
+            string basePath,
+            bool isDevelopment)
+        {
+            string configFilePath = "./AppData/config.development.json";
+
+            if (File.Exists(Path.Combine(basePath, configFilePath)))
+            {
+                return configFilePath; 
+            }
+
+            return "./AppData/config.json"; 
+        }
+
         private static IConfigurationRoot LoadConfig<TStartup>(
             string[] args,
             string basePath)
@@ -66,16 +80,16 @@ namespace IdentityBase.Public
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder()
                 .SetBasePath(basePath)
-                .AddJsonFile("./AppData/config.json", false, false);
+                .AddJsonFile(
+                    path: IdentityBaseWebHost.GetConfigFilePath(
+                        basePath,
+                        isDevelopment
+                    ),
+                    optional: false,
+                    reloadOnChange: false);
 
             if (isDevelopment)
             {
-                configBuilder.AddJsonFile(
-                    "./AppData/config.development.json",
-                    true,
-                    false
-                );
-
                 configBuilder.AddUserSecrets<TStartup>();
             }
 
