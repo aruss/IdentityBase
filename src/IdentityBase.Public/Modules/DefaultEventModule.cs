@@ -1,20 +1,26 @@
-﻿using Autofac;
-using Microsoft.Extensions.Configuration;
-using ServiceBase.Events;
-
 namespace IdentityBase.Public
 {
-    public class DefaultEventModule : Autofac.Module
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Events;
+
+    public class DefaultEventModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies 
-        /// </summary>
-        /// <param name="builder">The builder through which components can be registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            builder.RegisterInstance(Current.Configuration.GetSection("Events").Get<EventOptions>() ?? new EventOptions());
-            builder.RegisterType<DefaultEventService>().As<IEventService>();
-            builder.RegisterType<DefaultEventSink>().As<IEventSink>();
+            services.AddSingleton(configuration.GetSection("Events")
+                .Get<EventOptions>() ?? new EventOptions());
+
+            services.AddScoped<IEventService, DefaultEventService>();
+            services.AddScoped<IEventSink, DefaultEventSink>();
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }

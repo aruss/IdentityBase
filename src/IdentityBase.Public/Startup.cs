@@ -1,9 +1,6 @@
 namespace IdentityBase.Public
 {
     using System;
-    using Autofac;
-    using Autofac.Configuration;
-    using Autofac.Extensions.DependencyInjection;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Extensions;
@@ -26,6 +23,7 @@ namespace IdentityBase.Public
         private readonly ILogger logger;
         private readonly IHostingEnvironment environment;
         private readonly IConfiguration configuration;
+        private readonly ModuleHost moduleHost;
 
         /// <summary>
         ///
@@ -44,6 +42,8 @@ namespace IdentityBase.Public
             this.logger = logger;
             this.environment = environment;
             this.configuration = configuration;
+
+            this.moduleHost = new ModuleHost(this.configuration);
         }
 
         /// <summary>
@@ -88,32 +88,16 @@ namespace IdentityBase.Public
                     IdentityServerConstants.ExternalCookieAuthenticationScheme)
                 .AddCookie();
 
-            // Update current instances
-            Current.Configuration = this.configuration;
-            Current.Logger = this.logger;
+            this.moduleHost.ConfigureServices(services);
 
-            // Add AutoFac continer and register modules form config
-            ContainerBuilder builder = new ContainerBuilder();
-            builder.Populate(services);
-
-            if (this.configuration.ContainsSection("Services"))
-            {
-                builder.RegisterModule(
-                    new ConfigurationModule(
-                        this.configuration.GetSection("Services")));
-            }
-
-            IContainer container = builder.Build();
-            container.ValidateDataLayerServices(this.logger);
-            container.ValidateEmailSenderServices(this.logger);
-            container.ValidateSmsServices(this.logger);
-            container.ValidateEventServices(this.logger);
-
-            Current.Container = container;
+            services.ValidateDataLayerServices(this.logger);
+            services.ValidateEmailSenderServices(this.logger);
+            services.ValidateSmsServices(this.logger);
+            services.ValidateEventServices(this.logger);
 
             this.logger.LogInformation("Services Configured");
 
-            return new AutofacServiceProvider(container);
+            return services.BuildServiceProvider();
         }
 
         public virtual void Configure(IApplicationBuilder app)
@@ -147,6 +131,8 @@ namespace IdentityBase.Public
             app.UseAuthentication();
             app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
+
+            this.moduleHost.Configure(app);
 
             appLifetime.ApplicationStarted.Register(() =>
             {

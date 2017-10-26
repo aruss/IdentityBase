@@ -1,26 +1,24 @@
 namespace IdentityBase.Public.EntityFramework
 {
-    using Autofac;
-    using Autofac.Extensions.DependencyInjection;
     using IdentityBase.Public.EntityFramework.Options;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class ExampleDataStoreInitializerModule : Autofac.Module
+    public class ExampleDataStoreInitializerModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies
-        /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            ServiceCollection services = new ServiceCollection();
-            IConfiguration config = Current.Configuration;
-            EntityFrameworkOptions options = new EntityFrameworkOptions();
-            Current.Configuration.GetSection("EntityFramework").Bind(options);
+            var options = new EntityFrameworkOptions();
+            configuration.GetSection("EntityFramework").Bind(options);
             services.AddExampleDataStoreInitializer(options);
-            builder.Populate(services);
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }

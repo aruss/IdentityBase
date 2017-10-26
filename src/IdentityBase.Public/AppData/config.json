@@ -34,7 +34,7 @@
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      "ConnectionString": "Server=.\\MSSQL;Database=IdentityBase;User ID=dev;Password=dev"
+      "ConnectionString": "Server=.\\SQLEXPRESS;Database=IdentityBase;User ID=dev;Password=dev"
     }
   },
   "Events": {
@@ -79,17 +79,16 @@
   "Sms": {
     "TemplateDirectoryPath": "./Templates/Sms"
   },
-  "Services": {
-    "modules": [
-      { "type": "IdentityBase.Public.EntityFramework.SqlServer.SqlServerModule, IdentityBase.Public.EntityFramework.SqlServer" },
-      // { "type": "IdentityBase.Public.EntityFramework.Npgsql.NpgsqlModule, IdentityBase.Public.EntityFramework.Npgsql" },
 
-      // { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
-      { "type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+  "Modules": [
+    { "Type": "IdentityBase.Public.EntityFramework.SqlServer.SqlServerModule, IdentityBase.Public.EntityFramework.SqlServer" },
+    // { "type": "IdentityBase.Public.EntityFramework.Npgsql.NpgsqlModule, IdentityBase.Public.EntityFramework.Npgsql" },
 
-      { "type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
-      { "type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
-      { "type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
-    ]
-  }
+    // { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+    { "Type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+
+    { "Type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
+    { "Type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
+    { "Type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
+  ]
 }

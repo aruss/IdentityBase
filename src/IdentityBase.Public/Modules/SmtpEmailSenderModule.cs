@@ -1,28 +1,31 @@
 namespace IdentityBase.Public
 {
-    using Autofac;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Notification.Email;
     using ServiceBase.Notification.Smtp;
 
-    public class SmtpEmailSenderModule : Autofac.Module
+    public class SmtpEmailSenderModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies 
-        /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            builder.RegisterType<DefaultEmailService>().As<IEmailService>();
+            services.AddScoped<IEmailService, DefaultEmailService>();
 
-            builder.RegisterInstance(Current.Configuration
+            services.AddSingleton(configuration
                 .GetSection("Email").Get<DefaultEmailServiceOptions>());
 
-            builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
+            services.AddScoped<IEmailSender, SmtpEmailSender>();
 
-            builder.RegisterInstance(Current.Configuration
+            services.AddSingleton(configuration
                 .GetSection("Email:Smtp").Get<SmtpOptions>());
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }

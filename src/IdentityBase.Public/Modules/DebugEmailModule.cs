@@ -1,18 +1,22 @@
 namespace IdentityBase.Public
 {
-    using Autofac;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Notification.Email;
 
-    public class DebugEmailModule : Autofac.Module
+    public class DebugEmailModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies 
-        /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            builder.RegisterType<DebugEmailService>().As<IEmailService>();
+            services.AddScoped<IEmailService, DebugEmailService>(); 
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }

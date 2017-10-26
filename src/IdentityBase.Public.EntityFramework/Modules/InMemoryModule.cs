@@ -1,34 +1,30 @@
 namespace IdentityBase.Public.EntityFramework
 {
-    using Autofac;
-    using Autofac.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class InMemoryModule : Autofac.Module
+    public class InMemoryModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies
-        /// </summary>
-        /// <param name="builder">The builder through which components can
-        /// be registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            ServiceCollection services = new ServiceCollection();
-            IConfiguration config = Current.Configuration;
-
             services.AddEntityFrameworkStores((options) =>
             {
                 options.DbContextOptions = (dbBuilder) =>
                 {
-                    dbBuilder.UseInMemoryDatabase();
+                    dbBuilder.UseInMemoryDatabase("");
                 };
 
-                config.GetSection("EntityFramework").Bind(options);
+                configuration.GetSection("EntityFramework").Bind(options);
             });
+        }
 
-            builder.Populate(services);
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }

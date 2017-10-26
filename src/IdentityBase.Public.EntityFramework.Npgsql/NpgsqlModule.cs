@@ -1,24 +1,17 @@
 namespace IdentityBase.Public.EntityFramework.Npgsql
 {
     using System.Reflection;
-    using Autofac;
-    using Autofac.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class NpgsqlModule : Autofac.Module
+    public class NpgsqlModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies
-        /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration config)
         {
-            ServiceCollection services = new ServiceCollection();
-            IConfiguration config = Current.Configuration;
-
             services.AddEntityFrameworkStores((options) =>
             {
                 string migrationsAssembly =
@@ -35,8 +28,11 @@ namespace IdentityBase.Public.EntityFramework.Npgsql
 
                 config.GetSection("EntityFramework").Bind(options);
             });
-
-            builder.Populate(services);
         }
-    }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
+        }
+    }   
 }

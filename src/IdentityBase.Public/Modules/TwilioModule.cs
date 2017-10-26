@@ -1,28 +1,31 @@
 namespace IdentityBase.Public
 {
-    using Autofac;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Notification.Sms;
     using ServiceBase.Notification.Twilio;
 
-    public class TwilioModule : Autofac.Module
+    public class TwilioModule : IModule
     {
-        /// <summary>
-        /// Loads dependencies 
-        /// </summary>
-        /// <param name="builder">The builder through which components can be
-        /// registered.</param>
-        protected override void Load(ContainerBuilder builder)
+        public void ConfigureServices(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
-            builder.RegisterType<DefaultSmsService>().As<ISmsService>();
+            services.AddScoped<ISmsService, DefaultSmsService>();
 
-            builder.RegisterInstance(Current.Configuration
+            services.AddSingleton(configuration
                 .GetSection("Sms").Get<DefaultSmsServiceOptions>());
 
-            builder.RegisterType<TwilioSmsSender>().As<ISmsSender>();
+            services.AddScoped<ISmsSender, TwilioSmsSender>();
 
-            builder.RegisterInstance(Current.Configuration
+            services.AddSingleton(configuration
                 .GetSection("Sms:Twilio").Get<TwilioOptions>());
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+
         }
     }
 }
