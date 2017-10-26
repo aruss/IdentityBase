@@ -64,9 +64,9 @@ IdentityBase is built against ASP.NET Core 2.0 using the tooling that ships with
 
 ### Docker support
 
-You can either build it from source code by running the `build.sh` script in `./docker` directory or just start it from [Docker Hub](https://hub.docker.com/r/identitybase/identitybase/)
+You can either build it from source code by running the `build.sh` script in `./docker` directory or just start it from [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/)
  
-  `docker run -it --rm -p 5000:5000 identitybase/identitybase`
+  `docker run -it --rm -p 5000:5000 identitybasenet/identitybase`
 
 ### Acknowledgements
 

@@ -5,8 +5,7 @@ version: "2.0"
 services:
   identitybase-svc:
     container_name: identitybase
-    #image: docker.econduct.de/identitybase/identitybase
-    image: econduct/identitybase
+    image: identitybasenet/identitybase
     ports:
       - 5000:5000
     environment:
