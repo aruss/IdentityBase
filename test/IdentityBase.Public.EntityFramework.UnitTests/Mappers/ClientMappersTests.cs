@@ -1,22 +1,24 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System;
-using System.Linq;
-using FluentAssertions;
-using IdentityBase.Public.EntityFramework.Mappers;
-using Xunit;
-using Client = IdentityServer4.Models.Client;
-
 namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentAssertions;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using Xunit;
+    using Client = IdentityServer4.Models.Client;
+
     public class ClientMappersTests
     {
         [Fact]
         public void ClientAutomapperConfigurationIsValid()
         {
-            ClientMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            ClientMappers.Mapper.ConfigurationProvider
+                .AssertConfigurationIsValid();
 
             var model = new Client();
             var mappedEntity = model.ToEntity();
@@ -37,20 +39,22 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
                     {"foo2", "bar2"},
                 }
             };
-
-
-
+            
             var mappedEntity = model.ToEntity();
 
             mappedEntity.Properties.Count.Should().Be(2);
-            var foo1 = mappedEntity.Properties.FirstOrDefault(x => x.Key == "foo1");
+
+            var foo1 = mappedEntity.Properties
+                .FirstOrDefault(x => x.Key == "foo1");
+
             foo1.Should().NotBeNull();
             foo1.Value.Should().Be("bar1");
-            var foo2 = mappedEntity.Properties.FirstOrDefault(x => x.Key == "foo2");
+
+            var foo2 = mappedEntity.Properties
+                .FirstOrDefault(x => x.Key == "foo2");
+
             foo2.Should().NotBeNull();
             foo2.Value.Should().Be("bar2");
-
-
 
             var mappedModel = mappedEntity.ToModel();
 
@@ -62,11 +66,11 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
         }
 
         [Fact]
-        public void duplicates_properties_in_db_map()
+        public void Duplicates_properties_in_db_map()
         {
-            var entity = new IdentityBase.Public.EntityFramework.Entities.Client
+            var entity = new Entities.Client
             {
-                Properties = new System.Collections.Generic.List<Entities.ClientProperty>()
+                Properties = new List<Entities.ClientProperty>()
                 {
                     new Entities.ClientProperty{Key = "foo1", Value = "bar1"},
                     new Entities.ClientProperty{Key = "foo1", Value = "bar2"},

@@ -1,10 +1,10 @@
-﻿using IdentityBase.Public.EntityFramework.Entities;
-using IdentityBase.Public.EntityFramework.Mappers;
-using System.Collections.Generic;
-using Xunit;
-
 namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
 {
+    using System.Collections.Generic;
+    using IdentityBase.Public.EntityFramework.Entities;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using Xunit;
+
     public class UserAccountMappersTest
     {
         [Fact]
@@ -25,7 +25,8 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
 
             Assert.NotNull(mappedModel);
             Assert.NotNull(mappedEntity);
-            UserAccountMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            UserAccountMappers.Mapper.ConfigurationProvider
+                .AssertConfigurationIsValid();
         }
 
         [Fact]
@@ -46,7 +47,8 @@ namespace IdentityBase.Public.EntityFramework.UnitTests.Mappers
 
             Assert.NotNull(mappedModel);
             Assert.NotNull(mappedEntity);
-            UserAccountMappers.Mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            UserAccountMappers.Mapper.ConfigurationProvider
+                .AssertConfigurationIsValid();
         }
     }
 }
