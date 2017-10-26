@@ -10,6 +10,17 @@ services:
       - 5433:5433
     environment:
       - POSTGRES_PASSWORD=root
+
+  mysql-svc:
+    container_name
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD: root
+      - MYSQL_DATABASE: identitybase
+      - MYSQL_USER: dev
+      - MYSQL_PASSWORD: dev
+  
   
   rabbitmq-svc:
     container_name: idbase-dev-rabbitmq

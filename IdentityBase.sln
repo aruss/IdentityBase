@@ -42,9 +42,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApi", "samples\As
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomTheme", "samples\CustomTheme\CustomTheme.csproj", "{8A7907B0-8227-451A-AFE2-A8AC2F7837E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityBase.Public.EntityFramework.SqlServer", "src\IdentityBase.Public.EntityFramework.SqlServer\IdentityBase.Public.EntityFramework.SqlServer.csproj", "{EBEE5D7E-83ED-445E-BB2F-71CDE49238A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.SqlServer", "src\IdentityBase.Public.EntityFramework.SqlServer\IdentityBase.Public.EntityFramework.SqlServer.csproj", "{EBEE5D7E-83ED-445E-BB2F-71CDE49238A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.Npgsql", "src\IdentityBase.Public.EntityFramework.Npgsql\IdentityBase.Public.EntityFramework.Npgsql.csproj", "{E18C2E54-A329-4B7D-9E3A-17738B1514B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.MySql", "src\IdentityBase.Public.EntityFramework.MySql\IdentityBase.Public.EntityFramework.MySql.csproj", "{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +102,10 @@ Global
 		{E18C2E54-A329-4B7D-9E3A-17738B1514B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E18C2E54-A329-4B7D-9E3A-17738B1514B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E18C2E54-A329-4B7D-9E3A-17738B1514B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +123,7 @@ Global
 		{8A7907B0-8227-451A-AFE2-A8AC2F7837E5} = {F0015D43-954F-45EF-B89A-5DE580CAC948}
 		{EBEE5D7E-83ED-445E-BB2F-71CDE49238A1} = {2A584B11-E625-41B3-9C7A-ACA7D536DDFF}
 		{E18C2E54-A329-4B7D-9E3A-17738B1514B9} = {2A584B11-E625-41B3-9C7A-ACA7D536DDFF}
+		{75FFC940-C8A0-4D17-B580-60F83AE0B7AA} = {2A584B11-E625-41B3-9C7A-ACA7D536DDFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF96F7A7-679F-4B34-8009-8BF15588794C}
