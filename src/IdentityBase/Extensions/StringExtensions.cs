@@ -7,7 +7,7 @@ namespace IdentityBase.Extensions
 
     public static class StringExtensions
     {
-        static readonly string[] UglyBase64 = { "+", "/", "=" };
+        private static readonly string[] UglyBase64 = { "+", "/", "=" };
 
         [DebuggerStepThrough]
         public static string StripUglyBase64(this string s)

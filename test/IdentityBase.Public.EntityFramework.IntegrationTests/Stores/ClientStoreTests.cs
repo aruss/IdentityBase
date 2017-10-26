@@ -28,7 +28,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
 
             DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(
                 nameof(ClientStoreTests), StoreOptions),
-
+          
             DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(
                 nameof(ClientStoreTests), StoreOptions)
         };
