@@ -124,10 +124,14 @@ namespace IdentityBase.Public.Api.Invitations
                 userAccount.Email,
                 new
                 {
-                    ConfirmUrl = $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
-                    CancelUrl = $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
+                    ConfirmUrl =
+                        $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+
+                    CancelUrl =
+                        $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
                 },
-                true);
+                true
+            );
         }
     }
 }

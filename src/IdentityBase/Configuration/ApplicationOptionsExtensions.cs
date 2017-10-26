@@ -4,7 +4,7 @@ namespace IdentityBase.Configuration
     {
         /// <summary>
         /// Indicates if idbase API is enabled by checking individual endpoint
-        /// options 
+        /// options.
         /// </summary>
         /// <param name="options">Instance of <see cref="ApplicationOptions" />
         /// .</param>

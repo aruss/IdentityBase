@@ -1,37 +1,50 @@
-﻿using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Public.EntityFramework.Options;
-using IdentityBase.Public.EntityFramework.Stores;
-using IdentityBase.Models;
-using ServiceBase.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
 {
-    public class UserAccountStoreTests : IClassFixture<DatabaseProviderFixture<UserAccountDbContext>>
-    {
-        private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IdentityBase.Models;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Stores;
+    using Microsoft.EntityFrameworkCore;
+    using ServiceBase.Logging;
+    using Xunit;
 
-        public static readonly TheoryData<DbContextOptions<UserAccountDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<UserAccountDbContext>>
+    public class UserAccountStoreTests :
+        IClassFixture<DatabaseProviderFixture<UserAccountDbContext>>
+    {
+        private static readonly EntityFrameworkOptions StoreOptions =
+            new EntityFrameworkOptions();
+
+        public static readonly TheoryData<DbContextOptions<UserAccountDbContext>>
+            TestDatabaseProviders = new TheoryData<DbContextOptions<UserAccountDbContext>>
         {
-            DatabaseProviderBuilder.BuildInMemory<UserAccountDbContext>(nameof(UserAccountStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlite<UserAccountDbContext>(nameof(UserAccountStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlServer<UserAccountDbContext>(nameof(UserAccountStoreTests), StoreOptions)
+            DatabaseProviderBuilder.BuildInMemory<UserAccountDbContext>(
+                nameof(UserAccountStoreTests), StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlite<UserAccountDbContext>(
+                nameof(UserAccountStoreTests), StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlServer<UserAccountDbContext>(
+                nameof(UserAccountStoreTests), StoreOptions)
         };
 
-        public UserAccountStoreTests(DatabaseProviderFixture<UserAccountDbContext> fixture)
+        public UserAccountStoreTests(
+            DatabaseProviderFixture<UserAccountDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<UserAccountDbContext>)y)).ToList();
+            fixture.Options = TestDatabaseProviders
+                .SelectMany(x => x
+                    .Select(y => (DbContextOptions<UserAccountDbContext>)y))
+                .ToList();
+
             fixture.StoreOptions = StoreOptions;
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void LoadByIdAsync_WhenUserAccountExists_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void LoadByIdAsync_WhenUserAccountExists_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount = new UserAccount
             {
@@ -39,16 +52,19 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 Email = "jim@panse.de"
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount.ToEntity());
                 context.SaveChanges();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context, NullLogger<UserAccountStore>.Create());
 
                 userAccount = store.LoadByIdAsync(testUserAccount.Id).Result;
             }
@@ -57,32 +73,40 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void LoadByEmailAsync_WhenUserAccountExists_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void LoadByEmailAsync_WhenUserAccountExists_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount = new UserAccount
             {
                 Email = "jim22@panse.de"
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount.ToEntity());
                 context.SaveChanges();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
-                userAccount = store.LoadByEmailAsync(testUserAccount.Email).Result;
+                userAccount = store
+                    .LoadByEmailAsync(testUserAccount.Email).Result;
             }
 
             Assert.NotNull(userAccount);
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void LoadByEmailWithExternalAsync_WhenUserAccountExists_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void LoadByEmailWithExternalAsync_WhenUserAccountExists_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount = new UserAccount
             {
@@ -105,18 +129,25 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 }
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount.ToEntity());
                 context.SaveChanges();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
-                userAccount = store.LoadByEmailWithExternalAsync(testUserAccount.Email).Result;
+                userAccount = store
+                    .LoadByEmailWithExternalAsync(testUserAccount.Email)
+                    .Result;
             }
 
             Assert.NotNull(userAccount);
@@ -124,7 +155,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
 
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void LoadByVerificationKeyAsync_WhenUserAccountExists_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void LoadByVerificationKeyAsync_WhenUserAccountExists_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount = new UserAccount
             {
@@ -133,25 +165,32 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 VerificationKey = Guid.NewGuid().ToString()
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount.ToEntity());
                 context.SaveChanges();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
-                userAccount = store.LoadByVerificationKeyAsync(testUserAccount.VerificationKey).Result;
+                userAccount = store.LoadByVerificationKeyAsync(
+                    testUserAccount.VerificationKey).Result;
             }
 
             Assert.NotNull(userAccount);
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void LoadByExternalProviderAsync_WhenUserAccountExists_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void LoadByExternalProviderAsync_WhenUserAccountExists_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testExternalAccount = new ExternalAccount
             {
@@ -170,16 +209,21 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 }
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount.ToEntity());
                 context.SaveChanges();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
                 userAccount = store.LoadByExternalProviderAsync(
                     testExternalAccount.Provider,
@@ -190,7 +234,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void WriteAsync_NewUserAccount_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void WriteAsync_NewUserAccount_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount1 = new UserAccount
             {
@@ -218,9 +263,13 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 }
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
                 var userAccount = store.WriteAsync(testUserAccount1).Result;
                 Assert.NotNull(userAccount);
@@ -228,7 +277,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void WriteAsync_UpdateUserAccount_ExpectUserAccountRetured(DbContextOptions<UserAccountDbContext> options)
+        public void WriteAsync_UpdateUserAccount_ExpectUserAccountRetured(
+            DbContextOptions<UserAccountDbContext> options)
         {
             var testUserAccount1 = new UserAccount
             {
@@ -257,18 +307,24 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 }
             };
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 context.UserAccounts.Add(testUserAccount1.ToEntity());
                 context.SaveChanges();
                 testUserAccount1 = context.UserAccounts.AsNoTracking()
-                    .FirstOrDefault(c => c.Id == testUserAccount1.Id).ToModel();
+                    .FirstOrDefault(c => c.Id == testUserAccount1.Id)
+                    .ToModel();
             }
 
             UserAccount userAccount;
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
-                var store = new UserAccountStore(context, NullLogger<UserAccountStore>.Create());
+                var store = new UserAccountStore(
+                    context,
+                    NullLogger<UserAccountStore>.Create()
+                );
 
                 testUserAccount1.VerificationKeySentAt = DateTime.Now;
                 testUserAccount1.VerificationPurpose = 1;
@@ -279,7 +335,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 Assert.NotNull(userAccount);
             }
 
-            using (var context = new UserAccountDbContext(options, StoreOptions))
+            using (var context =
+                new UserAccountDbContext(options, StoreOptions))
             {
                 var updatedAccount = testUserAccount1 = context.UserAccounts
                     .Include(c => c.Accounts)
@@ -287,7 +344,10 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                    .FirstOrDefault(c => c.Id == testUserAccount1.Id).ToModel();
 
                 Assert.NotNull(updatedAccount);
-                Assert.Equal(updatedAccount.VerificationStorage, userAccount.VerificationStorage);
+                Assert.Equal(
+                    updatedAccount.VerificationStorage,
+                    userAccount.VerificationStorage);
+
                 Assert.Equal(2, updatedAccount.Accounts.Count());
                 Assert.Equal(3, updatedAccount.Claims.Count());
             }

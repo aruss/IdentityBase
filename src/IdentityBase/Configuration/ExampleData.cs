@@ -37,24 +37,44 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("0c2954d2-4c73-44e3-b0f2-c00403e4adef"),
                     Email = "alice@localhost",
+
                     PasswordHash  = crypto.HashPassword(
                         "alice@localhost",
                         options.PasswordHashingIterationCount),
+
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
                     IsLoginAllowed = true,
+
                     Claims = new List<UserAccountClaim>
                     {
-                        new UserAccountClaim(JwtClaimTypes.Name, "Alice Smith"),
-                        new UserAccountClaim(JwtClaimTypes.GivenName, "Alice"),
-                        new UserAccountClaim(JwtClaimTypes.FamilyName, "Smith"),
-                        new UserAccountClaim(JwtClaimTypes.Email, "alice@localhost"),
-                        new UserAccountClaim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+                        new UserAccountClaim(JwtClaimTypes.Name,
+                            "Alice Smith"),
+
+                        new UserAccountClaim(JwtClaimTypes.GivenName,
+                            "Alice"),
+
+                        new UserAccountClaim(JwtClaimTypes.FamilyName,
+                            "Smith"),
+
+                        new UserAccountClaim(JwtClaimTypes.Email,
+                            "alice@localhost"),
+
+                        new UserAccountClaim(JwtClaimTypes.EmailVerified,
+                            "true",
+                            ClaimValueTypes.Boolean),
+
                         new UserAccountClaim(JwtClaimTypes.Role, "Admin"),
+
                         new UserAccountClaim(JwtClaimTypes.Role, "Geek"),
-                        new UserAccountClaim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        new UserAccountClaim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServerConstants.ClaimValueTypes.Json)
+
+                        new UserAccountClaim(JwtClaimTypes.WebSite,
+                            "http://alice.com"),
+
+                        new UserAccountClaim(JwtClaimTypes.Address,
+                            @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
+                            IdentityServerConstants.ClaimValueTypes.Json)
                     }
                 },
                 // Active user account 
@@ -62,22 +82,46 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("28575826-68a0-4a1d-9428-674a2eb5db95"),
                     Email = "bob@localhost",
-                    PasswordHash  = crypto.HashPassword("bob@localhost", options.PasswordHashingIterationCount),
+
+                    PasswordHash  = crypto.HashPassword(
+                        "bob@localhost",
+                        options.PasswordHashingIterationCount),
+
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
                     IsLoginAllowed = true,
+
                     Claims = new List<UserAccountClaim>
                     {
-                        new UserAccountClaim(JwtClaimTypes.Name, "Bob Smith"),
-                        new UserAccountClaim(JwtClaimTypes.GivenName, "Bob"),
-                        new UserAccountClaim(JwtClaimTypes.FamilyName, "Smith"),
-                        new UserAccountClaim(JwtClaimTypes.Email, "bob@localhost"),
-                        new UserAccountClaim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                        new UserAccountClaim(JwtClaimTypes.Role, "Developer"),
-                        new UserAccountClaim(JwtClaimTypes.Role, "Geek"),
-                        new UserAccountClaim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new UserAccountClaim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServerConstants.ClaimValueTypes.Json)
+                        new UserAccountClaim(JwtClaimTypes.Name,
+                            "Bob Smith"),
+
+                        new UserAccountClaim(JwtClaimTypes.GivenName,
+                            "Bob"),
+
+                        new UserAccountClaim(JwtClaimTypes.FamilyName,
+                            "Smith"),
+
+                        new UserAccountClaim(JwtClaimTypes.Email,
+                            "bob@localhost"),
+
+                        new UserAccountClaim(JwtClaimTypes.EmailVerified,
+                            "true",
+                            ClaimValueTypes.Boolean),
+
+                        new UserAccountClaim(JwtClaimTypes.Role,
+                            "Developer"),
+
+                        new UserAccountClaim(JwtClaimTypes.Role,
+                            "Geek"),
+
+                        new UserAccountClaim(JwtClaimTypes.WebSite,
+                            "http://bob.com"),
+
+                        new UserAccountClaim(JwtClaimTypes.Address,
+                            @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
+                            IdentityServerConstants.ClaimValueTypes.Json)
                     }
                 },
                 
@@ -86,7 +130,11 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("6b13d17c-55a6-482e-96b9-dc784015f927"),
                     Email = "jim@localhost",
-                    PasswordHash  = crypto.HashPassword("jim@localhost", options.PasswordHashingIterationCount),
+
+                    PasswordHash  = crypto.HashPassword(
+                        "jim@localhost",
+                        options.PasswordHashingIterationCount),
+
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
@@ -100,7 +148,10 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("13808d08-b1c0-4f28-8d3e-8c9a4051efcb"),
                     Email = "paul@localhost",
-                    PasswordHash  = crypto.HashPassword("paul@localhost", options.PasswordHashingIterationCount),
+                    PasswordHash  = crypto.HashPassword(
+                        "paul@localhost",
+                        options.PasswordHashingIterationCount),
+
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = false,
@@ -116,8 +167,10 @@ namespace IdentityBase.Configuration
                     Email = "bill@localhost",
                     CreatedAt = now,
                     UpdatedAt = now,
-                    IsEmailVerified = false, // had never confirmed the email, since he got via facebook
-                    IsLoginAllowed = true,  // is allowed to login since he registed via facebook
+                    // had never confirmed the email, since he got via facebook
+                    IsEmailVerified = false,
+                    // is allowed to login since he registed via facebook
+                    IsLoginAllowed = true,  
                     Claims = CreateClaims("Bill Smith", "Bill", "Smith"),
                     Accounts = new List<ExternalAccount>()
                     {
@@ -168,7 +221,9 @@ namespace IdentityBase.Configuration
                     {
                         new Secret
                         {
-                            Type = IdentityServerConstants.SecretTypes.X509CertificateBase64,
+                            Type = IdentityServerConstants
+                                .SecretTypes.X509CertificateBase64,
+
                             Value = "MIIDATCCAe2gAwIBAgIQoHUYAquk9rBJcq8W+F0FAzAJBgUrDgMCHQUAMBIxEDAOBgNVBAMTB0RldlJvb3QwHhcNMTAwMTIwMjMwMDAwWhcNMjAwMTIwMjMwMDAwWjARMQ8wDQYDVQQDEwZDbGllbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDSaY4x1eXqjHF1iXQcF3pbFrIbmNw19w/IdOQxbavmuPbhY7jX0IORu/GQiHjmhqWt8F4G7KGLhXLC1j7rXdDmxXRyVJBZBTEaSYukuX7zGeUXscdpgODLQVay/0hUGz54aDZPAhtBHaYbog+yH10sCXgV1Mxtzx3dGelA6pPwiAmXwFxjJ1HGsS/hdbt+vgXhdlzud3ZSfyI/TJAnFeKxsmbJUyqMfoBl1zFKG4MOvgHhBjekp+r8gYNGknMYu9JDFr1ue0wylaw9UwG8ZXAkYmYbn2wN/CpJl3gJgX42/9g87uLvtVAmz5L+rZQTlS1ibv54ScR2lcRpGQiQav/LAgMBAAGjXDBaMBMGA1UdJQQMMAoGCCsGAQUFBwMCMEMGA1UdAQQ8MDqAENIWANpX5DZ3bX3WvoDfy0GhFDASMRAwDgYDVQQDEwdEZXZSb290ghAsWTt7E82DjU1E1p427Qj2MAkGBSsOAwIdBQADggEBADLje0qbqGVPaZHINLn+WSM2czZk0b5NG80btp7arjgDYoWBIe2TSOkkApTRhLPfmZTsaiI3Ro/64q+Dk3z3Kt7w+grHqu5nYhsn7xQFAQUf3y2KcJnRdIEk0jrLM4vgIzYdXsoC6YO+9QnlkNqcN36Y8IpSVSTda6gRKvGXiAhu42e2Qey/WNMFOL+YzMXGt/nDHL/qRKsuXBOarIb++43DV3YnxGTx22llhOnPpuZ9/gnNY7KLjODaiEciKhaKqt/b57mTEz4jTF4kIg6BP03MUfDXeVlM1Qf1jB43G2QQ19n5lUiqTpmQkcfLfyci2uBZ8BkOhXr3Vk9HIk/xBXQ="
                         }
                     },
@@ -302,9 +357,16 @@ namespace IdentityBase.Configuration
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
 
-                    RedirectUris =  { "http://localhost:44077/signin-oidc" },
-                    FrontChannelLogoutUri = "http://localhost:44077/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:44077/signout-callback-oidc" },
+                    RedirectUris =  {
+                        "http://localhost:44077/signin-oidc"
+                    },
+
+                    FrontChannelLogoutUri =
+                        "http://localhost:44077/signout-oidc",
+
+                    PostLogoutRedirectUris = {
+                        "http://localhost:44077/signout-callback-oidc"
+                    },
 
                     AllowedScopes =
                     {
@@ -327,11 +389,20 @@ namespace IdentityBase.Configuration
 
                     AllowedGrantTypes = GrantTypes.Implicit,
 
-                    RedirectUris = { "http://localhost:44078/home/callback" },
-                    FrontChannelLogoutUri = "http://localhost:44078/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:44078/" },
+                    RedirectUris = {
+                        "http://localhost:44078/home/callback"
+                    },
 
-                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId }
+                    FrontChannelLogoutUri =
+                        "http://localhost:44078/signout-oidc",
+
+                    PostLogoutRedirectUris = {
+                        "http://localhost:44078/"
+                    },
+
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId
+                    }
                 },
 
                 ///////////////////////////////////////////
@@ -355,7 +426,10 @@ namespace IdentityBase.Configuration
                     RedirectUris = {
                         "http://localhost:21402/signin-oidc"
                     },
-                    FrontChannelLogoutUri = "http://localhost:21402/signout-oidc",
+
+                    FrontChannelLogoutUri =
+                        "http://localhost:21402/signout-oidc",
+
                     PostLogoutRedirectUris = {
                         "http://localhost:21402/signout-callback-oidc"
                     },
@@ -418,8 +492,13 @@ namespace IdentityBase.Configuration
                         "http://localhost:7017/popup.html"
                     },
 
-                    PostLogoutRedirectUris = { "http://localhost:7017/index.html" },
-                    AllowedCorsOrigins = { "http://localhost:7017" },
+                    PostLogoutRedirectUris = {
+                        "http://localhost:7017/index.html"
+                    },
+
+                    AllowedCorsOrigins = {
+                        "http://localhost:7017"
+                    },
 
                     AllowedScopes =
                     {
@@ -509,7 +588,8 @@ namespace IdentityBase.Configuration
                         new Scope()
                         {
                             Name = "idbase.invitations",
-                            DisplayName = "Full access to IdentityBase invitations API",
+                            DisplayName =
+                                "Full access to IdentityBase invitations API",
                         }
                     }
                 }

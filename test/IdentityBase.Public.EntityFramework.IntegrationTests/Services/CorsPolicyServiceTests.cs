@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
@@ -18,46 +18,71 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
     using ServiceBase.Logging;
     using Xunit;
 
-    public class CorsPolicyServiceTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
+    public class CorsPolicyServiceTests : 
+        IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
-        private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
+        private static readonly EntityFrameworkOptions StoreOptions =
+            new EntityFrameworkOptions();
+
+        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>>
+            TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
-            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(CorsPolicyServiceTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(nameof(CorsPolicyServiceTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(nameof(CorsPolicyServiceTests), StoreOptions)
+            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(
+                nameof(CorsPolicyServiceTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(
+                nameof(CorsPolicyServiceTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(
+                nameof(CorsPolicyServiceTests),
+                StoreOptions)
         };
 
-        public CorsPolicyServiceTests(DatabaseProviderFixture<ConfigurationDbContext> fixture)
+        public CorsPolicyServiceTests(
+            DatabaseProviderFixture<ConfigurationDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<ConfigurationDbContext>)y)).ToList();
+            fixture.Options = TestDatabaseProviders
+                .SelectMany(x => x
+                    .Select(y => (DbContextOptions<ConfigurationDbContext>)y))
+                .ToList();
+
             fixture.StoreOptions = StoreOptions;
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void IsOriginAllowedAsync_WhenOriginIsAllowed_ExpectTrue(DbContextOptions<ConfigurationDbContext> options)
+        public void IsOriginAllowedAsync_WhenOriginIsAllowed_ExpectTrue(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             const string testCorsOrigin = "https://identityserver.io/";
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.Clients.Add(new Client
                 {
                     ClientId = Guid.NewGuid().ToString(),
                     ClientName = Guid.NewGuid().ToString(),
-                    AllowedCorsOrigins = new List<string> { "https://www.identityserver.com" }
+                    AllowedCorsOrigins = new List<string> {
+                        "https://www.identityserver.com"
+                    }
                 }.ToEntity());
                 context.Clients.Add(new Client
                 {
                     ClientId = "2",
                     ClientName = "2",
-                    AllowedCorsOrigins = new List<string> { "https://www.identityserver.com", testCorsOrigin }
+                    AllowedCorsOrigins = new List<string> {
+                        "https://www.identityserver.com",
+                        testCorsOrigin
+                    }
                 }.ToEntity());
                 context.SaveChanges();
             }
 
             bool result;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 var ctx = new DefaultHttpContext();
                 var svcs = new ServiceCollection();
@@ -66,7 +91,11 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
                 var ctxAccessor = new HttpContextAccessor();
                 ctxAccessor.HttpContext = ctx;
 
-                var service = new CorsPolicyService(ctxAccessor, NullLogger<CorsPolicyService>.Create());
+                var service = new CorsPolicyService(
+                    ctxAccessor,
+                    NullLogger<CorsPolicyService>.Create()
+                );
+
                 result = service.IsOriginAllowedAsync(testCorsOrigin).Result;
             }
 
@@ -74,21 +103,26 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void IsOriginAllowedAsync_WhenOriginIsNotAllowed_ExpectFalse(DbContextOptions<ConfigurationDbContext> options)
+        public void IsOriginAllowedAsync_WhenOriginIsNotAllowed_ExpectFalse(
+            DbContextOptions<ConfigurationDbContext> options)
         {
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.Clients.Add(new Client
                 {
                     ClientId = Guid.NewGuid().ToString(),
                     ClientName = Guid.NewGuid().ToString(),
-                    AllowedCorsOrigins = new List<string> { "https://www.identityserver.com" }
+                    AllowedCorsOrigins = new List<string> {
+                        "https://www.identityserver.com"
+                    }
                 }.ToEntity());
                 context.SaveChanges();
             }
 
             bool result;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 var ctx = new DefaultHttpContext();
                 var svcs = new ServiceCollection();
@@ -97,7 +131,11 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
                 var ctxAccessor = new HttpContextAccessor();
                 ctxAccessor.HttpContext = ctx;
 
-                var service = new CorsPolicyService(ctxAccessor, NullLogger<CorsPolicyService>.Create());
+                var service = new CorsPolicyService(
+                    ctxAccessor,
+                    NullLogger<CorsPolicyService>.Create()
+                );
+
                 result = service.IsOriginAllowedAsync("InvalidOrigin").Result;
             }
 

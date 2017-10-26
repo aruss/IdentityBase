@@ -5,7 +5,7 @@ namespace IdentityBase.Public
     using ServiceBase.Notification.Sms;
     using ServiceBase.Notification.Twilio;
 
-    public class TwillioModule : Autofac.Module
+    public class TwilioModule : Autofac.Module
     {
         /// <summary>
         /// Loads dependencies 
@@ -22,7 +22,7 @@ namespace IdentityBase.Public
             builder.RegisterType<TwilioSmsSender>().As<ISmsSender>();
 
             builder.RegisterInstance(Current.Configuration
-                .GetSection("Sms:Twillio").Get<TwilioOptions>());
+                .GetSection("Sms:Twilio").Get<TwilioOptions>());
         }
     }
 }

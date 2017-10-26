@@ -12,6 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Validation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Configuration\Clients.cs" />
     <Compile Remove="Configuration\Resources.cs" />
     <Compile Remove="Configuration\UserAccounts.cs" />
@@ -21,10 +27,6 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="IdentityServer4" Version="2.0.1" />
     <PackageReference Include="ServiceBase" Version="1.1.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validation\" />
   </ItemGroup>
 
 </Project>

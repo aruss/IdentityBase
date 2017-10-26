@@ -10,24 +10,42 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
     using Microsoft.EntityFrameworkCore;
     using Xunit;
 
-    public class ClientDbContextTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
+    public class ClientDbContextTests :
+        IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
-        private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
+        private static readonly EntityFrameworkOptions StoreOptions =
+            new EntityFrameworkOptions();
+
+        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>>
+            TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
-            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(ClientDbContextTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(nameof(ClientDbContextTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(nameof(ClientDbContextTests), StoreOptions)
+            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(
+                nameof(ClientDbContextTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(
+                nameof(ClientDbContextTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(
+                nameof(ClientDbContextTests),
+                StoreOptions)
         };
 
-        public ClientDbContextTests(DatabaseProviderFixture<ConfigurationDbContext> fixture)
+        public ClientDbContextTests(
+            DatabaseProviderFixture<ConfigurationDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<ConfigurationDbContext>)y)).ToList();
+            fixture.Options = TestDatabaseProviders
+                .SelectMany(x => x
+                    .Select(y => (DbContextOptions<ConfigurationDbContext>)y))
+                .ToList();
+
             fixture.StoreOptions = StoreOptions;
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void CanAddAndDeleteClientScopes(DbContextOptions<ConfigurationDbContext> options)
+        public void CanAddAndDeleteClientScopes(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             using (var db = new ConfigurationDbContext(options, StoreOptions))
             {
@@ -72,7 +90,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void CanAddAndDeleteClientRedirectUri(DbContextOptions<ConfigurationDbContext> options)
+        public void CanAddAndDeleteClientRedirectUri(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             using (var db = new ConfigurationDbContext(options, StoreOptions))
             {
@@ -99,7 +118,10 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
 
             using (var db = new ConfigurationDbContext(options, StoreOptions))
             {
-                var client = db.Clients.Include(x => x.RedirectUris).First();
+                var client = db.Clients
+                    .Include(x => x.RedirectUris)
+                    .First();
+
                 var redirectUri = client.RedirectUris.First();
 
                 client.RedirectUris.Remove(redirectUri);
@@ -111,7 +133,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
             {
                 var client = db.Clients.Include(x => x.RedirectUris).First();
 
-                Assert.Equal(0, client.RedirectUris.Count());
+                Assert.Empty(client.RedirectUris);
             }
         }
     }

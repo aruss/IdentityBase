@@ -286,7 +286,8 @@ namespace IdentityBase.Services
         }
 
         /// <summary>
-        /// Validate if verification key is valid, if yes it will load a corresponding <see cref="UserAccount"/>
+        /// Validate if verification key is valid, if yes it will load a
+        /// corresponding <see cref="UserAccount"/>
         /// </summary>
         /// <param name="key">Verification key</param>
         /// <param name="purpose"><see cref="VerificationKeyPurpose"/></param>

@@ -43,7 +43,8 @@ namespace IdentityBase.Public.Actions.Logout
             return this.View(vm);
         }
 
-        private async Task<LogoutViewModel> CreateLogoutViewModelAsync(string logoutId)
+        private async Task<LogoutViewModel> CreateLogoutViewModelAsync(
+            string logoutId)
         {
             var vm = new LogoutViewModel
             {
@@ -104,7 +105,9 @@ namespace IdentityBase.Public.Actions.Logout
                 try
                 {
                     // this triggers a redirect to the external provider for sign-out
-                    return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
+                    return this.SignOut(
+                        new AuthenticationProperties { RedirectUri = url },
+                        vm.ExternalAuthenticationScheme);
                 }
                 // This is for the external providers that don't have signout
                 catch (NotSupportedException)
@@ -119,14 +122,17 @@ namespace IdentityBase.Public.Actions.Logout
             return View("LoggedOut", vm);
         }
 
-        private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(string logoutId)
+        private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(
+            string logoutId)
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
             var logout = await interaction.GetLogoutContextAsync(logoutId);
 
             var vm = new LoggedOutViewModel
             {
-                AutomaticRedirectAfterSignOut = applicationOptions.AutomaticRedirectAfterSignOut,
+                AutomaticRedirectAfterSignOut = applicationOptions
+                    .AutomaticRedirectAfterSignOut,
+
                 PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
                 ClientName = logout?.ClientId,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
@@ -136,15 +142,19 @@ namespace IdentityBase.Public.Actions.Logout
             var user = HttpContext.User;
             if (user != null)
             {
-                var idp = user.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
-                if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
+                var idp = user
+                    .FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+
+                if (idp != null && idp != IdentityServerConstants
+                    .LocalIdentityProvider)
                 {
                     if (vm.LogoutId == null)
                     {
                         // if there's no current logout context, we need to create one
                         // this captures necessary info from the current logged in user
                         // before we signout and redirect away to the external IdP for signout
-                        vm.LogoutId = await interaction.CreateLogoutContextAsync();
+                        vm.LogoutId = await interaction
+                            .CreateLogoutContextAsync();
                     }
 
                     vm.ExternalAuthenticationScheme = idp;

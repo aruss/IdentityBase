@@ -11,7 +11,14 @@ namespace IdentityBase.Models
 
     public enum CreationKind
     {
+        /// <summary>
+        /// Created via frontend by user it self.
+        /// </summary>
         SelfService,
+
+        /// <summary>
+        /// User was invited via another user. 
+        /// </summary>
         Invitation
     }
 }

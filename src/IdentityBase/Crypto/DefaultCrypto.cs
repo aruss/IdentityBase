@@ -4,15 +4,15 @@
  *
  * Code borrowed from: https://github.com/brockallen/BrockAllen.MembershipReboot/tree/master/src/BrockAllen.MembershipReboot/Crypto
  */
-
-using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-
+ 
 namespace IdentityBase.Crypto
 {
+    using System;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Security.Cryptography;
+    using System.Text;
+
     public interface ICrypto
     {
         string HashPassword(

@@ -1,36 +1,52 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using IdentityModel;
-using IdentityBase.Public.EntityFramework.DbContexts;
-using IdentityBase.Public.EntityFramework.Mappers;
-using IdentityBase.Public.EntityFramework.Options;
-using IdentityBase.Public.EntityFramework.Stores;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-using ServiceBase.Logging;
-
 namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
 {
-    public class ScopeStoreTests : IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IdentityBase.Public.EntityFramework.DbContexts;
+    using IdentityBase.Public.EntityFramework.Mappers;
+    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Stores;
+    using IdentityModel;
+    using IdentityServer4.Models;
+    using IdentityServer4.Stores;
+    using Microsoft.EntityFrameworkCore;
+    using ServiceBase.Logging;
+    using Xunit;
+
+    public class ScopeStoreTests :
+        IClassFixture<DatabaseProviderFixture<ConfigurationDbContext>>
     {
-        private static readonly EntityFrameworkOptions StoreOptions = new EntityFrameworkOptions();
-        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>> TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
+        private static readonly EntityFrameworkOptions StoreOptions =
+            new EntityFrameworkOptions();
+
+        public static readonly TheoryData<DbContextOptions<ConfigurationDbContext>>
+            TestDatabaseProviders = new TheoryData<DbContextOptions<ConfigurationDbContext>>
         {
-            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(nameof(ScopeStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(nameof(ScopeStoreTests), StoreOptions),
-            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(nameof(ScopeStoreTests), StoreOptions)
+            DatabaseProviderBuilder.BuildInMemory<ConfigurationDbContext>(
+                nameof(ScopeStoreTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlite<ConfigurationDbContext>(
+                nameof(ScopeStoreTests),
+                StoreOptions),
+
+            DatabaseProviderBuilder.BuildSqlServer<ConfigurationDbContext>(
+                nameof(ScopeStoreTests),
+                StoreOptions)
         };
 
-        public ScopeStoreTests(DatabaseProviderFixture<ConfigurationDbContext> fixture)
+        public ScopeStoreTests(
+            DatabaseProviderFixture<ConfigurationDbContext> fixture)
         {
-            fixture.Options = TestDatabaseProviders.SelectMany(x => x.Select(y => (DbContextOptions<ConfigurationDbContext>)y)).ToList();
+            fixture.Options = TestDatabaseProviders
+                .SelectMany(x => x
+                    .Select(y => (DbContextOptions<ConfigurationDbContext>)y))
+                .ToList();
+
             fixture.StoreOptions = StoreOptions;
         }
 
@@ -42,7 +58,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                 DisplayName = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString(),
                 ShowInDiscoveryDocument = true,
-                UserClaims = 
+                UserClaims =
                 {
                     JwtClaimTypes.Subject,
                     JwtClaimTypes.Name,
@@ -55,7 +71,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             return new ApiResource()
             {
                 Name = Guid.NewGuid().ToString(),
-                ApiSecrets = new List<Secret> {new Secret("secret".Sha256())},
+                ApiSecrets = new List<Secret> { new Secret("secret".Sha256()) },
                 Scopes =
                     new List<Scope>
                     {
@@ -65,7 +81,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
                             UserClaims = {Guid.NewGuid().ToString()}
                         }
                     },
-                UserClaims = 
+                UserClaims =
                 {
                     Guid.NewGuid().ToString(),
                     Guid.NewGuid().ToString(),
@@ -74,12 +90,14 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindResourcesAsync_WhenResourcesExist_ExpectResourcesReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindResourcesAsync_WhenResourcesExist_ExpectResourcesReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var testIdentityResource = CreateIdentityTestResource();
             var testApiResource = CreateApiTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.IdentityResources.Add(testIdentityResource.ToEntity());
                 context.ApiResources.Add(testApiResource.ToEntity());
@@ -89,7 +107,11 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Resources resources;
             using (var context = new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
                 resources = store.FindResourcesByScopeAsync(new List<string>
                 {
                     testIdentityResource.Name,
@@ -102,28 +124,42 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Assert.NotEmpty(resources.IdentityResources);
             Assert.NotNull(resources.ApiResources);
             Assert.NotEmpty(resources.ApiResources);
-            Assert.NotNull(resources.IdentityResources.FirstOrDefault(x => x.Name == testIdentityResource.Name));
-            Assert.NotNull(resources.ApiResources.FirstOrDefault(x => x.Name == testApiResource.Name));
+
+            Assert.NotNull(resources.IdentityResources
+                .FirstOrDefault(x => x.Name == testIdentityResource.Name));
+
+            Assert.NotNull(resources.ApiResources
+                .FirstOrDefault(x => x.Name == testApiResource.Name));
         }
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindResourcesAsync_WhenResourcesExist_ExpectOnlyResourcesRequestedReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindResourcesAsync_WhenResourcesExist_ExpectOnlyResourcesRequestedReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var testIdentityResource = CreateIdentityTestResource();
             var testApiResource = CreateApiTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.IdentityResources.Add(testIdentityResource.ToEntity());
                 context.ApiResources.Add(testApiResource.ToEntity());
-                context.IdentityResources.Add(CreateIdentityTestResource().ToEntity());
+
+                context.IdentityResources
+                    .Add(CreateIdentityTestResource().ToEntity());
+
                 context.ApiResources.Add(CreateApiTestResource().ToEntity());
                 context.SaveChanges();
             }
 
             Resources resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
                 resources = store.FindResourcesByScopeAsync(new List<string>
                 {
                     testIdentityResource.Name,
@@ -141,30 +177,53 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void GetAllResources_WhenAllResourcesRequested_ExpectAllResourcesIncludingHidden(DbContextOptions<ConfigurationDbContext> options)
+        public void GetAllResources_WhenAllResourcesRequested_ExpectAllResourcesIncludingHidden(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var visibleIdentityResource = CreateIdentityTestResource();
             var visibleApiResource = CreateApiTestResource();
-            var hiddenIdentityResource = new IdentityResource{Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false};
+
+            var hiddenIdentityResource = new IdentityResource
+            {
+                Name = Guid.NewGuid().ToString(),
+                ShowInDiscoveryDocument = false
+            };
+
             var hiddenApiResource = new ApiResource
             {
                 Name = Guid.NewGuid().ToString(),
-                Scopes = new List<Scope> {new Scope {Name = Guid.NewGuid().ToString(), ShowInDiscoveryDocument = false}}
+                Scopes = new List<Scope> {
+                    new Scope {
+                    Name = Guid.NewGuid().ToString(),
+                        ShowInDiscoveryDocument = false
+                    }
+                }
             };
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                context.IdentityResources.Add(visibleIdentityResource.ToEntity());
+                context.IdentityResources
+                    .Add(visibleIdentityResource.ToEntity());
+
                 context.ApiResources.Add(visibleApiResource.ToEntity());
-                context.IdentityResources.Add(hiddenIdentityResource.ToEntity());
+
+                context.IdentityResources
+                    .Add(hiddenIdentityResource.ToEntity());
+
                 context.ApiResources.Add(hiddenApiResource.ToEntity());
                 context.SaveChanges();
             }
 
             Resources resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
                 resources = store.GetAllResourcesAsync().Result;
             }
 
@@ -172,29 +231,41 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Assert.NotEmpty(resources.IdentityResources);
             Assert.NotEmpty(resources.ApiResources);
 
-            Assert.True(resources.IdentityResources.Any(x => !x.ShowInDiscoveryDocument));
-            Assert.True(resources.ApiResources.Any(x => !x.Scopes.Any(y => y.ShowInDiscoveryDocument)));
+            Assert.Contains(resources.IdentityResources,
+                x => !x.ShowInDiscoveryDocument);
+
+            Assert.Contains(resources.ApiResources,
+                x => !x.Scopes.Any(y => y.ShowInDiscoveryDocument));
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindIdentityResourcesByScopeAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindIdentityResourcesByScopeAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var resource = CreateIdentityTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.IdentityResources.Add(resource.ToEntity());
                 context.SaveChanges();
             }
 
             IList<IdentityResource> resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindIdentityResourcesByScopeAsync(new List<string>
-                {
-                    resource.Name
-                }).Result.ToList();
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
+                resources = store.FindIdentityResourcesByScopeAsync(
+                    new List<string>
+                    {
+                        resource.Name
+                    }
+                ).Result.ToList();
             }
 
             Assert.NotNull(resources);
@@ -207,25 +278,36 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindIdentityResourcesByScopeAsync_WhenResourcesExist_ExpectOnlyRequestedReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindIdentityResourcesByScopeAsync_WhenResourcesExist_ExpectOnlyRequestedReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var resource = CreateIdentityTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.IdentityResources.Add(resource.ToEntity());
-                context.IdentityResources.Add(CreateIdentityTestResource().ToEntity());
+
+                context.IdentityResources
+                    .Add(CreateIdentityTestResource().ToEntity());
+
                 context.SaveChanges();
             }
 
             IList<IdentityResource> resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindIdentityResourcesByScopeAsync(new List<string>
-                {
-                    resource.Name
-                }).Result.ToList();
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
+                resources = store
+                    .FindIdentityResourcesByScopeAsync(new List<string>
+                    {
+                        resource.Name
+                    }).Result.ToList();
             }
 
             Assert.NotNull(resources);
@@ -234,7 +316,8 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindApiResourceAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindApiResourceAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var resource = CreateApiTestResource();
 
@@ -245,10 +328,16 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             }
 
             ApiResource foundResource;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                foundResource = store.FindApiResourceAsync(resource.Name).Result;
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
+                foundResource = store
+                    .FindApiResourceAsync(resource.Name).Result;
             }
 
             Assert.NotNull(foundResource);
@@ -259,25 +348,35 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Assert.NotEmpty(foundResource.ApiSecrets);
             Assert.NotNull(foundResource.Scopes);
             Assert.NotEmpty(foundResource.Scopes);
-            Assert.True(foundResource.Scopes.Any(x => x.UserClaims.Any()));
+            Assert.Contains(foundResource.Scopes, x => x.UserClaims.Any());
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindApiResourcesByScopeAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindApiResourcesByScopeAsync_WhenResourceExists_ExpectResourceAndCollectionsReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var resource = CreateApiTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.ApiResources.Add(resource.ToEntity());
                 context.SaveChanges();
             }
 
             IList<ApiResource> resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindApiResourcesByScopeAsync(new List<string> {resource.Scopes.First().Name}).Result.ToList();
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create());
+
+                resources = store.FindApiResourcesByScopeAsync(
+                    new List<string> {
+                        resource.Scopes.First().Name
+                    }
+                ).Result.ToList();
             }
 
             Assert.NotEmpty(resources);
@@ -289,15 +388,17 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             Assert.NotEmpty(resources.First().ApiSecrets);
             Assert.NotNull(resources.First().Scopes);
             Assert.NotEmpty(resources.First().Scopes);
-            Assert.True(resources.First().Scopes.Any(x => x.UserClaims.Any()));
+            Assert.Contains(resources.First().Scopes, x => x.UserClaims.Any());
         }
 
         [Theory, MemberData(nameof(TestDatabaseProviders))]
-        public void FindApiResourcesByScopeAsync_WhenMultipleResourcesExist_ExpectOnlyRequestedResourcesReturned(DbContextOptions<ConfigurationDbContext> options)
+        public void FindApiResourcesByScopeAsync_WhenMultipleResourcesExist_ExpectOnlyRequestedResourcesReturned(
+            DbContextOptions<ConfigurationDbContext> options)
         {
             var resource = CreateApiTestResource();
 
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
                 context.ApiResources.Add(resource.ToEntity());
                 context.ApiResources.Add(CreateApiTestResource().ToEntity());
@@ -306,10 +407,18 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
             }
 
             IList<ApiResource> resources;
-            using (var context = new ConfigurationDbContext(options, StoreOptions))
+            using (var context =
+                new ConfigurationDbContext(options, StoreOptions))
             {
-                var store = new ResourceStore(context, NullLogger<ResourceStore>.Create());
-                resources = store.FindApiResourcesByScopeAsync(new List<string> {resource.Scopes.First().Name}).Result.ToList();
+                var store = new ResourceStore(
+                    context,
+                    NullLogger<ResourceStore>.Create()
+                );
+
+                resources = store
+                    .FindApiResourcesByScopeAsync(new List<string> {
+                        resource.Scopes.First().Name
+                    }).Result.ToList();
             }
 
             Assert.NotNull(resources);
