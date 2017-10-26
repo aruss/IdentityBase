@@ -1,7 +1,20 @@
-# IdentityBase.Public.EntityFramework.Npgsql
+# IdentityBase.Public.EntityFramework.SqlServer
 
-See EntityFramework 7 https://docs.microsoft.com/en-us/ef/
+Microsoft SQL Server data provider for IdentityBase.
 
-    dotnet ef migrations add init --context MigrationDbContext
-	
-	dotnet ef database update 
+### Requirements 
+
+- SQL Server Express
+    - Database named `IdentityBase` with login (username: `dev`, password `dev`) as `db_owner`
+
+### Used libraries
+
+- EntityFramework 7 https://docs.microsoft.com/en-us/ef/
+- Microsoft SQL Server data provider https://docs.microsoft.com/en-us/ef/core/providers/sql-server/
+
+### Create migration files, for development only 
+
+```sh
+dotnet ef migrations add init --context MigrationDbContext
+```
+
