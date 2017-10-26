@@ -105,9 +105,10 @@ namespace IdentityBase.Public
 
         private static bool IsDevelopment()
         {
-            return Environment
-                .GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                .Equals("Development", StringComparison.OrdinalIgnoreCase);
+            return "Development".Equals(
+                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+                StringComparison.OrdinalIgnoreCase
+            );
         }
     }
 }
