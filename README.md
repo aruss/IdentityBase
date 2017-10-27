@@ -1,30 +1,3 @@
-
-<h1 align="center">
-  <br>
-  <img src="docs/icon.png" alt="IdentityBase" width="200">
-  <br>
-  IdentityBase
-  <br>
-</h1>
-
-<h4 align="center">IdentityBase is a <a  target="_blank"  href="https://en.wikipedia.org/wiki/Security_token_service">Secure Token Service (STS)</a> built on top of <a href="https://github.com/IdentityServer/IdentityServer4" target="_blank">IdentityServer4</a>.</h4>
-
-<p align="center">
-  <a target="_blank" href="https://ci.appveyor.com/project/aruss81994/servicebase-identityserver/branch/master">
-    <img src="https://ci.appveyor.com/api/projects/status/0kld9s4sm8b50930/branch/master?svg=true" alt="Build status">
-  </a>
-  <a  target="_blank" href="https://coveralls.io/github/aruss/IdentityBase?branch=master">
-      <img src="https://coveralls.io/repos/github/aruss/IdentityBase/badge.svg?branch=master" alt="Coverage Status">
-  </a>
-  <a  target="_blank" href="https://gitter.im/ServiceBase/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
-    <img src="https://badges.gitter.im/ServiceBase/Lobby.svg" alt="Join the chat">
-  </a>
-</p>
-<p>
-IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>  
-</p>
-
-
 ### Features
 
 * **Single Sign-on / Sign-out**
