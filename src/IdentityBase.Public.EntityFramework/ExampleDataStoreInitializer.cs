@@ -49,7 +49,7 @@ namespace IdentityBase.Public.EntityFramework
                 if (this.options.MigrateDatabase)
                 {
                     this.logger.LogInformation("Try migrate database");
-                    this.migrationDbContext.Database.Migrate();
+                    this.migrationDbContext.Database.Migrate(); 
                 }
 
                 if (this.options.SeedExampleData)

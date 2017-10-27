@@ -30,7 +30,7 @@ namespace IdentityBase
 
         public void Configure(IApplicationBuilder app)
         {
-            foreach (var module in this.modules)
+            foreach (IModule module in this.modules)
             {
                 module.Configure(app);
             }
@@ -38,7 +38,7 @@ namespace IdentityBase
 
         public void ConfigureServices(IServiceCollection services)
         {
-            foreach (var module in this.modules)
+            foreach (IModule module in this.modules)
             {
                 module.ConfigureServices(services, this.configuration);
             }
