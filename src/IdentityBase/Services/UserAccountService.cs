@@ -240,15 +240,15 @@ namespace IdentityBase.Services
         public async Task<UserAccount> WriteUserAccountAsync(
             UserAccount userAccount)
         {
-            var now = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
             userAccount.CreatedAt = now;
             userAccount.UpdatedAt = now;
 
-            var userAccount2 = await userAccountStore
+            UserAccount userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            await eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
-                userAccount.Id,
+            eventService.RaiseUserAccountCreatedSuccessEventAsync(
+                userAccount,
                 IdentityServerConstants.LocalIdentityProvider);
 
             return userAccount2;
@@ -260,11 +260,11 @@ namespace IdentityBase.Services
             // Update user account
             userAccount.UpdatedAt = DateTime.UtcNow;
 
-            var userAccount2 = await userAccountStore
+            UserAccount userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            await eventService
-                .RaiseSuccessfulUserAccountUpdatedEventAsync(userAccount.Id);
+            eventService
+                .RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
 
             return userAccount2;
         }
@@ -273,7 +273,7 @@ namespace IdentityBase.Services
         {
             ClearVerification(userAccount);
 
-            var now = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
             userAccount.IsLoginAllowed = true;
             userAccount.IsEmailVerified = true;
             userAccount.EmailVerifiedAt = now;
@@ -368,8 +368,8 @@ namespace IdentityBase.Services
             await userAccountStore.WriteExternalAccountAsync(externalAccount);
 
             // Emit event
-            eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
-                externalAccount.UserAccountId);
+            eventService.RaiseUserAccountUpdatedSuccessEventAsync(
+                userAccount);
         }
 
         public async Task<UserAccount> CreateNewExternalUserAccountAsync(
@@ -398,7 +398,7 @@ namespace IdentityBase.Services
         }
 
         public async Task<ExternalAccount> AddExternalAccountAsync(
-            Guid userAccountId,
+            UserAccount userAccount,
             string email,
             string provider,
             string subject)
@@ -407,7 +407,7 @@ namespace IdentityBase.Services
             var externalAccount = await userAccountStore
                 .WriteExternalAccountAsync(new ExternalAccount
                 {
-                    UserAccountId = userAccountId,
+                    UserAccountId = userAccount.Id,
                     Email = email,
                     Provider = provider,
                     Subject = subject,
@@ -418,8 +418,7 @@ namespace IdentityBase.Services
                 });
 
             // Emit event
-            eventService.RaiseSuccessfulUserAccountUpdatedEventAsync(
-                userAccountId);
+            eventService.RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
 
             return externalAccount;
         }
@@ -440,8 +439,8 @@ namespace IdentityBase.Services
         /// <returns><see cref="UserAccount"/></returns>
         public async Task<UserAccount> CreateNewLocalUserAccountAsync(
             string email,
-            Guid? invitedBy,
-            string returnUrl)
+            string returnUrl,
+            UserAccount invitedByUserAccount)
         {
             var foo = CreateNewLocalUserAccount(email);
             foo.CreationKind = CreationKind.Invitation;
@@ -450,11 +449,11 @@ namespace IdentityBase.Services
             var userAccount = await userAccountStore.WriteAsync(foo);
 
             // Emit events
-            eventService.RaiseSuccessfulUserAccountCreatedEventAsync(
-                userAccount.Id, IdentityServerConstants.LocalIdentityProvider);
+            eventService.RaiseUserAccountCreatedSuccessEventAsync(
+                userAccount, IdentityServerConstants.LocalIdentityProvider);
 
-            eventService.RaiseSuccessfulUserAccountInvitedEventAsync(
-                userAccount.Id, invitedBy);
+            eventService.RaiseUserAccountInvitedSuccessEventAsync(
+                userAccount, invitedByUserAccount);
 
             return userAccount;
         }

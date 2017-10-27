@@ -69,10 +69,13 @@ namespace IdentityBase.Public.Api.Invitations
                 );
             }
 
+            UserAccount invitedByUserAccount = null; 
             if (inputModel.InvitedBy.HasValue)
             {
-                if (await this.userAccountService
-                    .LoadByEmailAsync(inputModel.Email) == null)
+                invitedByUserAccount = await this.userAccountService
+                    .LoadByIdAsync(inputModel.InvitedBy.Value);
+
+                if (invitedByUserAccount == null)
                 {
                     return this.BadRequest(
                         nameof(inputModel.InvitedBy),
@@ -95,8 +98,8 @@ namespace IdentityBase.Public.Api.Invitations
             userAccount = await this.userAccountService
                 .CreateNewLocalUserAccountAsync(
                     inputModel.Email,
-                    inputModel.InvitedBy,
-                    returnUri
+                    returnUri,
+                    invitedByUserAccount                   
                 );
 
             await this.SendEmailAsync(userAccount);
