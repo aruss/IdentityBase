@@ -19,7 +19,9 @@
   <a  target="_blank" href="https://gitter.im/ServiceBase/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
     <img src="https://badges.gitter.im/ServiceBase/Lobby.svg" alt="Join the chat">
   </a>
-  </br></br>IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>
+</p>
+<p>
+IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>  
 </p>
 
 
