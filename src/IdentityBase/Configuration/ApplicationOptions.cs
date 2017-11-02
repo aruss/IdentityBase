@@ -6,9 +6,10 @@ namespace IdentityBase.Configuration
     public class ApplicationOptions
     {
         // TODO: Find another way to get the current public URI, while application start.
-        public string PublicUrl { get; set; }
+        public string PublicUrl { get; set; } = "http://localhost:5000";
 
-        public string TempFolder { get; set; } = "./TempData";
+        public string TempFolder { get; set; } = "./AppData/Temp";
+
         public bool Leader { get; set; } = true;
 
         // Local account options
@@ -84,6 +85,7 @@ namespace IdentityBase.Configuration
         public double RememberMeLoginDuration { get; set; } = 30;
 
         public bool ShowLogoutPrompt { get; set; } = false;
+
         public bool AutomaticRedirectAfterSignOut { get; set; } = true;
 
         public bool WindowsAuthenticationEnabled { get; set; } = false;
