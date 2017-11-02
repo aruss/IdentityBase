@@ -18,6 +18,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="halde\**" />
+    <EmbeddedResource Remove="halde\**" />
+    <None Remove="halde\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ConfigBuilder.cs" />
+    <Compile Remove="SchemaUtils.cs" />
+    <Compile Remove="TestServerBuilder2.cs" />
+    <Compile Remove="Tests\GeneralTests.cs" />
+    <Compile Remove="Tests\InviteTests.cs" />
+    <Compile Remove="Tests\LoginTests.cs" />
+    <Compile Remove="Tests\RecoverTests.cs" />
+    <Compile Remove="Tests\RegisterTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
@@ -27,8 +44,8 @@
     <PackageReference Include="Moq" Version="4.7.142" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.4" />
-    <PackageReference Include="xunit" Version="2.3.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>

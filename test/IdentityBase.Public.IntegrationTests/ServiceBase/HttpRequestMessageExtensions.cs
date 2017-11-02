@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.IntegrationTests
+namespace ServiceBase.Tests
 {
     using System.Collections.Generic;
     using System.Linq;

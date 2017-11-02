@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.IntegrationTests
+namespace ServiceBase.Tests
 {
     using Microsoft.Net.Http.Headers;
     using System.Collections.Generic;
