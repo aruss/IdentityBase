@@ -14,8 +14,8 @@
       <group targetFramework=".NETCoreApp1.1">
         <dependency id="Autofac.Configuration" version="4.0.1" exclude="Build,Analyzers" />
         <dependency id="Autofac.Extensions.DependencyInjection" version="4.2.0" exclude="Build,Analyzers" />
-        <dependency id="IdentityServer4" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="IdentityServer4.AccessTokenValidation" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="IdentityServer4" version="2.0.2" exclude="Build,Analyzers"/>
+        <dependency id="IdentityServer4.AccessTokenValidation" version="2.1.0" exclude="Build,Analyzers" />
         <dependency id="Microsoft.AspNetCore" version="2.0.0" exclude="Build,Analyzers" />
         <dependency id="Microsoft.AspNetCore.Authentication" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.0" exclude="Build,Analyzers"/>
@@ -56,6 +56,9 @@
 
         <!-- entity framework npgsql -->
         <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.0" exclude="Build,Analyzers"/>
+		
+		<!-- entity framework mysql -->
+		<dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.0.1" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
     <contentFiles>
