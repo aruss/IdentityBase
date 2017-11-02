@@ -13,11 +13,6 @@ namespace IdentityBase.Public
             this IServiceCollection services,
             ApplicationOptions applicationOptions)
         {
-            if (!applicationOptions.IsWebApiEnabled())
-            {
-                return;
-            }
-
             services.AddAuthorization(options =>
             {
                 options.AddScopePolicies<ApiController>(
