@@ -5,6 +5,7 @@ namespace IdentityBase.Public.EntityFramework.Npgsql
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
 
     public class NpgsqlModule : IModule
     {

@@ -5,6 +5,7 @@ namespace IdentityBase.Public.EntityFramework.SqlServer
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
 
     public class SqlServerModule : IModule
     {

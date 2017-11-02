@@ -3,6 +3,7 @@ namespace IdentityBase.Public
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
     using ServiceBase.Notification.Sms;
     using ServiceBase.Notification.Twilio;
 

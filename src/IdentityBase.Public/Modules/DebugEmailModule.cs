@@ -3,6 +3,7 @@ namespace IdentityBase.Public
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
     using ServiceBase.Notification.Email;
 
     public class DebugEmailModule : IModule

@@ -14,6 +14,7 @@ namespace IdentityBase.Public
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase;
+    using ServiceBase.Modules;
 
     /// <summary>
     /// Application startup class

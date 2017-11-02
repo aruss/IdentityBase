@@ -1,5 +1,5 @@
 
-namespace IdentityBase
+namespace ServiceBase.Modules
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;

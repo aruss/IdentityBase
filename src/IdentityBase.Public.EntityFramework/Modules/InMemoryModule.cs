@@ -4,6 +4,7 @@ namespace IdentityBase.Public.EntityFramework
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
 
     public class InMemoryModule : IModule
     {
@@ -15,7 +16,7 @@ namespace IdentityBase.Public.EntityFramework
             {
                 options.DbContextOptions = (dbBuilder) =>
                 {
-                    dbBuilder.UseInMemoryDatabase("");
+                    dbBuilder.UseInMemoryDatabase("Put_value_from_config_here");
                 };
 
                 configuration.GetSection("EntityFramework").Bind(options);

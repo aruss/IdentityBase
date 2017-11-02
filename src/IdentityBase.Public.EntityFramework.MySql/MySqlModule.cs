@@ -5,6 +5,7 @@ namespace IdentityBase.Public.EntityFramework.MySql
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
 
     public class MySqlModule : IModule
     {

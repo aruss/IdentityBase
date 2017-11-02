@@ -4,6 +4,7 @@ namespace IdentityBase.Public
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Events;
+    using ServiceBase.Modules;
 
     public class DefaultEventModule : IModule
     {

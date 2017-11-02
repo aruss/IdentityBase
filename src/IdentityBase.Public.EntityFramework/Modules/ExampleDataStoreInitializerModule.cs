@@ -4,6 +4,7 @@ namespace IdentityBase.Public.EntityFramework
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Modules;
 
     public class ExampleDataStoreInitializerModule : IModule
     {

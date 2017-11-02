@@ -1,4 +1,4 @@
-namespace IdentityBase
+namespace ServiceBase.Modules
 {
     using System.Collections.Generic;
 
