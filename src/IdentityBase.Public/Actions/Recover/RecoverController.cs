@@ -1,5 +1,7 @@
 namespace IdentityBase.Public.Actions.Recover
 {
+    using System.Linq;
+    using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
     using IdentityBase.Models;
@@ -10,9 +12,6 @@ namespace IdentityBase.Public.Actions.Recover
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Notification.Email;
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class RecoverController : Controller
     {
@@ -46,7 +45,7 @@ namespace IdentityBase.Public.Actions.Recover
         [HttpGet("recover", Name = "Recover")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = await CreateViewModelAsync(returnUrl);
+            var vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
                 logger.LogWarning(IdentityBaseConstants.ErrorMessages
@@ -80,7 +79,7 @@ namespace IdentityBase.Public.Actions.Recover
                                 userAccount,
                                 model.ReturnUrl);
 
-                        SendEmailAsync(userAccount);
+                        await SendEmailAsync(userAccount);
 
                         return View("Success", new SuccessViewModel()
                         {

@@ -18,12 +18,14 @@ namespace IdentityBase.Public
             ApplicationOptions appOptions,
             IHostingEnvironment environment)
         {
-            services.AddRouting((options) =>
-            {
-                options.LowercaseUrls = true;
-            });
+            services
+                .AddRouting((options) =>
+                {
+                    options.LowercaseUrls = true;
+                });
 
-            services.AddMvc(mvcOptions =>
+            services
+                .AddMvc(mvcOptions =>
                 {
                     mvcOptions.OutputFormatters
                         .AddDefaultJsonOutputFormatter();
@@ -38,7 +40,7 @@ namespace IdentityBase.Public
                 {
                     StartupMvc
                         .ConfigureApplicationPartManager(appOptions, manager);
-                });
+                }); 
         }
 
         private static void ConfigureApplicationPartManager(
