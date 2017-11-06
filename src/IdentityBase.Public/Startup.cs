@@ -1,6 +1,7 @@
 namespace IdentityBase.Public
 {
     using System;
+    using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Extensions;
@@ -25,6 +26,7 @@ namespace IdentityBase.Public
         private readonly IHostingEnvironment environment;
         private readonly IConfiguration configuration;
         private readonly ModuleHost moduleHost;
+        private readonly HttpMessageHandler httpMessageHandler;
 
         /// <summary>
         ///
@@ -34,16 +36,21 @@ namespace IdentityBase.Public
         /// <param name="environment">Instance of
         /// <see cref="IHostingEnvironment"/></param>
         /// <param name="logger">Instance of <see cref="ILogger{Startup}"/>
+        /// <param name="sharedHandler">Instance of
+        /// <see cref="HttpMessageHandler"/>. It will be used to make outgoing
+        /// HTTP requests.</param>
         /// </param>
         public Startup(
-             IConfiguration configuration,
-             IHostingEnvironment environment,
-             ILogger<Startup> logger)
+            IConfiguration configuration,
+            IHostingEnvironment environment,
+            ILogger<Startup> logger,
+            HttpMessageHandler httpMessageHandler = null)
         {
             this.logger = logger;
             this.environment = environment;
             this.configuration = configuration;
-
+            this.httpMessageHandler = httpMessageHandler;
+            
             this.moduleHost = new ModuleHost(this.configuration);
         }
 
@@ -80,7 +87,7 @@ namespace IdentityBase.Public
                         this.configuration.GetValue<string>("Host:Cors")));
             });
 
-            services.AddWebApi(options);
+            services.AddWebApi(options, this.httpMessageHandler);
             services.AddMvc(options, this.environment);
 
             // https://github.com/aspnet/Security/issues/1310
