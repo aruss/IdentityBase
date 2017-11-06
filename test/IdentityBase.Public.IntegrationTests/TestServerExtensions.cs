@@ -62,7 +62,7 @@ namespace IdentityBase.Public.IntegrationTests
             TokenResponse tokenResponse = await testServer.RequestTokenAsync(
                   "client", // Some api client 
                   "secret",
-                  "idbase.invitations"
+                  "idbase"
               );
 
             if (tokenResponse.IsError)

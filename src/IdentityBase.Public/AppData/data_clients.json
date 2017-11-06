@@ -33,7 +33,7 @@
     "AllowedScopes": [
       "api1",
       "api2.read_only",
-      "idbase.invitations"
+      "idbase"
     ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,
@@ -537,7 +537,7 @@
       "email",
       "api1",
       "api2.read_only",
-      "idbase.invitations"
+      "idbase"
     ],
     "AlwaysIncludeUserClaimsInIdToken": false,
     "IdentityTokenLifetime": 300,

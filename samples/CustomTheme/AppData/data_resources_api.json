@@ -74,8 +74,8 @@
     ],
     "Scopes": [
       {
-        "Name": "idbase.invitations",
-        "DisplayName": "Full access to IdentityBase invitations API",
+        "Name": "idbase",
+        "DisplayName": "Full access to IdentityBase public API",
         "Description": null,
         "Required": false,
         "Emphasize": false,

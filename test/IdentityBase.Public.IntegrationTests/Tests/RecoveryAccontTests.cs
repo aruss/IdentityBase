@@ -2,54 +2,17 @@ namespace IdentityBase.Public.IntegrationTests
 {
     using System.Net;
     using System.Net.Http;
-    using System.Threading;
     using System.Threading.Tasks;
     using AngleSharp.Dom.Html;
     using FluentAssertions;
     using Microsoft.AspNetCore.TestHost;
-    using Microsoft.Extensions.DependencyInjection;
-    using Moq;
     using ServiceBase.Extensions;
-    using ServiceBase.Logging;
-    using ServiceBase.Notification.Email;
     using ServiceBase.Tests;
     using Xunit;
 
     [Collection("FooTests")]
     public class RecoveryAccontTests
     {
-        private TestServer CreateServer(
-            Mock<IEmailService> emailServiceMock = null)
-        {
-            return new TestServerBuilder()
-                .UseEnvironment("Test")
-                .UseContentRoot()
-                .AddServices(services =>
-                {
-                    if (emailServiceMock != null)
-                    {
-                        services.AddSingleton(emailServiceMock.Object);
-                    }
-                })
-                .AddStartup((environment) =>
-                {
-                    var builder = new TestConfigurationBuilder()
-                        .UseDefaultConfiguration();
-
-                    if (emailServiceMock != null)
-                    {
-                        builder.RemoveDebugEmailModule();
-                    }
-                    
-                    return new Startup(
-                        builder.Build(),
-                        environment,
-                        new NullLogger<Startup>()
-                    );
-                })
-                .Build();
-        }
-
         [Fact(DisplayName = "Forgot password / Confirm / Add new password / Login")]
         public async Task ForgotPassword_Confirm_AddNewPassword_Login()
         {
@@ -70,35 +33,39 @@ namespace IdentityBase.Public.IntegrationTests
 
                 });
 
-            TestServer server = this.CreateServer(emailServiceMock);
+            TestServer server = TestServerBuilderExtensions
+                .CreateServer(emailServiceMock);
+
             HttpClient client = server.CreateClient();
 
             // 1. Call the recovery page and Fill out the form and submit 
             HttpResponseMessage response = await client
-                .RecoveryGetAndPostForm("alice@localhost");
-
-            // Wait until we receive the mail 
-            // Thread.Yield(); 
+                .RecoveryGetAndPostFormAsync("alice@localhost");
+            
+            Assert.NotNull(confirmUrl);
+            Assert.NotNull(cancelUrl);
 
             // Call the confirmation link and fill out the form 
             HttpResponseMessage confirmResponse = await client
-                       .RecoveryConfirmGetAndPostForm(
-                            confirmUrl,
-                            "new-password"
-                        );
+                .RecoveryConfirmGetAndPostFormAsync(
+                    confirmUrl,
+                    "new-password"
+                );
 
             HttpResponseMessage consentPostResponse = await
-                client.ConstentPostForm(false, confirmResponse);
+                client.ConstentPostFormAsync(false, confirmResponse);
 
             // Calling confirm url again shouldnt be possible
-            await client.RecoveryConfirmGetInvalid(cancelUrl);
+            await client.RecoveryConfirmGetInvalidAsync(cancelUrl);
 
             // Calling cancel url shouldnt be possible after successfull
             // confirmation
-            await client.RecoveryCancelGetInvalid(cancelUrl);
+            await client.RecoveryCancelGetInvalidAsync(cancelUrl);
 
             HttpResponseMessage loginResponse = await client
-                .LoginGetAndPostForm("alice@localhost", "new-password");
+                .LoginGetAndPostFormAsync("alice@localhost", "new-password");
+
+            loginResponse.ShouldBeRedirectedToAuthorizeEndpoint();
         }
 
         [Fact(DisplayName = "Forgot password / Cancel")]
@@ -120,21 +87,23 @@ namespace IdentityBase.Public.IntegrationTests
                         .ToDictionary()["CancelUrl"].ToString();
                 });
 
-            TestServer server = this.CreateServer(emailServiceMock);
+            TestServer server = TestServerBuilderExtensions
+                .CreateServer(emailServiceMock);
+
             HttpClient client = server.CreateClient();
 
             // Call cancel url
-            await client.RecoveryCancelGetValid(cancelUrl);
+            await client.RecoveryCancelGetValidAsync(cancelUrl);
 
             // Calling cancel url again shouldnt be possible
-            await client.RecoveryCancelGetInvalid(cancelUrl);
+            await client.RecoveryCancelGetInvalidAsync(cancelUrl);
 
             // Calling confirm url shouldnt be possible after successfull
             // cancelation
-            await client.RecoveryConfirmGetInvalid(confirmUrl);
+            await client.RecoveryConfirmGetInvalidAsync(confirmUrl);
         }
 
-        [Theory(DisplayName = "Try_Recover")]
+        [Theory(DisplayName = "Forgot password ")]
 
         // Recovering non existing user should return a error message
         [InlineData("nothere@localhost", new string[] {
@@ -152,11 +121,11 @@ namespace IdentityBase.Public.IntegrationTests
             string email,
             string[] errorMsgs)
         {
-            TestServer server = this.CreateServer();
+            TestServer server = TestServerBuilderExtensions.CreateServer();
             HttpClient client = server.CreateClient();
 
             HttpResponseMessage response = await client
-              .RecoveryGetAndPostForm(email);
+              .RecoveryGetAndPostFormAsync(email);
 
             IHtmlDocument doc = await response.Content
                 .ReadAsHtmlDocumentAsync();
@@ -164,10 +133,10 @@ namespace IdentityBase.Public.IntegrationTests
             doc.ShouldContainErrors(errorMsgs);
         }
 
-        [Fact(DisplayName = "Try_Recover_Without_ReturnUrl")]
+        [Fact(DisplayName = "Forgot password / Without returnUrl")]
         public async Task Try_Recover_Without_ReturnUrl()
         {
-            TestServer server = this.CreateServer();
+            TestServer server = TestServerBuilderExtensions.CreateServer();
             HttpClient client = server.CreateClient();
             HttpResponseMessage response = await client.GetAsync($"/recover");
             response.StatusCode.Should().Be(HttpStatusCode.Redirect);

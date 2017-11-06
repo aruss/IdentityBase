@@ -17,6 +17,7 @@ namespace IdentityBase
             public const string UserAccountCreated = "UserAccountCreated";
             public const string UserAccountRecover = "UserAccountRecover";
             public const string UserAccountInvited = "UserAccountInvited";
+            public const string UserAccountEmailChanged = "UserAccountEmailChanged";
         }
 
         public static class ErrorMessages
@@ -36,7 +37,10 @@ namespace IdentityBase
                 "Recovery attempt with missing ReturnUrl parameter.";
 
             public const string EmailAddressAlreadyTaken =
-                "Email address is already taken."; 
+                "Email address is already taken.";
+
+            public const string InvalidCredentials =
+                "Invalid username or password."; 
         }
     }
 }

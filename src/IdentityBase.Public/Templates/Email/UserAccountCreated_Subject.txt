@@ -1,1 +1,1 @@
-﻿[{applicationName}] Account Created
+IdentityBase - Account Created.

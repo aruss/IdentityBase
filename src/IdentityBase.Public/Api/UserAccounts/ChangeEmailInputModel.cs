@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.Api.Invitations
+namespace IdentityBase.Public.Api.UserAccounts
 {
     using System.ComponentModel.DataAnnotations;
     public class ChangeEmailInputModel

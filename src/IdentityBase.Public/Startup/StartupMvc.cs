@@ -76,6 +76,15 @@ namespace IdentityBase.Public
 
                 .AddIf<Actions.Register.RegisterController>(
                     !appOptions.EnableAccountRegistration)
+
+                .AddIf<Api.UserAccounts.UserAccountDeleteController>(
+                    !appOptions.EnableUserAccountDeleteEndpoint)
+
+                .AddIf<Api.UserAccounts.ChangeEmailPostController>(
+                    !appOptions.EnableAccountChangeEmailEndpoint)
+
+                .AddIf<Actions.Account.ChangeEmailController>(
+                    !appOptions.EnableAccountChangeEmailEndpoint)
             ));
         }
 

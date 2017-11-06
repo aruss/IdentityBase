@@ -35,7 +35,7 @@ namespace IdentityBase.Public.Api.Invitations
         }
 
         [HttpPut("invitations")]
-        [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
+        [ScopeAuthorize("idbase", AuthenticationSchemes =
              IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)

@@ -49,7 +49,7 @@ namespace AspNetCoreWeb
                     options.Scope.Add("profile");
                     options.Scope.Add("email");
                     options.Scope.Add("api1");
-                    options.Scope.Add("idbase.invitations");
+                    options.Scope.Add("idbase");
                     options.Scope.Add("offline_access");
 
                     options.GetClaimsFromUserInfoEndpoint = true;

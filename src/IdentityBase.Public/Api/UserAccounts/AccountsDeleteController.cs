@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.Api.Invitations
+namespace IdentityBase.Public.Api.UserAccounts
 {
     using System;
     using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace IdentityBase.Public.Api.Invitations
         }
         
         [HttpDelete("useraccounts/{UserAccountId}")]
-        [ScopeAuthorize("idbase.useraccounts", AuthenticationSchemes =
+        [ScopeAuthorize("idbase", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {

@@ -86,15 +86,19 @@ namespace IdentityBase.Public.Actions.Login
                 {
                     if (!result.IsLoginAllowed)
                     {
-                        this.ModelState
-                            .AddModelError("User account is diactivated");
+                        this.ModelState.AddModelError(
+                            IdentityBaseConstants.ErrorMessages
+                                .UserAccountIsDeactivated
+                        );
                     }
                     else if (result.IsLocalAccount)
                     {
                         if (!result.IsPasswordValid)
                         {
-                            this.ModelState
-                                .AddModelError("Invalid credentials");
+                            this.ModelState.AddModelError(
+                                IdentityBaseConstants.ErrorMessages
+                                    .InvalidCredentials
+                            );
 
                             // TODO: Account locking on failed login attempts
                             // is not supported yet
@@ -117,8 +121,9 @@ namespace IdentityBase.Public.Actions.Login
                     }
                 }
 
-                this.ModelState
-                    .AddModelError("Invalid username or password.");
+                this.ModelState.AddModelError(
+                    IdentityBaseConstants.ErrorMessages.InvalidCredentials
+                );
             }
 
             // Something went wrong, show form with error
@@ -139,7 +144,7 @@ namespace IdentityBase.Public.Actions.Login
                 {
                     IsPersistent = true,
                     // TODO: use DateTimeAccessor
-                    ExpiresUtc = DateTimeOffset.UtcNow.Add( 
+                    ExpiresUtc = DateTimeOffset.UtcNow.Add(
                         TimeSpan.FromDays(
                             this.applicationOptions.RememberMeLoginDuration
                         )

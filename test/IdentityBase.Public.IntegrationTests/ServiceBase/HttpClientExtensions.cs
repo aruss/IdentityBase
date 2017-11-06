@@ -14,6 +14,25 @@ namespace ServiceBase.Tests
             string requestUri,
             object obj = null)
         {
+            return await client
+                .SendJsonAsync(HttpMethod.Put, requestUri, obj); 
+        }
+
+        public static async Task<HttpResponseMessage> PostJsonAsync(
+            this HttpClient client,
+            string requestUri,
+            object obj = null)
+        {
+            return await client
+                .SendJsonAsync(HttpMethod.Post, requestUri, obj);
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonAsync(
+            this HttpClient client,
+            HttpMethod method,
+            string requestUri,
+            object obj = null)
+        {
             string json;
             if (obj == null)
             {
@@ -24,13 +43,19 @@ namespace ServiceBase.Tests
                 json = JsonConvert.SerializeObject(obj,
                     JsonSerializerSettingsExtensions.CreateWithDefaults());
             }
-
+            
             StringContent content = new StringContent(
                 json,
                 Encoding.UTF8,
                 "application/json");
 
-            return await client.PutAsync(requestUri, content);
+            HttpRequestMessage request =
+                new HttpRequestMessage(method, requestUri)
+                {
+                    Content = content
+                };
+
+            return await client.SendAsync(request); 
         }
 
         public static async Task<HttpResponseMessage> PostAsync(

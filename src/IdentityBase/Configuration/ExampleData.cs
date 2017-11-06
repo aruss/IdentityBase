@@ -207,7 +207,7 @@ namespace IdentityBase.Configuration
                     AllowedScopes = {
                         "api1",
                         "api2.read_only",
-                        "idbase.invitations"
+                        "idbase"
                     }
                 },
 
@@ -443,7 +443,7 @@ namespace IdentityBase.Configuration
                         IdentityServerConstants.StandardScopes.Email,
                         "api1",
                         "api2.read_only",
-                        "idbase.invitations"
+                        "idbase"
                     }
                 },
 
@@ -587,10 +587,10 @@ namespace IdentityBase.Configuration
                     {
                         new Scope()
                         {
-                            Name = "idbase.invitations",
+                            Name = "idbase",
                             DisplayName =
-                                "Full access to IdentityBase invitations API",
-                        }
+                                "Full access to IdentityBase public API",
+                        }                        
                     }
                 }
             };

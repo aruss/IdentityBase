@@ -1,5 +1,6 @@
 namespace IdentityBase.Public.Actions.Recover
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
@@ -7,6 +8,7 @@ namespace IdentityBase.Public.Actions.Recover
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityServer4.Extensions;
+    using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -15,13 +17,12 @@ namespace IdentityBase.Public.Actions.Recover
 
     public class RecoverController : Controller
     {
-        private readonly ApplicationOptions applicationOptions;
-        private readonly ILogger<RecoverController> logger;
-        private readonly IIdentityServerInteractionService interaction;
-        private readonly IEmailService emailService;
-        private readonly ClientService clientService;
-        private readonly UserAccountService userAccountService;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly ApplicationOptions _applicationOptions;
+        private readonly ILogger<RecoverController> _logger;
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IEmailService _emailService;
+        private readonly ClientService _clientService;
+        private readonly UserAccountService _userAccountService;
 
         public RecoverController(
             ApplicationOptions applicationOptions,
@@ -30,31 +31,29 @@ namespace IdentityBase.Public.Actions.Recover
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
             ClientService clientService,
-            UserAccountService userAccountService,
-            IHttpContextAccessor httpContextAccessor)
+            UserAccountService userAccountService)
         {
-            this.applicationOptions = applicationOptions;
-            this.logger = logger;
-            this.interaction = interaction;
-            this.emailService = emailService;
-            this.clientService = clientService;
-            this.userAccountService = userAccountService;
-            this.httpContextAccessor = httpContextAccessor;
+            this._applicationOptions = applicationOptions;
+            this._logger = logger;
+            this._interaction = interaction;
+            this._emailService = emailService;
+            this._clientService = clientService;
+            this._userAccountService = userAccountService;
         }
 
         [HttpGet("recover", Name = "Recover")]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var vm = await this.CreateViewModelAsync(returnUrl);
+            RecoverViewModel vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
-                logger.LogWarning(IdentityBaseConstants.ErrorMessages
+                this._logger.LogWarning(IdentityBaseConstants.ErrorMessages
                     .RecoveryNoReturnUrl);
 
-                return Redirect(Url.Action("Index", "Error"));
+                return this.Redirect(Url.Action("Index", "Error"));
             }
 
-            return View(vm);
+            return this.View(vm);
         }
 
         [HttpPost("recover")]
@@ -64,24 +63,24 @@ namespace IdentityBase.Public.Actions.Recover
             if (ModelState.IsValid)
             {
                 // Load user by email
-                var email = model.Email.ToLower();
+                string email = model.Email.ToLower();
 
                 // Check if user with same email exists
-                var userAccount = await userAccountService
+                UserAccount userAccount = await this._userAccountService
                     .LoadByEmailAsync(email);
 
                 if (userAccount != null)
                 {
                     if (userAccount.IsLoginAllowed)
                     {
-                        await userAccountService
+                        await this._userAccountService
                             .SetResetPasswordVirificationKeyAsync(
                                 userAccount,
                                 model.ReturnUrl);
 
-                        await SendEmailAsync(userAccount);
+                        await this.SendEmailAsync(userAccount);
 
-                        return View("Success", new SuccessViewModel()
+                        return this.View("Success", new SuccessViewModel()
                         {
                             ReturnUrl = model.ReturnUrl,
                             Provider = userAccount.Email
@@ -91,56 +90,61 @@ namespace IdentityBase.Public.Actions.Recover
                     }
                     else
                     {
-                        ModelState.AddModelError(IdentityBaseConstants
+                        this.ModelState.AddModelError(IdentityBaseConstants
                             .ErrorMessages.UserAccountIsDeactivated);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(IdentityBaseConstants
+                    this.ModelState.AddModelError(IdentityBaseConstants
                         .ErrorMessages.UserAccountDoesNotExists);
                 }
 
-                return View(await CreateViewModelAsync(model, userAccount));
+                return this.View(
+                    await this.CreateViewModelAsync(model, userAccount)
+                );
             }
 
-            return View(await CreateViewModelAsync(model));
+            return this.View(await CreateViewModelAsync(model));
         }
 
         [HttpGet("recover/confirm/{key}", Name = "RecoverConfirm")]
         public async Task<IActionResult> Confirm(string key)
         {
-            var result = await userAccountService.HandleVerificationKeyAsync(
-                key,
-                VerificationKeyPurpose.ResetPassword
-            );
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ResetPassword
+                );
 
             if (result.UserAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                ModelState.AddModelError(IdentityBaseConstants
+                this.ModelState.AddModelError(IdentityBaseConstants
                     .ErrorMessages.TokenIsInvalid);
-                return View("InvalidToken");
+
+                return this.View("InvalidToken");
             }
 
-            var vm = new ConfirmViewModel
+            ConfirmViewModel vm = new ConfirmViewModel
             {
                 Key = key,
                 Email = result.UserAccount.Email
             };
 
-            return View(vm);
+            return this.View(vm);
         }
 
         [HttpPost("recover/confirm/{key}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(ConfirmInputModel model)
         {
-            var result = await userAccountService.HandleVerificationKeyAsync(
-                model.Key,
-                VerificationKeyPurpose.ResetPassword
-            );
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    model.Key,
+                    VerificationKeyPurpose.ResetPassword
+                );
 
             if (result.UserAccount == null ||
                 result.TokenExpired ||
@@ -148,10 +152,10 @@ namespace IdentityBase.Public.Actions.Recover
             {
                 // TODO: clear token if account is there 
 
-                ModelState.AddModelError(
+                this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
 
-                return View("InvalidToken");
+                return this.View("InvalidToken");
             }
 
             if (!ModelState.IsValid)
@@ -163,54 +167,64 @@ namespace IdentityBase.Public.Actions.Recover
                 });
             }
 
-            var returnUrl = result.UserAccount.VerificationStorage;
+            string returnUrl = result.UserAccount.VerificationStorage;
 
-            await userAccountService.SetNewPasswordAsync(
+            await this._userAccountService.SetNewPasswordAsync(
                 result.UserAccount,
-                model.Password);
+                model.Password
+            );
 
-            if (applicationOptions.LoginAfterAccountRecovery)
+            if (this._applicationOptions.LoginAfterAccountRecovery)
             {
-                await httpContextAccessor.HttpContext
-                    .SignInAsync(result.UserAccount, null);
+                await this.HttpContext.SignInAsync(result.UserAccount, null);
 
-                if (interaction.IsValidReturnUrl(returnUrl))
+                if (this._interaction.IsValidReturnUrl(returnUrl))
                 {
-                    return Redirect(returnUrl);
+                    return this.Redirect(returnUrl);
                 }
             }
 
-            return this.Redirect(Url.Action("Index", "Login",
-                new { ReturnUrl = returnUrl }));
+            return this.Redirect(
+                this.Url.Action(
+                    "Index",
+                    "Login",
+                    new { ReturnUrl = returnUrl }
+                )
+            );
         }
 
         [HttpGet("recover/cancel/{key}", Name = "RecoverCancel")]
         public async Task<IActionResult> Cancel(string key)
         {
-            var result = await userAccountService.HandleVerificationKeyAsync(
-                key,
-                VerificationKeyPurpose.ResetPassword
-            );
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ResetPassword
+                );
 
             if (result.UserAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
                 // TODO: clear token if account is there 
-
-                ModelState.AddModelError(
+                this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
 
-                return View("InvalidToken");
+                return this.View("InvalidToken");
             }
 
-            var returnUrl = result.UserAccount.VerificationStorage;
+            string returnUrl = result.UserAccount.VerificationStorage;
 
-            await this.userAccountService
+            await this._userAccountService
                 .ClearVerificationAsync(result.UserAccount);
 
-            return this.Redirect(Url.Action("Index", "Login",
-                new { ReturnUrl = returnUrl }));
+            return this.Redirect(
+                this.Url.Action(
+                    "Index",
+                    "Login",
+                    new { ReturnUrl = returnUrl }
+                )
+            );
         }
 
         [NonAction]
@@ -218,7 +232,8 @@ namespace IdentityBase.Public.Actions.Recover
             string returnUrl)
         {
             return await this.CreateViewModelAsync(
-                new RecoverInputModel { ReturnUrl = returnUrl });
+                new RecoverInputModel { ReturnUrl = returnUrl }
+            );
         }
 
         [NonAction]
@@ -226,7 +241,7 @@ namespace IdentityBase.Public.Actions.Recover
             RecoverInputModel inputModel,
             UserAccount userAccount = null)
         {
-            var context = await this.interaction
+            AuthorizationRequest context = await this._interaction
                 .GetAuthorizationContextAsync(inputModel.ReturnUrl);
 
             if (context == null)
@@ -234,20 +249,20 @@ namespace IdentityBase.Public.Actions.Recover
                 return null;
             }
 
-            var client = await this.clientService
+            Client client = await this._clientService
                 .FindEnabledClientByIdAsync(context.ClientId);
 
-            var providers = await this.clientService
-                .GetEnabledProvidersAsync(client);
+            IEnumerable<ExternalProvider> providers =
+                await this._clientService.GetEnabledProvidersAsync(client);
 
-            var vm = new RecoverViewModel(inputModel)
+            RecoverViewModel vm = new RecoverViewModel(inputModel)
             {
-                EnableAccountRegistration = applicationOptions
-                    .EnableAccountRegistration,
+                EnableAccountRegistration =
+                    this._applicationOptions.EnableAccountRegistration,
 
                 EnableLocalLogin = (client != null ?
                     client.EnableLocalLogin : false) &&
-                    applicationOptions.EnableLocalLogin,
+                    this._applicationOptions.EnableLocalLogin,
 
                 LoginHint = context.LoginHint,
                 ExternalProviders = providers.ToArray(),
@@ -265,7 +280,7 @@ namespace IdentityBase.Public.Actions.Recover
                 .EnsureTrailingSlash(this.HttpContext
                     .GetIdentityServerBaseUrl());
 
-            await emailService.SendEmailAsync(
+            await this._emailService.SendEmailAsync(
                 IdentityBaseConstants.EmailTemplates.UserAccountRecover,
                 userAccount.Email,
                 new

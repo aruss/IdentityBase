@@ -3,7 +3,6 @@ namespace IdentityBase.Public.IntegrationTests
     using System.Net.Http;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.TestHost;
-    using ServiceBase.Tests;
     using Xunit;
 
     [Collection("FooTests")]
@@ -12,9 +11,7 @@ namespace IdentityBase.Public.IntegrationTests
         [Fact(DisplayName = "Get LandingPage")]
         public async Task Get_LandingPage()
         {
-            TestServer server = new TestServerBuilder()
-                .UseDefaultSetup()
-                .Build();
+            TestServer server = TestServerBuilderExtensions.CreateServer();
 
             HttpClient client = server.CreateClient();
             HttpResponseMessage response = await client.GetAsync("/");

@@ -13,7 +13,7 @@ namespace IdentityBase.Public.IntegrationTests
 
     public static class HttpClientExtensions
     {
-        public static async Task<HttpResponseMessage> ConstentPostForm(
+        public static async Task<HttpResponseMessage> ConstentPostFormAsync(
             this HttpClient client,
             bool rememberMe,
             HttpResponseMessage formGetResponse)
@@ -35,12 +35,12 @@ namespace IdentityBase.Public.IntegrationTests
 
             HttpResponseMessage constentPostResponse = await client
                 .PostAsync(doc.GetFormAction(), form, constentGetResponse);
-                        
+
             constentPostResponse.EnsureSuccessStatusCode();
             return constentPostResponse;
         }
 
-        public static async Task<HttpResponseMessage> LoginGetAndPostForm(
+        public static async Task<HttpResponseMessage> LoginGetAndPostFormAsync(
             this HttpClient client,
             string emailAddress,
             string password,
@@ -67,15 +67,10 @@ namespace IdentityBase.Public.IntegrationTests
             HttpResponseMessage postResponse = await client
                 .PostAsync(doc.GetFormAction(), form, getResponse);
 
-            postResponse.StatusCode.Should().Be(HttpStatusCode.Found);
-
-            postResponse.Headers.Location.ToString().Should()
-                .StartWith("/connect/authorize/callback");
-
             return postResponse;
         }
-        
-        public static async Task<HttpResponseMessage> RecoveryConfirmGetAndPostForm(
+
+        public static async Task<HttpResponseMessage> RecoveryConfirmGetAndPostFormAsync(
             this HttpClient client,
             string confirmUrl,
             string newPassword,
@@ -102,7 +97,7 @@ namespace IdentityBase.Public.IntegrationTests
             return postResponse;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryGetForm(
+        public static async Task<HttpResponseMessage> RecoveryGetFormAsync(
             this HttpClient client,
             HttpResponseMessage prevResponse = null)
         {
@@ -116,7 +111,7 @@ namespace IdentityBase.Public.IntegrationTests
             return response;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryPostForm(
+        public static async Task<HttpResponseMessage> RecoveryPostFormAsync(
             this HttpClient client,
             string emailAddress,
             HttpResponseMessage formGetResponse)
@@ -135,17 +130,17 @@ namespace IdentityBase.Public.IntegrationTests
             return response;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryGetAndPostForm(
+        public static async Task<HttpResponseMessage> RecoveryGetAndPostFormAsync(
             this HttpClient client,
             string emailAddress,
             HttpResponseMessage prevResponse = null)
         {
-            return await client.RecoveryPostForm(
+            return await client.RecoveryPostFormAsync(
                 emailAddress,
-                await client.RecoveryGetForm(prevResponse));
+                await client.RecoveryGetFormAsync(prevResponse));
         }
 
-        public static async Task<HttpResponseMessage> RecoveryCancelGetValid(
+        public static async Task<HttpResponseMessage> RecoveryCancelGetValidAsync(
             this HttpClient client,
             string cancelUrl)
         {
@@ -154,22 +149,22 @@ namespace IdentityBase.Public.IntegrationTests
 
             response.EnsureSuccessStatusCode();
 
-            return response; 
+            return response;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryCancelGetInvalid(
+        public static async Task<HttpResponseMessage> RecoveryCancelGetInvalidAsync(
            this HttpClient client,
            string cancelUrl)
         {
             HttpResponseMessage response = await client
-                .RecoveryCancelGetValid(cancelUrl); 
+                .RecoveryCancelGetValidAsync(cancelUrl);
 
             // TODO: check for error message 
 
             return response;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryConfirmGetValid(
+        public static async Task<HttpResponseMessage> RecoveryConfirmGetValidAsync(
             this HttpClient client,
             string confirmUrl)
         {
@@ -181,59 +176,50 @@ namespace IdentityBase.Public.IntegrationTests
             return response;
         }
 
-        public static async Task<HttpResponseMessage> RecoveryConfirmGetInvalid(
+        public static async Task<HttpResponseMessage> RecoveryConfirmGetInvalidAsync(
            this HttpClient client,
            string confirmUrl)
         {
             HttpResponseMessage response = await client
-                .RecoveryConfirmGetValid(confirmUrl);
+                .RecoveryConfirmGetValidAsync(confirmUrl);
 
             // TODO: check for error message 
 
             return response;
         }
 
-        //public static async Task<HttpResponseMessage> InviteUserAccount(
-        //    this HttpClient client,
-        //    string email,
-        //    string clientId)
-        //{
-        //    HttpResponseMessage response = await client
-        //            .PutJsonAsync("/invitations", new
-        //            {
-        //                Email = email,
-        //                ClientId = clientId
-        //            });
-        //
-        //    response.EnsureSuccessStatusCode();
-        //
-        //
-        //    var schema = SchemaUtils.GenerateSchema<InvitationsPutResultModel>();
-        //
-        //    response.AssertSchema(@"{
-        //              'type': 'object',
-        //              'additionalProperties' : false,
-        //              'properties': {
-        //                'id': {
-        //                  'type': [
-        //                    'string',
-        //                    'null'
-        //                  ]
-        //                },
-        //                'error': {},
-        //                'stackTrace': {
-        //                  'type': [
-        //                    'string',
-        //                    'null'
-        //                  ]
-        //                }
-        //              },
-        //              'required': [
-        //                'type',
-        //                'error',
-        //                'stackTrace'
-        //              ]
-        //            }");
-        //}
+
+        public static async Task<HttpResponseMessage> RegisterConfirmGetAndPostFormAsync(
+            this HttpClient client,
+            string confirmUrl,
+            string password = null,
+            HttpResponseMessage prevResponse = null)
+        {
+            HttpResponseMessage getResponse = client.GetAsync(confirmUrl).Result;
+            getResponse.EnsureSuccessStatusCode();
+
+            IHtmlDocument doc = await getResponse.Content
+                .ReadAsHtmlDocumentAsync();
+
+            Dictionary<string, string> form = doc.GetFormInputs();
+            if (!String.IsNullOrWhiteSpace(password))
+            {
+                form["Password"] = password;
+                form["PasswordConfirm"] = password;
+            }
+
+            HttpResponseMessage postResponse = await client
+                .PostAsync(doc.GetFormAction(), form, getResponse);
+            
+            return postResponse;
+        }
+
+        public static void ShouldBeRedirectedToAuthorizeEndpoint(
+            this HttpResponseMessage response)
+        {
+            response.StatusCode.Should().Be(HttpStatusCode.Found);
+            response.Headers.Location.ToString().Should()
+                .StartWith("/connect/authorize/callback");
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace IdentityBase.Public.Api.Invitations
         }
 
         [HttpGet("invitations")]
-        [ScopeAuthorize("idbase.invitations", AuthenticationSchemes =
+        [ScopeAuthorize("idbase", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(PagedListInputModel request)
         {

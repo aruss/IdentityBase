@@ -100,20 +100,30 @@ namespace IdentityBase.Configuration
         public string ThemePath { get; set; } = "./Themes/Default";
 
         /// <summary>
-        /// Enbales invitation get API 
+        /// Enables invitation get API 
         /// </summary>
         public bool EnableInvitationGetEndpoint { get; set; } = false;
 
         /// <summary>
-        /// Enbales invitation create API 
+        /// Enables invitation create API 
         /// </summary>
         public bool EnableInvitationCreateEndpoint { get; set; } = false;
 
         /// <summary>
         /// Enbales invitation delete API 
-        /// </summary>
+        /// </Enables>
         public bool EnableInvitationDeleteEndpoint { get; set; } = false;
         
+        /// <summary>
+        /// Enbales user account delete API 
+        /// </Enables>
+        public bool EnableUserAccountDeleteEndpoint { get; set; } = false;
+
+        /// <summary>
+        /// Enables email change API 
+        /// </summary>
+        public bool EnableAccountChangeEmailEndpoint { get; set; } = false;
+
         /// <summary>
         /// In case idbase API is active, this will be used as secret for
         /// authentication

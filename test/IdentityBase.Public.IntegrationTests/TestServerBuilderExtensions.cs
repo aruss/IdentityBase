@@ -1,9 +1,14 @@
 namespace IdentityBase.Public.IntegrationTests
 {
+    using System;
     using System.IO;
+    using System.Net.Http;
     using IdentityBase.Public;
-    using Microsoft.Extensions.Configuration;
+    using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging.Abstractions;
+    using Moq;
+    using ServiceBase.Notification.Email;
     using ServiceBase.Tests;
 
     public static class TestServerBuilderExtensions
@@ -28,25 +33,45 @@ namespace IdentityBase.Public.IntegrationTests
 
             return builder.UseContentRoot(contentRoot);
         }
-
-        public static TestServerBuilder UseDefaultSetup(
-            this TestServerBuilder builder)
+        
+        public static TestServer CreateServer(
+            Mock<IEmailService> emailServiceMock = null,
+            Action<TestConfigurationBuilder> configBuild = null,
+            HttpMessageHandler messageHandler = null)
         {
-            return builder
+            return new TestServerBuilder()
                 .UseEnvironment("Test")
                 .UseContentRoot()
+                .AddServices(services =>
+                {
+                    if (emailServiceMock != null)
+                    {
+                        services.AddSingleton(emailServiceMock.Object);
+                    }
+                })
                 .AddStartup((environment) =>
                 {
-                    IConfiguration config = new TestConfigurationBuilder()
-                        .UseDefaultConfiguration()
-                        .Build();
+                    var builder = new TestConfigurationBuilder()
+                        .UseDefaultConfiguration();
+                    
+                    if (emailServiceMock != null)
+                    {
+                        builder.RemoveDebugEmailModule();
+                    }
+
+                    if (configBuild != null)
+                    {
+                        configBuild.Invoke(builder);
+                    }
 
                     return new Startup(
-                        config,
+                        builder.Build(),
                         environment,
-                        new NullLogger<Startup>()
+                        new NullLogger<Startup>(),
+                        messageHandler
                     );
-                });
+                })
+                .Build();
         }
     }
 }

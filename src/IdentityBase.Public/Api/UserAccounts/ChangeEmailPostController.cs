@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.Api.Invitations
+namespace IdentityBase.Public.Api.UserAccounts
 {
     using System;
     using System.Linq;
@@ -34,11 +34,11 @@ namespace IdentityBase.Public.Api.Invitations
         }
 
         [HttpPost("useraccounts/{UserAccountId}/change_email")]
-        [ScopeAuthorize("idbase.useraccounts", AuthenticationSchemes =
+        [ScopeAuthorize("idbase", AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post(
             [FromRoute]Guid userAccountId,
-            [FromRoute]ChangeEmailInputModel inputModel)
+            [FromBody]ChangeEmailInputModel inputModel)
         {
             // Check if user account to change exists
             UserAccount userAccount = await this._userAccountService
@@ -68,7 +68,7 @@ namespace IdentityBase.Public.Api.Invitations
             // Update user directly without sending confirmation email 
             await this._userAccountService.SetNewEmailAsync(
                userAccount,
-               inputModel.Email
+               inputModel.Email.ToLower()
             );
 
             return this.Ok();
@@ -118,26 +118,33 @@ namespace IdentityBase.Public.Api.Invitations
                     returnUri
                 );
 
+            await this.SendEmailAsync(
+                inputModel.Email,
+                userAccount.VerificationKey
+            ); 
+
             return this.Ok();
         }
 
         [NonAction]
-        internal async Task SendEmailAsync(UserAccount userAccount)
+        internal async Task SendEmailAsync(
+            string newEmail,
+            string verificationKey)
         {
             string baseUrl = ServiceBase.Extensions.StringExtensions
                 .RemoveTrailingSlash(this.HttpContext
                     .GetIdentityServerBaseUrl());
 
             await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountInvited,
-                userAccount.Email,
+                IdentityBaseConstants.EmailTemplates.UserAccountEmailChanged,
+                newEmail,
                 new
                 {
                     ConfirmUrl =
-                        $"{baseUrl}/email/confirm/{userAccount.VerificationKey}",
+                        $"{baseUrl}/email/confirm/{verificationKey}",
 
                     CancelUrl =
-                        $"{baseUrl}/email/cancel/{userAccount.VerificationKey}"
+                        $"{baseUrl}/email/cancel/{verificationKey}"
                 },
                 true
             );
