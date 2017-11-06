@@ -25,7 +25,7 @@ namespace ServiceBase.Tests
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Dictionary<string, string> Alter(string key, string value)
+        public TestConfigurationBuilder Alter(string key, string value)
         {
             if (this.config.ContainsKey(key))
             {
@@ -36,7 +36,7 @@ namespace ServiceBase.Tests
                 this.config.Add(key, value);
             }
 
-            return this.config;
+            return this;
         }
 
         /// <summary>

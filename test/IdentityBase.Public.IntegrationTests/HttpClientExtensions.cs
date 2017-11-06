@@ -8,6 +8,8 @@ namespace IdentityBase.Public.IntegrationTests
     using AngleSharp.Dom.Html;
     using FluentAssertions;
     using ServiceBase.Tests;
+    using IdentityBase.Public.Api.Invitations;
+    using ServiceBase.Tests;
 
     public static class HttpClientExtensions
     {
@@ -190,5 +192,48 @@ namespace IdentityBase.Public.IntegrationTests
 
             return response;
         }
+
+        //public static async Task<HttpResponseMessage> InviteUserAccount(
+        //    this HttpClient client,
+        //    string email,
+        //    string clientId)
+        //{
+        //    HttpResponseMessage response = await client
+        //            .PutJsonAsync("/invitations", new
+        //            {
+        //                Email = email,
+        //                ClientId = clientId
+        //            });
+        //
+        //    response.EnsureSuccessStatusCode();
+        //
+        //
+        //    var schema = SchemaUtils.GenerateSchema<InvitationsPutResultModel>();
+        //
+        //    response.AssertSchema(@"{
+        //              'type': 'object',
+        //              'additionalProperties' : false,
+        //              'properties': {
+        //                'id': {
+        //                  'type': [
+        //                    'string',
+        //                    'null'
+        //                  ]
+        //                },
+        //                'error': {},
+        //                'stackTrace': {
+        //                  'type': [
+        //                    'string',
+        //                    'null'
+        //                  ]
+        //                }
+        //              },
+        //              'required': [
+        //                'type',
+        //                'error',
+        //                'stackTrace'
+        //              ]
+        //            }");
+        //}
     }
 }

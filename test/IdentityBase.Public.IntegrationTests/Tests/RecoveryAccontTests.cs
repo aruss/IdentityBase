@@ -2,6 +2,7 @@ namespace IdentityBase.Public.IntegrationTests
 {
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
     using AngleSharp.Dom.Html;
     using FluentAssertions;
@@ -77,7 +78,7 @@ namespace IdentityBase.Public.IntegrationTests
                 .RecoveryGetAndPostForm("alice@localhost");
 
             // Wait until we receive the mail 
-            do { } while (confirmUrl == null);
+            // Thread.Yield(); 
 
             // Call the confirmation link and fill out the form 
             HttpResponseMessage confirmResponse = await client

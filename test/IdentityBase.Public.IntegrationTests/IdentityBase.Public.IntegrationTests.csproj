@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Compile Remove="ConfigBuilder.cs" />
-    <Compile Remove="SchemaUtils.cs" />
     <Compile Remove="TestServerBuilder2.cs" />
     <Compile Remove="Tests\GeneralTests.cs" />
     <Compile Remove="Tests\InviteTests.cs" />

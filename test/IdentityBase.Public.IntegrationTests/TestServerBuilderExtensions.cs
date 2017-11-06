@@ -46,7 +46,7 @@ namespace IdentityBase.Public.IntegrationTests
                         environment,
                         new NullLogger<Startup>()
                     );
-                }); 
+                });
         }
     }
 }
