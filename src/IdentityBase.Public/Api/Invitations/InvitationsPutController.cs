@@ -119,7 +119,7 @@ namespace IdentityBase.Public.Api.Invitations
         internal async Task SendEmailAsync(UserAccount userAccount)
         {
             string baseUrl = ServiceBase.Extensions.StringExtensions
-                .EnsureTrailingSlash(this.HttpContext
+                .RemoveTrailingSlash(this.HttpContext
                     .GetIdentityServerBaseUrl());
 
             await this.emailService.SendEmailAsync(
@@ -128,10 +128,10 @@ namespace IdentityBase.Public.Api.Invitations
                 new
                 {
                     ConfirmUrl =
-                        $"{baseUrl}register/confirm/{userAccount.VerificationKey}",
+                        $"{baseUrl}/register/confirm/{userAccount.VerificationKey}",
 
                     CancelUrl =
-                        $"{baseUrl}register/cancel/{userAccount.VerificationKey}"
+                        $"{baseUrl}/register/cancel/{userAccount.VerificationKey}"
                 },
                 true
             );

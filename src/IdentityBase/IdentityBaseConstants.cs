@@ -34,6 +34,9 @@ namespace IdentityBase
 
             public const string RecoveryNoReturnUrl =
                 "Recovery attempt with missing ReturnUrl parameter.";
+
+            public const string EmailAddressAlreadyTaken =
+                "Email address is already taken."; 
         }
     }
 }

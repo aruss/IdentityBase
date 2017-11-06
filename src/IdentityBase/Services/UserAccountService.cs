@@ -247,7 +247,7 @@ namespace IdentityBase.Services
             UserAccount userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            eventService.RaiseUserAccountCreatedSuccessEventAsync(
+            await eventService.RaiseUserAccountCreatedSuccessEventAsync(
                 userAccount,
                 IdentityServerConstants.LocalIdentityProvider);
 
@@ -263,7 +263,7 @@ namespace IdentityBase.Services
             UserAccount userAccount2 = await userAccountStore
                 .WriteAsync(userAccount);
 
-            eventService
+            await eventService
                 .RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
 
             return userAccount2;
@@ -368,7 +368,7 @@ namespace IdentityBase.Services
             await userAccountStore.WriteExternalAccountAsync(externalAccount);
 
             // Emit event
-            eventService.RaiseUserAccountUpdatedSuccessEventAsync(
+            await eventService.RaiseUserAccountUpdatedSuccessEventAsync(
                 userAccount);
         }
 
@@ -418,7 +418,7 @@ namespace IdentityBase.Services
                 });
 
             // Emit event
-            eventService.RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
+            await eventService.RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
 
             return externalAccount;
         }
@@ -449,10 +449,10 @@ namespace IdentityBase.Services
             var userAccount = await userAccountStore.WriteAsync(foo);
 
             // Emit events
-            eventService.RaiseUserAccountCreatedSuccessEventAsync(
+            await eventService.RaiseUserAccountCreatedSuccessEventAsync(
                 userAccount, IdentityServerConstants.LocalIdentityProvider);
 
-            eventService.RaiseUserAccountInvitedSuccessEventAsync(
+            await eventService.RaiseUserAccountInvitedSuccessEventAsync(
                 userAccount, invitedByUserAccount);
 
             return userAccount;
@@ -489,6 +489,35 @@ namespace IdentityBase.Services
             userAccount.PasswordHash = crypto.HashPassword(password,
                       applicationOptions.PasswordHashingIterationCount);
             userAccount.PasswordChangedAt = DateTime.UtcNow;
+
+            await UpdateUserAccountAsync(userAccount);
+        }
+
+        public async Task SetEmailChangeVirificationKeyAsync(
+            UserAccount userAccount,
+            string email, 
+            string returnUrl = null)
+        {
+            // TODO: Move to verification storage reader or something
+            string storage = Newtonsoft.Json.JsonConvert
+                .SerializeObject(new string[] { email, returnUrl }); 
+            
+            // Set verification key
+            this.SetVerification(userAccount,
+                VerificationKeyPurpose.ChangeEmail,
+                storage,
+                DateTime.UtcNow); // TODO: use time service
+
+            await UpdateUserAccountAsync(userAccount);
+        }
+
+        public async Task SetNewEmailAsync(
+            UserAccount userAccount,
+            string email)
+        {
+            ClearVerification(userAccount);
+            
+            userAccount.Email = email; 
 
             await UpdateUserAccountAsync(userAccount);
         }
