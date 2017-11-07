@@ -25,7 +25,7 @@
     "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
   },
   "EntityFramework": {
-    "MigrateDatabase": true,
+    "MigrateDatabase": false,
     "SeedExampleData": true,
     "EnsureDeleted": false,
     "CleanupTokens": true,
@@ -76,9 +76,11 @@
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
     "ThemePath": "./Themes/Default",
-    "EnableInvitationGetEndpoint": false,
-    "EnableInvitationCreateEndpoint": false,
-    "EnableInvitationDeleteEndpoint": false,
+    "EnableInvitationGetEndpoint": true,
+    "EnableInvitationCreateEndpoint": true,
+    "EnableInvitationDeleteEndpoint": true,
+    "EnableUserAccountDeleteEndpoint": true,
+    "EnableAccountChangeEmailEndpoint": true,
     "ApiSecret": "secret"
   },
   "Email": {
@@ -89,11 +91,12 @@
   },
 
   "Modules": [
-    { "Type": "IdentityBase.Public.EntityFramework.SqlServer.SqlServerModule, IdentityBase.Public.EntityFramework.SqlServer" },
+    { "Type": "IdentityBase.Public.EntityFramework.InMemoryModule, IdentityBase.Public.EntityFramework" },
+    // { "Type": "IdentityBase.Public.EntityFramework.SqlServer.SqlServerModule, IdentityBase.Public.EntityFramework.SqlServer" },
     // { "type": "IdentityBase.Public.EntityFramework.Npgsql.NpgsqlModule, IdentityBase.Public.EntityFramework.Npgsql" },
 
-    // { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
-    { "Type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+    { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+    // { "Type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
 
     { "Type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
     { "Type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },

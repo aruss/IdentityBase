@@ -10,8 +10,8 @@
     ],
     "Scopes": [
       {
-        "Name": "api1",
-        "DisplayName": "Some API 1",
+        "Name": "piq.full",
+        "DisplayName": "Full access to QUIPE API",
         "Description": null,
         "Required": false,
         "Emphasize": false,
@@ -20,8 +20,8 @@
       }
     ],
     "Enabled": true,
-    "Name": "api1",
-    "DisplayName": "Some API 1",
+    "Name": "piq",
+    "DisplayName": "QUIPE",
     "Description": null,
     "UserClaims": []
   },
@@ -36,46 +36,8 @@
     ],
     "Scopes": [
       {
-        "Name": "api2.full_access",
-        "DisplayName": "Full access to API 2",
-        "Description": null,
-        "Required": false,
-        "Emphasize": false,
-        "ShowInDiscoveryDocument": true,
-        "UserClaims": []
-      },
-      {
-        "Name": "api2.read_only",
-        "DisplayName": "Read only access to API 2",
-        "Description": null,
-        "Required": false,
-        "Emphasize": false,
-        "ShowInDiscoveryDocument": true,
-        "UserClaims": []
-      }
-    ],
-    "Enabled": true,
-    "Name": "api2",
-    "DisplayName": null,
-    "Description": null,
-    "UserClaims": [
-      "name",
-      "email"
-    ]
-  },
-  {
-    "ApiSecrets": [
-      {
-        "Description": null,
-        "Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
-        "Expiration": null,
-        "Type": "SharedSecret"
-      }
-    ],
-    "Scopes": [
-      {
         "Name": "idbase",
-        "DisplayName": "Full access to IdentityBase invitations API",
+        "DisplayName": "Full access to QUIPE API",
         "Description": null,
         "Required": false,
         "Emphasize": false,

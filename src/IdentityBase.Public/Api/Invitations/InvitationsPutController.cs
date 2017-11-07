@@ -91,7 +91,7 @@ namespace IdentityBase.Public.Api.Invitations
             {
                 return this.BadRequest(
                     nameof(inputModel.Email),
-                    "The Email field is invalid, UserAccount already exists."
+                    "The Email field is invalid, Email already taken."
                 );
             }
 

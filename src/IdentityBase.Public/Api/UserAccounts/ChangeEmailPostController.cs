@@ -55,7 +55,7 @@ namespace IdentityBase.Public.Api.UserAccounts
             {
                 return this.BadRequest(
                     nameof(inputModel.Email),
-                    "Email address is already taken."
+                    "The Email field is invalid, Email already taken."
                 );
             }
 
