@@ -124,7 +124,7 @@ namespace IdentityBase.Public.Api.UserAccounts
             await this.SendEmailAsync(
                 inputModel.Email,
                 userAccount.VerificationKey
-            ); 
+            );
 
             return this.Ok();
         }

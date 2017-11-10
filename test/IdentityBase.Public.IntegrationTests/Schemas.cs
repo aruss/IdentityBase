@@ -1,4 +1,4 @@
-﻿namespace IdentityBase.Public.IntegrationTests
+namespace IdentityBase.Public.IntegrationTests
 {
     public static class Schemas
     {
@@ -30,6 +30,18 @@
                     'createdAt',
                     'verificationKeySentAt'
                 ]
-            }"; 
+            }";
+
+        public static string ErrorResponse = @"{
+                'type': 'object',
+                'additionalProperties' : false,
+                'properties': {
+                'type': {
+                    'type': 'string'
+                },
+                'error': {
+                    'type': 'object'
+                }
+            }";
     }
 }
