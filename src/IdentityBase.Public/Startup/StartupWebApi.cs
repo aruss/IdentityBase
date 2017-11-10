@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public
 {
     using System.Net.Http;
@@ -38,9 +41,11 @@ namespace IdentityBase.Public
 
                     options.Authority = applicationOptions.PublicUrl;
 
+                    // TODO: extract to string extension
                     options.RequireHttpsMetadata =
                         applicationOptions.PublicUrl.IndexOf("https") > -1;
 
+                    // TODO: move to constants
                     options.ApiName = "idbase";
                     options.ApiSecret = applicationOptions.ApiSecret;
                 });

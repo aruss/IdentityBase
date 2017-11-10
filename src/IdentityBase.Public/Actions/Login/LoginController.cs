@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Login
 {
     using System;
@@ -18,11 +21,11 @@ namespace IdentityBase.Public.Actions.Login
     // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
     public class LoginController : Controller
     {
-        private readonly ApplicationOptions applicationOptions;
-        private readonly ILogger<LoginController> logger;
-        private readonly IIdentityServerInteractionService interaction;
-        private readonly UserAccountService userAccountService;
-        private readonly ClientService clientService;
+        private readonly ApplicationOptions _applicationOptions;
+        private readonly ILogger<LoginController> _logger;
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly UserAccountService _userAccountService;
+        private readonly ClientService _clientService;
 
         public LoginController(
             ApplicationOptions applicationOptions,
@@ -31,11 +34,11 @@ namespace IdentityBase.Public.Actions.Login
             UserAccountService userAccountService,
             ClientService clientService)
         {
-            this.applicationOptions = applicationOptions;
-            this.logger = logger;
-            this.interaction = interaction;
-            this.userAccountService = userAccountService;
-            this.clientService = clientService;
+            this._applicationOptions = applicationOptions;
+            this._logger = logger;
+            this._interaction = interaction;
+            this._userAccountService = userAccountService;
+            this._clientService = clientService;
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace IdentityBase.Public.Actions.Login
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
-                this.logger.LogError(
+                this._logger.LogError(
                     "Login attempt with missing returnUrl parameter");
 
                 return this.Redirect(Url.Action("Index", "Error"));
@@ -76,7 +79,7 @@ namespace IdentityBase.Public.Actions.Login
 
             if (this.ModelState.IsValid)
             {
-                var result = await this.userAccountService
+                var result = await this._userAccountService
                     .VerifyByEmailAndPasswordAsync(
                         model.Email,
                         model.Password
@@ -107,7 +110,7 @@ namespace IdentityBase.Public.Actions.Login
                         }
                         else
                         {
-                            return await SignInAsync(model, result);
+                            return await this.SignInAsync(model, result);
                         }
                     }
                     else
@@ -137,7 +140,7 @@ namespace IdentityBase.Public.Actions.Login
         {
             AuthenticationProperties props = null;
 
-            if (this.applicationOptions.EnableRememberLogin &&
+            if (this._applicationOptions.EnableRememberLogin &&
                 model.RememberLogin)
             {
                 props = new AuthenticationProperties
@@ -146,7 +149,7 @@ namespace IdentityBase.Public.Actions.Login
                     // TODO: use DateTimeAccessor
                     ExpiresUtc = DateTimeOffset.UtcNow.Add(
                         TimeSpan.FromDays(
-                            this.applicationOptions.RememberMeLoginDuration
+                            this._applicationOptions.RememberMeLoginDuration
                         )
                     )
                 };
@@ -154,12 +157,12 @@ namespace IdentityBase.Public.Actions.Login
 
             await this.HttpContext.SignInAsync(result.UserAccount, props);
 
-            await this.userAccountService
+            await this._userAccountService
                 .UpdateSuccessfulLoginAsync(result.UserAccount);
 
             // Make sure the returnUrl is still valid, and if yes -
             // redirect back to authorize endpoint
-            if (interaction.IsValidReturnUrl(model.ReturnUrl))
+            if (this._interaction.IsValidReturnUrl(model.ReturnUrl))
             {
                 return Redirect(model.ReturnUrl);
             }
@@ -182,7 +185,7 @@ namespace IdentityBase.Public.Actions.Login
             LoginInputModel inputModel,
             UserAccount userAccount = null)
         {
-            AuthorizationRequest context = await this.interaction
+            AuthorizationRequest context = await this._interaction
                 .GetAuthorizationContextAsync(inputModel.ReturnUrl);
 
             if (context == null)
@@ -192,13 +195,13 @@ namespace IdentityBase.Public.Actions.Login
 
             LoginViewModel vm = new LoginViewModel(inputModel)
             {
-                EnableRememberLogin = this.applicationOptions
+                EnableRememberLogin = this._applicationOptions
                     .EnableRememberLogin,
 
-                EnableAccountRegistration = this.applicationOptions
+                EnableAccountRegistration = this._applicationOptions
                     .EnableAccountRegistration,
 
-                EnableAccountRecover = this.applicationOptions
+                EnableAccountRecover = this._applicationOptions
                     .EnableAccountRecovery,
 
                 LoginHint = context.LoginHint,
@@ -217,17 +220,17 @@ namespace IdentityBase.Public.Actions.Login
                 return vm;
             }*/
 
-            Client client = await this.clientService
+            Client client = await this._clientService
                 .FindEnabledClientByIdAsync(context.ClientId);
 
-            IEnumerable<ExternalProvider> providers = await this.clientService
+            IEnumerable<ExternalProvider> providers = await this._clientService
                 .GetEnabledProvidersAsync(client);
 
             vm.ExternalProviders = providers.ToArray();
 
             vm.EnableLocalLogin = (client != null ?
                 client.EnableLocalLogin : false) &&
-                this.applicationOptions.EnableLocalLogin;
+                this._applicationOptions.EnableLocalLogin;
 
             if (userAccount != null)
             {

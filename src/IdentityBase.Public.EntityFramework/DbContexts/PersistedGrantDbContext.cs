@@ -72,7 +72,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigurePersistedGrantContext(_storeOptions);
+            modelBuilder.ConfigurePersistedGrantContext(this._storeOptions);
 
             base.OnModelCreating(modelBuilder);
         }

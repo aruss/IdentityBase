@@ -16,7 +16,8 @@ namespace IdentityBase.Public.EntityFramework
             {
                 options.DbContextOptions = (dbBuilder) =>
                 {
-                    dbBuilder.UseInMemoryDatabase("Put_value_from_config_here");
+                    dbBuilder
+                        .UseInMemoryDatabase("Put_value_from_config_here");
                 };
 
                 configuration.GetSection("EntityFramework").Bind(options);

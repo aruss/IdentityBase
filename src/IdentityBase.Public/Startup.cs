@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public
 {
     using System;
@@ -22,11 +25,11 @@ namespace IdentityBase.Public
     /// </summary>
     public class Startup : IStartup
     {
-        private readonly ILogger logger;
-        private readonly IHostingEnvironment environment;
-        private readonly IConfiguration configuration;
-        private readonly ModuleHost moduleHost;
-        private readonly HttpMessageHandler httpMessageHandler;
+        private readonly ILogger _logger;
+        private readonly IHostingEnvironment _environment;
+        private readonly IConfiguration _configuration;
+        private readonly ModuleHost _moduleHost;
+        private readonly HttpMessageHandler _httpMessageHandler;
 
         /// <summary>
         ///
@@ -46,33 +49,36 @@ namespace IdentityBase.Public
             ILogger<Startup> logger,
             HttpMessageHandler httpMessageHandler = null)
         {
-            this.logger = logger;
-            this.environment = environment;
-            this.configuration = configuration;
-            this.httpMessageHandler = httpMessageHandler;
-            
-            this.moduleHost = new ModuleHost(this.configuration);
+            this._logger = logger;
+            this._environment = environment;
+            this._configuration = configuration;
+            this._httpMessageHandler = httpMessageHandler;
+            this._moduleHost = new ModuleHost(configuration);
         }
 
         /// <summary>
-        ///
+        /// Configurates the services
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">
+        /// Instance of <see cref="IServiceCollection"/>.
+        /// </param>
+        /// <returns>
+        /// Instance of <see cref="IServiceProvider"/>.
+        /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            this.logger.LogInformation("Services Configure");
+            this._logger.LogInformation("Services Configure");
 
-            ApplicationOptions options = this.configuration.GetSection("App")
+            ApplicationOptions options = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
-            services.AddSingleton(this.configuration);
+            services.AddSingleton(this._configuration);
             services.AddSingleton(options);
 
             services.AddIdentityServer(
-                this.configuration,
-                this.logger,
-                this.environment);
+                this._configuration,
+                this._logger,
+                this._environment);
 
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
@@ -84,11 +90,11 @@ namespace IdentityBase.Public
             {
                 corsOpts.AddPolicy("CorsPolicy",
                     corsBuilder => corsBuilder.WithOrigins(
-                        this.configuration.GetValue<string>("Host:Cors")));
+                        this._configuration.GetValue<string>("Host:Cors")));
             });
 
-            services.AddWebApi(options, this.httpMessageHandler);
-            services.AddMvc(options, this.environment);
+            services.AddWebApi(options, this._httpMessageHandler);
+            services.AddMvc(options, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
             services
@@ -96,21 +102,27 @@ namespace IdentityBase.Public
                     IdentityServerConstants.ExternalCookieAuthenticationScheme)
                 .AddCookie();
 
-            this.moduleHost.ConfigureServices(services);
+            this._moduleHost.ConfigureServices(services);
 
-            services.ValidateDataLayerServices(this.logger);
-            services.ValidateEmailSenderServices(this.logger);
-            services.ValidateSmsServices(this.logger);
-            services.ValidateEventServices(this.logger);
+            services.ValidateDataLayerServices(this._logger);
+            services.ValidateEmailSenderServices(this._logger);
+            services.ValidateSmsServices(this._logger);
+            services.ValidateEventServices(this._logger);
 
-            this.logger.LogInformation("Services Configured");
+            this._logger.LogInformation("Services Configured");
 
             return services.BuildServiceProvider();
         }
 
+        /// <summary>
+        /// Configures the pipeline 
+        /// </summary>
+        /// <param name="app">
+        /// Instance of <see cref="IApplicationBuilder"/>.
+        /// </param>
         public virtual void Configure(IApplicationBuilder app)
         {
-            this.logger.LogInformation("Application Configure");
+            this._logger.LogInformation("Application Configure");
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
@@ -134,13 +146,13 @@ namespace IdentityBase.Public
             }
 
             app.UseCors("CorsPolicy");
-            app.UseStaticFiles(options, this.environment);
+            app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
 
-            this.moduleHost.Configure(app);
+            this._moduleHost.Configure(app);
 
             appLifetime.ApplicationStarted.Register(() =>
             {
@@ -149,21 +161,21 @@ namespace IdentityBase.Public
 
                 app.InitializeStores();
 
-                this.logger.LogInformation("Application Started");
+                this._logger.LogInformation("Application Started");
             });
 
             appLifetime.ApplicationStopping.Register(() =>
             {
-                this.logger.LogInformation("Application Stopping");
+                this._logger.LogInformation("Application Stopping");
                 app.CleanupStores();
             });
 
             appLifetime.ApplicationStopped.Register(() =>
             {
-                this.logger.LogInformation("Application Stopped");
+                this._logger.LogInformation("Application Stopped");
             });
 
-            this.logger.LogInformation("Application Configured");
+            this._logger.LogInformation("Application Configured");
         }
     }
 }

@@ -123,15 +123,15 @@
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="ServiceBase" Version="1.1.9" />
     <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.9" />
-    <PackageReference Include="ServiceBase.Notification.SendGrid" Version="1.1.9" />
-    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.1.9" />
-    <PackageReference Include="ServiceBase.Notification.Twilio" Version="1.1.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework.MySql\IdentityBase.Public.EntityFramework.MySql.csproj" />
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework.Npgsql\IdentityBase.Public.EntityFramework.Npgsql.csproj" />
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework.SqlServer\IdentityBase.Public.EntityFramework.SqlServer.csproj" />
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework\IdentityBase.Public.EntityFramework.csproj" />
+    <ProjectReference Include="..\IdentityBase.Public.SendGrid\IdentityBase.Public.SendGrid.csproj" />
+    <ProjectReference Include="..\IdentityBase.Public.Smtp\IdentityBase.Public.Smtp.csproj" />
+    <ProjectReference Include="..\IdentityBase.Public.Twilio\IdentityBase.Public.Twilio.csproj" />
     <ProjectReference Include="..\IdentityBase\IdentityBase.csproj" />
   </ItemGroup>
   <ItemGroup>

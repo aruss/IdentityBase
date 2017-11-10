@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Account
 {
     using System;
@@ -18,7 +21,7 @@ namespace IdentityBase.Public.Actions.Account
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEmailService _emailService;
         private readonly UserAccountService _userAccountService;
-
+        
         public ChangeEmailController(
             ApplicationOptions applicationOptions,
             ILogger<ChangeEmailController> logger,

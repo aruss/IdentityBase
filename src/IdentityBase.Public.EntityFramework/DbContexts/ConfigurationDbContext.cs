@@ -18,7 +18,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
     /// <seealso cref="Interfaces.IConfigurationDbContext" />
     public class ConfigurationDbContext : DbContext, IConfigurationDbContext
     {
-        private readonly EntityFrameworkOptions storeOptions;
+        private readonly EntityFrameworkOptions _storeOptions;
 
         /// <summary>
         /// Initializes a new instance of the
@@ -32,7 +32,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
             EntityFrameworkOptions storeOptions)
             : base(options)
         {
-            this.storeOptions = storeOptions ?? throw
+            this._storeOptions = storeOptions ?? throw
                 new ArgumentNullException(nameof(storeOptions));
         }
 
@@ -88,8 +88,8 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigureClientContext(storeOptions);
-            modelBuilder.ConfigureResourcesContext(storeOptions);
+            modelBuilder.ConfigureClientContext(this._storeOptions);
+            modelBuilder.ConfigureResourcesContext(this._storeOptions);
 
             base.OnModelCreating(modelBuilder);
         }

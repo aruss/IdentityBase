@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Services
 {
     using IdentityModel;
@@ -11,11 +14,11 @@ namespace IdentityBase.Services
 
     public class ProfileService : IProfileService
     {
-        private readonly IUserAccountStore userAccountStore;
+        private readonly IUserAccountStore _userAccountStore;
 
         public ProfileService(IUserAccountStore userAccountStore)
         {
-            this.userAccountStore = userAccountStore;
+            this._userAccountStore = userAccountStore;
         }
 
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -23,11 +26,11 @@ namespace IdentityBase.Services
             Guid userAccountId = Guid.Parse(context.Subject
                 .FindFirst(JwtClaimTypes.Subject).Value);
 
-            UserAccount userAccount = this.userAccountStore
+            UserAccount userAccount = this._userAccountStore
                 .LoadByIdAsync(userAccountId).Result;
 
             // TODO: get claims from db user
-            var claims = new List<Claim>
+            List<Claim> claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Subject, userAccount.Id.ToString()),
                 new Claim(JwtClaimTypes.Email, userAccount.Email),
@@ -49,7 +52,7 @@ namespace IdentityBase.Services
             Guid userId = Guid.Parse(context.Subject
                 .FindFirst(JwtClaimTypes.Subject).Value);
 
-            UserAccount user = this.userAccountStore
+            UserAccount user = this._userAccountStore
                 .LoadByIdAsync(userId).Result;
 
             context.IsActive = user != null && user.IsLoginAllowed;

@@ -8,32 +8,34 @@ namespace Microsoft.Extensions.DependencyInjection
 
     internal class TokenCleanupHostedService : IHostedService
     {
-        private readonly TokenCleanupService tokenCleanup;
-        private readonly EntityFrameworkOptions options;
+        private readonly TokenCleanupService _tokenCleanup;
+        private readonly EntityFrameworkOptions _options;
 
         public TokenCleanupHostedService(
             TokenCleanupService tokenCleanup,
             EntityFrameworkOptions options)
         {
-            this.tokenCleanup = tokenCleanup;
-            this.options = options;
+            this._tokenCleanup = tokenCleanup;
+            this._options = options;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (this.options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
             {
-                this.tokenCleanup.Start(cancellationToken);
+                this._tokenCleanup.Start(cancellationToken);
             }
+
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (this.options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
             {
-                this.tokenCleanup.Stop();
+                this._tokenCleanup.Stop();
             }
+
             return Task.CompletedTask;
         }
     }

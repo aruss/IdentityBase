@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Register
 {
     using IdentityBase.Models;
@@ -20,8 +23,11 @@ namespace IdentityBase.Public.Actions.Register
         }
 
         public bool EnableLocalLogin { get; set; }
+
         public bool EnableAccountRecover { get; set; }
+
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
+
         public IEnumerable<string> ExternalProviderHints { get; set; }       
     }
 }

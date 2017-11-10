@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace ServiceBase.Modules
 {
     using System;
@@ -9,17 +12,17 @@ namespace ServiceBase.Modules
 
     public class ModuleHost
     {
-        private readonly IEnumerable<IModule> modules;
-        private readonly IConfiguration configuration;
+        private readonly IEnumerable<IModule> _modules;
+        private readonly IConfiguration _configuration;
 
         public ModuleHost(IConfiguration configuration)
         {
-            this.configuration = configuration ??
+            this._configuration = configuration ??
                 throw new ArgumentNullException(nameof(configuration));
 
             ModulesOptions options = configuration.Get<ModulesOptions>();
 
-            this.modules = options.Modules.Select(s =>
+            this._modules = options.Modules.Select(s =>
             {
                 Type type = Type.GetType(s.Type);
                 IModule module = (IModule)Activator.CreateInstance(type);
@@ -30,7 +33,7 @@ namespace ServiceBase.Modules
 
         public void Configure(IApplicationBuilder app)
         {
-            foreach (IModule module in this.modules)
+            foreach (IModule module in this._modules)
             {
                 module.Configure(app);
             }
@@ -38,9 +41,9 @@ namespace ServiceBase.Modules
 
         public void ConfigureServices(IServiceCollection services)
         {
-            foreach (IModule module in this.modules)
+            foreach (IModule module in this._modules)
             {
-                module.ConfigureServices(services, this.configuration);
+                module.ConfigureServices(services, this._configuration);
             }
         }
     }

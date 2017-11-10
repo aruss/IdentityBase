@@ -16,8 +16,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
     /// <seealso cref="IdentityServer4.Stores.IClientStore" />
     public class ClientStore : IClientStore
     {
-        private readonly IConfigurationDbContext context;
-        private readonly ILogger<ClientStore> logger;
+        private readonly IConfigurationDbContext _context;
+        private readonly ILogger<ClientStore> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientStore"/> class.
@@ -29,10 +29,10 @@ namespace IdentityBase.Public.EntityFramework.Stores
             IConfigurationDbContext context,
             ILogger<ClientStore> logger)
         {
-            this.context = context ?? throw
+            this._context = context ?? throw
                 new ArgumentNullException(nameof(context));
 
-            this.logger = logger;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// </returns>
         public Task<Client> FindClientByIdAsync(string clientId)
         {
-            Entities.Client client = this.context.Clients
+            Entities.Client client = this._context.Clients
                 .Include(x => x.AllowedGrantTypes)
                 .Include(x => x.RedirectUris)
                 .Include(x => x.PostLogoutRedirectUris)
@@ -58,7 +58,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             Client model = client?.ToModel();
 
-            this.logger.LogDebug(
+            this._logger.LogDebug(
                 "{clientId} found in database: {clientIdFound}",
                 clientId, model != null);
 

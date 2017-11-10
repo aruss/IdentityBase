@@ -1,3 +1,5 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 namespace IdentityBase.Services
 {
@@ -8,24 +10,27 @@ namespace IdentityBase.Services
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Http;
-
+    using Microsoft.AspNetCore.Authentication;
+    
     // TODO: Move to tenant service
     public class ClientService
     {
-        private IHttpContextAccessor contextAccessor;
-        private IClientStore clientStore;
+        private IHttpContextAccessor _contextAccessor;
+        private IClientStore _clientStore;
 
         public ClientService(
             IClientStore clientStore,
             IHttpContextAccessor contextAccessor)
         {
-            this.contextAccessor = contextAccessor;
-            this.clientStore = clientStore;
+            this._contextAccessor = contextAccessor;
+            this._clientStore = clientStore;
         }
 
         public async Task<Client> FindEnabledClientByIdAsync(string clientId)
         {
-            var client = await clientStore.FindClientByIdAsync(clientId);
+            Client client = await this._clientStore
+                .FindClientByIdAsync(clientId);
+
             if (client != null && client.Enabled == true)
             {
                 return client;
@@ -38,7 +43,7 @@ namespace IdentityBase.Services
             GetEnabledProvidersAsync(Client client)
         {
             // TODO: Filter enabled providers by tenant
-            var providers = this.contextAccessor.HttpContext
+            var providers = this._contextAccessor.HttpContext
                 .Authentication.GetAuthenticationSchemes()
 
                   .Where(x => x.DisplayName != null)

@@ -8,8 +8,6 @@ namespace IdentityBase.Public.IntegrationTests
     using AngleSharp.Dom.Html;
     using FluentAssertions;
     using ServiceBase.Tests;
-    using IdentityBase.Public.Api.Invitations;
-    using ServiceBase.Tests;
 
     public static class HttpClientExtensions
     {

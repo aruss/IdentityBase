@@ -14,14 +14,14 @@ namespace IdentityBase.Public.EntityFramework
         IPersistedGrantDbContext,
         IUserAccountDbContext
     {
-        private readonly EntityFrameworkOptions storeOptions;
+        private readonly EntityFrameworkOptions _storeOptions;
 
         public MigrationDbContext(
             DbContextOptions<MigrationDbContext> options,
             EntityFrameworkOptions storeOptions)
             : base(options)
         {
-            this.storeOptions = storeOptions ??
+            this._storeOptions = storeOptions ??
                 throw new ArgumentNullException(nameof(storeOptions));
         }
 
@@ -46,10 +46,10 @@ namespace IdentityBase.Public.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigureClientContext(storeOptions);
-            modelBuilder.ConfigureResourcesContext(storeOptions);
-            modelBuilder.ConfigurePersistedGrantContext(storeOptions);
-            modelBuilder.ConfigureUserAccountContext(storeOptions);
+            modelBuilder.ConfigureClientContext(this._storeOptions);
+            modelBuilder.ConfigureResourcesContext(this._storeOptions);
+            modelBuilder.ConfigurePersistedGrantContext(this._storeOptions);
+            modelBuilder.ConfigureUserAccountContext(this._storeOptions);
 
             base.OnModelCreating(modelBuilder);
         }

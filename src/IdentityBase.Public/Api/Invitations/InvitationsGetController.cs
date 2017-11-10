@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Api.Invitations
 {
     using System.Linq;
@@ -16,14 +19,14 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(ModelStateFilter))]
     public class InvitationsGetController : ApiController
     {
-        private readonly UserAccountService userAccountService;
+        private readonly UserAccountService _userAccountService;
 
         public InvitationsGetController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore)
         {
-            this.userAccountService = userAccountService;
+            this._userAccountService = userAccountService;
         }
 
         [HttpGet("invitations")]
@@ -31,7 +34,7 @@ namespace IdentityBase.Public.Api.Invitations
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(PagedListInputModel request)
         {
-            PagedList<UserAccount> list = await this.userAccountService
+            PagedList<UserAccount> list = await this._userAccountService
                 .LoadInvitedUserAccountsAsync(request.Take, request.Skip);
 
             var result = new PagedList<InvitationsPutResultModel>
