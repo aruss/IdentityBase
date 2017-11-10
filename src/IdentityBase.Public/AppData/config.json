@@ -95,8 +95,8 @@
     // { "Type": "IdentityBase.Public.EntityFramework.SqlServer.SqlServerModule, IdentityBase.Public.EntityFramework.SqlServer" },
     // { "type": "IdentityBase.Public.EntityFramework.Npgsql.NpgsqlModule, IdentityBase.Public.EntityFramework.Npgsql" },
 
-    { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
-    // { "Type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+    // { "type": "IdentityBase.Public.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.Public.EntityFramework" },
+    { "Type": "IdentityBase.Public.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.Public.EntityFramework" },
 
     { "Type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
     { "Type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },

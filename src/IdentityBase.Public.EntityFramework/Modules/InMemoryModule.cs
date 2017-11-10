@@ -1,5 +1,6 @@
 namespace IdentityBase.Public.EntityFramework
 {
+    using IdentityBase.Public.EntityFramework.Options;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -26,7 +27,19 @@ namespace IdentityBase.Public.EntityFramework
 
         public void Configure(IApplicationBuilder app)
         {
+            using (IServiceScope serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                EntityFrameworkOptions options = serviceScope.ServiceProvider
+                    .GetService<EntityFrameworkOptions>();
 
+                if (options != null)
+                {
+                    // Disable migration since InMemoryDatabase does not
+                    // require one 
+                    options.MigrateDatabase = false;
+                }
+            }            
         }
     }
 }

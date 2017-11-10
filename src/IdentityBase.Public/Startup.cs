@@ -154,28 +154,28 @@ namespace IdentityBase.Public
 
             this._moduleHost.Configure(app);
 
-            appLifetime.ApplicationStarted.Register(() =>
-            {
-                // TODO: implement leader election
-                options.Leader = true;
-
-                app.InitializeStores();
-
-                this._logger.LogInformation("Application Started");
-            });
-
-            appLifetime.ApplicationStopping.Register(() =>
-            {
-                this._logger.LogInformation("Application Stopping");
-                app.CleanupStores();
-            });
-
-            appLifetime.ApplicationStopped.Register(() =>
-            {
-                this._logger.LogInformation("Application Stopped");
-            });
-
-            this._logger.LogInformation("Application Configured");
+            //appLifetime.ApplicationStarted.Register(() =>
+            //{
+            //    // TODO: implement leader election
+            //    options.Leader = true;
+            //
+            //    app.InitializeStores();
+            //
+            //    this._logger.LogInformation("Application Started");
+            //});
+            //
+            //appLifetime.ApplicationStopping.Register(() =>
+            //{
+            //    this._logger.LogInformation("Application Stopping");
+            //    app.CleanupStores();
+            //});
+            //
+            //appLifetime.ApplicationStopped.Register(() =>
+            //{
+            //    this._logger.LogInformation("Application Stopped");
+            //});
+            //
+            //this._logger.LogInformation("Application Configured");
         }
     }
 }

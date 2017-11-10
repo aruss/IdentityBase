@@ -16,11 +16,6 @@ namespace IdentityBase.Public
             this IServiceCollection services,
             ILogger logger)
         {
-            if (services.IsAdded<IStoreInitializer>())
-            {
-                logger.LogInformation("IStoreInitializer registered.");
-            }
-
             if (!services.IsAdded<IClientStore>())
             {
                 throw new Exception("IClientStore not registered.");

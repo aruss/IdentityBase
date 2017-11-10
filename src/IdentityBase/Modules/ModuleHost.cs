@@ -22,13 +22,15 @@ namespace ServiceBase.Modules
 
             ModulesOptions options = configuration.Get<ModulesOptions>();
 
-            this._modules = options.Modules.Select(s =>
-            {
-                Type type = Type.GetType(s.Type);
-                IModule module = (IModule)Activator.CreateInstance(type);
+            this._modules = options.Modules
+                .Select(s =>
+                {
+                    Type type = Type.GetType(s.Type);
+                    IModule module = (IModule)Activator.CreateInstance(type);
 
-                return module;
-            });
+                    return module;
+                }
+            );
         }
 
         public void Configure(IApplicationBuilder app)

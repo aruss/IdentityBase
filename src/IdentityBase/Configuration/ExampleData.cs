@@ -592,7 +592,7 @@ namespace IdentityBase.Configuration
                         {
                             Name = "idbase",
                             DisplayName =
-                                "Full access to IdentityBase public API",
+                                "Full access to IdentityBase API",
                         }                        
                     }
                 }

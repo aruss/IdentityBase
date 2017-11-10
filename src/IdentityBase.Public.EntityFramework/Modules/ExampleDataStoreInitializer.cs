@@ -10,7 +10,7 @@ namespace IdentityBase.Public.EntityFramework
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
-    public class ExampleDataStoreInitializer : IStoreInitializer
+    public class ExampleDataStoreInitializer
     {
         private readonly EntityFrameworkOptions options;
         private readonly ApplicationOptions appOptions;
