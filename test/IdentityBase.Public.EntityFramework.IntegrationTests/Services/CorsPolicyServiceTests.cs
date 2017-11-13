@@ -9,7 +9,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Services
     using IdentityBase.Public.EntityFramework.DbContexts;
     using IdentityBase.Public.EntityFramework.Interfaces;
     using IdentityBase.Public.EntityFramework.Mappers;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Services;
     using IdentityServer4.Models;
     using Microsoft.AspNetCore.Http;
