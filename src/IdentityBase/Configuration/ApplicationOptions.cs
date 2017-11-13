@@ -17,6 +17,10 @@ namespace IdentityBase.Configuration
 
         public int PasswordHashingIterationCount { get; set; } = 0;
         public int AccountLockoutFailedLoginAttempts { get; set; } = 5;
+
+        /// <summary>
+        /// Duration for account lockout in seconds
+        /// </summary>
         public int AccountLockoutDuration { get; set; } = 600; // 10 minutes
 
         /// <summary>
@@ -62,9 +66,9 @@ namespace IdentityBase.Configuration
         public bool LoginAfterAccountRecovery { get; set; } = true;
 
         /// <summary>
-        /// Timespan the confirmation and concelation links a valid in minutes
+        /// Timespan the confirmation and concelation links a valid in seconds
         /// </summary>
-        public int VerificationKeyLifetime { get; set; } = 1440; // 24 hours
+        public int VerificationKeyLifetime { get; set; } = 86400; // 24 hours
 
         public bool EnableAccountRegistration { get; set; } = true;
 
@@ -72,7 +76,7 @@ namespace IdentityBase.Configuration
 
         /// <summary>
         /// Automatically merges third party accounts with local account if
-        /// email matches
+        /// email matches.
         /// </summary>
         public bool AutomaticAccountMerge { get; set; } = true;
 
@@ -81,9 +85,9 @@ namespace IdentityBase.Configuration
         public bool EnableLocalLogin { get; set; } = true;
 
         /// <summary>
-        /// How long should Remember Login last in days
+        /// How long should Remember Login last in seconds.
         /// </summary>
-        public double RememberMeLoginDuration { get; set; } = 30;
+        public double RememberMeLoginDuration { get; set; } = 28800; // 8 hours
 
         public bool ShowLogoutPrompt { get; set; } = false;
 

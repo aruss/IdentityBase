@@ -317,7 +317,7 @@ namespace IdentityBase.Services
             if (userAccount.VerificationKeySentAt.HasValue)
             {
                 var validTill = userAccount.VerificationKeySentAt.Value +
-                    TimeSpan.FromMinutes(
+                    TimeSpan.FromSeconds(
                         applicationOptions.VerificationKeyLifetime
                     );
 

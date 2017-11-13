@@ -148,7 +148,7 @@ namespace IdentityBase.Public.Actions.Login
                     IsPersistent = true,
                     // TODO: use DateTimeAccessor
                     ExpiresUtc = DateTimeOffset.UtcNow.Add(
-                        TimeSpan.FromDays(
+                        TimeSpan.FromSeconds(
                             this._applicationOptions.RememberMeLoginDuration
                         )
                     )
