@@ -15,7 +15,7 @@ namespace IdentityBase.Public.IntegrationTests
     [Collection("ApiChangeEmailTests")]
     public class ApiChangeEmailTests
     {
-        const string aliceId =    "0c2954d2-4c73-44e3-b0f2-c00403e4adef";
+        const string aliceId = "0c2954d2-4c73-44e3-b0f2-c00403e4adef";
         const string notFoundId = "00000000-4c73-ffe4-b0f2-c00403e4adee";
 
         private TestServer CreateServer(
@@ -71,6 +71,40 @@ namespace IdentityBase.Public.IntegrationTests
             // Try authenticate
         }
 
+        [Fact(DisplayName = "API: Change email / Force update")]
+        public async Task ChangeEmail_FoceUpdate()
+        {
+            string confirmUrl = null;
+            string cancelUrl = null;
+
+            // Mock the email service to intercept the outgoing email messages
+            var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
+                IdentityBaseConstants.EmailTemplates.UserAccountEmailChanged,
+                "nerd@localhost", (templateName, emailTo, viewData, isHtml) =>
+                {
+                    // 2. Get confirm url and call it
+                    confirmUrl = viewData
+                        .ToDictionary()["ConfirmUrl"].ToString();
+
+                    cancelUrl = viewData
+                        .ToDictionary()["CancelUrl"].ToString();
+
+                });
+
+            TestServer server = this.CreateServer(emailServiceMock);
+            HttpClient client = await server.CreateAuthenticatedClient();
+
+            string uri = $"/useraccounts/{aliceId}/change_email";
+            HttpResponseMessage response = await client.PostJsonAsync(uri, new
+            {
+                Email = "nerd@localhost",
+                ClientId = "mvc.hybrid",
+                Force = true
+            });
+
+            response.EnsureSuccessStatusCode();
+            var json = response.Content.ReadAsStringAsync().Result;
+        }
 
         [Fact(DisplayName = "API: Change email / User does not exists")]
         public async Task ChangeEmail_UserDoesNotExists()
@@ -131,7 +165,6 @@ namespace IdentityBase.Public.IntegrationTests
             json.Should().Be("{\"type\":\"SerializableError\",\"error\":{\"clientId\":[\"The ClientId field is required.\"]}}");
         }
 
-
         [Fact(DisplayName = "API: Change email / Invalid ClientId")]
         public async Task ChangeEmail_InvalidClientId()
         {
@@ -148,9 +181,9 @@ namespace IdentityBase.Public.IntegrationTests
 
             response.StatusCode
                 .Should().Be(System.Net.HttpStatusCode.BadRequest);
-            
+
             string json = await response.Content.ReadAsStringAsync();
-            json.Should().Be("{\"type\":\"SerializableError\",\"error\":{\"clientId\":[\"The ClientId field is invalid.\"]}}"); 
+            json.Should().Be("{\"type\":\"SerializableError\",\"error\":{\"clientId\":[\"The ClientId field is invalid.\"]}}");
         }
     }
 }
