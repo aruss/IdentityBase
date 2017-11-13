@@ -12,9 +12,7 @@ namespace IdentityBase.Configuration
         public string PublicUrl { get; set; } = "http://localhost:5000";
 
         public string TempFolder { get; set; } = "./AppData/Temp";
-
-        public bool Leader { get; set; } = true;
-
+        
         // Local account options
 
         public int PasswordHashingIterationCount { get; set; } = 0;

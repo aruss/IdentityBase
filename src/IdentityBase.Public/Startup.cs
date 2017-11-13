@@ -7,7 +7,6 @@ namespace IdentityBase.Public
     using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
-    using IdentityBase.Extensions;
     using IdentityBase.Services;
     using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
@@ -126,10 +125,7 @@ namespace IdentityBase.Public
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
-
-            IApplicationLifetime appLifetime = app.ApplicationServices
-                .GetRequiredService<IApplicationLifetime>();
-
+            
             ApplicationOptions options = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
@@ -153,29 +149,6 @@ namespace IdentityBase.Public
             app.UseMvcWithDefaultRoute();
 
             this._moduleHost.Configure(app);
-
-            //appLifetime.ApplicationStarted.Register(() =>
-            //{
-            //    // TODO: implement leader election
-            //    options.Leader = true;
-            //
-            //    app.InitializeStores();
-            //
-            //    this._logger.LogInformation("Application Started");
-            //});
-            //
-            //appLifetime.ApplicationStopping.Register(() =>
-            //{
-            //    this._logger.LogInformation("Application Stopping");
-            //    app.CleanupStores();
-            //});
-            //
-            //appLifetime.ApplicationStopped.Register(() =>
-            //{
-            //    this._logger.LogInformation("Application Stopped");
-            //});
-            //
-            //this._logger.LogInformation("Application Configured");
         }
     }
 }
