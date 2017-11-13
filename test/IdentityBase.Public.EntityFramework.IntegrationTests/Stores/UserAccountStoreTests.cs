@@ -6,7 +6,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.Stores
     using IdentityBase.Models;
     using IdentityBase.Public.EntityFramework.DbContexts;
     using IdentityBase.Public.EntityFramework.Mappers;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Stores;
     using Microsoft.EntityFrameworkCore;
     using ServiceBase.Logging;

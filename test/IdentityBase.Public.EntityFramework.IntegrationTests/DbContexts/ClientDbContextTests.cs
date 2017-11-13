@@ -6,7 +6,7 @@ namespace IdentityBase.Public.EntityFramework.IntegrationTests.DbContexts
     using System.Linq;
     using IdentityBase.Public.EntityFramework.DbContexts;
     using IdentityBase.Public.EntityFramework.Entities;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Xunit;
 
