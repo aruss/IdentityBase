@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Home
 {
     using System.Threading.Tasks;
@@ -6,11 +9,11 @@ namespace IdentityBase.Public.Actions.Home
 
     public class HomeController : Controller
     {
-        private readonly IIdentityServerInteractionService interaction;
+        private readonly IIdentityServerInteractionService _interaction;
 
         public HomeController(IIdentityServerInteractionService interaction)
         {
-            this.interaction = interaction;
+            this._interaction = interaction;
         }
 
         /// <summary>
@@ -21,7 +24,7 @@ namespace IdentityBase.Public.Actions.Home
         {
             // TODO: redirect to default RP since index page does not
             // provide any value
-            return View();
+            return this.View();
         }
     }
 }

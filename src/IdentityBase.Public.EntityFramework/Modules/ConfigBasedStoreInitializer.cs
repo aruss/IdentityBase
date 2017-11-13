@@ -7,11 +7,10 @@ namespace IdentityBase.Public.EntityFramework
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
     using IdentityBase.Models;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Interfaces;
     using IdentityBase.Public.EntityFramework.Mappers;
-    using IdentityBase.Public.EntityFramework.Options;
     using IdentityBase.Public.EntityFramework.Services;
-    using IdentityBase.Services;
     using IdentityServer4.Models;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ namespace IdentityBase.Public.EntityFramework
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
-    public class ConfigBasedStoreInitializer : IStoreInitializer
+    public class ConfigBasedStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
         private readonly ApplicationOptions _appOptions;
@@ -42,19 +41,19 @@ namespace IdentityBase.Public.EntityFramework
             IHostingEnvironment environment,
             IServiceProvider serviceProvider)
         {
-            _options = options;
-            _appOptions = appOptions;
-            _logger = logger;
-            _migrationDbContext = migrationDbContext;
-            _configurationDbContext = configurationDbContext;
-            _persistedGrantDbContext = persistedGrantDbContext;
-            _userAccountDbContext = userAccountDbContext;
-            _environment = environment;
+            this._options = options;
+            this._appOptions = appOptions;
+            this._logger = logger;
+            this._migrationDbContext = migrationDbContext;
+            this._configurationDbContext = configurationDbContext;
+            this._persistedGrantDbContext = persistedGrantDbContext;
+            this._userAccountDbContext = userAccountDbContext;
+            this._environment = environment;
 
-            _serviceProvider = serviceProvider ??
+            this._serviceProvider = serviceProvider ??
                 throw new ArgumentNullException(nameof(serviceProvider));
 
-            _logger.LogDebug("ConfigBasedStoreInitializer initialized");
+            this._logger.LogDebug("ConfigBasedStoreInitializer initialized");
         }
 
         /// <summary>
@@ -62,74 +61,66 @@ namespace IdentityBase.Public.EntityFramework
         /// </summary>
         public void InitializeStores()
         {
-            _logger.LogDebug("Initialize Stores, MigrateDatabase: " +
+            this._logger.LogDebug("Initialize Stores, MigrateDatabase: " +
                 $"{_options.MigrateDatabase}, SeedExampleData: " +
                 $"{_options.SeedExampleData}");
 
-            // Only a leader may migrate or seed
-            if (_appOptions.Leader)
+            if (_options.MigrateDatabase)
             {
-                if (_options.MigrateDatabase)
-                {
-                    _logger.LogDebug("Try migrate database");
-                    _migrationDbContext.Database.Migrate();
-                    _logger.LogDebug("Database migrated");
-                }
+                this._logger.LogDebug("Try migrate database");
+                this._migrationDbContext.Database.Migrate();
+                this._logger.LogDebug("Database migrated");
+            }
 
-                if (_options.SeedExampleData)
-                {
-                    _logger.LogDebug("Try seed initial data");
-                    this.EnsureSeedData();
-                    _logger.LogDebug("Initial data seeded");
-                }
+            if (this._options.SeedExampleData)
+            {
+                this._logger.LogDebug("Try seed initial data");
+                this.EnsureSeedData();
+                this._logger.LogDebug("Initial data seeded");
+            }
 
-                if (_options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
+            {
+                using (var serviceScope = _serviceProvider
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
                 {
-                    using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
-                    {
-                        serviceScope.ServiceProvider
-                            .GetService<TokenCleanupService>().Start();
-                    }
+                    serviceScope.ServiceProvider
+                        .GetService<TokenCleanupService>().Start();
                 }
             }
         }
 
         public void CleanupStores()
         {
-            _logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}," +
-                $" EnsureDeleted: {_options.EnsureDeleted}");
+            this._logger.LogDebug(
+                $"Cleanup Stores, EnsureDeleted: {_options.EnsureDeleted}");
 
-            // Only leader may delete the database
-            if (_appOptions.Leader)
+            if (this._options.EnsureDeleted)
             {
-                if (_options.EnsureDeleted)
-                {
-                    _logger.LogDebug("Ensure deleting database");
-                    _migrationDbContext.Database.EnsureDeleted();
-                    _logger.LogDebug("Database deleted");
-                }
+                this._logger.LogDebug("Ensure deleting database");
+                this._migrationDbContext.Database.EnsureDeleted();
+                this._logger.LogDebug("Database deleted");
+            }
 
-                if (_options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
+            {
+                using (var serviceScope = _serviceProvider
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
                 {
-                    using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
-                    {
-                        serviceScope.ServiceProvider
-                            .GetService<TokenCleanupService>().Stop();
-                    }
+                    serviceScope.ServiceProvider
+                        .GetService<TokenCleanupService>().Stop();
                 }
             }
         }
 
         internal virtual void EnsureSeedData()
         {
-            _logger.LogDebug("Ensure Seed Data");
+            this._logger.LogDebug("Ensure Seed Data");
 
-            var rootPath = _options.SeedExampleDataPath.GetFullPath(
-                _environment.ContentRootPath);
+            string rootPath = _options.SeedExampleDataPath.GetFullPath(
+                this._environment.ContentRootPath);
 
             if (!_configurationDbContext.IdentityResources.Any())
             {

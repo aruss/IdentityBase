@@ -1,7 +1,7 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.EntityFramework.Options
+namespace IdentityBase.Public.EntityFramework.Configuration
 {
     /// <summary>
     /// Class to control a table's name and schema.

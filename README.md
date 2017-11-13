@@ -17,7 +17,6 @@
   </a>
 </p>
 
-
 <p align="center">
 IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>  
 </p>

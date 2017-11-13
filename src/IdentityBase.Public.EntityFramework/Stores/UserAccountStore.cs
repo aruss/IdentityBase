@@ -26,23 +26,23 @@ namespace IdentityBase.Public.EntityFramework.Stores
             UserAccountDbContext context,
             ILogger<UserAccountStore> logger)
         {
-            _context = context ?? throw
+            this._context = context ?? throw
                 new ArgumentNullException(nameof(context));
 
-            _logger = logger;
+            this._logger = logger;
         }
 
         public Task DeleteByIdAsync(Guid id)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
              //.Include(x => x.Accounts)
              //.Include(x => x.Claims)
              .FirstOrDefault(x => x.Id == id);
 
             if (userAccount != null)
             {
-                _context.Remove(userAccount);
-                _context.SaveChanges();
+                this._context.Remove(userAccount);
+                this._context.SaveChanges();
             }
 
             return Task.FromResult(0);
@@ -55,7 +55,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
         public Task<UserAccount> LoadByEmailAsync(string email)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
                 .FirstOrDefault(x => x.Email
@@ -63,7 +63,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug(
+            this._logger.LogDebug(
                 "{email} found in database: {userAccountFound}",
                 email,
                 model != null);
@@ -73,7 +73,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
         public Task<UserAccount> LoadByEmailWithExternalAsync(string email)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
                 .FirstOrDefault(x => x.Email
@@ -83,7 +83,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug(
+            this._logger.LogDebug(
                 "{email} found in database: {userAccountFound}",
                 email,
                 model != null);
@@ -95,7 +95,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
             string provider,
             string subject)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
                 .FirstOrDefault(x =>
@@ -106,7 +106,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug(
+            this._logger.LogDebug(
                 "{provider}, {subject} found in database: {userAccountFound}",
                 provider,
                 subject,
@@ -117,14 +117,14 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
         public Task<UserAccount> LoadByIdAsync(Guid id)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
                .Include(x => x.Accounts)
                .Include(x => x.Claims)
                .FirstOrDefault(x => x.Id == id);
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug(
+            this._logger.LogDebug(
                 "{id} found in database: {userAccountFound}",
                 id,
                 model != null);
@@ -134,14 +134,14 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
         public Task<UserAccount> LoadByVerificationKeyAsync(string key)
         {
-            var userAccount = _context.UserAccounts
+            var userAccount = this._context.UserAccounts
                 .Include(x => x.Accounts)
                 .Include(x => x.Claims)
                 .FirstOrDefault(x => x.VerificationKey == key);
 
             var model = userAccount?.ToModel();
 
-            _logger.LogDebug(
+            this._logger.LogDebug(
                 "{key} found in database: {userAccountFound}",
                 key, model != null);
 
@@ -153,21 +153,21 @@ namespace IdentityBase.Public.EntityFramework.Stores
             if (userAccount == null) throw
                     new ArgumentNullException(nameof(userAccount));
 
-            var userAccountEntity = _context.UserAccounts
+            var userAccountEntity = this._context.UserAccounts
                 .SingleOrDefault(x => x.Id == userAccount.Id);
 
             if (userAccountEntity == null)
             {
-                _logger.LogDebug(
+                this._logger.LogDebug(
                     "{userAccountId} not found in database",
                     userAccount.Id);
 
-                userAccountEntity = _context.UserAccounts
+                userAccountEntity = this._context.UserAccounts
                     .Add(userAccount.ToEntity()).Entity;
             }
             else
             {
-                _logger.LogDebug(
+                this._logger.LogDebug(
                     "{userAccountId} found in database",
                     userAccount.Id);
 
@@ -183,12 +183,12 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             try
             {
-                _context.SaveChanges();
+                this._context.SaveChanges();
                 return Task.FromResult(userAccountEntity.ToModel());
             }
             catch (Exception ex)
             {
-                _logger.LogError(0, ex, "Exception storing user account");
+                this._logger.LogError(0, ex, "Exception storing user account");
             }
 
             return Task.FromResult<UserAccount>(null);
@@ -199,34 +199,34 @@ namespace IdentityBase.Public.EntityFramework.Stores
         {
             var userAccountId = externalAccount.UserAccount != null ?
                 externalAccount.UserAccount.Id : externalAccount.UserAccountId;
-            var userAccountEntity = _context.UserAccounts
+            var userAccountEntity = this._context.UserAccounts
                 .SingleOrDefault(x => x.Id == userAccountId);
 
             if (userAccountEntity == null)
             {
-                _logger.LogError(
+                this._logger.LogError(
                     "{existingUserAccountId} not found in database",
 
                     userAccountId);
                 return null;
             }
 
-            var externalAccountEntity = _context.ExternalAccounts
+            var externalAccountEntity = this._context.ExternalAccounts
                 .SingleOrDefault(x =>
                     x.Provider == externalAccount.Provider &&
                     x.Subject == externalAccount.Subject);
 
             if (externalAccountEntity == null)
             {
-                _logger.LogDebug("{0} {1} not found in database",
+                this._logger.LogDebug("{0} {1} not found in database",
                     externalAccount.Provider, externalAccount.Subject);
 
                 externalAccountEntity = externalAccount.ToEntity();
-                _context.ExternalAccounts.Add(externalAccountEntity);
+                this._context.ExternalAccounts.Add(externalAccountEntity);
             }
             else
             {
-                _logger.LogDebug("{0} {1} found in database",
+                this._logger.LogDebug("{0} {1} found in database",
                     externalAccountEntity.Provider,
                     externalAccountEntity.Subject);
 
@@ -235,12 +235,12 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             try
             {
-                _context.SaveChanges();
+                this._context.SaveChanges();
                 return Task.FromResult(externalAccountEntity.ToModel());
             }
             catch (Exception ex)
             {
-                _logger.LogError(0, ex, "Exception storing external account");
+                this._logger.LogError(0, ex, "Exception storing external account");
             }
 
             return Task.FromResult<ExternalAccount>(null);
@@ -251,7 +251,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
             int skip = 0,
             Guid? invitedBy = null)
         {
-            var baseQuery = _context.UserAccounts
+            var baseQuery = this._context.UserAccounts
                 .Where(c => c.CreationKind == (int)CreationKind.Invitation);
 
             if (invitedBy.HasValue)

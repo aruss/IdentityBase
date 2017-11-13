@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Api.UserAccounts
 {
     using System;
@@ -121,7 +124,7 @@ namespace IdentityBase.Public.Api.UserAccounts
             await this.SendEmailAsync(
                 inputModel.Email,
                 userAccount.VerificationKey
-            ); 
+            );
 
             return this.Ok();
         }

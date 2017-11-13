@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ServiceBase" Version="1.1.9" />
+    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityBase\IdentityBase.csproj" />
+  </ItemGroup>
+
+</Project>

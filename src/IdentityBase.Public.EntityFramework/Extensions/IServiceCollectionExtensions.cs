@@ -3,7 +3,7 @@ namespace IdentityBase.Public.EntityFramework
     using System;
     using IdentityBase.Public.EntityFramework.DbContexts;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Services;
     using IdentityBase.Public.EntityFramework.Stores;
     using IdentityBase.Services;
@@ -39,36 +39,7 @@ namespace IdentityBase.Public.EntityFramework
 
             services.AddSingleton(options);
         }
-
-        public static void AddConfigBasedStoreInitializer(
-            this IServiceCollection services,
-            EntityFrameworkOptions options)
-        {
-            services.AddTransient<IStoreInitializer,
-                ConfigBasedStoreInitializer>();
-        }
-
-        public static void AddExampleDataStoreInitializer(
-            this IServiceCollection services,
-            EntityFrameworkOptions options)
-        {
-            services.AddTransient<IStoreInitializer,
-                ExampleDataStoreInitializer>();
-        }
-
-        public static void AddExample(
-            this IServiceCollection services,
-            EntityFrameworkOptions options)
-        {
-            services
-                .AddDbContext<MigrationDbContext>(options.DbContextOptions);
-
-            services.AddScoped<ConfigurationDbContext>();
-
-            services.AddTransient<IStoreInitializer,
-                ConfigBasedStoreInitializer>();
-        }
-
+        
         internal static void AddConfigurationStore(
             this IServiceCollection services,
             EntityFrameworkOptions options)

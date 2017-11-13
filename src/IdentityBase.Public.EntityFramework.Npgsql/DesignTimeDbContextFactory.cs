@@ -3,7 +3,7 @@
 namespace IdentityBase.Public.EntityFramework.Npgsql
 {
     using System.Reflection;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
 

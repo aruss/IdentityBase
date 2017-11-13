@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public
 {
     using System;
@@ -13,11 +16,6 @@ namespace IdentityBase.Public
             this IServiceCollection services,
             ILogger logger)
         {
-            if (services.IsAdded<IStoreInitializer>())
-            {
-                logger.LogInformation("IStoreInitializer registered.");
-            }
-
             if (!services.IsAdded<IClientStore>())
             {
                 throw new Exception("IClientStore not registered.");

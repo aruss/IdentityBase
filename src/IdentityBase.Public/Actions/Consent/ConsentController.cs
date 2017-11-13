@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Consent
 {
     using System.Linq;
@@ -11,10 +14,10 @@ namespace IdentityBase.Public.Actions.Consent
 
     public class ConsentController : Controller
     {
-        private readonly ILogger<ConsentController> logger;
-        private readonly IClientStore clientStore;
-        private readonly IIdentityServerInteractionService interaction;
-        private readonly IResourceStore resourceStore;
+        private readonly ILogger<ConsentController> _logger;
+        private readonly IClientStore _clientStore;
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IResourceStore _resourceStore;
 
         public ConsentController(
             ILogger<ConsentController> logger,
@@ -22,10 +25,10 @@ namespace IdentityBase.Public.Actions.Consent
             IClientStore clientStore,
             IResourceStore resourceStore)
         {
-            this.logger = logger;
-            this.interaction = interaction;
-            this.clientStore = clientStore;
-            this.resourceStore = resourceStore;
+            this._logger = logger;
+            this._interaction = interaction;
+            this._clientStore = clientStore;
+            this._resourceStore = resourceStore;
         }
 
         [HttpGet("consent", Name = "Consent")]
@@ -47,7 +50,7 @@ namespace IdentityBase.Public.Actions.Consent
             string button,
             ConsentInputModel model)
         {
-            var request = await interaction
+            AuthorizationRequest request = await this._interaction
                 .GetAuthorizationContextAsync(model.ReturnUrl);
 
             ConsentResponse response = null;
@@ -69,46 +72,47 @@ namespace IdentityBase.Public.Actions.Consent
                 }
                 else
                 {
-
-                    ModelState.AddModelError(
+                    this.ModelState.AddModelError(
                         "You must pick at least one permission.");
                 }
             }
             else
             {
-                ModelState.AddModelError("Invalid Selection");
+                this.ModelState.AddModelError("Invalid Selection");
             }
 
             if (response != null)
             {
-                await interaction.GrantConsentAsync(request, response);
-                return Redirect(model.ReturnUrl);
+                await this._interaction.GrantConsentAsync(request, response);
+                return this.Redirect(model.ReturnUrl);
             }
 
-            var vm = await BuildViewModelAsync(model.ReturnUrl, model);
+            ConsentViewModel vm =
+                await this.BuildViewModelAsync(model.ReturnUrl, model);
+
             if (vm != null)
             {
-                return View("Index", vm);
+                return this.View("Index", vm);
             }
 
-            return View("Error");
+            return this.View("Error");
         }
 
         private async Task<ConsentViewModel> BuildViewModelAsync(
             string returnUrl,
             ConsentInputModel model = null)
         {
-            var request = await interaction
+            AuthorizationRequest request = await this._interaction
                 .GetAuthorizationContextAsync(returnUrl);
 
             if (request != null)
             {
-                var client = await clientStore
+                Client client = await this._clientStore
                     .FindEnabledClientByIdAsync(request.ClientId);
 
                 if (client != null)
                 {
-                    var resources = await resourceStore
+                    Resources resources = await this._resourceStore
                         .FindEnabledResourcesByScopeAsync(
                             request.ScopesRequested);
 
@@ -124,7 +128,7 @@ namespace IdentityBase.Public.Actions.Consent
                     }
                     else
                     {
-                        logger.LogError(
+                        this._logger.LogError(
                             "No scopes matching: {0}",
                             request.ScopesRequested
                                 .Aggregate((x, y) => x + ", " + y));
@@ -132,14 +136,14 @@ namespace IdentityBase.Public.Actions.Consent
                 }
                 else
                 {
-                    logger.LogError(
+                    this._logger.LogError(
                         "Invalid client id: {0}",
                         request.ClientId);
                 }
             }
             else
             {
-                logger.LogError(
+                this._logger.LogError(
                     "No consent request matching request: {0}",
                     returnUrl);
             }
@@ -152,7 +156,7 @@ namespace IdentityBase.Public.Actions.Consent
             AuthorizationRequest request,
             Client client, Resources resources)
         {
-            var vm = new ConsentViewModel()
+            ConsentViewModel vm = new ConsentViewModel()
             {
                 RememberConsent = model?.RememberConsent ?? true,
 

@@ -36,7 +36,8 @@ namespace IdentityBase.Public.EntityFramework.Mappers
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public static IdentityResource ToEntity(this IdentityServer4.Models.IdentityResource model)
+        public static IdentityResource ToEntity(
+            this IdentityServer4.Models.IdentityResource model)
         {
             return model == null ? null : Mapper.Map<IdentityResource>(model);
         }

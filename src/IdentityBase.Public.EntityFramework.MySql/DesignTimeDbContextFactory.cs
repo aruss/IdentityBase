@@ -3,7 +3,7 @@
 namespace IdentityBase.Public.EntityFramework.MySql
 {
     using System.Reflection;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
 
@@ -20,7 +20,7 @@ namespace IdentityBase.Public.EntityFramework.MySql
 
             string connString =
                 "Server=localhost;database=identitybase;uid=root;pwd=root;";
-            
+
             string migrationsAssembly = typeof(DesignTimeDbContextFactory)
                 .GetTypeInfo().Assembly.GetName().Name;
 

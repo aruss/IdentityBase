@@ -5,7 +5,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
     using IdentityBase.Public.EntityFramework.Entities;
     using IdentityBase.Public.EntityFramework.Extensions;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
 
     public class UserAccountDbContext : DbContext, IUserAccountDbContext
@@ -17,8 +17,8 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
             EntityFrameworkOptions options)
             : base(dbContextOptions)
         {
-            _options = options ??
-                throw new ArgumentNullException(nameof(_options));
+            this._options = options ??
+                throw new ArgumentNullException(nameof(this._options));
         }
 
         public DbSet<UserAccount> UserAccounts { get; set; }
@@ -34,7 +34,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigureUserAccountContext(_options);
+            modelBuilder.ConfigureUserAccountContext(this._options);
 
             base.OnModelCreating(modelBuilder);
         }

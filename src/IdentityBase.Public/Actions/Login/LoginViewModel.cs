@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Actions.Login
 {
     using System.Collections.Generic;
@@ -19,15 +22,20 @@ namespace IdentityBase.Public.Actions.Login
         }
 
         public bool EnableLocalLogin { get; set; }
+
         public bool EnableRememberLogin { get; set; }
+
         public bool EnableAccountRegistration { get; set; }
+
         public bool EnableAccountRecover { get; set; }
 
         public bool IsExternalLoginOnly =>
             EnableLocalLogin == false && ExternalProviders?.Count() == 1;
 
         public string LoginHint { get; set; }
+
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
+
         public IEnumerable<string> ExternalProviderHints { get; set; }    
     }
 }

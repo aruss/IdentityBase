@@ -8,7 +8,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
     using IdentityBase.Public.EntityFramework.Entities;
     using IdentityBase.Public.EntityFramework.Extensions;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
@@ -72,7 +72,7 @@ namespace IdentityBase.Public.EntityFramework.DbContexts
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ConfigurePersistedGrantContext(_storeOptions);
+            modelBuilder.ConfigurePersistedGrantContext(this._storeOptions);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -6,16 +6,16 @@ namespace IdentityBase.Public.EntityFramework.Services
     using System.Threading.Tasks;
     using IdentityBase.Public.EntityFramework.Entities;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     internal class TokenCleanupService
     {
-        private readonly ILogger<TokenCleanupService> logger;
-        private readonly IServiceProvider serviceProvider;
-        private readonly TimeSpan interval;
-        private CancellationTokenSource source;
+        private readonly ILogger<TokenCleanupService> _logger;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly TimeSpan _interval;
+        private CancellationTokenSource _source;
 
         public TokenCleanupService(
             IServiceProvider serviceProvider,
@@ -33,13 +33,13 @@ namespace IdentityBase.Public.EntityFramework.Services
                     "interval must be more than 1 second");
             }
 
-            this.logger = logger ?? throw
+            this._logger = logger ?? throw
                 new ArgumentNullException(nameof(logger));
 
-            this.serviceProvider = serviceProvider ?? throw
+            this._serviceProvider = serviceProvider ?? throw
                 new ArgumentNullException(nameof(serviceProvider));
 
-            this.interval = TimeSpan.FromSeconds(options.TokenCleanupInterval);
+            this._interval = TimeSpan.FromSeconds(options.TokenCleanupInterval);
         }
 
         public void Start()
@@ -49,32 +49,32 @@ namespace IdentityBase.Public.EntityFramework.Services
 
         public void Start(CancellationToken cancellationToken)
         {
-            if (this.source != null)
+            if (this._source != null)
             {
                 throw new InvalidOperationException(
                     "Already started. Call Stop first.");
             }
 
-            this.logger.LogDebug("Starting token cleanup");
+            this._logger.LogDebug("Starting token cleanup");
 
-            this.source = CancellationTokenSource
+            this._source = CancellationTokenSource
                 .CreateLinkedTokenSource(cancellationToken);
 
-            Task.Factory.StartNew(() => StartInternal(this.source.Token));
+            Task.Factory.StartNew(() => StartInternal(this._source.Token));
         }
 
         public void Stop()
         {
-            if (this.source == null)
+            if (this._source == null)
             {
                 throw new InvalidOperationException(
                         "Not started. Call Start first.");
             }
 
-            this.logger.LogDebug("Stopping token cleanup");
+            this._logger.LogDebug("Stopping token cleanup");
 
-            this.source.Cancel();
-            this.source = null;
+            this._source.Cancel();
+            this._source = null;
         }
 
         private async Task StartInternal(CancellationToken cancellationToken)
@@ -83,22 +83,22 @@ namespace IdentityBase.Public.EntityFramework.Services
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    this.logger.LogDebug("CancellationRequested. Exiting.");
+                    this._logger.LogDebug("CancellationRequested. Exiting.");
                     break;
                 }
 
                 try
                 {
-                    await Task.Delay(this.interval, cancellationToken);
+                    await Task.Delay(this._interval, cancellationToken);
                 }
                 catch (TaskCanceledException)
                 {
-                    this.logger.LogDebug("TaskCanceledException. Exiting.");
+                    this._logger.LogDebug("TaskCanceledException. Exiting.");
                     break;
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(
+                    this._logger.LogError(
                         "Task.Delay exception: {0}. Exiting.",
                         ex.Message);
                     break;
@@ -106,7 +106,7 @@ namespace IdentityBase.Public.EntityFramework.Services
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    this.logger.LogDebug("CancellationRequested. Exiting.");
+                    this._logger.LogDebug("CancellationRequested. Exiting.");
                     break;
                 }
 
@@ -122,7 +122,7 @@ namespace IdentityBase.Public.EntityFramework.Services
             }
             catch (Exception ex)
             {
-                this.logger.LogError(
+                this._logger.LogError(
                     "Exception clearing tokens: {exception}",
                     ex.Message);
             }
@@ -130,9 +130,9 @@ namespace IdentityBase.Public.EntityFramework.Services
 
         public void ClearTokens()
         {
-            this.logger.LogTrace("Querying for tokens to clear");
+            this._logger.LogTrace("Querying for tokens to clear");
 
-            using (IServiceScope serviceScope = this.serviceProvider
+            using (IServiceScope serviceScope = this._serviceProvider
                 .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 using (IPersistedGrantDbContext context = serviceScope
@@ -142,7 +142,7 @@ namespace IdentityBase.Public.EntityFramework.Services
                         .Where(x => x.Expiration < DateTimeOffset.UtcNow)
                         .ToArray();
 
-                    this.logger.LogInformation(
+                    this._logger.LogInformation(
                         "Clearing {tokenCount} tokens",
                         expired.Length);
 

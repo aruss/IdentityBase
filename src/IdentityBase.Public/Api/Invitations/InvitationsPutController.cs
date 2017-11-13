@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Api.Invitations
 {
     using System;
@@ -20,18 +23,18 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(BadRequestFilter))]
     public class InvitationsPutController : ApiController
     {
-        private readonly UserAccountService userAccountService;
-        private readonly IEmailService emailService;
-        private readonly IClientStore clientStore;
+        private readonly UserAccountService _userAccountService;
+        private readonly IEmailService _emailService;
+        private readonly IClientStore _clientStore;
 
         public InvitationsPutController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore)
         {
-            this.userAccountService = userAccountService;
-            this.emailService = emailService;
-            this.clientStore = clientStore;
+            this._userAccountService = userAccountService;
+            this._emailService = emailService;
+            this._clientStore = clientStore;
         }
 
         [HttpPut("invitations")]
@@ -40,7 +43,7 @@ namespace IdentityBase.Public.Api.Invitations
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)
         {
-            Client client = await this.clientStore
+            Client client = await this._clientStore
                 .FindClientByIdAsync(inputModel.ClientId);
 
             if (client == null)
@@ -72,7 +75,7 @@ namespace IdentityBase.Public.Api.Invitations
             UserAccount invitedByUserAccount = null; 
             if (inputModel.InvitedBy.HasValue)
             {
-                invitedByUserAccount = await this.userAccountService
+                invitedByUserAccount = await this._userAccountService
                     .LoadByIdAsync(inputModel.InvitedBy.Value);
 
                 if (invitedByUserAccount == null)
@@ -84,7 +87,7 @@ namespace IdentityBase.Public.Api.Invitations
                 }
             }
 
-            UserAccount userAccount = await userAccountService
+            UserAccount userAccount = await this._userAccountService
                 .LoadByEmailAsync(inputModel.Email);
 
             if (userAccount != null)
@@ -95,7 +98,7 @@ namespace IdentityBase.Public.Api.Invitations
                 );
             }
 
-            userAccount = await this.userAccountService
+            userAccount = await this._userAccountService
                 .CreateNewLocalUserAccountAsync(
                     inputModel.Email,
                     returnUri,
@@ -122,7 +125,7 @@ namespace IdentityBase.Public.Api.Invitations
                 .RemoveTrailingSlash(this.HttpContext
                     .GetIdentityServerBaseUrl());
 
-            await this.emailService.SendEmailAsync(
+            await this._emailService.SendEmailAsync(
                 IdentityBaseConstants.EmailTemplates.UserAccountInvited,
                 userAccount.Email,
                 new

@@ -1,6 +1,5 @@
 namespace IdentityBase.Public.EntityFramework
 {
-    using IdentityBase.Public.EntityFramework.Options;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -12,14 +11,23 @@ namespace IdentityBase.Public.EntityFramework
             IServiceCollection services,
             IConfiguration configuration)
         {
-            var options = new EntityFrameworkOptions();
-            configuration.GetSection("EntityFramework").Bind(options);
-            services.AddExampleDataStoreInitializer(options);
+            services.AddTransient<ExampleDataStoreInitializer>();
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            using (IServiceScope serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                ExampleDataStoreInitializer initializer = serviceScope
+                    .ServiceProvider
+                    .GetService<ExampleDataStoreInitializer>();
 
+                if (initializer != null)
+                {
+                    initializer.InitializeStores();
+                }
+            }
         }
     }
 }

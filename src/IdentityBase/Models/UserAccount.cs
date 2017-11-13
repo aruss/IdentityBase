@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Models
 {
     using System;
@@ -51,15 +54,20 @@ namespace IdentityBase.Models
 
         [StringLength(100)]
         public virtual string VerificationKey { get; set; }
+
         public virtual int? VerificationPurpose { get; set; }
+
         public virtual DateTime? VerificationKeySentAt { get; set; }
+
         [StringLength(2000)]
         public virtual string VerificationStorage { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
         public DateTime UpdatedAt { get; set; }
 
         public IEnumerable<ExternalAccount> Accounts { get; set; }
+
         public IEnumerable<UserAccountClaim> Claims { get; set; }
 
         public Guid? CreatedBy { get; set; }

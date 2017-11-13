@@ -19,8 +19,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
     /// <seealso cref="IdentityServer4.Stores.IPersistedGrantStore" />
     public class PersistedGrantStore : IPersistedGrantStore
     {
-        private readonly IPersistedGrantDbContext context;
-        private readonly ILogger logger;
+        private readonly IPersistedGrantDbContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PersistedGrantStore"/>
@@ -32,8 +32,8 @@ namespace IdentityBase.Public.EntityFramework.Stores
             IPersistedGrantDbContext context,
             ILogger<PersistedGrantStore> logger)
         {
-            this.context = context;
-            this.logger = logger;
+            this._context = context;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -43,21 +43,21 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// <returns></returns>
         public Task StoreAsync(PersistedGrant token)
         {
-            var existing = this.context.PersistedGrants
+            Entities.PersistedGrant existing = this._context.PersistedGrants
                 .SingleOrDefault(x => x.Key == token.Key);
 
             if (existing == null)
             {
-                this.logger.LogDebug(
+                this._logger.LogDebug(
                     "{persistedGrantKey} not found in database",
                     token.Key);
 
                 var persistedGrant = token.ToEntity();
-                this.context.PersistedGrants.Add(persistedGrant);
+                this._context.PersistedGrants.Add(persistedGrant);
             }
             else
             {
-                this.logger.LogDebug(
+                this._logger.LogDebug(
                     "{persistedGrantKey} found in database",
                     token.Key);
 
@@ -66,11 +66,11 @@ namespace IdentityBase.Public.EntityFramework.Stores
 
             try
             {
-                this.context.SaveChanges();
+                this._context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                this.logger.LogWarning(
+                this._logger.LogWarning(
                     "exception updating {persistedGrantKey} persisted grant in database: {error}",
                     token.Key, ex.Message);
             }
@@ -85,12 +85,12 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// <returns></returns>
         public Task<PersistedGrant> GetAsync(string key)
         {
-            var persistedGrant = this.context.PersistedGrants
+            var persistedGrant = this._context.PersistedGrants
                 .FirstOrDefault(x => x.Key == key);
 
             var model = persistedGrant?.ToModel();
 
-            this.logger.LogDebug(
+            this._logger.LogDebug(
                 "{persistedGrantKey} found in database: {persistedGrantKeyFound}",
                 key, model != null);
 
@@ -104,12 +104,12 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// <returns></returns>
         public Task<IEnumerable<PersistedGrant>> GetAllAsync(string subjectId)
         {
-            var persistedGrants = this.context.PersistedGrants
+            var persistedGrants = this._context.PersistedGrants
                 .Where(x => x.SubjectId == subjectId).ToList();
 
             var model = persistedGrants.Select(x => x.ToModel());
 
-            this.logger.LogDebug(
+            this._logger.LogDebug(
                 "{persistedGrantCount} persisted grants found for {subjectId}",
                 persistedGrants.Count,
                 subjectId);
@@ -124,24 +124,24 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// <returns></returns>
         public Task RemoveAsync(string key)
         {
-            var persistedGrant = this.context.PersistedGrants
+            var persistedGrant = this._context.PersistedGrants
                 .FirstOrDefault(x => x.Key == key);
 
             if (persistedGrant != null)
             {
-                this.logger.LogDebug(
+                this._logger.LogDebug(
                     "removing {persistedGrantKey} persisted grant from database",
                     key);
 
-                this.context.PersistedGrants.Remove(persistedGrant);
+                this._context.PersistedGrants.Remove(persistedGrant);
 
                 try
                 {
-                    this.context.SaveChanges();
+                    this._context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    this.logger.LogInformation(
+                    this._logger.LogInformation(
                         "exception removing {persistedGrantKey} persisted grant from database: {error}",
                         key,
                         ex.Message);
@@ -149,7 +149,7 @@ namespace IdentityBase.Public.EntityFramework.Stores
             }
             else
             {
-                this.logger.LogDebug(
+                this._logger.LogDebug(
                     "no {persistedGrantKey} persisted grant found in database",
                     key);
             }
@@ -165,25 +165,25 @@ namespace IdentityBase.Public.EntityFramework.Stores
         /// <returns></returns>
         public Task RemoveAllAsync(string subjectId, string clientId)
         {
-            var persistedGrants = this.context.PersistedGrants
+            var persistedGrants = this._context.PersistedGrants
                 .Where(x => x.SubjectId == subjectId &&
                     x.ClientId == clientId).ToList();
 
-            this.logger.LogDebug(
+            this._logger.LogDebug(
                 "removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}",
                 persistedGrants.Count,
                 subjectId,
                 clientId);
 
-            this.context.PersistedGrants.RemoveRange(persistedGrants);
+            this._context.PersistedGrants.RemoveRange(persistedGrants);
 
             try
             {
-                this.context.SaveChanges();
+                this._context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                this.logger.LogInformation(
+                this._logger.LogInformation(
                     "removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}: {error}",
                     persistedGrants.Count,
                     subjectId,
@@ -207,27 +207,27 @@ namespace IdentityBase.Public.EntityFramework.Stores
             string clientId,
             string type)
         {
-            var persistedGrants = this.context.PersistedGrants.Where(x =>
+            var persistedGrants = this._context.PersistedGrants.Where(x =>
                 x.SubjectId == subjectId &&
                 x.ClientId == clientId &&
                 x.Type == type).ToList();
 
-            this.logger.LogDebug(
+            this._logger.LogDebug(
                 "removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}, grantType {persistedGrantType}",
                 persistedGrants.Count,
                 subjectId,
                 clientId,
                 type);
 
-            this.context.PersistedGrants.RemoveRange(persistedGrants);
+            this._context.PersistedGrants.RemoveRange(persistedGrants);
 
             try
             {
-                this.context.SaveChanges();
+                this._context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                this.logger.LogInformation(
+                this._logger.LogInformation(
                     "exception removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}, grantType {persistedGrantType}: {error}",
                     persistedGrants.Count,
                     subjectId,

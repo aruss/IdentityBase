@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Api.UserAccounts
 {
     using System;
@@ -14,12 +17,12 @@ namespace IdentityBase.Public.Api.UserAccounts
     [TypeFilter(typeof(BadRequestFilter))]
     public class UserAccountDeleteController : ApiController
     {
-        private readonly UserAccountService userAccountService;
+        private readonly UserAccountService _userAccountService;
 
         public UserAccountDeleteController(
             UserAccountService userAccountService)
         {
-            this.userAccountService = userAccountService;
+            this._userAccountService = userAccountService;
         }
         
         [HttpDelete("useraccounts/{UserAccountId}")]
@@ -27,7 +30,7 @@ namespace IdentityBase.Public.Api.UserAccounts
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {
-            UserAccount userAccount = await this.userAccountService
+            UserAccount userAccount = await this._userAccountService
                 .LoadByIdAsync(userAccountId);
 
             if (userAccount == null)
@@ -35,7 +38,7 @@ namespace IdentityBase.Public.Api.UserAccounts
                 return this.NotFound();
             }
             
-            await this.userAccountService.DeleteByIdAsync(userAccountId);
+            await this._userAccountService.DeleteByIdAsync(userAccountId);
 
             return this.Ok(); 
         }

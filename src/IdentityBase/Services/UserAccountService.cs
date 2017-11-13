@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Services
 {
     using IdentityBase.Configuration;
@@ -314,7 +317,7 @@ namespace IdentityBase.Services
             if (userAccount.VerificationKeySentAt.HasValue)
             {
                 var validTill = userAccount.VerificationKeySentAt.Value +
-                    TimeSpan.FromMinutes(
+                    TimeSpan.FromSeconds(
                         applicationOptions.VerificationKeyLifetime
                     );
 

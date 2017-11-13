@@ -2,38 +2,40 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Services;
     using Microsoft.Extensions.Hosting;
 
     internal class TokenCleanupHostedService : IHostedService
     {
-        private readonly TokenCleanupService tokenCleanup;
-        private readonly EntityFrameworkOptions options;
+        private readonly TokenCleanupService _tokenCleanup;
+        private readonly EntityFrameworkOptions _options;
 
         public TokenCleanupHostedService(
             TokenCleanupService tokenCleanup,
             EntityFrameworkOptions options)
         {
-            this.tokenCleanup = tokenCleanup;
-            this.options = options;
+            this._tokenCleanup = tokenCleanup;
+            this._options = options;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (this.options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
             {
-                this.tokenCleanup.Start(cancellationToken);
+                this._tokenCleanup.Start(cancellationToken);
             }
+
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (this.options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
             {
-                this.tokenCleanup.Stop();
+                this._tokenCleanup.Stop();
             }
+
             return Task.CompletedTask;
         }
     }

@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Public.Api.Invitations
 {
     using System;
@@ -14,12 +17,12 @@ namespace IdentityBase.Public.Api.Invitations
     [TypeFilter(typeof(BadRequestFilter))]
     public class InvitationsDeleteController : ApiController
     {
-        private readonly UserAccountService userAccountService;
+        private readonly UserAccountService _userAccountService;
 
         public InvitationsDeleteController(
             UserAccountService userAccountService)
         {
-            this.userAccountService = userAccountService;
+            this._userAccountService = userAccountService;
         }
         
         [HttpDelete("invitations/{UserAccountId}")]
@@ -27,7 +30,7 @@ namespace IdentityBase.Public.Api.Invitations
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {
-            UserAccount userAccount = await this.userAccountService
+            UserAccount userAccount = await this._userAccountService
                 .LoadByIdAsync(userAccountId);
 
             if (userAccount == null ||
@@ -42,7 +45,7 @@ namespace IdentityBase.Public.Api.Invitations
                     "Invitation is already confirmed and cannot be deleted");
             }
 
-            await this.userAccountService.DeleteByIdAsync(userAccountId);
+            await this._userAccountService.DeleteByIdAsync(userAccountId);
 
             return this.Ok(); 
         }

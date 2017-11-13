@@ -44,7 +44,7 @@
         <dependency id="ServiceBase.Notification.SendGrid" version="1.1.9" exclude="Build,Analyzers"/>
         <dependency id="ServiceBase.Notification.Smtp" version="1.1.9" exclude="Build,Analyzers"/>
         <dependency id="ServiceBase.Notification.Twilio" version="1.1.9" exclude="Build,Analyzers"/>
-        
+
         <!-- entity framework -->
         <dependency id="AutoMapper" version="6.1.1" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.EntityFrameworkCore" version="2.0.0" exclude="Build,Analyzers"/>
@@ -56,9 +56,9 @@
 
         <!-- entity framework npgsql -->
         <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.0" exclude="Build,Analyzers"/>
-		
-		<!-- entity framework mysql -->
-		<dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.0.1" exclude="Build,Analyzers"/>
+
+        <!-- entity framework mysql -->
+        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.0.1" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
     <contentFiles>
@@ -81,5 +81,14 @@
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smpt.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Smpt.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smpt.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Smpt.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" />
   </files>
 </package>

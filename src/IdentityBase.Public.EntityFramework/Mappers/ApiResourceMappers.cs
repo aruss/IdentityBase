@@ -37,7 +37,8 @@ namespace IdentityBase.Public.EntityFramework.Mappers
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public static ApiResource ToEntity(this IdentityServer4.Models.ApiResource model)
+        public static ApiResource ToEntity(
+            this IdentityServer4.Models.ApiResource model)
         {
             return model == null ?
                 null :

@@ -1,4 +1,7 @@
-namespace IdentityBase.Public
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+namespace IdentityBase.Public.SendGrid
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
@@ -13,12 +16,12 @@ namespace IdentityBase.Public
             IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddScoped<IEmailService, DefaultEmailService>(); 
+            services.AddScoped<IEmailService, DefaultEmailService>();
 
             services.AddSingleton(configuration.GetSection("Email")
                 .Get<DefaultEmailServiceOptions>());
 
-            services.AddScoped<IEmailSender, SendGridEmailSender>(); 
+            services.AddScoped<IEmailSender, SendGridEmailSender>();
 
             services.AddSingleton(configuration
                 .GetSection("Email:SendGrid").Get<SendGridOptions>());
