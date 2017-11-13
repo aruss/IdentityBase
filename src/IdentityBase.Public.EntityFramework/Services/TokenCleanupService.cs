@@ -6,7 +6,7 @@ namespace IdentityBase.Public.EntityFramework.Services
     using System.Threading.Tasks;
     using IdentityBase.Public.EntityFramework.Entities;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 

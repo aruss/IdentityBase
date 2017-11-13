@@ -7,9 +7,9 @@ namespace IdentityBase.Public.EntityFramework
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
     using IdentityBase.Models;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Interfaces;
     using IdentityBase.Public.EntityFramework.Mappers;
-    using IdentityBase.Public.EntityFramework.Options;
     using IdentityBase.Public.EntityFramework.Services;
     using IdentityServer4.Models;
     using Microsoft.AspNetCore.Hosting;
@@ -65,60 +65,52 @@ namespace IdentityBase.Public.EntityFramework
                 $"{_options.MigrateDatabase}, SeedExampleData: " +
                 $"{_options.SeedExampleData}");
 
-            // Only a leader may migrate or seed
-            if (this._appOptions.Leader)
+            if (_options.MigrateDatabase)
             {
-                if (_options.MigrateDatabase)
-                {
-                    this._logger.LogDebug("Try migrate database");
-                    this._migrationDbContext.Database.Migrate();
-                    this._logger.LogDebug("Database migrated");
-                }
+                this._logger.LogDebug("Try migrate database");
+                this._migrationDbContext.Database.Migrate();
+                this._logger.LogDebug("Database migrated");
+            }
 
-                if (this._options.SeedExampleData)
-                {
-                    this._logger.LogDebug("Try seed initial data");
-                    this.EnsureSeedData();
-                    this._logger.LogDebug("Initial data seeded");
-                }
+            if (this._options.SeedExampleData)
+            {
+                this._logger.LogDebug("Try seed initial data");
+                this.EnsureSeedData();
+                this._logger.LogDebug("Initial data seeded");
+            }
 
-                if (this._options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
+            {
+                using (var serviceScope = _serviceProvider
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
                 {
-                    using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
-                    {
-                        serviceScope.ServiceProvider
-                            .GetService<TokenCleanupService>().Start();
-                    }
+                    serviceScope.ServiceProvider
+                        .GetService<TokenCleanupService>().Start();
                 }
             }
         }
 
         public void CleanupStores()
         {
-            this._logger.LogDebug($"Cleanup Stores, Leader: {_appOptions.Leader}," +
-                $" EnsureDeleted: {_options.EnsureDeleted}");
+            this._logger.LogDebug(
+                $"Cleanup Stores, EnsureDeleted: {_options.EnsureDeleted}");
 
-            // Only leader may delete the database
-            if (this._appOptions.Leader)
+            if (this._options.EnsureDeleted)
             {
-                if (this._options.EnsureDeleted)
-                {
-                    this._logger.LogDebug("Ensure deleting database");
-                    this._migrationDbContext.Database.EnsureDeleted();
-                    this._logger.LogDebug("Database deleted");
-                }
+                this._logger.LogDebug("Ensure deleting database");
+                this._migrationDbContext.Database.EnsureDeleted();
+                this._logger.LogDebug("Database deleted");
+            }
 
-                if (this._options.EnableTokenCleanup)
+            if (this._options.EnableTokenCleanup)
+            {
+                using (var serviceScope = _serviceProvider
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
                 {
-                    using (var serviceScope = _serviceProvider
-                        .GetRequiredService<IServiceScopeFactory>()
-                        .CreateScope())
-                    {
-                        serviceScope.ServiceProvider
-                            .GetService<TokenCleanupService>().Stop();
-                    }
+                    serviceScope.ServiceProvider
+                        .GetService<TokenCleanupService>().Stop();
                 }
             }
         }

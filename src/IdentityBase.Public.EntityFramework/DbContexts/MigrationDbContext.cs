@@ -5,7 +5,7 @@ namespace IdentityBase.Public.EntityFramework
     using IdentityBase.Public.EntityFramework.Entities;
     using IdentityBase.Public.EntityFramework.Extensions;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using Microsoft.EntityFrameworkCore;
 
     public class MigrationDbContext :

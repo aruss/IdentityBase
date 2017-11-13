@@ -3,10 +3,9 @@ namespace IdentityBase.Public.EntityFramework
     using System.Linq;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Interfaces;
     using IdentityBase.Public.EntityFramework.Mappers;
-    using IdentityBase.Public.EntityFramework.Options;
-    using IdentityBase.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
@@ -43,27 +42,22 @@ namespace IdentityBase.Public.EntityFramework
 
         public void InitializeStores()
         {
-            // Only a leader may migrate or seed
-            if (this.appOptions.Leader)
+            if (this.options.MigrateDatabase)
             {
-                if (this.options.MigrateDatabase)
-                {
-                    this.logger.LogInformation("Try migrate database");
-                    this.migrationDbContext.Database.Migrate(); 
-                }
-
-                if (this.options.SeedExampleData)
-                {
-                    this.logger.LogInformation("Try seed initial data");
-                    this.EnsureSeedData();
-                }
+                this.logger.LogInformation("Try migrate database");
+                this.migrationDbContext.Database.Migrate(); 
             }
+
+            if (this.options.SeedExampleData)
+            {
+                this.logger.LogInformation("Try seed initial data");
+                this.EnsureSeedData();
+            }            
         }
 
         public void CleanupStores()
         {
-            // Only leader may delete the database
-            if (this.appOptions.Leader && this.options.EnsureDeleted)
+            if (this.options.EnsureDeleted)
             {
                 this.logger.LogInformation("Ensure deleting database");
                 this.migrationDbContext.Database.EnsureDeleted();

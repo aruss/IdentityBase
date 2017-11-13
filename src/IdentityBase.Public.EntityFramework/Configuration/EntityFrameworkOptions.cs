@@ -1,4 +1,4 @@
-namespace IdentityBase.Public.EntityFramework.Options
+namespace IdentityBase.Public.EntityFramework.Configuration
 {
     using System;
     using Microsoft.EntityFrameworkCore;

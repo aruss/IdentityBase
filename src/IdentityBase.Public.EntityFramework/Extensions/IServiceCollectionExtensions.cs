@@ -3,7 +3,7 @@ namespace IdentityBase.Public.EntityFramework
     using System;
     using IdentityBase.Public.EntityFramework.DbContexts;
     using IdentityBase.Public.EntityFramework.Interfaces;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Services;
     using IdentityBase.Public.EntityFramework.Stores;
     using IdentityBase.Services;

@@ -2,7 +2,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using IdentityBase.Public.EntityFramework.Options;
+    using IdentityBase.Public.EntityFramework.Configuration;
     using IdentityBase.Public.EntityFramework.Services;
     using Microsoft.Extensions.Hosting;
 
