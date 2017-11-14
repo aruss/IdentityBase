@@ -85,8 +85,8 @@
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" />
 
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smpt.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Smpt.dll" />
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smpt.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Smpt.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smtp.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Smtp.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Smtp.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Smtp.pdb" />
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" />
