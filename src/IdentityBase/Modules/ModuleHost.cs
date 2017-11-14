@@ -26,8 +26,14 @@ namespace ServiceBase.Modules
                 .Select(s =>
                 {
                     Type type = Type.GetType(s.Type);
-                    IModule module = (IModule)Activator.CreateInstance(type);
 
+                    if (type == null)
+                    {
+                        throw new ApplicationException(
+                            $"Cannot load type \"{s.Type}\"");
+                    }
+
+                    IModule module = (IModule)Activator.CreateInstance(type);
                     return module;
                 }
             );
