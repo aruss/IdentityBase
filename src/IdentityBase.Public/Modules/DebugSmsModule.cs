@@ -21,6 +21,6 @@ namespace IdentityBase.Public
         public void Configure(IApplicationBuilder app)
         {
 
-        }        
+        }
     }
 }
