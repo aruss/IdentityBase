@@ -12,13 +12,14 @@
     <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security sso</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
-        <dependency id="Autofac.Configuration" version="4.0.1" exclude="Build,Analyzers" />
-        <dependency id="Autofac.Extensions.DependencyInjection" version="4.2.0" exclude="Build,Analyzers" />
+
         <dependency id="IdentityServer4" version="2.0.2" exclude="Build,Analyzers"/>
-        <dependency id="IdentityServer4.AccessTokenValidation" version="2.1.0" exclude="Build,Analyzers" />
-        <dependency id="Microsoft.AspNetCore" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="IdentityServer4.AccessTokenValidation" version="2.1.0" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.AspNetCore" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Authentication" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.0" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.0" exclude="Build,Analyzers"/>
+        <dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Hosting" version="2.0.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.0" exclude="Build,Analyzers"/>
@@ -66,21 +67,18 @@
     </contentFiles>
   </metadata>
   <files>
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" />
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.dll" target="lib\netcoreapp2.0\IdentityBase.Public.dll" />
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.pdb" />
 
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
-
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" />
-    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.MySql.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.MySql.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.MySql.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.MySql.pdb" />
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.Npgsql.pdb" />
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.SqlServer.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.EntityFramework.pdb" />
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.SendGrid.pdb" />
@@ -90,5 +88,12 @@
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.dll" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.Twilio.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.dll" target="lib\netcoreapp2.0\IdentityBase.Public.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.pdb" target="lib\netcoreapp2.0\IdentityBase.Public.pdb" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" target="lib\netcoreapp2.0\IdentityBase.Public.runtimeconfig.json" />
   </files>
 </package>
