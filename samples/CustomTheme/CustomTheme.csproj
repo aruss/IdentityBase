@@ -60,10 +60,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
-    <PackageReference Include="ServiceBase" Version="1.1.9" />
-    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.1.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\IdentityBase.Public.EntityFramework\IdentityBase.Public.EntityFramework.csproj" />
