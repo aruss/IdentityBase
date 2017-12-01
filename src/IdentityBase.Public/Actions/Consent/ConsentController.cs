@@ -152,9 +152,11 @@ namespace IdentityBase.Public.Actions.Consent
         }
 
         private ConsentViewModel CreateConsentViewModel(
-            ConsentInputModel model, string returnUrl,
+            ConsentInputModel model,
+            string returnUrl,
             AuthorizationRequest request,
-            Client client, Resources resources)
+            Client client,
+            Resources resources)
         {
             ConsentViewModel vm = new ConsentViewModel()
             {
@@ -186,11 +188,14 @@ namespace IdentityBase.Public.Actions.Consent
             {
                 vm.ResourceScopes = vm.ResourceScopes
                     .Union(new ScopeViewModel[] {
-                        GetOfflineAccessScope(vm.ScopesConsented.Contains(
+                        this.GetOfflineAccessScope(vm.ScopesConsented.Contains(
                             IdentityServerConstants.StandardScopes.OfflineAccess) ||
                             model == null
                         )
                     });
+
+                // You must prompt for consent every time offline_access is requested.
+                vm.AllowRememberConsent = false;
             }
 
             return vm;
