@@ -195,6 +195,7 @@ namespace IdentityBase.Public.Actions.Consent
                     });
 
                 // You must prompt for consent every time offline_access is requested.
+                // https://github.com/IdentityServer/IdentityServer3/issues/2057
                 vm.AllowRememberConsent = false;
             }
 
@@ -235,8 +236,7 @@ namespace IdentityBase.Public.Actions.Consent
             {
                 Name = IdentityServerConstants.StandardScopes.OfflineAccess,
                 DisplayName = "Offline Access",
-                Description = "Access to your applications and resources, " +
-                "even when you are offline",
+                Description = "Access to your applications and resources, even when you are offline",
                 Emphasize = true,
                 Checked = check
             };

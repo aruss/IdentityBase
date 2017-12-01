@@ -121,8 +121,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-    <PackageReference Include="ServiceBase" Version="1.1.10" />
-    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.10" />
+    <PackageReference Include="ServiceBase" Version="1.1.11" />
+    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IdentityBase.Public.EntityFramework.MySql\IdentityBase.Public.EntityFramework.MySql.csproj" />

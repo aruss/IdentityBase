@@ -27,7 +27,7 @@ namespace IdentityBase.Public
         private readonly ILogger _logger;
         private readonly IHostingEnvironment _environment;
         private readonly IConfiguration _configuration;
-        private readonly ModuleHost _moduleHost;
+        private readonly ModulesStartup _modulesStartup;
         private readonly HttpMessageHandler _httpMessageHandler;
 
         /// <summary>
@@ -52,11 +52,11 @@ namespace IdentityBase.Public
             this._environment = environment;
             this._configuration = configuration;
             this._httpMessageHandler = httpMessageHandler;
-            this._moduleHost = new ModuleHost(configuration);
+            this._modulesStartup = new ModulesStartup(configuration);
         }
 
         /// <summary>
-        /// Configurates the services
+        /// Configurates the services.
         /// </summary>
         /// <param name="services">
         /// Instance of <see cref="IServiceCollection"/>.
@@ -101,7 +101,7 @@ namespace IdentityBase.Public
                     IdentityServerConstants.ExternalCookieAuthenticationScheme)
                 .AddCookie();
 
-            this._moduleHost.ConfigureServices(services);
+            this._modulesStartup.ConfigureServices(services);
 
             services.ValidateDataLayerServices(this._logger);
             services.ValidateEmailSenderServices(this._logger);
@@ -114,7 +114,7 @@ namespace IdentityBase.Public
         }
 
         /// <summary>
-        /// Configures the pipeline 
+        /// Configures the pipeline.
         /// </summary>
         /// <param name="app">
         /// Instance of <see cref="IApplicationBuilder"/>.
@@ -148,7 +148,7 @@ namespace IdentityBase.Public
             app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
 
-            this._moduleHost.Configure(app);
+            this._modulesStartup.Configure(app);
         }
     }
 }
