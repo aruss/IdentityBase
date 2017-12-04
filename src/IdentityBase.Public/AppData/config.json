@@ -100,6 +100,8 @@
 
     { "Type": "IdentityBase.Public.DebugSmsModule, IdentityBase.Public" },
     { "Type": "IdentityBase.Public.DebugEmailModule, IdentityBase.Public" },
-    { "Type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" }
+    { "Type": "IdentityBase.Public.DefaultEventModule, IdentityBase.Public" },
+
+    { "Type": "IdentityBase.Public.WebApi.PublicWebApiModule, IdentityBase.Public.WebApi" }
   ]
 }

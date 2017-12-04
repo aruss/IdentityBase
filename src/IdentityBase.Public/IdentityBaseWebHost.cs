@@ -7,8 +7,11 @@ namespace IdentityBase.Public
     using System.IO;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Hosting.Server;
+    using Microsoft.AspNetCore.Server.Kestrel.Core;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.DependencyInjection;
 
     public static class IdentityBaseWebHost
     {
@@ -40,6 +43,10 @@ namespace IdentityBase.Public
 
             IWebHostBuilder hostBuilder = new WebHostBuilder()
                 .UseKestrel()
+                /*.ConfigureServices(s =>
+                {
+                    s.AddSingleton<IServer, KestrelServer>();
+                })*/
                 .UseUrls(configHost.GetValue<string>("Urls"))
                 .UseContentRoot(basePath)
                 .UseConfiguration(config)

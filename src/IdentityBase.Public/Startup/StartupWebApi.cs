@@ -55,7 +55,7 @@ namespace IdentityBase.Public
             this IApplicationBuilder app,
             ApplicationOptions applicationOptions)
         {
-
+           
         }
     }
 }

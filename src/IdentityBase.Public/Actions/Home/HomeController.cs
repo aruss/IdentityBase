@@ -3,9 +3,11 @@
 
 namespace IdentityBase.Public.Actions.Home
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
 
     public class HomeController : Controller
     {

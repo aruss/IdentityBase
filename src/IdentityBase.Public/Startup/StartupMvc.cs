@@ -3,6 +3,7 @@
 
 namespace IdentityBase.Public
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -28,11 +29,11 @@ namespace IdentityBase.Public
                 });
 
             services
-                .AddMvc(mvcOptions =>
+                .AddMvc()/*mvcOptions =>
                 {
                     mvcOptions.OutputFormatters
                         .AddDefaultJsonOutputFormatter();
-                })
+                })*/
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
@@ -43,7 +44,7 @@ namespace IdentityBase.Public
                 {
                     StartupMvc
                         .ConfigureApplicationPartManager(appOptions, manager);
-                }); 
+                });
         }
 
         private static void ConfigureApplicationPartManager(
@@ -60,6 +61,10 @@ namespace IdentityBase.Public
                 manager.FeatureProviders.Remove(item);
             }
 
+            manager.FeatureProviders
+                .Add(FromAssemblyFeatureProvider.WithAssemblyOf<Startup>());
+
+            /*return;
             // Register new IApplicationFeatureProvider with a blacklist
             // depending on current configuration
             manager.FeatureProviders.Add(
@@ -88,7 +93,7 @@ namespace IdentityBase.Public
 
                 .AddIf<Actions.Account.ChangeEmailController>(
                     !appOptions.EnableAccountChangeEmailEndpoint)
-            ));
+            ));*/
         }
 
         private static List<TypeInfo> AddIf<TController>(

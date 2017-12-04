@@ -92,14 +92,14 @@ namespace IdentityBase.Public
                         this._configuration.GetValue<string>("Host:Cors")));
             });
 
-            services.AddWebApi(options, this._httpMessageHandler);
+            // services.AddWebApi(options, this._httpMessageHandler);
             services.AddMvc(options, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
-            services
+            /*services
                 .AddAuthentication(
                     IdentityServerConstants.ExternalCookieAuthenticationScheme)
-                .AddCookie();
+                .AddCookie();*/
 
             this._modulesStartup.ConfigureServices(services);
 
@@ -131,7 +131,7 @@ namespace IdentityBase.Public
 
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseLogging();
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -140,12 +140,13 @@ namespace IdentityBase.Public
             {
                 app.UseExceptionHandler("/error");
             }
-
+            
             app.UseCors("CorsPolicy");
+            
             app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
-            app.UseAuthentication();
-            app.UseWebApi(options);
+            //app.UseAuthentication();
+            //app.UseWebApi(options);
             app.UseMvcWithDefaultRoute();
 
             this._modulesStartup.Configure(app);
