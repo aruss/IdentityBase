@@ -12,7 +12,7 @@ namespace IdentityBase.Actions.Consent
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    public class ConsentController : Controller
+    public class ConsentController : WebController
     {
         private readonly ILogger<ConsentController> _logger;
         private readonly IClientStore _clientStore;

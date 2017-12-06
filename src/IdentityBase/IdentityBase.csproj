@@ -45,7 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="IdentityBase.nuspec" />
     <None Remove="IdentityBase.Public.nuspec" />
+    <None Remove="README.md" />
     <None Remove="tempkey.rsa" />
   </ItemGroup>
 

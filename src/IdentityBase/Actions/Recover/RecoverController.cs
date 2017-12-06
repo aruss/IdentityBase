@@ -18,7 +18,7 @@ namespace IdentityBase.Actions.Recover
     using Microsoft.Extensions.Logging;
     using ServiceBase.Notification.Email;
 
-    public class RecoverController : Controller
+    public class RecoverController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<RecoverController> _logger;

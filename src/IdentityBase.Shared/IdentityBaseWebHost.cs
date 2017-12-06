@@ -7,17 +7,14 @@ namespace IdentityBase
     using System.IO;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Hosting.Server;
-    using Microsoft.AspNetCore.Server.Kestrel.Core;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.DependencyInjection;
 
     public static class IdentityBaseWebHost
     {
-        public static void Run(string[] args)
+        public static void Run<TStartup>(string[] args) where TStartup : class
         {
-            IdentityBaseWebHost.Run<Startup>(
+            IdentityBaseWebHost.Run<TStartup>(
                 args,
                 Directory.GetCurrentDirectory());
         }
@@ -43,10 +40,6 @@ namespace IdentityBase
 
             IWebHostBuilder hostBuilder = new WebHostBuilder()
                 .UseKestrel()
-                /*.ConfigureServices(s =>
-                {
-                    s.AddSingleton<IServer, KestrelServer>();
-                })*/
                 .UseUrls(configHost.GetValue<string>("Urls"))
                 .UseContentRoot(basePath)
                 .UseConfiguration(config)

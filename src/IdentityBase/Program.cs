@@ -9,7 +9,7 @@ namespace IdentityBase
     {
         public static void Main(string[] args)
         {
-            IdentityBaseWebHost.Run(args);
+            IdentityBaseWebHost.Run<Startup>(args);
         }
     }
 }

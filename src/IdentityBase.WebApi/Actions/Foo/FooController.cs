@@ -7,9 +7,9 @@ namespace IdentityBase.WebApi.Actions.Foo
 
     public class FooController : WebApiController
     {
-        [HttpGet("invitations")]
-        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        [HttpGet("foo")]
+        //[ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
+        //    IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get()
         {
             return this.Ok(); 

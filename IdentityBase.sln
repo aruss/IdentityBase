@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.SendGrid", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Smtp", "src\IdentityBase.Smtp\IdentityBase.Smtp.csproj", "{2E769B7B-8845-4EDB-B027-2CE61079FBED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityBase.WebApi", "src\IdentityBase.WebApi\IdentityBase.WebApi.csproj", "{42125742-2C15-4C9D-9065-09A909BB51AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.WebApi", "src\IdentityBase.WebApi\IdentityBase.WebApi.csproj", "{42125742-2C15-4C9D-9065-09A909BB51AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

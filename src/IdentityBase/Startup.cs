@@ -26,9 +26,11 @@ namespace IdentityBase
     {
         private readonly ILogger _logger;
         private readonly IHostingEnvironment _environment;
-        private readonly IConfiguration _configuration;
         private readonly ModulesStartup _modulesStartup;
-        private readonly HttpMessageHandler _httpMessageHandler;
+        private readonly IConfiguration _configuration;
+        private readonly ApplicationOptions _applicationOptions;
+
+        private readonly IModule _webApiModule;
 
         /// <summary>
         ///
@@ -38,21 +40,31 @@ namespace IdentityBase
         /// <param name="environment">Instance of
         /// <see cref="IHostingEnvironment"/></param>
         /// <param name="logger">Instance of <see cref="ILogger{Startup}"/>
-        /// <param name="sharedHandler">Instance of
-        /// <see cref="HttpMessageHandler"/>. It will be used to make outgoing
-        /// HTTP requests.</param>
         /// </param>
         public Startup(
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger<Startup> logger,
-            HttpMessageHandler httpMessageHandler = null)
+            ILogger<Startup> logger)
         {
             this._logger = logger;
             this._environment = environment;
             this._configuration = configuration;
-            this._httpMessageHandler = httpMessageHandler;
             this._modulesStartup = new ModulesStartup(configuration);
+
+            this._applicationOptions = this._configuration.GetSection("App")
+                .Get<ApplicationOptions>() ?? new ApplicationOptions();
+
+            if (this._applicationOptions.EnableWebApi)
+            {
+                Type type = Type.GetType(
+                    "IdentityBase.WebApi.WebApiModule, IdentityBase.WebApi");
+
+                if (type != null)
+                {
+                    this._webApiModule =
+                        (IModule)Activator.CreateInstance(type);
+                }
+            }
         }
 
         /// <summary>
@@ -66,13 +78,10 @@ namespace IdentityBase
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            this._logger.LogInformation("Services Configure");
-
-            ApplicationOptions options = this._configuration.GetSection("App")
-                .Get<ApplicationOptions>() ?? new ApplicationOptions();
+            this._logger.LogInformation("Configure services.");
 
             services.AddSingleton(this._configuration);
-            services.AddSingleton(options);
+            services.AddSingleton(this._applicationOptions);
 
             services.AddIdentityServer(
                 this._configuration,
@@ -85,15 +94,15 @@ namespace IdentityBase
             services.AddAntiforgery();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddCors(corsOpts =>
-            {
-                corsOpts.AddPolicy("CorsPolicy",
-                    corsBuilder => corsBuilder.WithOrigins(
-                        this._configuration.GetValue<string>("Host:Cors")));
-            });
+            // // TOOD: can be moved to webapi component 
+            // services.AddCors(corsOpts =>
+            // {
+            //     corsOpts.AddPolicy("CorsPolicy",
+            //         corsBuilder => corsBuilder.WithOrigins(
+            //             this._configuration.GetValue<string>("Host:Cors")));
+            // });
 
-            // services.AddWebApi(options, this._httpMessageHandler);
-            services.AddMvc(options, this._environment);
+            services.AddMvc(this._applicationOptions, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
             /*services
@@ -108,7 +117,14 @@ namespace IdentityBase
             //services.ValidateSmsServices(this._logger);
             services.ValidateEventServices(this._logger);
 
-            this._logger.LogInformation("Services Configured");
+            this._logger.LogInformation("Services configured.");
+
+            // Enable webapi if available
+            if (this._webApiModule != null)
+            {
+                this._webApiModule
+                    .ConfigureServices(services, this._configuration);
+            }
 
             return services.BuildServiceProvider();
         }
@@ -121,17 +137,17 @@ namespace IdentityBase
         /// </param>
         public virtual void Configure(IApplicationBuilder app)
         {
-            this._logger.LogInformation("Application Configure");
+            this._logger.LogInformation("Configure application.");
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
-            
+
             ApplicationOptions options = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseLogging();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -140,9 +156,9 @@ namespace IdentityBase
             {
                 app.UseExceptionHandler("/error");
             }
-            
-            app.UseCors("CorsPolicy");
-            
+
+            //app.UseCors("CorsPolicy");
+
             app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
             //app.UseAuthentication();
@@ -150,6 +166,14 @@ namespace IdentityBase
             app.UseMvcWithDefaultRoute();
 
             this._modulesStartup.Configure(app);
+
+            this._logger.LogInformation("Configure application.");
+
+            // Configure webapi if available
+            if (this._webApiModule != null)
+            {
+                this._webApiModule.Configure(app);
+            }
         }
     }
 }

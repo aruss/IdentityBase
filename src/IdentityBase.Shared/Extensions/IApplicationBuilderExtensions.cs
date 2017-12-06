@@ -1,3 +1,6 @@
+
+// Code from https://www.strathweb.com/2017/04/running-multiple-independent-asp-net-core-pipelines-side-by-side-in-the-same-application/
+
 namespace IdentityBase.Extensions
 {
     using System;
@@ -6,32 +9,40 @@ namespace IdentityBase.Extensions
     using Microsoft.AspNetCore.Hosting.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Features;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public static class IApplicationBuilderExtensions
     {
-        /*public static IApplicationBuilder UseBranchWithServices<TServer>(
+        public static IApplicationBuilder MapStartup /*<TStartup>*/(
             this IApplicationBuilder app,
             PathString path,
+            IHostingEnvironment environment,
+            IConfiguration configuration,
             Action<IServiceCollection> servicesConfiguration,
             Action<IApplicationBuilder> appBuilderConfiguration)
-
-            where TServer : class, IServer
-        {*/
-
-        public static IApplicationBuilder UseBranchWithServices(
-            this IApplicationBuilder app,
-            PathString path,
-            Action<IServiceCollection> servicesConfiguration,
-            Action<IApplicationBuilder> appBuilderConfiguration)
+            // where TStartup : class
         {
-            IWebHost webHost = new WebHostBuilder()
-                //.ConfigureServices(s => s.AddSingleton<IServer, TServer>())
+            /*var webHost = new WebHostBuilder()
                 .UseKestrel()
+                .UseContentRoot(environment.ContentRootPath)
+                .UseConfiguration(configuration)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddSerilog(hostingContext.Configuration);
+                })
+                .UseStartup<TStartup>()
+                .Build();*/
+
+            IWebHost webHost = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(environment.ContentRootPath)
+                .UseConfiguration(configuration)
                 .ConfigureServices(servicesConfiguration)
                 .UseStartup<EmptyStartup>()
                 .Build();
-
+            
             IServiceProvider serviceProvider = webHost.Services;
             IFeatureCollection serverFeatures = webHost.ServerFeatures;
 

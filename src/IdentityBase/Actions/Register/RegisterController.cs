@@ -20,7 +20,7 @@ namespace IdentityBase.Actions.Register
     using ServiceBase.Extensions;
     using ServiceBase.Notification.Email;
 
-    public class RegisterController : Controller
+    public class RegisterController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<RegisterController> _logger;

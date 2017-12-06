@@ -8,7 +8,7 @@ namespace IdentityBase.Actions.Error
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
 
-    public class ErrorController : Controller
+    public class ErrorController : WebController
     {
         private readonly IIdentityServerInteractionService _interaction;
 

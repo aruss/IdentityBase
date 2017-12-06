@@ -3,16 +3,9 @@
 
 namespace IdentityBase
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
     using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.ApplicationParts;
-    using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Mvc;
     using ServiceBase.Razor;
 
     public static class StartupMvc
@@ -29,11 +22,7 @@ namespace IdentityBase
                 });
 
             services
-                .AddMvc()/*mvcOptions =>
-                {
-                    mvcOptions.OutputFormatters
-                        .AddDefaultJsonOutputFormatter();
-                })*/
+                .AddMvc()
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
@@ -42,70 +31,9 @@ namespace IdentityBase
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
-                    StartupMvc
-                        .ConfigureApplicationPartManager(appOptions, manager);
+                    manager.FeatureProviders.ReplaceControllerFeatureProvider(
+                        new WebControllerFeatureProvider(appOptions));
                 });
-        }
-
-        private static void ConfigureApplicationPartManager(
-            ApplicationOptions appOptions,
-            ApplicationPartManager manager)
-        {
-            // Remove default ControllerFeatureProvider 
-            IApplicationFeatureProvider item = manager.FeatureProviders
-                .FirstOrDefault(c => c.GetType()
-                    .Equals(typeof(ControllerFeatureProvider)));
-
-            if (item != null)
-            {
-                manager.FeatureProviders.Remove(item);
-            }
-
-            manager.FeatureProviders
-                .Add(FromAssemblyFeatureProvider.WithAssemblyOf<Startup>());
-
-            /*return;
-            // Register new IApplicationFeatureProvider with a blacklist
-            // depending on current configuration
-            manager.FeatureProviders.Add(
-                new BlackListedControllerFeatureProvider(new List<TypeInfo>()
-
-                .AddIf<Api.Invitations.InvitationsGetController>(
-                    !appOptions.EnableInvitationGetEndpoint)
-
-                .AddIf<Api.Invitations.InvitationsPutController>(
-                    !appOptions.EnableInvitationCreateEndpoint)
-
-                .AddIf<Api.Invitations.InvitationsDeleteController>(
-                    !appOptions.EnableInvitationDeleteEndpoint)
-
-                .AddIf<Actions.Recover.RecoverController>(
-                    !appOptions.EnableAccountRecovery)
-
-                .AddIf<Actions.Register.RegisterController>(
-                    !appOptions.EnableAccountRegistration)
-
-                .AddIf<Api.UserAccounts.UserAccountDeleteController>(
-                    !appOptions.EnableUserAccountDeleteEndpoint)
-
-                .AddIf<Api.UserAccounts.ChangeEmailPostController>(
-                    !appOptions.EnableAccountChangeEmailEndpoint)
-
-                .AddIf<Actions.Account.ChangeEmailController>(
-                    !appOptions.EnableAccountChangeEmailEndpoint)
-            ));*/
-        }
-
-        private static List<TypeInfo> AddIf<TController>(
-            this List<TypeInfo> list,
-            bool assertion)
-        {
-            if (assertion)
-            {
-                list.Add(typeof(TController).GetTypeInfo());
-            }
-
-            return list;
         }
     }
 }

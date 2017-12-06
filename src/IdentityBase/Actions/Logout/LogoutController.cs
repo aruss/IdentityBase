@@ -16,7 +16,7 @@ namespace IdentityBase.Actions.Logout
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    public class LogoutController : Controller
+    public class LogoutController : WebController
     {
         private readonly IIdentityServerInteractionService _interaction;
         private readonly ApplicationOptions _applicationOptions;

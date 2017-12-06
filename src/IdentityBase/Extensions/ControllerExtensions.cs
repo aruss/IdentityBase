@@ -3,9 +3,10 @@
 
 namespace Microsoft.AspNetCore.Mvc
 {
+    using System.Collections.Generic;
     using System.Text.Encodings.Web;
     using Microsoft.AspNetCore.Authentication;
-
+    
     public static class ControllerExtensions
     {
         /// <summary>

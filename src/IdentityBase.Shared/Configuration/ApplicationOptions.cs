@@ -11,15 +11,12 @@ namespace IdentityBase.Configuration
         /// <summary>
         /// Enables public web api on /api
         /// </summary>
-        public bool EnbaleWebApi { get; set; }
+        public bool EnableWebApi { get; set; }
 
         /// <summary>
         /// Enables administrative dashboard on /admin
         /// </summary>
         public bool EnableAdmin { get; set; }
-
-        // TODO: Find another way to get the current public URI, while application start.
-        public string PublicUrl { get; set; } = "http://localhost:5000";
 
         /// <summary>
         /// Location of temporary folder.

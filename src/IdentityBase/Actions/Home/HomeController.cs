@@ -9,7 +9,7 @@ namespace IdentityBase.Actions.Home
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-    public class HomeController : Controller
+    public class HomeController : WebController
     {
         private readonly IIdentityServerInteractionService _interaction;
 

@@ -14,7 +14,7 @@ namespace IdentityBase.Actions.Account
     using Newtonsoft.Json;
     using ServiceBase.Notification.Email;
 
-    public class ChangeEmailController : Controller
+    public class ChangeEmailController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<ChangeEmailController> _logger;

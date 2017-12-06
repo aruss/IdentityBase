@@ -19,7 +19,7 @@ namespace IdentityBase.Actions.Login
     using Microsoft.Extensions.Logging;
 
     // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
-    public class LoginController : Controller
+    public class LoginController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<LoginController> _logger;

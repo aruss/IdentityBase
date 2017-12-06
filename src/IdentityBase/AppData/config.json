@@ -50,7 +50,7 @@
     }
   },
   "App": {
-    "PublicUrl": "http://localhost:5000",
+    "EnableWebApi": true,
     "TempFolder": "./AppData/Temp",
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
@@ -78,6 +78,7 @@
     "ThemePath": "./Themes/Default"
   },
   "WebApi": {
+    "AutorityUrl": "http://localhost:5000",
     "ApiSecret": "secret"
   },
   "Email": {
@@ -97,8 +98,6 @@
 
     { "Type": "IdentityBase.DebugSmsModule, IdentityBase" },
     { "Type": "IdentityBase.DebugEmailModule, IdentityBase" },
-    { "Type": "IdentityBase.DefaultEventModule, IdentityBase" },
-
-    // { "Type": "IdentityBase.WebApi.PublicWebApiModule, IdentityBase.WebApi" }
+    { "Type": "IdentityBase.DefaultEventModule, IdentityBase" }
   ]
 }

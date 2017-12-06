@@ -13,5 +13,10 @@ namespace IdentityBase.Configuration
         /// authentication.
         /// </summary>
         public string ApiSecret { get; set; } = "secret";
+
+        /// <summary>
+        /// Base-address of the token issuer
+        /// </summary>
+        public string AutorityUrl { get; set; } = "http://localhost:5000";
     }
 }
