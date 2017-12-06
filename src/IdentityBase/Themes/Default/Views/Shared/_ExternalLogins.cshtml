@@ -1,0 +1,26 @@
+﻿@model  IdentityBase.Actions.IExternalLoginsViewModel
+
+@if (Model.ExternalProviders != null && Model.ExternalProviders.Count() > 0)
+{
+    <div class="col-md-6 col-sm-6 external-providers">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">External Account</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-inline">
+
+                    @foreach (var item in Model.ExternalProviders)
+                    {
+                        <li>
+                            <a class="btn btn-default"
+                               asp-route="External"
+                               asp-route-provider="@item.AuthenticationScheme"
+                               asp-route-returnUrl="@Model.ReturnUrl">@item.DisplayName</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

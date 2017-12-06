@@ -24,7 +24,7 @@ build_script:
   - dotnet build ./IdentityBase.sln -c Release /property:Version=%APPVEYOR_BUILD_VERSION%
 
 after_build:
-  - nuget pack ./src/IdentityBase.Public/IdentityBase.Public.nuspec -OutputDirectory ./artifacts/packages -version %APPVEYOR_BUILD_VERSION%
+  - nuget pack ./src/IdentityBase/IdentityBase.nuspec -OutputDirectory ./artifacts/packages -version %APPVEYOR_BUILD_VERSION%
   
 test_script:
   - bash coveralls.sh

@@ -13,25 +13,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		coverage.sh = coverage.sh
 		coveralls.sh = coveralls.sh
-		src\IdentityBase.Public\IdentityBase.Public.nuspec = src\IdentityBase.Public\IdentityBase.Public.nuspec
+		src\IdentityBase\IdentityBase.nuspec = src\IdentityBase\IdentityBase.nuspec
 		NuGet.Config = NuGet.Config
 		pack.sh = pack.sh
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public", "src\IdentityBase.Public\IdentityBase.Public.csproj", "{82B74722-8F71-4D09-AF72-390FF28DFF64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase", "src\IdentityBase\IdentityBase.csproj", "{82B74722-8F71-4D09-AF72-390FF28DFF64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase", "src\IdentityBase\IdentityBase.csproj", "{CC3F72FC-39EE-47FD-8430-CA056D7C2A13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Shared", "src\IdentityBase.Shared\IdentityBase.Shared.csproj", "{CC3F72FC-39EE-47FD-8430-CA056D7C2A13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework", "src\IdentityBase.Public.EntityFramework\IdentityBase.Public.EntityFramework.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework", "src\IdentityBase.EntityFramework\IdentityBase.EntityFramework.csproj", "{AB1E0A37-3E7C-443A-9030-2461B4EB357E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C47B5EFB-92B9-412D-834D-32FFE16FCFB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.IntegrationTests", "test\IdentityBase.Public.EntityFramework.IntegrationTests\IdentityBase.Public.EntityFramework.IntegrationTests.csproj", "{01F527D8-7F80-431B-9355-28E4837038AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework.IntegrationTests", "test\IdentityBase.EntityFramework.IntegrationTests\IdentityBase.EntityFramework.IntegrationTests.csproj", "{01F527D8-7F80-431B-9355-28E4837038AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.UnitTests", "test\IdentityBase.Public.EntityFramework.UnitTests\IdentityBase.Public.EntityFramework.UnitTests.csproj", "{E08D9D07-AE41-42FD-BB09-84636BD02BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework.UnitTests", "test\IdentityBase.EntityFramework.UnitTests\IdentityBase.EntityFramework.UnitTests.csproj", "{E08D9D07-AE41-42FD-BB09-84636BD02BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.IntegrationTests", "test\IdentityBase.Public.IntegrationTests\IdentityBase.Public.IntegrationTests.csproj", "{25B52726-0E49-4B1B-BA44-1936886D6A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.IntegrationTests", "test\IdentityBase.IntegrationTests\IdentityBase.IntegrationTests.csproj", "{25B52726-0E49-4B1B-BA44-1936886D6A8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.UnitTests", "test\IdentityBase.UnitTests\IdentityBase.UnitTests.csproj", "{C9217BE8-60DD-40EC-9B11-C8BA6CA58833}"
 EndProject
@@ -41,19 +41,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWeb", "samples\As
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreApi", "samples\AspNetCoreApi\AspNetCoreApi.csproj", "{800E97A2-6012-4816-B9B8-64F409028A70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.SqlServer", "src\IdentityBase.Public.EntityFramework.SqlServer\IdentityBase.Public.EntityFramework.SqlServer.csproj", "{EBEE5D7E-83ED-445E-BB2F-71CDE49238A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework.SqlServer", "src\IdentityBase.EntityFramework.SqlServer\IdentityBase.EntityFramework.SqlServer.csproj", "{EBEE5D7E-83ED-445E-BB2F-71CDE49238A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.Npgsql", "src\IdentityBase.Public.EntityFramework.Npgsql\IdentityBase.Public.EntityFramework.Npgsql.csproj", "{E18C2E54-A329-4B7D-9E3A-17738B1514B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework.Npgsql", "src\IdentityBase.EntityFramework.Npgsql\IdentityBase.EntityFramework.Npgsql.csproj", "{E18C2E54-A329-4B7D-9E3A-17738B1514B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.EntityFramework.MySql", "src\IdentityBase.Public.EntityFramework.MySql\IdentityBase.Public.EntityFramework.MySql.csproj", "{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.EntityFramework.MySql", "src\IdentityBase.EntityFramework.MySql\IdentityBase.EntityFramework.MySql.csproj", "{75FFC940-C8A0-4D17-B580-60F83AE0B7AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.Twilio", "src\IdentityBase.Public.Twilio\IdentityBase.Public.Twilio.csproj", "{166E0D5D-DC9D-42F9-A2C9-DC2AC1A007B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Twilio", "src\IdentityBase.Twilio\IdentityBase.Twilio.csproj", "{166E0D5D-DC9D-42F9-A2C9-DC2AC1A007B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.SendGrid", "src\IdentityBase.Public.SendGrid\IdentityBase.Public.SendGrid.csproj", "{A6A593C5-793B-4B0A-82C2-B4CFA468344C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.SendGrid", "src\IdentityBase.SendGrid\IdentityBase.SendGrid.csproj", "{A6A593C5-793B-4B0A-82C2-B4CFA468344C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Public.Smtp", "src\IdentityBase.Public.Smtp\IdentityBase.Public.Smtp.csproj", "{2E769B7B-8845-4EDB-B027-2CE61079FBED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityBase.Smtp", "src\IdentityBase.Smtp\IdentityBase.Smtp.csproj", "{2E769B7B-8845-4EDB-B027-2CE61079FBED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityBase.Public.WebApi", "src\IdentityBase.Public.WebApi\IdentityBase.Public.WebApi.csproj", "{42125742-2C15-4C9D-9065-09A909BB51AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityBase.WebApi", "src\IdentityBase.WebApi\IdentityBase.WebApi.csproj", "{42125742-2C15-4C9D-9065-09A909BB51AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
