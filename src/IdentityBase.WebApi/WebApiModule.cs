@@ -5,7 +5,9 @@ namespace IdentityBase.WebApi
     using System.Linq;
     using System.Reflection;
     using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
     using IdentityBase.Services;
+    using IdentityBase.WebApi.Actions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -15,18 +17,10 @@ namespace IdentityBase.WebApi
 
     public class WebApiModule : IModule
     {
-        private List<ServiceDescriptor> _sharedServices =
-            new List<ServiceDescriptor>();
-             
         public void ConfigureServices(
             IServiceCollection services,
             IConfiguration configuration)
         {
-           
-            // get all required services from shared service collection
-
-            this._sharedServices.AddRange(
-                services.Where(d => d.ServiceType == typeof(UserAccountService)).ToArray());
 
         }
 
@@ -39,8 +33,6 @@ namespace IdentityBase.WebApi
                 "/api",
                 (services) =>
                 {
-                    // Shared services ....
-
                     this.ServiceConfig(services, config);
                 },
                 (app) =>
@@ -60,6 +52,10 @@ namespace IdentityBase.WebApi
                 config.GetSection("App").Get<ApplicationOptions>() ??
                 new ApplicationOptions();
 
+            WebApiOptions webApiOptions =
+                config.GetSection("WebApi").Get<WebApiOptions>() ??
+                new WebApiOptions();
+
             services
                 .AddRouting((options) =>
                 {
@@ -78,13 +74,13 @@ namespace IdentityBase.WebApi
                 {
                     manager.FeatureProviders.Clear();
                     manager.FeatureProviders.Add(
-                        new TypedControllerFeatureProvider<PublicApiController>());
+                        new TypedControllerFeatureProvider<WebApiController>());
                 });
 
             services
                 .AddAuthorization(options =>
                 {
-                    options.AddScopePolicies<PublicApiController>(
+                    options.AddScopePolicies<WebApiController>(
                         applicationOptions.PublicUrl,
                         assembly: assembly,
                         fromReferenced: true
@@ -102,8 +98,8 @@ namespace IdentityBase.WebApi
                       applicationOptions.PublicUrl.IndexOf("https") > -1;
 
                    // TODO: move to constants
-                   options.ApiName = "idbase";
-                   options.ApiSecret = applicationOptions.ApiSecret;
+                   options.ApiName = WebApiConstants.ApiName;
+                   options.ApiSecret = webApiOptions.ApiSecret;
                });
         }
     }

@@ -3,17 +3,17 @@
 
 namespace IdentityBase
 {
-    public static partial class IdentityBaseConstants
+    public static partial class WebApiConstants
     {
-        public const string AuthenticationTypePassword = "password";
+        public const string ApiName = "idbase";
         
-        public static class EmailTemplates
-        {
-            public const string UserAccountCreated = "UserAccountCreated";
-            public const string UserAccountRecover = "UserAccountRecover";
-            public const string UserAccountInvited = "UserAccountInvited";
-            public const string UserAccountEmailChanged = "UserAccountEmailChanged";
-        }
+        public const int TakeDefault = 10;
+        public const int TakeMin = 1;
+        public const int TakeMax = 1000;
+
+        public const int SkipDefault = 0;
+        public const int SkipMin = 0;
+        public const int SkipMax = 999;
 
         public static class ErrorMessages
         {

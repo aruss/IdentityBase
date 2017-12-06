@@ -1,7 +1,7 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.WebApi.UserAccounts
+namespace IdentityBase.WebApi.Actions.UserAccounts
 {
     using System;
     using System.Linq;
@@ -17,7 +17,7 @@ namespace IdentityBase.Public.WebApi.UserAccounts
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    public class ChangeEmailPostController : ApiController
+    public class ChangeEmailPostController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
@@ -34,7 +34,7 @@ namespace IdentityBase.Public.WebApi.UserAccounts
         }
 
         [HttpPost("useraccounts/{UserAccountId}/change_email")]
-        [ScopeAuthorize("idbase", AuthenticationSchemes =
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post(
             [FromRoute]Guid userAccountId,

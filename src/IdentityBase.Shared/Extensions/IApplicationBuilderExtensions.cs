@@ -1,38 +1,14 @@
-namespace IdentityBase
+namespace IdentityBase.Extensions
 {
     using System;
-    using System.Reflection;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Hosting.Builder;
-    using Microsoft.AspNetCore.Hosting.Server;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc.Controllers;
+    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class FromAssemblyFeatureProvider : ControllerFeatureProvider
-    {
-        public static FromAssemblyFeatureProvider WithAssemblyOf<TFoo>()
-        {
-            return new FromAssemblyFeatureProvider(typeof(TFoo)
-              .GetTypeInfo().Assembly);
-        }
-
-        private Assembly _assembly;
-
-        public FromAssemblyFeatureProvider(Assembly assembly)
-        {
-            this._assembly = assembly ?? throw new ArgumentNullException();
-        }
-
-        protected override bool IsController(TypeInfo typeInfo)
-        {
-            return typeInfo.Assembly == this._assembly &&
-                base.IsController(typeInfo);
-        }
-    }
-
-    public static class ParallelApplicationPipelinesExtensions
+    public static class IApplicationBuilderExtensions
     {
         /*public static IApplicationBuilder UseBranchWithServices<TServer>(
             this IApplicationBuilder app,
@@ -49,23 +25,23 @@ namespace IdentityBase
             Action<IServiceCollection> servicesConfiguration,
             Action<IApplicationBuilder> appBuilderConfiguration)
         {
-            var webHost = new WebHostBuilder()
+            IWebHost webHost = new WebHostBuilder()
                 //.ConfigureServices(s => s.AddSingleton<IServer, TServer>())
                 .UseKestrel()
                 .ConfigureServices(servicesConfiguration)
                 .UseStartup<EmptyStartup>()
                 .Build();
 
-            var serviceProvider = webHost.Services;
-            var serverFeatures = webHost.ServerFeatures;
+            IServiceProvider serviceProvider = webHost.Services;
+            IFeatureCollection serverFeatures = webHost.ServerFeatures;
 
-            var appBuilderFactory = serviceProvider
+            IApplicationBuilderFactory appBuilderFactory = serviceProvider
                 .GetRequiredService<IApplicationBuilderFactory>();
 
-            var branchBuilder = appBuilderFactory
+            IApplicationBuilder branchBuilder = appBuilderFactory
                 .CreateBuilder(serverFeatures);
 
-            var factory = serviceProvider
+            IServiceScopeFactory factory = serviceProvider
                 .GetRequiredService<IServiceScopeFactory>();
 
             branchBuilder.Use(async (context, next) =>
@@ -79,7 +55,7 @@ namespace IdentityBase
 
             appBuilderConfiguration(branchBuilder);
 
-            var branchDelegate = branchBuilder.Build();
+            RequestDelegate branchDelegate = branchBuilder.Build();
 
             return app.Map(path, builder =>
             {
@@ -92,9 +68,13 @@ namespace IdentityBase
 
         private class EmptyStartup
         {
-            public void ConfigureServices(IServiceCollection services) { }
+            public void ConfigureServices(IServiceCollection services)
+            {
+            }
 
-            public void Configure(IApplicationBuilder app) { }
+            public void Configure(IApplicationBuilder app)
+            {
+            }
         }
     }
 }

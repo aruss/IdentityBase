@@ -52,7 +52,6 @@
   "App": {
     "PublicUrl": "http://localhost:5000",
     "TempFolder": "./AppData/Temp",
-    "Leader": true,
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
     "AccountLockoutDuration": 600,
@@ -63,6 +62,7 @@
     "LoginAfterAccountCreation": true,
     "LoginAfterAccountConfirmation": true,
     "LoginAfterAccountRecovery": true,
+    "LoginAfterAccountInvitation": true,
     "VerificationKeyLifetime": 86400,
     "EnableAccountRegistration": true,
     "EnableAccountRecovery": true,
@@ -75,12 +75,9 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
-    "ThemePath": "./Themes/Default",
-    "EnableInvitationGetEndpoint": true,
-    "EnableInvitationCreateEndpoint": true,
-    "EnableInvitationDeleteEndpoint": true,
-    "EnableUserAccountDeleteEndpoint": true,
-    "EnableAccountChangeEmailEndpoint": true,
+    "ThemePath": "./Themes/Default"
+  },
+  "WebApi": {
     "ApiSecret": "secret"
   },
   "Email": {

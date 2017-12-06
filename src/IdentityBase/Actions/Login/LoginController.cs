@@ -230,7 +230,7 @@ namespace IdentityBase.Actions.Login
 
             vm.EnableLocalLogin = (client != null ?
                 client.EnableLocalLogin : false) &&
-                this._applicationOptions.EnableLocalLogin;
+                this._applicationOptions.EnableAccountLogin;
 
             if (userAccount != null)
             {

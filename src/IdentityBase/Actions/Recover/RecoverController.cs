@@ -265,7 +265,7 @@ namespace IdentityBase.Actions.Recover
 
                 EnableLocalLogin = (client != null ?
                     client.EnableLocalLogin : false) &&
-                    this._applicationOptions.EnableLocalLogin,
+                    this._applicationOptions.EnableAccountLogin,
 
                 LoginHint = context.LoginHint,
                 ExternalProviders = providers.ToArray(),

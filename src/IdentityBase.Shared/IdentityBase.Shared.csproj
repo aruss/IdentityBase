@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Configuration\ApplicationOptionsExtensions.cs" />
     <Compile Remove="Configuration\Clients.cs" />
     <Compile Remove="Configuration\Resources.cs" />
     <Compile Remove="Configuration\UserAccounts.cs" />

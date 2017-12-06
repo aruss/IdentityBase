@@ -3,20 +3,20 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityBase.Public.WebApi.Invitations
+namespace IdentityBase.WebApi.Actions.Invitations
 {
     public class PagedListInputModel
     {
         /// <summary>
         /// Items to retrieve
         /// </summary>
-        [Range(IdentityBaseConstants.TakeMin, IdentityBaseConstants.TakeMax)]
-        public int Take { get; set; } = IdentityBaseConstants.TakeDefault;
+        [Range(WebApiConstants.TakeMin, WebApiConstants.TakeMax)]
+        public int Take { get; set; } = WebApiConstants.TakeDefault;
 
         /// <summary>
         /// Items to skip 
         /// </summary>
-        [Range(IdentityBaseConstants.SkipMin, IdentityBaseConstants.SkipMax)]
-        public int Skip { get; set; } = IdentityBaseConstants.SkipDefault;
+        [Range(WebApiConstants.SkipMin, WebApiConstants.SkipMax)]
+        public int Skip { get; set; } = WebApiConstants.SkipDefault;
     }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.WebApi.UserAccounts
+namespace IdentityBase.WebApi.Actions.UserAccounts
 {
     using System;
     using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace IdentityBase.Public.WebApi.UserAccounts
     using Microsoft.AspNetCore.Mvc;
     using ServiceBase.Authorization;
 
-    public class UserAccountDeleteController : ApiController
+    public class UserAccountDeleteController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
 
@@ -22,7 +22,7 @@ namespace IdentityBase.Public.WebApi.UserAccounts
         }
         
         [HttpDelete("useraccounts/{UserAccountId}")]
-        [ScopeAuthorize("idbase", AuthenticationSchemes =
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {

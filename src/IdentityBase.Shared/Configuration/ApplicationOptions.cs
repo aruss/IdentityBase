@@ -8,9 +8,22 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ApplicationOptions
     {
+        /// <summary>
+        /// Enables public web api on /api
+        /// </summary>
+        public bool EnbaleWebApi { get; set; }
+
+        /// <summary>
+        /// Enables administrative dashboard on /admin
+        /// </summary>
+        public bool EnableAdmin { get; set; }
+
         // TODO: Find another way to get the current public URI, while application start.
         public string PublicUrl { get; set; } = "http://localhost:5000";
 
+        /// <summary>
+        /// Location of temporary folder.
+        /// </summary>
         public string TempFolder { get; set; } = "./AppData/Temp";
         
         // Local account options
@@ -70,9 +83,20 @@ namespace IdentityBase.Configuration
         /// </summary>
         public int VerificationKeyLifetime { get; set; } = 86400; // 24 hours
 
+        /// <summary>
+        /// Enables local account registration and registration confirmation.
+        /// </summary>
         public bool EnableAccountRegistration { get; set; } = true;
 
+        /// <summary>
+        /// Enables local account recovery and recovery confirmation.
+        /// </summary>
         public bool EnableAccountRecovery { get; set; } = true;
+
+        /// <summary>
+        /// Enables local account invitation and invitation confirmation.
+        /// </summary>
+        public bool EnableAccountInvitation { get; set; } = true;
 
         /// <summary>
         /// Automatically merges third party accounts with local account if
@@ -80,9 +104,15 @@ namespace IdentityBase.Configuration
         /// </summary>
         public bool AutomaticAccountMerge { get; set; } = true;
 
+        /// <summary>
+        /// Enables "Remember Me" option for login. 
+        /// </summary>
         public bool EnableRememberLogin { get; set; } = true;
 
-        public bool EnableLocalLogin { get; set; } = true;
+        /// <summary>
+        /// Enables local account login form. 
+        /// </summary>
+        public bool EnableAccountLogin { get; set; } = true;
 
         /// <summary>
         /// How long should Remember Login last in seconds.
@@ -107,32 +137,32 @@ namespace IdentityBase.Configuration
         /// <summary>
         /// Enables invitation get API 
         /// </summary>
-        public bool EnableInvitationGetEndpoint { get; set; } = false;
+        //public bool EnableInvitationGetEndpoint { get; set; } = false;
 
         /// <summary>
         /// Enables invitation create API 
         /// </summary>
-        public bool EnableInvitationCreateEndpoint { get; set; } = false;
+        //public bool EnableInvitationCreateEndpoint { get; set; } = false;
 
         /// <summary>
         /// Enbales invitation delete API 
         /// </Enables>
-        public bool EnableInvitationDeleteEndpoint { get; set; } = false;
-        
+        //public bool EnableInvitationDeleteEndpoint { get; set; } = false;
+
         /// <summary>
         /// Enbales user account delete API 
         /// </Enables>
-        public bool EnableUserAccountDeleteEndpoint { get; set; } = false;
+        //public bool EnableUserAccountDeleteEndpoint { get; set; } = false;
 
         /// <summary>
         /// Enables email change API 
         /// </summary>
-        public bool EnableAccountChangeEmailEndpoint { get; set; } = false;
+        //public bool EnableAccountChangeEmailEndpoint { get; set; } = false;
 
         /// <summary>
         /// In case idbase API is active, this will be used as secret for
         /// authentication
         /// </summary>
-        public string ApiSecret { get; set; } = "secret";
+        // public string ApiSecret { get; set; } = "secret";
     }
 }

@@ -1,4 +1,3 @@
-
 namespace IdentityBase.WebApi.Actions.Foo
 {
     using System.Threading.Tasks;
@@ -6,10 +5,10 @@ namespace IdentityBase.WebApi.Actions.Foo
     using Microsoft.AspNetCore.Mvc;
     using ServiceBase.Authorization;
 
-    public class FooController : PublicApiController
+    public class FooController : WebApiController
     {
         [HttpGet("invitations")]
-        [ScopeAuthorize("idbase", AuthenticationSchemes =
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get()
         {

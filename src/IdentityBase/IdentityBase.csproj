@@ -36,6 +36,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Startup\StartupDataLayer.cs" />
+    <Compile Remove="Startup\StartupEmailSender.cs" />
+    <Compile Remove="Startup\StartupEvents.cs" />
+    <Compile Remove="Startup\StartupLogging.cs" />
+    <Compile Remove="Startup\StartupSmsSender.cs" />
+    <Compile Remove="Startup\StartupWebApi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="IdentityBase.Public.nuspec" />
     <None Remove="tempkey.rsa" />
   </ItemGroup>

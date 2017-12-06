@@ -1,7 +1,7 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.WebApi.Invitations
+namespace IdentityBase.WebApi.Actions.Invitations
 {
     using System;
     using System.Linq;
@@ -18,7 +18,7 @@ namespace IdentityBase.Public.WebApi.Invitations
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    public class InvitationsPutController : ApiController
+    public class InvitationsPutController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
@@ -35,7 +35,7 @@ namespace IdentityBase.Public.WebApi.Invitations
         }
 
         [HttpPut("invitations")]
-        [ScopeAuthorize("idbase", AuthenticationSchemes =
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
              IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)

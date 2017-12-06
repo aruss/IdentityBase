@@ -1,18 +1,17 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.WebApi.Invitations
+namespace IdentityBase.WebApi.Actions.Invitations
 {
     using System;
     using System.Threading.Tasks;
     using IdentityBase.Models;
-    using IdentityBase.Public.WebApi;
     using IdentityBase.Services;
     using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Mvc;
     using ServiceBase.Authorization;
 
-    public class InvitationsDeleteController : ApiController
+    public class InvitationsDeleteController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
 
@@ -23,7 +22,7 @@ namespace IdentityBase.Public.WebApi.Invitations
         }
         
         [HttpDelete("invitations/{UserAccountId}")]
-        [ScopeAuthorize("idbase", AuthenticationSchemes =
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {

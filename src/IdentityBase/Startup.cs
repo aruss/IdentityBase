@@ -105,7 +105,7 @@ namespace IdentityBase
 
             services.ValidateDataLayerServices(this._logger);
             services.ValidateEmailSenderServices(this._logger);
-            services.ValidateSmsServices(this._logger);
+            //services.ValidateSmsServices(this._logger);
             services.ValidateEventServices(this._logger);
 
             this._logger.LogInformation("Services Configured");

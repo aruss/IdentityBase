@@ -1,7 +1,7 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Public.WebApi.Invitations
+namespace IdentityBase.WebApi.Actions.Invitations
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,7 +14,7 @@ namespace IdentityBase.Public.WebApi.Invitations
     using ServiceBase.Collections;
     using ServiceBase.Notification.Email;
 
-    public class InvitationsGetController : ApiController
+    public class InvitationsGetController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
 
@@ -27,8 +27,8 @@ namespace IdentityBase.Public.WebApi.Invitations
         }
 
         [HttpGet("invitations")]
-        /*[ScopeAuthorize("idbase", AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]*/
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
+            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(PagedListInputModel request)
         {
             PagedList<UserAccount> list = await this._userAccountService
