@@ -18,7 +18,7 @@ namespace IdentityBase.WebApi
 
     public class Startup : IStartup
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Startup> _logger;
         private readonly IHostingEnvironment _environment;
         private readonly ModulesStartup _modulesStartup;
         private readonly IConfiguration _configuration;
@@ -28,9 +28,9 @@ namespace IdentityBase.WebApi
         public Startup(
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger<Startup> logger)
+            ILoggerFactory loggerFactory)
         {
-            this._logger = logger;
+            this._logger = loggerFactory.CreateLogger<Startup>();
             this._environment = environment;
             this._configuration = configuration;
             this._modulesStartup = new ModulesStartup(configuration);

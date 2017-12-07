@@ -4,11 +4,9 @@
 namespace IdentityBase
 {
     using System;
-    using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
-    using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -24,13 +22,11 @@ namespace IdentityBase
     /// </summary>
     public class Startup : IStartup
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Startup> _logger;
         private readonly IHostingEnvironment _environment;
         private readonly ModulesStartup _modulesStartup;
         private readonly IConfiguration _configuration;
         private readonly ApplicationOptions _applicationOptions;
-
-        private readonly IModule _webApiModule;
 
         /// <summary>
         ///
@@ -44,27 +40,15 @@ namespace IdentityBase
         public Startup(
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILogger<Startup> logger)
+            ILoggerFactory loggerFactory)
         {
-            this._logger = logger;
+            this._logger = loggerFactory.CreateLogger<Startup>();
             this._environment = environment;
             this._configuration = configuration;
             this._modulesStartup = new ModulesStartup(configuration);
 
             this._applicationOptions = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
-
-            if (this._applicationOptions.EnableWebApi)
-            {
-                Type type = Type.GetType(
-                    "IdentityBase.WebApi.WebApiModule, IdentityBase.WebApi");
-
-                if (type != null)
-                {
-                    this._webApiModule =
-                        (IModule)Activator.CreateInstance(type);
-                }
-            }
         }
 
         /// <summary>
@@ -120,13 +104,6 @@ namespace IdentityBase
 
             this._logger.LogInformation("Services configured.");
 
-            // Enable webapi if available
-            if (this._webApiModule != null)
-            {
-                this._webApiModule
-                    .ConfigureServices(services, this._configuration);
-            }
-
             return services.BuildServiceProvider();
         }
 
@@ -170,10 +147,10 @@ namespace IdentityBase
 
             this._logger.LogInformation("Configure application.");
 
-            // Configure webapi if available
-            if (this._webApiModule != null)
+            // Run embedded WebAPI if enabled
+            if (this._applicationOptions.EnableWebApi)
             {
-                this._webApiModule.Configure(app);
+                app.AddEmbeddedWebApi();
             }
         }
     }

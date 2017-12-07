@@ -54,7 +54,7 @@ namespace IdentityBase
                 Console.WriteLine("Enabling IIS Integration");
                 hostBuilder = hostBuilder.UseIISIntegration();
             }
-
+            
             hostBuilder.Build().Run();
         }
 

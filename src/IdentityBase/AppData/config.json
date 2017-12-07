@@ -17,7 +17,7 @@
         "Name": "RollingFile",
         "Args": {
           "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-          "pathFormat": "./AppData/Logs/log.json",
+          "pathFormat": "./AppData/Logs/IdentityBase.json",
           "fileSizeLimitBytes": 1234567
         }
       }

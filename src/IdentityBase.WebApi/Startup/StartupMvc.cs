@@ -16,7 +16,7 @@ namespace IdentityBase.WebApi
             this IServiceCollection services,
             WebApiOptions webApiOptions)
         {
-            Assembly assembly = typeof(WebApiModule)
+            Assembly assembly = typeof(StartupMvc)
                .GetTypeInfo().Assembly;
 
             services

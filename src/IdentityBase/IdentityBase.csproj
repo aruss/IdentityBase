@@ -1,27 +1,160 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <UserSecretsId>7f742bdf-fc51-4620-b061-e42e68d2a7ed</UserSecretsId>
     <Authors>Russlan Akiev</Authors>
     <Company />
-    <Description>IdentityBase common code base</Description>
+    <Description>Secure Token Service, IdentityBase web interface</Description>
     <Copyright>Copyright (c) Russlan Akiev. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/aruss/IdentityBase</PackageProjectUrl>
     <PackageTags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</PackageTags>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Validation\**" />
-    <EmbeddedResource Remove="Validation\**" />
-    <None Remove="Validation\**" />
+    <Compile Remove="Actions\External\**" />
+    <Compile Remove="Api\**" />
+    <Compile Remove="AppData\Logs\**" />
+    <Compile Remove="TempData\**" />
+    <Content Remove="Actions\External\**" />
+    <Content Remove="Api\**" />
+    <Content Remove="AppData\Logs\**" />
+    <Content Remove="TempData\**" />
+    <EmbeddedResource Remove="Actions\External\**" />
+    <EmbeddedResource Remove="Api\**" />
+    <EmbeddedResource Remove="AppData\Logs\**" />
+    <EmbeddedResource Remove="TempData\**" />
+    <None Remove="Actions\External\**" />
+    <None Remove="Api\**" />
+    <None Remove="AppData\Logs\**" />
+    <None Remove="TempData\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Startup\StartupDataLayer.cs" />
+    <Compile Remove="Startup\StartupEmailSender.cs" />
+    <Compile Remove="Startup\StartupLogging.cs" />
+    <Compile Remove="Startup\StartupWebApi.cs" />
+  </ItemGroup>
 
   <ItemGroup>
+    <None Remove="IdentityBase.nuspec" />
+    <None Remove="IdentityBase.Public.nuspec" />
+    <None Remove="README.md" />
+    <None Remove="tempkey.rsa" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Themes\Default\Public\css\site.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\css\site.less">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\css\site.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\favicon.ico">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\icon.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\icon.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\css\bootstrap.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\css\bootstrap.css.map">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\css\bootstrap.min.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\fonts\glyphicons-halflings-regular.eot">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\fonts\glyphicons-halflings-regular.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\fonts\glyphicons-halflings-regular.woff">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\js\bootstrap.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\bootstrap\js\bootstrap.min.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\jquery\jquery.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\jquery\jquery.min.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Themes\Default\Public\lib\jquery\jquery.min.map">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.0.4" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.4.0" />
+    <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="ServiceBase" Version="1.1.11" />
+    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IdentityBase.EntityFramework.MySql\IdentityBase.EntityFramework.MySql.csproj" />
+    <ProjectReference Include="..\IdentityBase.EntityFramework.Npgsql\IdentityBase.EntityFramework.Npgsql.csproj" />
+    <ProjectReference Include="..\IdentityBase.EntityFramework.SqlServer\IdentityBase.EntityFramework.SqlServer.csproj" />
+    <ProjectReference Include="..\IdentityBase.EntityFramework\IdentityBase.EntityFramework.csproj" />
+    <ProjectReference Include="..\IdentityBase.SendGrid\IdentityBase.SendGrid.csproj" />
+    <ProjectReference Include="..\IdentityBase.Smtp\IdentityBase.Smtp.csproj" />
+    <ProjectReference Include="..\IdentityBase.Twilio\IdentityBase.Twilio.csproj" />
+    <ProjectReference Include="..\IdentityBase.WebApi\IdentityBase.WebApi.csproj" />
+    <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Themes\Fancy\Public\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="AppData\idsvr3test.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

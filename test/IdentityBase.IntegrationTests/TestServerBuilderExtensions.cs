@@ -67,7 +67,7 @@ namespace IdentityBase.IntegrationTests
                     return new IdentityBase.Startup(
                         builder.Build(),
                         environment,
-                        new NullLogger<Startup>()
+                        new NullLoggerFactory()                        
                         // messageHandler
                     );
                 })
