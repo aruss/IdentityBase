@@ -54,7 +54,8 @@ namespace IdentityBase.WebApi
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
+            
             services.AddCors(corsOpts =>
             {
                 corsOpts.AddPolicy("CorsPolicy",

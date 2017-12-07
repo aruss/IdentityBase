@@ -8,13 +8,12 @@ namespace IdentityBase.Services
     using IdentityBase.Events;
     using IdentityBase.Extensions;
     using IdentityBase.Models;
-    using IdentityServer4;
-    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Http;
     using ServiceBase.Collections;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using ServiceBase.Events;
 
     public class UserAccountService
     {
@@ -89,7 +88,7 @@ namespace IdentityBase.Services
         }
 
         /// <summary>
-        /// Loads user by its primary key 
+        /// Loads user by its primary key
         /// </summary>
         /// <param name="id">UserId</param>
         /// <returns></returns>
@@ -100,7 +99,7 @@ namespace IdentityBase.Services
         }
 
         /// <summary>
-        /// Loads user by email 
+        /// Loads user by email
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
@@ -110,7 +109,7 @@ namespace IdentityBase.Services
         }
 
         /// <summary>
-        /// Loads user by email and with all external accounts 
+        /// Loads user by email and with all external accounts
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
@@ -121,9 +120,11 @@ namespace IdentityBase.Services
         }
 
         /// <summary>
-        /// Get by external provider information, 
+        /// Get by external provider information,
         /// </summary>
-        /// <param name="provider">Provider name (facebook, twitter, ...)</param>
+        /// <param name="provider">
+        /// Provider name (facebook, twitter, ...)
+        /// </param>
         /// <param name="subject">Provider account ID</param>
         /// <returns></returns>
         public async Task<UserAccount> LoadByExternalProviderAsync(
@@ -252,7 +253,7 @@ namespace IdentityBase.Services
 
             await eventService.RaiseUserAccountCreatedSuccessEventAsync(
                 userAccount,
-                IdentityServerConstants.LocalIdentityProvider);
+                IdentityServer4.IdentityServerConstants.LocalIdentityProvider);
 
             return userAccount2;
         }
@@ -421,7 +422,8 @@ namespace IdentityBase.Services
                 });
 
             // Emit event
-            await eventService.RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
+            await eventService
+                .RaiseUserAccountUpdatedSuccessEventAsync(userAccount);
 
             return externalAccount;
         }
@@ -445,18 +447,22 @@ namespace IdentityBase.Services
             string returnUrl,
             UserAccount invitedByUserAccount)
         {
-            var foo = CreateNewLocalUserAccount(email);
-            foo.CreationKind = CreationKind.Invitation;
-            SetVerification(foo, VerificationKeyPurpose.ConfirmAccount, returnUrl);
+            UserAccount userAccount = this.CreateNewLocalUserAccount(email);
+            userAccount.CreationKind = CreationKind.Invitation;
 
-            var userAccount = await userAccountStore.WriteAsync(foo);
+            this.SetVerification(userAccount,
+                VerificationKeyPurpose.ConfirmAccount, returnUrl);
+
+            userAccount = await userAccountStore.WriteAsync(userAccount);
 
             // Emit events
             await eventService.RaiseUserAccountCreatedSuccessEventAsync(
-                userAccount, IdentityServerConstants.LocalIdentityProvider);
+                userAccount,
+                IdentityServer4.IdentityServerConstants.LocalIdentityProvider);
 
             await eventService.RaiseUserAccountInvitedSuccessEventAsync(
-                userAccount, invitedByUserAccount);
+                userAccount,
+                invitedByUserAccount);
 
             return userAccount;
         }
@@ -498,13 +504,13 @@ namespace IdentityBase.Services
 
         public async Task SetEmailChangeVirificationKeyAsync(
             UserAccount userAccount,
-            string email, 
+            string email,
             string returnUrl = null)
         {
             // TODO: Move to verification storage reader or something
             string storage = Newtonsoft.Json.JsonConvert
-                .SerializeObject(new string[] { email, returnUrl }); 
-            
+                .SerializeObject(new string[] { email, returnUrl });
+
             // Set verification key
             this.SetVerification(userAccount,
                 VerificationKeyPurpose.ChangeEmail,
@@ -519,8 +525,8 @@ namespace IdentityBase.Services
             string email)
         {
             ClearVerification(userAccount);
-            
-            userAccount.Email = email; 
+
+            userAccount.Email = email;
 
             await UpdateUserAccountAsync(userAccount);
         }

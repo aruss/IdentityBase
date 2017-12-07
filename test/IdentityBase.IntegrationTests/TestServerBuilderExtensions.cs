@@ -64,11 +64,11 @@ namespace IdentityBase.IntegrationTests
                         configBuild.Invoke(builder);
                     }
 
-                    return new Startup(
+                    return new IdentityBase.Startup(
                         builder.Build(),
                         environment,
-                        new NullLogger<Startup>(),
-                        messageHandler
+                        new NullLogger<Startup>()
+                        // messageHandler
                     );
                 })
                 .Build();

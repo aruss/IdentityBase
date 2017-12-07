@@ -6,8 +6,7 @@ namespace IdentityBase.Events
     using System;
     using System.Threading.Tasks;
     using IdentityBase.Models;
-    using IdentityServer4.Events;
-    using IdentityServer4.Services;
+    using ServiceBase.Events;
 
     /// <summary>
     /// Event for successful <see cref="UserAccount"/> invitation.

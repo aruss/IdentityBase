@@ -93,6 +93,7 @@ namespace IdentityBase
             services.AddTransient<ClientService>();
             services.AddAntiforgery();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
 
             // // TOOD: can be moved to webapi component 
             // services.AddCors(corsOpts =>

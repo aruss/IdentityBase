@@ -40,6 +40,10 @@ namespace IdentityBase.Extensions
                 .UseContentRoot(environment.ContentRootPath)
                 .UseConfiguration(configuration)
                 .ConfigureServices(servicesConfiguration)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddSerilog(hostingContext.Configuration);
+                })
                 .UseStartup<EmptyStartup>()
                 .Build();
             

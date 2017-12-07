@@ -17,6 +17,7 @@ namespace AspNetCoreWeb.Actions.Invite
         }
 
         [HttpPost("/invite")]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Invited(InviteInputModel inputModel)
         {
@@ -35,8 +36,10 @@ namespace AspNetCoreWeb.Actions.Invite
             };
 
             HttpResponseMessage response = await client.PutJsonAsync(
-                "http://localhost:5000/invitations",
+                "http://localhost:5000/api/invitations",
                 model);
+
+            response.EnsureSuccessStatusCode(); 
 
             var json = response.Content.ReadAsStringAsync().Result;
 

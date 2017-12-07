@@ -14,6 +14,7 @@ namespace IdentityBase.WebApi.Actions.Invitations
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using ServiceBase.Authorization;
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
@@ -22,7 +23,7 @@ namespace IdentityBase.WebApi.Actions.Invitations
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
-        private readonly IClientStore _clientStore;
+        private readonly IClientStore _clientStore; 
 
         public InvitationsPutController(
             UserAccountService userAccountService,

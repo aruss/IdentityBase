@@ -69,7 +69,7 @@ namespace IdentityBase
             .AddProfileService<ProfileService>()
             .AddSecretParser<JwtBearerClientAssertionSecretParser>()
             .AddSecretValidator<PrivateKeyJwtSecretValidator>()
-            .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
+            .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>(); 
             
             if (environment.IsDevelopment())
             {
@@ -86,7 +86,9 @@ namespace IdentityBase
             {
                 if (config.ContainsSection("IdentityServer"))
                 {
-                    var section = config.GetSection("IdentityServer");
+                    IConfigurationSection section =
+                        config.GetSection("IdentityServer");
+
                     if (section.ContainsSection("SigningCredentialFromPfx"))
                     {
                         string filePath = section

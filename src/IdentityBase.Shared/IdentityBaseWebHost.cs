@@ -55,9 +55,7 @@ namespace IdentityBase
                 hostBuilder = hostBuilder.UseIISIntegration();
             }
 
-            hostBuilder
-                .Build()
-                .Run();
+            hostBuilder.Build().Run();
         }
 
         private static string GetConfigFilePath(
@@ -68,10 +66,10 @@ namespace IdentityBase
 
             if (File.Exists(Path.Combine(basePath, configFilePath)))
             {
-                return configFilePath; 
+                return configFilePath;
             }
 
-            return "./AppData/config.json"; 
+            return "./AppData/config.json";
         }
 
         private static IConfigurationRoot LoadConfig<TStartup>(
