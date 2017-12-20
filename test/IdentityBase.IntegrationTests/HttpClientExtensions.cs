@@ -185,8 +185,7 @@ namespace IdentityBase.IntegrationTests
 
             return response;
         }
-
-
+        
         public static async Task<HttpResponseMessage> RegisterConfirmGetAndPostFormAsync(
             this HttpClient client,
             string confirmUrl,

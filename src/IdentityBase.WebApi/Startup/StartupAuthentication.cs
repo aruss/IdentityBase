@@ -3,6 +3,8 @@
 
 namespace IdentityBase.WebApi
 {
+    using System;
+    using System.Net.Http;
     using System.Reflection;
     using IdentityBase.Configuration;
     using IdentityBase.WebApi.Actions;
@@ -14,7 +16,8 @@ namespace IdentityBase.WebApi
     {
         public static void AddAuthentication(
             this IServiceCollection services,
-            WebApiOptions webApiOptions)
+            WebApiOptions webApiOptions,
+            Func<HttpMessageHandler> messageHandlerFactory = null)
         {
             Assembly assembly = typeof(StartupAuthentication)
                .GetTypeInfo().Assembly;
@@ -32,6 +35,17 @@ namespace IdentityBase.WebApi
                     // TODO: move to constants
                     options.ApiName = WebApiConstants.ApiName;
                     options.ApiSecret = webApiOptions.ApiSecret;
+
+                    // Set message handler, mostly used for integration tests
+                    if (messageHandlerFactory != null)
+                    {
+                        HttpMessageHandler messageHandler =
+                            messageHandlerFactory();
+
+                        options.IntrospectionDiscoveryHandler = messageHandler;
+                        options.IntrospectionDiscoveryHandler = messageHandler;
+                        options.JwtBackChannelHandler = messageHandler; 
+                    }
                 });
 
             services

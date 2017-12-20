@@ -5,6 +5,7 @@ namespace IdentityBase
 {
     using System;
     using System.IO;
+    using System.Net.Http;
     using System.Security.Cryptography.X509Certificates;
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
@@ -25,10 +26,10 @@ namespace IdentityBase
             ILogger logger,
             IHostingEnvironment environment)
         {
-            var eventOptions = config.GetSection("Events")
+            EventOptions eventOptions = config.GetSection("Events")
                 .Get<EventOptions>() ?? new EventOptions();
 
-            var appOptions = config.GetSection("App")
+            ApplicationOptions appOptions = config.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
             var builder = services.AddIdentityServer((options) =>
@@ -53,7 +54,7 @@ namespace IdentityBase
                 options.UserInteraction.ErrorUrl = "/error";
 
                 options.Cors.CorsPolicyName = "CorsPolicy";
-
+                
                 // options.Authentication
                 //     .FederatedSignOutPaths.Add("/signout-oidc");
                 // 
@@ -69,7 +70,9 @@ namespace IdentityBase
             .AddProfileService<ProfileService>()
             .AddSecretParser<JwtBearerClientAssertionSecretParser>()
             .AddSecretValidator<PrivateKeyJwtSecretValidator>()
-            .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>(); 
+            .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
+
+            
             
             if (environment.IsDevelopment())
             {

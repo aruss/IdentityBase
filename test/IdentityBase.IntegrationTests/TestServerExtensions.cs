@@ -48,7 +48,7 @@ namespace IdentityBase.IntegrationTests
                 throw new Exception(discoResult.Error);
             }
 
-            var tokenClient = testServer.CreateTokenClient(
+            TokenClient tokenClient = testServer.CreateTokenClient(
                 discoResult.TokenEndpoint,
                 clientId,
                 clientSecret);

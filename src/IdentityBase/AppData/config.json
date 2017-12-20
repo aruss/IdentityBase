@@ -79,7 +79,8 @@
   },
   "WebApi": {
     "AutorityUrl": "http://localhost:5000",
-    "ApiSecret": "secret"
+    "ApiSecret": "secret",
+    "EnableSwagger":  true
   },
   "Email": {
     "TemplateDirectoryPath": "./Templates/Email"
@@ -96,8 +97,8 @@
     { "type": "IdentityBase.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.EntityFramework" },
     // { "Type": "IdentityBase.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.EntityFramework" },
 
-    { "Type": "IdentityBase.DebugSmsModule, IdentityBase" },
-    { "Type": "IdentityBase.DebugEmailModule, IdentityBase" },
-    { "Type": "IdentityBase.DefaultEventModule, IdentityBase" }
+    { "Type": "IdentityBase.DebugSmsModule, IdentityBase.Shared" },
+    { "Type": "IdentityBase.DebugEmailModule, IdentityBase.Shared" },
+    { "Type": "IdentityBase.DefaultEventModule, IdentityBase.Shared" }
   ]
 }

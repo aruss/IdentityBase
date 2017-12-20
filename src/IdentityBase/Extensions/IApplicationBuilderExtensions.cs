@@ -4,6 +4,7 @@
 namespace IdentityBase
 {
     using System;
+    using System.Net.Http;
     using IdentityBase.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -15,23 +16,30 @@ namespace IdentityBase
     public static class IApplicationBuilderExtensions
     {
         public static void AddEmbeddedWebApi(
-            this IApplicationBuilder appBuilder)
+            this IApplicationBuilder appBuilder,
+            Func<HttpMessageHandler> messageHandlerFactory = null)
         {
-            appBuilder.AddEmbedded("/api",
-                "IdentityBase.WebApi.Startup, IdentityBase.WebApi");
+            appBuilder.AddEmbedded(
+                "/api",
+                "IdentityBase.WebApi.Startup, IdentityBase.WebApi",
+                messageHandlerFactory);
         }
 
         public static void AddEmbeddedAdmin(
-            this IApplicationBuilder appBuilder)
+            this IApplicationBuilder appBuilder,
+            Func<HttpMessageHandler> messageHandlerFactory = null)
         {
-            appBuilder.AddEmbedded("/api",
-                "IdentityBase.Admin.Startup, IdentityBase.Admin");
+            appBuilder.AddEmbedded(
+                "/admin",
+                "IdentityBase.Admin.Startup, IdentityBase.Admin",
+                messageHandlerFactory);
         }
 
         public static void AddEmbedded(
             this IApplicationBuilder appBuilder,
             PathString path,
-            string startupTypeName)
+            string startupTypeName,
+            Func<HttpMessageHandler> messageHandlerFactory = null)
         {
             IConfiguration config = appBuilder.ApplicationServices
                 .GetRequiredService<IConfiguration>();
@@ -46,7 +54,8 @@ namespace IdentityBase
                 startupTypeName,
                 config,
                 environment,
-                loggerFactory);
+                loggerFactory,
+                messageHandlerFactory);
 
             appBuilder.MapStartup(
                 path,
@@ -66,7 +75,8 @@ namespace IdentityBase
             string startupTypeName,
            IConfiguration configuration,
            IHostingEnvironment environment,
-           ILoggerFactory loggerFactory)
+           ILoggerFactory loggerFactory,
+           Func<HttpMessageHandler> messageHandlerFactory = null)
         {
             Type type = Type.GetType(startupTypeName);
 
@@ -80,7 +90,8 @@ namespace IdentityBase
                 type,
                 configuration,
                 environment,
-                loggerFactory);
+                loggerFactory,
+                messageHandlerFactory);
         }
     }
 }

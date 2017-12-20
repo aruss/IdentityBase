@@ -2,6 +2,7 @@ namespace IdentityBase.IntegrationTests
 {
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Moq;
     using ServiceBase.Extensions;
@@ -15,12 +16,7 @@ namespace IdentityBase.IntegrationTests
         private TestServer CreateServer(
             Mock<IEmailService> emailServiceMock = null)
         {
-            return TestServerBuilderExtensions
-                .CreateServer(emailServiceMock, (builder) =>
-                {
-                    builder
-                        .Alter("App:EnableInvitationCreateEndpoint", "true");
-                }, TestServerBuilderExtensions.CreateServer().CreateHandler());
+            return TestServerBuilderExtensions.CreateServer(emailServiceMock);
         }
 
         [Fact(DisplayName = "API: Invite / Confirm / Add password / Login")]
@@ -47,7 +43,7 @@ namespace IdentityBase.IntegrationTests
             HttpClient client = await server.CreateAuthenticatedClient();
 
             HttpResponseMessage response = await client
-                .PutJsonAsync("/invitations", new
+                .PutJsonAsync("/api/invitations", new
                 {
                     Email = "invited@localhost",
                     ClientId = "mvc.hybrid"

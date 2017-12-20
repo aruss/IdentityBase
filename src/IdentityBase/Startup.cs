@@ -4,6 +4,7 @@
 namespace IdentityBase
 {
     using System;
+    using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
@@ -27,6 +28,7 @@ namespace IdentityBase
         private readonly ModulesStartup _modulesStartup;
         private readonly IConfiguration _configuration;
         private readonly ApplicationOptions _applicationOptions;
+        private readonly Func<HttpMessageHandler> _messageHandlerFactory; 
 
         /// <summary>
         ///
@@ -40,12 +42,14 @@ namespace IdentityBase
         public Startup(
             IConfiguration configuration,
             IHostingEnvironment environment,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            Func<HttpMessageHandler> messageHandlerFactory = null)
         {
             this._logger = loggerFactory.CreateLogger<Startup>();
             this._environment = environment;
             this._configuration = configuration;
             this._modulesStartup = new ModulesStartup(configuration);
+            this._messageHandlerFactory = messageHandlerFactory;
 
             this._applicationOptions = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
@@ -150,7 +154,7 @@ namespace IdentityBase
             // Run embedded WebAPI if enabled
             if (this._applicationOptions.EnableWebApi)
             {
-                app.AddEmbeddedWebApi();
+                app.AddEmbeddedWebApi(this._messageHandlerFactory);
             }
         }
     }

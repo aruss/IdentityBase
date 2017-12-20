@@ -16,12 +16,7 @@ namespace IdentityBase.IntegrationTests
         private TestServer CreateServer(
             Mock<IEmailService> emailServiceMock = null)
         {
-            return TestServerBuilderExtensions
-                .CreateServer(emailServiceMock, (builder) =>
-                {
-                    builder
-                        .Alter("App:EnableUserAccountDeleteEndpoint", "true");
-                }, TestServerBuilderExtensions.CreateServer().CreateHandler());
+            return TestServerBuilderExtensions.CreateServer(emailServiceMock);
         }
 
         [Fact(DisplayName = "API: Delete account / Try login")]
@@ -30,7 +25,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = "/useraccounts/0c2954d2-4c73-44e3-b0f2-c00403e4adef";
+            string uri = "/api/useraccounts/0c2954d2-4c73-44e3-b0f2-c00403e4adef";
             HttpResponseMessage deleteResponse = await client.DeleteAsync(uri);
             deleteResponse.EnsureSuccessStatusCode();
 
@@ -52,11 +47,11 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = "/useraccounts/1c2954d2-4c73-44e3-b0f2-c00403e4adee";
+            string uri = "/api/useraccounts/1c2954d2-4c73-44e3-b0f2-c00403e4adee";
             HttpResponseMessage response = await client.DeleteAsync(uri);
 
             response.StatusCode
-                .Should().Be(System.Net.HttpStatusCode.NotFound); 
+                .Should().Be(System.Net.HttpStatusCode.NotFound);
         }
     }
 }

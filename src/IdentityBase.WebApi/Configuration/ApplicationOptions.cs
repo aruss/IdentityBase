@@ -18,5 +18,7 @@ namespace IdentityBase.Configuration
         /// Base-address of the token issuer
         /// </summary>
         public string AutorityUrl { get; set; } = "http://localhost:5000";
+
+        public bool EnableSwagger { get; set; } = false; 
     }
 }

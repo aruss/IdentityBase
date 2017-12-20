@@ -11,8 +11,11 @@ namespace IdentityBase.IntegrationTests
         {
             var configData = new Dictionary<string, string>()
             {
-                { "App:PublicUrl", "http://localhost" },
+                { "App:EnableWebApi", "true" },
                 { "App:TempFolder", $"./AppData/Temp/{Guid.NewGuid()}" },
+
+                { "WebApi:AutorityUrl", "http://localhost" },
+                { "WebApi:ApiSecret", "secret" },
 
                 { "EntityFramework:MigrateDatabase", "false" },
                 { "EntityFramework:SeedExampleData", "true" },
@@ -24,9 +27,9 @@ namespace IdentityBase.IntegrationTests
 
                 { "Modules:0:Type", "IdentityBase.EntityFramework.InMemoryModule, IdentityBase.EntityFramework" },
                 { "Modules:1:Type", "IdentityBase.EntityFramework.ExampleDataStoreInitializerModule, IdentityBase.EntityFramework" },
-                { "Modules:2:Type", "IdentityBase.DebugSmsModule, IdentityBase" },
-                { "Modules:3:Type", "IdentityBase.DebugEmailModule, IdentityBase" },
-                { "Modules:4:Type", "IdentityBase.DefaultEventModule, IdentityBase" },
+                { "Modules:2:Type", "IdentityBase.DebugSmsModule, IdentityBase.Shared" },
+                { "Modules:3:Type", "IdentityBase.DebugEmailModule, IdentityBase.Shared" },
+                { "Modules:4:Type", "IdentityBase.DefaultEventModule, IdentityBase.Shared" },
             };
 
             return builder.UseConfiguration(configData);
@@ -37,7 +40,7 @@ namespace IdentityBase.IntegrationTests
         {
             return builder
                 .RemoveByValue("IdentityBase.DebugEmailModule, IdentityBase")
-                .ReorderModules(); 
+                .ReorderModules();
         }
     }
 }

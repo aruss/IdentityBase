@@ -21,12 +21,7 @@ namespace IdentityBase.IntegrationTests
         private TestServer CreateServer(
             Mock<IEmailService> emailServiceMock = null)
         {
-            return TestServerBuilderExtensions
-                .CreateServer(emailServiceMock, (builder) =>
-                {
-                    builder
-                        .Alter("App:EnableAccountChangeEmailEndpoint", "true");
-                }, TestServerBuilderExtensions.CreateServer().CreateHandler());
+            return TestServerBuilderExtensions.CreateServer(emailServiceMock);
         }
 
         [Fact(DisplayName = "API: Change email / Confirm / Login")]
@@ -52,7 +47,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer(emailServiceMock);
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{aliceId}/change_email";
+            string uri = $"/api/useraccounts/{aliceId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri, new
             {
                 Email = "nerd@localhost",
@@ -94,7 +89,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer(emailServiceMock);
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{aliceId}/change_email";
+            string uri = $"/api/useraccounts/{aliceId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri, new
             {
                 Email = "nerd@localhost",
@@ -112,7 +107,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{notFoundId}/change_email";
+            string uri = $"/api/useraccounts/{notFoundId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri,
                 new
                 {
@@ -130,7 +125,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{aliceId}/change_email";
+            string uri = $"/api/useraccounts/{aliceId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri,
                 new
                 {
@@ -151,7 +146,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{aliceId}/change_email";
+            string uri = $"/api/useraccounts/{aliceId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri,
                 new
                 {
@@ -171,7 +166,7 @@ namespace IdentityBase.IntegrationTests
             TestServer server = this.CreateServer();
             HttpClient client = await server.CreateAuthenticatedClient();
 
-            string uri = $"/useraccounts/{aliceId}/change_email";
+            string uri = $"/api/useraccounts/{aliceId}/change_email";
             HttpResponseMessage response = await client.PostJsonAsync(uri,
                 new
                 {
