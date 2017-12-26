@@ -1,13 +1,13 @@
-﻿@model IdentityBase.Actions.Consent.ConsentViewModel
+@model IdentityBase.Actions.Consent.ConsentViewModel
 
 <div class="page-consent">
     <div class="row page-header">
         <div class="col-sm-10">
             <div class="client-logo" hide-if-null="Model.ClientLogoUrl"><img src="@Model.ClientLogoUrl"></div>
             <h1>
-                @Model.ClientName
-                <small>is requesting your permission</small>
-            </h1>
+                @Model.ClientName<br/>
+                <small>is requesting your permission</small>    
+            </h1>            
         </div>
     </div>
 
@@ -65,5 +65,4 @@
             </form>
         </div>
     </div>
-
 </div>

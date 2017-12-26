@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Themes\Default\package.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="IdentityBase.nuspec" />
     <None Remove="IdentityBase.Public.nuspec" />
     <None Remove="README.md" />
@@ -50,15 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Themes\Default\Public\css\site.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Themes\Default\Public\css\site.less">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Themes\Default\Public\css\site.min.css">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Include="Themes\Default\Public\favicon.ico">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -150,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\Fancy\Public\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Themes\Default\package.json" />
   </ItemGroup>
   <ItemGroup>
     <None Update="AppData\idsvr3test.pfx">

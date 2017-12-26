@@ -8,10 +8,14 @@ namespace IdentityBase.Events
     /// </summary>
     public static class EventIds
     {
+        /// <summary>
+        /// If user signs up
+        /// </summary>
         public const int UserAccountCreated = 4000;
-        public const int UserAccountUpdated = 4100;
+        public const int UserAccountLogin = 4100;
+        public const int UserAccountInvited = 4200;
+
         public const int UserAccountDeleted = 4200;
-        public const int UserAccountInvited = 4400;
     }
 }
 

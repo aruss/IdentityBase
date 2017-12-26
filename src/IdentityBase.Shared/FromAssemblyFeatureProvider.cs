@@ -1,8 +1,9 @@
-﻿namespace IdentityBase
+namespace IdentityBase
 {
     using System;
     using System.Reflection;
     using Microsoft.AspNetCore.Mvc.Controllers;
+
     public class FromAssemblyFeatureProvider : ControllerFeatureProvider
     {
         public static FromAssemblyFeatureProvider WithAssemblyOf<TFoo>()

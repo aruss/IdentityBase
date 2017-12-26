@@ -17,10 +17,11 @@ PostgreSQL data provider for IdentityBase.
 dotnet ef migrations add init --context MigrationDbContext
 ```
 
-### Start postgres by running following docker compose file 
+### Start postgres server by running following docker compose file 
 
 ```yaml
 version: "2.0"
+
 services:
   postgres-svc:  
     container_name: idbase-dev-postgres

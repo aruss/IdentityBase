@@ -9,23 +9,23 @@ namespace IdentityBase.Events
     using ServiceBase.Events;
 
     /// <summary>
-    /// Event for successfull <see cref="UserAccount"/> update.
+    /// Event for successfull <see cref="UserAccount"/> Login.
     /// </summary>
-    public class UserAccountUpdatedSuccessEvent : Event
+    public class UserAccountLoginSuccessEvent : Event
     {
         /// <summary>
-        /// Created a instace of <see cref="UserAccountInvitedSuccessEvent"/>.
+        /// Created a instace of <see cref="UserAccountLoginSuccessEvent"/>.
         /// </summary>
-        /// <param name="userAccount">Instance of updated
+        /// <param name="userAccount">Instance of logged in
         /// <see cref="UserAccount"/>.</param>
         /// <exception cref="ArgumentNullException">Thrown when
         /// invitedUserAccount is null.</exception>
-        public UserAccountUpdatedSuccessEvent(
+        public UserAccountLoginSuccessEvent(
             UserAccount userAccount)
             : base(EventCategories.UserAccount,
-                  "UserAccount updated success",
+                  "UserAccount login success",
                   EventTypes.Success,
-                  EventIds.UserAccountUpdated)
+                  EventIds.UserAccountLogin)
         {
             if (userAccount == null)
             {
@@ -44,18 +44,18 @@ namespace IdentityBase.Events
     public static partial class IEventServiceExtensions
     {
         /// <summary>
-        /// Raises <see cref="UserAccountUpdatedSuccessEvent"/>.
+        /// Raises <see cref="UserAccountLoginSuccessEvent"/>.
         /// </summary>
         /// <param name="eventService">Instance of
         /// <see cref="IEventService"/>.</param>
         /// <param name="userAccount">Instance of updated
         /// <see cref="UserAccount"/>.</param>
-        public static async Task RaiseUserAccountUpdatedSuccessEventAsync(
+        public static async Task RaiseUserAccountLoginSuccessEventAsync(
             this IEventService eventService,
             UserAccount userAccount)
         {
             await eventService.RaiseAsync(
-                new UserAccountUpdatedSuccessEvent(userAccount));
+                new UserAccountLoginSuccessEvent(userAccount));
         }
     }
 }

@@ -1,6 +1,6 @@
 # IdentityBase.EntityFramework.MySql
 
-PostgreSQL data provider for IdentityBase.
+MySQL data provider for IdentityBase.
 
 ### Requirements 
 
@@ -18,14 +18,14 @@ PostgreSQL data provider for IdentityBase.
 dotnet ef migrations add init --context MigrationDbContext
 ```
 
-### Start postgres by running following docker compose file 
+### Start mysql server by running following docker compose file 
 
 ```yaml
 version: "2.0"
 
 services:
   mysql-svc:
-    container_name
+    container_name: idbase-dev-mysql
     image: mysql:5.7
     restart: always
     environment:

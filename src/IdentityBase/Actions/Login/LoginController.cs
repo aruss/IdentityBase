@@ -17,8 +17,8 @@ namespace IdentityBase.Actions.Login
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using ServiceBase;
 
-    // https://github.com/IdentityServer/IdentityServer4.Samples/blob/dev/Quickstarts/5HybridFlowAuthenticationWithApiAccess/src/QuickstartIdentityServer/Controllers/AccountController.cs
     public class LoginController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
@@ -26,23 +26,26 @@ namespace IdentityBase.Actions.Login
         private readonly IIdentityServerInteractionService _interaction;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
+        private readonly IDateTimeAccessor _dateTimeAccessor;
 
         public LoginController(
             ApplicationOptions applicationOptions,
             ILogger<LoginController> logger,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
-            ClientService clientService)
+            ClientService clientService,
+            IDateTimeAccessor dateTimeAccessor)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
             this._interaction = interaction;
             this._userAccountService = userAccountService;
             this._clientService = clientService;
+            this._dateTimeAccessor = dateTimeAccessor;
         }
 
         /// <summary>
-        /// Show login page
+        /// Shows the login page.
         /// </summary>
         [HttpGet("login", Name = "Login")]
         public async Task<IActionResult> Login(string returnUrl)
@@ -73,9 +76,10 @@ namespace IdentityBase.Actions.Login
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
-            // NOTE: since the theme does not renders the local login form
-            // it is not possible to post this if local login is disabled
-            // due to missing anti forgery token.
+            if (!this._applicationOptions.EnableAccountLogin)
+            {
+                return this.NotFound(); 
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -96,21 +100,14 @@ namespace IdentityBase.Actions.Login
                     }
                     else if (result.IsLocalAccount)
                     {
-                        if (!result.IsPasswordValid)
+                        if (result.IsPasswordValid)
                         {
-                            this.ModelState.AddModelError(
-                                IdentityBaseConstants.ErrorMessages
-                                    .InvalidCredentials
-                            );
-
-                            // TODO: Account locking on failed login attempts
-                            // is not supported yet
-                            // await userAccountService
-                            //     .UpdateFailedLoginAsync(result.UserAccount);
+                            return await this.SignInAsync(model, result);
                         }
                         else
                         {
-                            return await this.SignInAsync(model, result);
+                            await this._userAccountService
+                                .PerceiveFailedLoginAsync(result.UserAccount);
                         }
                     }
                     else
@@ -146,8 +143,7 @@ namespace IdentityBase.Actions.Login
                 props = new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    // TODO: use DateTimeAccessor
-                    ExpiresUtc = DateTimeOffset.UtcNow.Add(
+                    ExpiresUtc = this._dateTimeAccessor.UtcNow.Add(
                         TimeSpan.FromSeconds(
                             this._applicationOptions.RememberMeLoginDuration
                         )
@@ -158,16 +154,13 @@ namespace IdentityBase.Actions.Login
             await this.HttpContext.SignInAsync(result.UserAccount, props);
 
             await this._userAccountService
-                .UpdateSuccessfulLoginAsync(result.UserAccount);
+                .PerceiveSuccessfulLoginAsync(result.UserAccount);
 
-            // Make sure the returnUrl is still valid, and if yes -
-            // redirect back to authorize endpoint
-            if (this._interaction.IsValidReturnUrl(model.ReturnUrl))
-            {
-                return Redirect(model.ReturnUrl);
-            }
-
-            return Redirect("/");
+            return this.Redirect(
+                this._interaction.IsValidReturnUrl(model.ReturnUrl) ?
+                model.ReturnUrl :
+                "/"
+            );
         }
 
         [NonAction]
@@ -204,6 +197,7 @@ namespace IdentityBase.Actions.Login
                 EnableAccountRecover = this._applicationOptions
                     .EnableAccountRecovery,
 
+                // TODO: expose AuthorizationRequest
                 LoginHint = context.LoginHint,
             };
 

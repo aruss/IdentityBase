@@ -77,8 +77,9 @@ namespace IdentityBase
                 this._environment);
 
             services.AddTransient<ICrypto, DefaultCrypto>();
-            services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
+            services.AddScoped<UserAccountService>();
+            services.AddScoped<NotificationService>(); 
             services.AddAntiforgery();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();

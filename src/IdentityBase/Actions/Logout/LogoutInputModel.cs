@@ -7,6 +7,9 @@ namespace IdentityBase.Actions.Logout
 
     public class LogoutInputModel
     {
+        /// <summary>
+        /// The logout identifier.
+        /// </summary>
         [StringLength(50)]
         public string LogoutId { get; set; }
     }

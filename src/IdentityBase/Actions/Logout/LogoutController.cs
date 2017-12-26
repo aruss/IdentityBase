@@ -25,6 +25,7 @@ namespace IdentityBase.Actions.Logout
         public LogoutController(
             IIdentityServerInteractionService interaction,
             ApplicationOptions applicationOptions,
+            IEventService eventService,
             ILogger<LogoutController> logger)
         {
             this._interaction = interaction;
@@ -33,7 +34,7 @@ namespace IdentityBase.Actions.Logout
         }
 
         /// <summary>
-        /// Show logout page
+        /// Show logout page at GET /logout
         /// </summary>
         [HttpGet("logout", Name = "Logout")]
         public async Task<IActionResult> Logout(string logoutId)
@@ -43,7 +44,6 @@ namespace IdentityBase.Actions.Logout
 
             if (!vm.ShowLogoutPrompt)
             {
-                // no need to show prompt
                 return await this.Logout(vm);
             }
 
@@ -83,7 +83,7 @@ namespace IdentityBase.Actions.Logout
         }
 
         /// <summary>
-        /// Handle logout page postback
+        /// Handle logout page postback at POST /logout
         /// </summary>
         [HttpPost("logout", Name = "LoggedOut")]
         [ValidateAntiForgeryToken]
@@ -131,7 +131,7 @@ namespace IdentityBase.Actions.Logout
                 }
             }
 
-            return View("LoggedOut", vm);
+            return this.View("LoggedOut", vm);
         }
 
         private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(

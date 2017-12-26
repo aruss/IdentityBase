@@ -26,6 +26,7 @@ namespace IdentityBase.Actions.Recover
         private readonly IEmailService _emailService;
         private readonly ClientService _clientService;
         private readonly UserAccountService _userAccountService;
+        private readonly NotificationService _notificationService;
 
         public RecoverController(
             ApplicationOptions applicationOptions,
@@ -34,7 +35,8 @@ namespace IdentityBase.Actions.Recover
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
             ClientService clientService,
-            UserAccountService userAccountService)
+            UserAccountService userAccountService,
+            NotificationService notificationService)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
@@ -42,6 +44,7 @@ namespace IdentityBase.Actions.Recover
             this._emailService = emailService;
             this._clientService = clientService;
             this._userAccountService = userAccountService;
+            this._notificationService = notificationService;
         }
 
         [HttpGet("recover", Name = "Recover")]
@@ -63,52 +66,49 @@ namespace IdentityBase.Actions.Recover
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RecoverInputModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Load user by email
-                string email = model.Email.ToLower();
+                return this.View(await this.CreateViewModelAsync(model));
+            }
 
-                // Check if user with same email exists
-                UserAccount userAccount = await this._userAccountService
-                    .LoadByEmailAsync(email);
+            // Check if user with same email exists
+            UserAccount userAccount = await this._userAccountService
+                .LoadByEmailAsync(model.Email);
 
-                if (userAccount != null)
+            if (userAccount != null)
+            {
+                if (userAccount.IsLoginAllowed)
                 {
-                    if (userAccount.IsLoginAllowed)
-                    {
-                        await this._userAccountService
-                            .SetResetPasswordVirificationKeyAsync(
-                                userAccount,
-                                model.ReturnUrl);
+                    await this._userAccountService
+                        .SetVirificationDataForResetPasswordAsync(
+                            userAccount,
+                            model.ReturnUrl);
 
-                        await this.SendEmailAsync(userAccount);
+                    await this._notificationService
+                        .SendUserAccountRecoverEmailAsync(userAccount);
 
-                        return this.View("Success", new SuccessViewModel()
-                        {
-                            ReturnUrl = model.ReturnUrl,
-                            Provider = userAccount.Email
-                                .Split('@')
-                                .LastOrDefault()
-                        });
-                    }
-                    else
+                    return this.View("Success", new SuccessViewModel()
                     {
-                        this.ModelState.AddModelError(IdentityBaseConstants
-                            .ErrorMessages.UserAccountIsDeactivated);
-                    }
+                        ReturnUrl = model.ReturnUrl,
+                        Provider = userAccount.Email
+                            .Split('@')
+                            .LastOrDefault()
+                    });
                 }
                 else
                 {
                     this.ModelState.AddModelError(IdentityBaseConstants
-                        .ErrorMessages.UserAccountDoesNotExists);
+                        .ErrorMessages.UserAccountIsDeactivated);
                 }
-
-                return this.View(
-                    await this.CreateViewModelAsync(model, userAccount)
-                );
+            }
+            else
+            {
+                this.ModelState.AddModelError(IdentityBaseConstants
+                    .ErrorMessages.UserAccountDoesNotExists);
             }
 
-            return this.View(await CreateViewModelAsync(model));
+            return this.View(
+                await this.CreateViewModelAsync(model, userAccount));
         }
 
         [HttpGet("recover/confirm/{key}", Name = "RecoverConfirm")]
@@ -181,10 +181,14 @@ namespace IdentityBase.Actions.Recover
             {
                 await this.HttpContext.SignInAsync(result.UserAccount, null);
 
-                if (this._interaction.IsValidReturnUrl(returnUrl))
-                {
-                    return this.Redirect(returnUrl);
-                }
+                await this._userAccountService
+                    .PerceiveSuccessfulLoginAsync(result.UserAccount);
+
+                return this.Redirect(
+                    this._interaction.IsValidReturnUrl(returnUrl) ?
+                    returnUrl :
+                    "/"
+                );
             }
 
             return this.Redirect(
@@ -274,28 +278,6 @@ namespace IdentityBase.Actions.Recover
             };
 
             return vm;
-        }
-
-        [NonAction]
-        internal async Task SendEmailAsync(UserAccount userAccount)
-        {
-            string baseUrl = ServiceBase.Extensions.StringExtensions
-                .EnsureTrailingSlash(this.HttpContext
-                    .GetIdentityServerBaseUrl());
-
-            await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountRecover,
-                userAccount.Email,
-                new
-                {
-                    ConfirmUrl =
-                        $"{baseUrl}recover/confirm/{userAccount.VerificationKey}",
-
-                    CancelUrl =
-                        $"{baseUrl}recover/cancel/{userAccount.VerificationKey}"
-                },
-                true
-            );
         }
     }
 }

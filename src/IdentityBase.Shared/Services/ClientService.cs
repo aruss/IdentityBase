@@ -9,21 +9,20 @@ namespace IdentityBase.Services
     using IdentityBase.Models;
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Authentication;
-    
+
     // TODO: Move to tenant service
     public class ClientService
     {
-        private IHttpContextAccessor _contextAccessor;
         private IClientStore _clientStore;
+        private IAuthenticationSchemeProvider _authenticationSchemeProvider;
 
         public ClientService(
             IClientStore clientStore,
-            IHttpContextAccessor contextAccessor)
+            IAuthenticationSchemeProvider authenticationSchemeProvider)
         {
-            this._contextAccessor = contextAccessor;
             this._clientStore = clientStore;
+            this._authenticationSchemeProvider = authenticationSchemeProvider;
         }
 
         public async Task<Client> FindEnabledClientByIdAsync(string clientId)
@@ -43,15 +42,14 @@ namespace IdentityBase.Services
             GetEnabledProvidersAsync(Client client)
         {
             // TODO: Filter enabled providers by tenant
-            var providers = this._contextAccessor.HttpContext
-                .Authentication.GetAuthenticationSchemes()
-
-                  .Where(x => x.DisplayName != null)
-                  .Select(x => new ExternalProvider
-                  {
-                      DisplayName = x.DisplayName,
-                      AuthenticationScheme = x.AuthenticationScheme
-                  });
+            var providers = (await this._authenticationSchemeProvider
+                .GetAllSchemesAsync())
+                .Where(x => x.DisplayName != null)
+                .Select(x => new ExternalProvider
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                });
 
             if (client != null &&
                 client.IdentityProviderRestrictions != null &&
@@ -61,7 +59,7 @@ namespace IdentityBase.Services
                     client.IdentityProviderRestrictions
                         .Contains(provider.AuthenticationScheme));
             }
-            
+
             return providers;
         }
     }

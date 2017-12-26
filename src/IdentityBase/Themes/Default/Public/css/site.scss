@@ -1,4 +1,4 @@
-﻿body {
+body {
     margin-top: 65px;
 }
 
@@ -21,6 +21,8 @@
 .page-consent {
     .client-logo {
         float: left;
+        margin-right: 10px;
+        margin-top: 20px;
 
         img {
             width: 80px;
@@ -54,6 +56,12 @@
             padding-left: 16px;
         }
     }
+}
+
+.page-footer {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-top: 1px solid #eee;
 }
 
 iframe.signout 
