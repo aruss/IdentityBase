@@ -108,7 +108,11 @@ namespace IdentityBase.Actions.Account
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                // TODO: clear token if account is there 
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
 
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
@@ -118,8 +122,7 @@ namespace IdentityBase.Actions.Account
 
             await this._userAccountService
                 .ClearVerificationAsync(result.UserAccount);
-
-            // TODO: Move to verification storage reader or something
+            
             string[] storage = JsonConvert.DeserializeObject<string[]>(
                 result.UserAccount.VerificationStorage);
 

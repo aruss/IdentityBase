@@ -4,6 +4,8 @@
 namespace Microsoft.AspNetCore.Mvc
 {
     using System.Text.Encodings.Web;
+    using IdentityBase.Actions;
+    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authentication;
 
     public static class ControllerExtensions
@@ -16,7 +18,7 @@ namespace Microsoft.AspNetCore.Mvc
         /// </param>
         /// <returns>Instance of <see cref="ChallengeResult"/>.</returns>
         public static IActionResult ChallengeExternalLogin(
-            this Controller controller,
+            this WebController controller,
             string provider,
             string returnUrl)
         {
@@ -36,5 +38,49 @@ namespace Microsoft.AspNetCore.Mvc
 
             return new ChallengeResult(provider, props);
         }
-    }   
+
+        /// <summary>
+        /// Redirects to login page.
+        /// </summary>
+        /// <param name="controller">The instance of
+        /// <see cref="WebController"/>.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns>The created <see cref="RedirectResult"/> for
+        /// the response.</returns>
+        public static IActionResult RedirectToLogin(
+            this WebController controller,
+            string returnUrl)
+        {
+            return controller.RedirectToAction(
+                "Index",
+                "Login",
+                new { ReturnUrl = returnUrl }
+            );
+        }
+
+        /// <summary>
+        /// If <paramref name="returnUrl"/> is valid it will redirect to it,
+        /// otherwise will redirect to landing page
+        /// </summary>
+        /// <param name="controller">The instance of
+        /// <see cref="WebController"/>.</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="interactionService">The instance of
+        /// <see cref="IIdentityServerInteractionService"/> used to
+        /// validate returnUrl.</param>
+        /// <returns>The created <see cref="RedirectResult"/> for
+        /// the response.</returns>
+        public static IActionResult RedirectToReturnUrl(
+            this WebController controller,
+            string returnUrl,
+            IIdentityServerInteractionService interactionService)
+        {
+            if (interactionService.IsValidReturnUrl(returnUrl))
+            {
+                return controller.Redirect(returnUrl);
+            }
+
+            return controller.Redirect("/");
+        }
+    }
 }

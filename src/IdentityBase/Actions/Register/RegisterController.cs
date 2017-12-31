@@ -11,13 +11,10 @@ namespace IdentityBase.Actions.Register
     using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
-    using IdentityServer4.Extensions;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using ServiceBase.Extensions;
     using ServiceBase.Notification.Email;
 
     public class RegisterController : WebController
@@ -25,11 +22,10 @@ namespace IdentityBase.Actions.Register
         private readonly ApplicationOptions _applicationOptions;
         private readonly ILogger<RegisterController> _logger;
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly IEmailService _emailService;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly NotificationService _notificationService; 
+        private readonly NotificationService _notificationService;
+        private readonly AuthenticationService _authenticationService;
 
         public RegisterController(
             ApplicationOptions applicationOptions,
@@ -38,17 +34,16 @@ namespace IdentityBase.Actions.Register
             IEmailService emailService,
             UserAccountService userAccountService,
             ClientService clientService,
-            IHttpContextAccessor httpContextAccessor,
-            NotificationService notificationService)
+            NotificationService notificationService,
+            AuthenticationService authenticationService)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
             this._interaction = interaction;
-            this._emailService = emailService;
             this._userAccountService = userAccountService;
             this._clientService = clientService;
-            this._httpContextAccessor = httpContextAccessor;
-            this._notificationService = notificationService; 
+            this._notificationService = notificationService;
+            this._authenticationService = authenticationService;
         }
 
         [HttpGet("register", Name = "Register")]
@@ -60,7 +55,7 @@ namespace IdentityBase.Actions.Register
                 this._logger.LogError(
                     "Register attempt with missing returnUrl parameter");
 
-                return this.Redirect(this.Url.Action("Index", "Error"));
+                return this.RedirectToAction("Index", "Error");
             }
 
             return this.View(vm);
@@ -135,16 +130,25 @@ namespace IdentityBase.Actions.Register
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
+
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
 
-            // User account requires completion 
+            // User account requires completion.
             if (this._applicationOptions.EnableAccountInvitation &&
                 result.UserAccount.CreationKind == CreationKind.Invitation)
             {
+                // TODO: move invitation confirmation to own contoller
+                //       listening on /invitation/confirm/{key}
+
                 ConfirmViewModel vm = new ConfirmViewModel
                 {
                     Key = key,
@@ -154,27 +158,27 @@ namespace IdentityBase.Actions.Register
 
                 return this.View(vm);
             }
-            // User profile already fine and just needs to be activated
+            // User account already fine and can be authenticated.
             else
             {
+                // TODO: Refactor so the db will hit only once in case
+                //       LoginAfterAccountConfirmation is true
+
                 string returnUrl = result.UserAccount.VerificationStorage;
 
                 await this._userAccountService
                     .SetEmailVerifiedAsync(result.UserAccount);
-
+                
                 if (this._applicationOptions.LoginAfterAccountConfirmation)
                 {
-                    return await this
+                    await this._authenticationService
                         .SignInAsync(result.UserAccount, returnUrl);
+
+                    return this.RedirectToReturnUrl(
+                        returnUrl, this._interaction); 
                 }
 
-                return this.Redirect(
-                    this.Url.Action(
-                        "Login",
-                        "Login",
-                        new { ReturnUrl = returnUrl }
-                    )
-                );
+                return this.RedirectToLogin(returnUrl); 
             }
         }
 
@@ -198,7 +202,11 @@ namespace IdentityBase.Actions.Register
                 result.TokenExpired ||
                 !result.PurposeValid)
             {
-                // TODO: clear token if account is there 
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
 
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
@@ -226,26 +234,21 @@ namespace IdentityBase.Actions.Register
 
             if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
-                return this.Redirect(
-                    this._interaction.IsValidReturnUrl(returnUrl) ?
-                    returnUrl :
-                    "/"
-                );
+                return this.RedirectToReturnUrl(
+                        returnUrl, this._interaction);
             }
             else
             {
                 if (this._applicationOptions.LoginAfterAccountRecovery)
                 {
-                    await this.SignInAsync(result.UserAccount, returnUrl); 
+                    await this._authenticationService
+                        .SignInAsync(result.UserAccount, returnUrl);
+
+                    return this.RedirectToReturnUrl(
+                        returnUrl, this._interaction); 
                 }
 
-                return this.Redirect(
-                    this.Url.Action(
-                        "Index",
-                        "Login",
-                        new { ReturnUrl = returnUrl }
-                    )
-                );
+                return this.RedirectToLogin(returnUrl);
             }
         }
 
@@ -262,12 +265,16 @@ namespace IdentityBase.Actions.Register
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                // TODO: clear token if account is there 
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
 
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
 
-                return View("InvalidToken");
+                return this.View("InvalidToken");
             }
 
             string returnUrl = result.UserAccount.VerificationStorage;
@@ -275,24 +282,13 @@ namespace IdentityBase.Actions.Register
             await this._userAccountService
                 .ClearVerificationAsync(result.UserAccount);
 
-
             if (this._interaction.IsValidReturnUrl(returnUrl))
             {
-                return this.Redirect(
-                    this.Url.Action(
-                        "Index",
-                        "Login",
-                        new { ReturnUrl = returnUrl }
-                    )
-                );
+                return this.Redirect(returnUrl);
             }
             else
             {
-                return this.Redirect(
-                    this._interaction.IsValidReturnUrl(returnUrl) ?
-                    returnUrl :
-                    "/"
-                );
+                return this.RedirectToLogin(returnUrl);
             }
         }
 
@@ -439,13 +435,14 @@ namespace IdentityBase.Actions.Register
 
                 if (this._applicationOptions.LoginAfterAccountCreation)
                 {
-                    await this.SignInAsync(userAccount, model.ReturnUrl);
+                    await this._authenticationService
+                        .SignInAsync(userAccount, model.ReturnUrl);
                 }
                 else
                 {
-                    return this.View(
-                        "Success",
-                        CreateSuccessViewModel(userAccount, model.ReturnUrl)
+                    return this.View("Success",
+                        this.CreateSuccessViewModel(
+                            userAccount, model.ReturnUrl)
                     );
                 }
             }
@@ -464,7 +461,7 @@ namespace IdentityBase.Actions.Register
 
             return View(vm);
         }
-        
+
         [NonAction]
         internal async Task<IActionResult> TryCreateNewUserAccount(
             RegisterInputModel model)
@@ -485,27 +482,15 @@ namespace IdentityBase.Actions.Register
 
             if (this._applicationOptions.LoginAfterAccountCreation)
             {
-                return await SignInAsync(userAccount, model.ReturnUrl);
+                await this._authenticationService
+                    .SignInAsync(userAccount, model.ReturnUrl);
+
+                return this.RedirectToReturnUrl(
+                    model.ReturnUrl, this._interaction); 
             }
 
             return this.View("Success",
                 this.CreateSuccessViewModel(userAccount, model.ReturnUrl)
-            );
-        }
-
-        private async Task<IActionResult> SignInAsync(
-            UserAccount userAccount,
-            string returnUrl)
-        {
-            await this.HttpContext.SignInAsync(userAccount, null);
-
-            await this._userAccountService
-                    .PerceiveSuccessfulLoginAsync(userAccount);
-
-            return this.Redirect(
-                this._interaction.IsValidReturnUrl(returnUrl) ?
-                returnUrl :
-                "/"
             );
         }
     }

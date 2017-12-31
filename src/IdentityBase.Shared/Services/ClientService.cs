@@ -11,7 +11,6 @@ namespace IdentityBase.Services
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Authentication;
 
-    // TODO: Move to tenant service
     public class ClientService
     {
         private IClientStore _clientStore;
@@ -41,9 +40,8 @@ namespace IdentityBase.Services
         public async Task<IEnumerable<ExternalProvider>>
             GetEnabledProvidersAsync(Client client)
         {
-            // TODO: Filter enabled providers by tenant
-            var providers = (await this._authenticationSchemeProvider
-                .GetAllSchemesAsync())
+            IEnumerable<ExternalProvider> providers =
+                (await this._authenticationSchemeProvider.GetAllSchemesAsync())
                 .Where(x => x.DisplayName != null)
                 .Select(x => new ExternalProvider
                 {

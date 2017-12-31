@@ -3,18 +3,14 @@
 
 namespace IdentityBase.Actions.Login
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ServiceBase;
@@ -26,7 +22,7 @@ namespace IdentityBase.Actions.Login
         private readonly IIdentityServerInteractionService _interaction;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
-        private readonly IDateTimeAccessor _dateTimeAccessor;
+        private readonly AuthenticationService _authenticationService;
 
         public LoginController(
             ApplicationOptions applicationOptions,
@@ -34,14 +30,15 @@ namespace IdentityBase.Actions.Login
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
             ClientService clientService,
-            IDateTimeAccessor dateTimeAccessor)
+            IDateTimeAccessor dateTimeAccessor,
+            AuthenticationService authenticationService)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
             this._interaction = interaction;
             this._userAccountService = userAccountService;
             this._clientService = clientService;
-            this._dateTimeAccessor = dateTimeAccessor;
+            this._authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -56,7 +53,7 @@ namespace IdentityBase.Actions.Login
                 this._logger.LogError(
                     "Login attempt with missing returnUrl parameter");
 
-                return this.Redirect(Url.Action("Index", "Error"));
+                return this.RedirectToAction("Index", "Error");
             }
 
             if (vm.IsExternalLoginOnly)
@@ -78,7 +75,7 @@ namespace IdentityBase.Actions.Login
         {
             if (!this._applicationOptions.EnableAccountLogin)
             {
-                return this.NotFound(); 
+                return this.NotFound();
             }
 
             if (this.ModelState.IsValid)
@@ -102,7 +99,14 @@ namespace IdentityBase.Actions.Login
                     {
                         if (result.IsPasswordValid)
                         {
-                            return await this.SignInAsync(model, result);
+                            await this._authenticationService.SignInAsync(
+                                result.UserAccount,
+                                model.ReturnUrl,
+                                model.RememberLogin);
+
+                            return this.RedirectToReturnUrl(
+                                model.ReturnUrl,
+                                this._interaction);
                         }
                         else
                         {
@@ -129,40 +133,7 @@ namespace IdentityBase.Actions.Login
             // Something went wrong, show form with error
             return this.View(await CreateViewModelAsync(model));
         }
-
-        [NonAction]
-        internal async Task<IActionResult> SignInAsync(
-            LoginInputModel model,
-            UserAccountVerificationResult result)
-        {
-            AuthenticationProperties props = null;
-
-            if (this._applicationOptions.EnableRememberLogin &&
-                model.RememberLogin)
-            {
-                props = new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                    ExpiresUtc = this._dateTimeAccessor.UtcNow.Add(
-                        TimeSpan.FromSeconds(
-                            this._applicationOptions.RememberMeLoginDuration
-                        )
-                    )
-                };
-            };
-
-            await this.HttpContext.SignInAsync(result.UserAccount, props);
-
-            await this._userAccountService
-                .PerceiveSuccessfulLoginAsync(result.UserAccount);
-
-            return this.Redirect(
-                this._interaction.IsValidReturnUrl(model.ReturnUrl) ?
-                model.ReturnUrl :
-                "/"
-            );
-        }
-
+        
         [NonAction]
         internal async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)

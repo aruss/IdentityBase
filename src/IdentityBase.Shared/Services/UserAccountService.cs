@@ -106,8 +106,7 @@ namespace IdentityBase.Services
         /// </summary>
         /// <param name="id">UserAccount ID.</param>
         /// <returns>Instance of <see cref="UserAccount"/>.</returns>
-        public async Task<UserAccount> LoadByIdAsync(
-            Guid id)
+        public async Task<UserAccount> LoadByIdAsync(Guid id)
         {
             return await this._userAccountStore.LoadByIdAsync(id);
         }
@@ -208,7 +207,7 @@ namespace IdentityBase.Services
 
             await this.UpdateUserAccountAsync(userAccount);
         }
-        
+
         /// <summary>
         /// Creates a verification key and stores data on user object.
         /// </summary>
@@ -245,7 +244,7 @@ namespace IdentityBase.Services
             userAccount.VerificationKeySentAt = null;
             userAccount.VerificationStorage = null;
         }
-                
+
         /// <summary>
         /// Create verification key and updates the <see cref="UserAccount"/>.
         /// This method will write to persistent store.
@@ -285,13 +284,8 @@ namespace IdentityBase.Services
 
             await this.UpdateUserAccountAsync(userAccount);
         }
-        
 
-
-
-
-
-
+                
 
 
 

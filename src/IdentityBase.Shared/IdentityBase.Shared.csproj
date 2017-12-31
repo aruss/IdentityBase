@@ -23,6 +23,7 @@
     <Compile Remove="Configuration\Clients.cs" />
     <Compile Remove="Configuration\Resources.cs" />
     <Compile Remove="Configuration\UserAccounts.cs" />
+    <Compile Remove="Extensions\AuthenticationManagerExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

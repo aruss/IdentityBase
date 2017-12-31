@@ -14,10 +14,10 @@ rm -rf $COVERAGE_DIR
 mkdir -p $COVERAGE_DIR
 
 PROJECTS=(\
-"IdentityBase.EntityFramework.IntegrationTests\IdentityBase.EntityFramework.IntegrationTests.csproj" \
-"IdentityBase.EntityFramework.UnitTests\IdentityBase.EntityFramework.UnitTests.csproj" \
+#"IdentityBase.EntityFramework.IntegrationTests\IdentityBase.EntityFramework.IntegrationTests.csproj" \
+#"IdentityBase.EntityFramework.UnitTests\IdentityBase.EntityFramework.UnitTests.csproj" \
 "IdentityBase.IntegrationTests\IdentityBase.IntegrationTests.csproj" \
-"IdentityBase.UnitTests\IdentityBase.UnitTests.csproj"
+#"IdentityBase.UnitTests\IdentityBase.UnitTests.csproj"
 )
 
 for PROJECT in "${PROJECTS[@]}"

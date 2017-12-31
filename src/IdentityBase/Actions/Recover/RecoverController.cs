@@ -27,6 +27,7 @@ namespace IdentityBase.Actions.Recover
         private readonly ClientService _clientService;
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
+        private readonly AuthenticationService _authenticationService;
 
         public RecoverController(
             ApplicationOptions applicationOptions,
@@ -36,7 +37,8 @@ namespace IdentityBase.Actions.Recover
             IEmailService emailService,
             ClientService clientService,
             UserAccountService userAccountService,
-            NotificationService notificationService)
+            NotificationService notificationService,
+            AuthenticationService authenticationService)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
@@ -45,6 +47,7 @@ namespace IdentityBase.Actions.Recover
             this._clientService = clientService;
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
+            this._authenticationService = authenticationService; 
         }
 
         [HttpGet("recover", Name = "Recover")]
@@ -56,7 +59,7 @@ namespace IdentityBase.Actions.Recover
                 this._logger.LogWarning(IdentityBaseConstants.ErrorMessages
                     .RecoveryNoReturnUrl);
 
-                return this.Redirect(Url.Action("Index", "Error"));
+                return this.RedirectToAction("Index", "Error");
             }
 
             return this.View(vm);
@@ -153,7 +156,11 @@ namespace IdentityBase.Actions.Recover
                 result.TokenExpired ||
                 !result.PurposeValid)
             {
-                // TODO: clear token if account is there 
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
 
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
@@ -179,25 +186,13 @@ namespace IdentityBase.Actions.Recover
 
             if (this._applicationOptions.LoginAfterAccountRecovery)
             {
-                await this.HttpContext.SignInAsync(result.UserAccount, null);
-
-                await this._userAccountService
-                    .PerceiveSuccessfulLoginAsync(result.UserAccount);
-
-                return this.Redirect(
-                    this._interaction.IsValidReturnUrl(returnUrl) ?
-                    returnUrl :
-                    "/"
-                );
+                await this._authenticationService
+                    .SignInAsync(result.UserAccount, returnUrl); 
+            
+                return this.RedirectToReturnUrl(returnUrl, this._interaction); 
             }
 
-            return this.Redirect(
-                this.Url.Action(
-                    "Index",
-                    "Login",
-                    new { ReturnUrl = returnUrl }
-                )
-            );
+            return this.RedirectToLogin(returnUrl);
         }
 
         [HttpGet("recover/cancel/{key}", Name = "RecoverCancel")]
@@ -213,7 +208,12 @@ namespace IdentityBase.Actions.Recover
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                // TODO: clear token if account is there 
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
+
                 this.ModelState.AddModelError(
                     IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
 
@@ -225,13 +225,7 @@ namespace IdentityBase.Actions.Recover
             await this._userAccountService
                 .ClearVerificationAsync(result.UserAccount);
 
-            return this.Redirect(
-                this.Url.Action(
-                    "Index",
-                    "Login",
-                    new { ReturnUrl = returnUrl }
-                )
-            );
+            return this.RedirectToLogin(returnUrl);
         }
 
         [NonAction]

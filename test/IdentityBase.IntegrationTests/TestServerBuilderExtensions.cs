@@ -43,7 +43,6 @@ namespace IdentityBase.IntegrationTests
         /// </summary>
         /// <param name="emailServiceMock"></param>
         /// <param name="configBuild"></param>
-        /// <param name="messageHandler"></param>
         /// <returns></returns>
         public static TestServer CreateServer(
             Mock<IEmailService> emailServiceMock = null,
@@ -89,7 +88,6 @@ namespace IdentityBase.IntegrationTests
                     );
                 })
                 .Build();
-
 
             return testServer;
         }
