@@ -7,8 +7,12 @@ namespace ServiceBase.Tests
     using Newtonsoft.Json;
     using ServiceBase.Json;
 
+    /// <summary>
+    /// <see cref="HttpClient"/> extension methods. 
+    /// </summary>
     public static class HttpClientExtensions
     {
+
         public static async Task<HttpResponseMessage> PutJsonAsync(
             this HttpClient client,
             string requestUri,
@@ -26,6 +30,7 @@ namespace ServiceBase.Tests
             return await client
                 .SendJsonAsync(HttpMethod.Post, requestUri, obj);
         }
+
 
         public static async Task<HttpResponseMessage> SendJsonAsync(
             this HttpClient client,

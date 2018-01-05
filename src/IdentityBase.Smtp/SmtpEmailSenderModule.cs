@@ -3,6 +3,7 @@
 
 namespace IdentityBase.Smtp
 {
+    using System.IO;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +18,18 @@ namespace IdentityBase.Smtp
             IConfiguration configuration)
         {
             services.AddScoped<IEmailService, DefaultEmailService>();
-
-            services.AddSingleton(configuration
-                .GetSection("Email").Get<DefaultEmailServiceOptions>());
-
             services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+            DefaultEmailServiceOptions emailOptions = configuration
+                .GetSection("Email")
+                .Get<DefaultEmailServiceOptions>();
+
+            emailOptions.TemplateDirectoryPath =
+                Path.Combine(ThemeHelper.GetFullThemePath(configuration),
+                "Resources",
+                "Email");
+
+            services.AddSingleton(emailOptions);
 
             services.AddSingleton(configuration
                 .GetSection("Email:Smtp").Get<SmtpOptions>());

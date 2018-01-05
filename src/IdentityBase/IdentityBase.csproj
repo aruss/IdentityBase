@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <Content Remove="Themes\Default\package.json" />
+    <Content Remove="Themes\Default\Resources\Shared.en-US.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Themes\Default\package.json" />
+    <None Include="Themes\Default\Resources\Localization\Shared.en-US.json" />
   </ItemGroup>
   <ItemGroup>
     <None Update="AppData\idsvr3test.pfx">

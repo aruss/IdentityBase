@@ -120,8 +120,10 @@ namespace IdentityBase.IntegrationTests
             Dictionary<string, string> form = doc.GetFormInputs();
             form["Email"] = emailAddress;
 
+            string uri = doc.GetFormAction();
+
             HttpResponseMessage response = await client
-                .PostAsync(doc.GetFormAction(), form, formGetResponse);
+                .PostAsync(uri, form, formGetResponse);
 
             response.EnsureSuccessStatusCode();
 
@@ -133,9 +135,10 @@ namespace IdentityBase.IntegrationTests
             string emailAddress,
             HttpResponseMessage prevResponse = null)
         {
-            return await client.RecoveryPostFormAsync(
-                emailAddress,
-                await client.RecoveryGetFormAsync(prevResponse));
+            HttpResponseMessage response = await client
+                .RecoveryGetFormAsync(prevResponse);
+
+            return await client.RecoveryPostFormAsync(emailAddress, response);
         }
 
         public static async Task<HttpResponseMessage> RecoveryCancelGetValidAsync(
@@ -157,7 +160,7 @@ namespace IdentityBase.IntegrationTests
             HttpResponseMessage response = await client
                 .RecoveryCancelGetValidAsync(cancelUrl);
 
-            // TODO: check for error message 
+            response.EnsureSuccessStatusCode();
 
             return response;
         }
@@ -181,11 +184,11 @@ namespace IdentityBase.IntegrationTests
             HttpResponseMessage response = await client
                 .RecoveryConfirmGetValidAsync(confirmUrl);
 
-            // TODO: check for error message 
+            response.EnsureSuccessStatusCode();
 
             return response;
         }
-        
+
         public static async Task<HttpResponseMessage> RegisterConfirmGetAndPostFormAsync(
             this HttpClient client,
             string confirmUrl,
@@ -207,7 +210,7 @@ namespace IdentityBase.IntegrationTests
 
             HttpResponseMessage postResponse = await client
                 .PostAsync(doc.GetFormAction(), form, getResponse);
-            
+
             return postResponse;
         }
 

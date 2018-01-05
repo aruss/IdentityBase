@@ -1,17 +1,14 @@
-
-
 namespace IdentityBase.IntegrationTests
 {
+
     using System;
     using System.IO;
     using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using IdentityBase;
     using Microsoft.AspNetCore.TestHost;
-    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Logging.Abstractions;
     using Moq;
+    using ServiceBase.Extensions;
     using ServiceBase.Notification.Email;
     using ServiceBase.Tests;
 
@@ -58,62 +55,36 @@ namespace IdentityBase.IntegrationTests
             testServer = new TestServerBuilder()
                 .UseEnvironment("Test")
                 .UseContentRoot()
-                .AddServices(services =>
-                {
-                    if (emailServiceMock != null)
-                    {
-                        services.AddSingleton(emailServiceMock.Object);
-                    }
-                })
                 .AddStartup((environment) =>
                 {
                     var builder = new TestConfigurationBuilder()
                         .UseDefaultConfiguration();
-
-                    if (emailServiceMock != null)
-                    {
-                        builder.RemoveDebugEmailModule();
-                    }
 
                     if (configBuild != null)
                     {
                         configBuild.Invoke(builder);
                     }
 
-                    return new IdentityBase.Startup(
+                    var startup = new IdentityBase.Startup(
                         builder.Build(),
                         environment,
                         new NullLoggerFactory(),
                         messageHandlerFactory
                     );
+
+                    if (emailServiceMock != null)
+                    {
+                        startup.OverrideServices = (services =>
+                        {
+                            services.Replace(emailServiceMock.Object);
+                        });
+                    }
+
+                    return startup;
                 })
                 .Build();
 
             return testServer;
-        }
-    }
-}
-
-namespace System.Net.Http
-{
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public class TestHttpMessageHandler : HttpMessageHandler
-    {
-        private HttpMessageHandler _messageHandler;
-        private Func<HttpMessageHandler> _createHandler;
-
-        public TestHttpMessageHandler(Func<HttpMessageHandler> createHandler)
-        {
-            this._createHandler = createHandler;
-        }
-
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

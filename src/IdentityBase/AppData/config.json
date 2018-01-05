@@ -82,10 +82,9 @@
     "EnableSwagger":  true
   },
   "Email": {
-    "TemplateDirectoryPath": "./Templates/Email"
+    
   },
   "Sms": {
-    "TemplateDirectoryPath": "./Templates/Sms"
   },
 
   "Modules": [

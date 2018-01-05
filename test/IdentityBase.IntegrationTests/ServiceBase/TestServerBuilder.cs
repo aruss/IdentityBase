@@ -9,6 +9,9 @@ namespace ServiceBase.Tests
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.FileProviders;
 
+    /// <summary>
+    /// <see cref="TestServer"/> factory.
+    /// </summary>
     public class TestServerBuilder
     {
         private string contentRoot;
@@ -17,18 +20,37 @@ namespace ServiceBase.Tests
         private Action<IServiceCollection> configureServices;
         private Func<IHostingEnvironment, IStartup> createStartup;
 
+        /// <summary>
+        /// Specify the environment to be used by the web host.
+        /// </summary>
+        /// <param name="environment">The environment to host the
+        /// application in.</param>
+        /// <returns>Instance of <see cref="TestServerBuilder"/></returns>
         public TestServerBuilder UseEnvironment(string environment)
         {
             this.environment = environment;
             return this;
         }
 
+        /// <summary>
+        /// Specify the content root directory to be used by the web host.
+        /// </summary>
+        /// <param name="contentRoot">Path to root directory of the
+        /// application.</param>
+        /// <returns>Instance of <see cref="TestServerBuilder"/></returns>
         public TestServerBuilder UseContentRoot(string contentRoot)
         {
             this.contentRoot = contentRoot;
             return this;
         }
 
+        /// <summary>
+        /// Adds a delegate for configuring additional services for the host
+        /// or web application. This may be called multiple times.
+        /// </summary>
+        /// <param name="configureServices">A delegate for configuring the
+        /// <see cref="IServiceCollection"/>.</param>
+        /// <returns>Instance of <see cref="TestServerBuilder"/></returns>
         public TestServerBuilder AddServices(
            Action<IServiceCollection> configureServices)
         {
@@ -36,6 +58,11 @@ namespace ServiceBase.Tests
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="createStartup"></param>
+        /// <returns>Instance of <see cref="TestServerBuilder"/></returns>
         public TestServerBuilder AddStartup(
            Func<IHostingEnvironment, IStartup> createStartup)
         {
@@ -43,9 +70,14 @@ namespace ServiceBase.Tests
             return this;
         }
 
+        /// <summary>
+        /// Builds the required services and an <see cref="TestServer"/>
+        /// which hosts a web application.
+        /// </summary>
+        /// <returns>Instance of <see cref="TestServer"/>.</returns>
         public TestServer Build()
         {
-            this.Validate();
+            // this.Validate();
 
             IHostingEnvironment environment = new HostingEnvironment
             {
@@ -73,11 +105,6 @@ namespace ServiceBase.Tests
                 .UseSetting(WebHostDefaults.ApplicationKey, appName);
 
             return new TestServer(builder);
-        }
-
-        private void Validate()
-        {
-
         }
     }
 }

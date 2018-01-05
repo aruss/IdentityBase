@@ -1,6 +1,7 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+
 namespace IdentityBase
 {
     using System;
@@ -93,6 +94,9 @@ namespace IdentityBase
             //             this._configuration.GetValue<string>("Host:Cors")));
             // });
 
+            services.AddDistributedMemoryCache();
+
+            services.AddLocalization(this._applicationOptions, this._environment); 
             services.AddMvc(this._applicationOptions, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
@@ -102,6 +106,8 @@ namespace IdentityBase
                 .AddCookie();*/
 
             this._modulesStartup.ConfigureServices(services);
+
+            OverrideServices?.Invoke(services);
 
             services.ValidateDataLayerServices(this._logger);
             services.ValidateEmailSenderServices(this._logger);
@@ -113,6 +119,12 @@ namespace IdentityBase
             return services.BuildServiceProvider();
         }
 
+        /// <summary>
+        /// Only used for testing. Use it for hooking in mocked services.
+        /// </summary>
+        /// <param name="services"></param>
+        public Action<IServiceCollection> OverrideServices { get; set; }
+        
         /// <summary>
         /// Configures the pipeline.
         /// </summary>
@@ -130,6 +142,9 @@ namespace IdentityBase
                 .GetRequiredService<ApplicationOptions>();
 
             app.UseMiddleware<RequestIdMiddleware>();
+            
+            app.UseRequestLocalization(); 
+
             app.UseLogging();
 
             if (env.IsDevelopment())

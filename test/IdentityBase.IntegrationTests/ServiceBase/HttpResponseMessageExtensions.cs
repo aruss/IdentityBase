@@ -5,11 +5,17 @@ namespace ServiceBase.Tests
     using System.Linq;
     using System.Net.Http;
 
+    /// <summary>
+    /// <see cref="HttpResponseMessage"/> extension methods.
+    /// </summary>
     public static class HttpResponseMessageExtensions
     {
-        // Inspired from:
-        // https://github.com/aspnet/Mvc/blob/538cd9c19121f8d3171cbfddd5d842cbb756df3e/test/Microsoft.AspNet.Mvc.FunctionalTests/TempDataTest.cs#L201-L202
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response">Instance of
+        /// <see cref="HttpResponseMessage"/>.</param>
+        /// <returns></returns>
         public static IDictionary<string, string> ExtractCookies(
             this HttpResponseMessage response)
         {

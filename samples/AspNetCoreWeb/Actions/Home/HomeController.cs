@@ -12,11 +12,23 @@ namespace AspNetCoreWeb.Actions.Home
     using Microsoft.IdentityModel.Protocols.OpenIdConnect;
     using System.Globalization;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Localization;
+    using Microsoft.Extensions.Logging;
 
     public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            this._logger = logger; 
+        }
+
         public IActionResult Index()
         {
+            this._logger.LogInformation("CurrentUICulture " +
+                CultureInfo.CurrentUICulture);
+
             return View();
         }
 
@@ -119,6 +131,18 @@ namespace AspNetCoreWeb.Actions.Home
         public IActionResult Error()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
         }
     }
 }

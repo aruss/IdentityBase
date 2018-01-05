@@ -130,5 +130,7 @@ namespace IdentityBase.Configuration
             "Windows";
 
         public string ThemePath { get; set; } = "./Themes/Default";
+
+        public string DefaultCulture { get; set; } = "de-DE"; // "en-US"; 
     }
 }

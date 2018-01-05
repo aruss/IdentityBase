@@ -14,7 +14,8 @@ namespace ServiceBase.Tests
 
         public MockHttpMessageHandlerBuilder()
         {
-            this.responses = new Dictionary<string, Func<HttpResponseMessage>>();
+            this.responses =
+                new Dictionary<string, Func<HttpResponseMessage>>();
         }
 
         public HttpMessageHandler Build()

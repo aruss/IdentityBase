@@ -6,8 +6,17 @@ namespace ServiceBase.Tests
     using ServiceBase.Notification.Email;
     using Xunit;
 
+    /// <summary>
+    /// <see cref="IEmailService"/> test helper
+    /// </summary>
     public static class EmailServiceHelper
     {
+        /// <summary>
+        /// Creates a <see cref="Mock{IEmailService}"/> instance that will
+        /// mock a single SendEmailAsync call
+        /// </summary>
+        /// <param name="templateName">Email template.</param>
+        /// <param name="email">Email address.</param>
         public static Mock<IEmailService> GetEmailServiceMock(
             string templateName,
             string email,

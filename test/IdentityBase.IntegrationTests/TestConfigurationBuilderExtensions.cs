@@ -3,9 +3,20 @@ namespace IdentityBase.IntegrationTests
     using System.Collections.Generic;
     using ServiceBase.Tests;
     using System;
+    using System.Reflection;
 
+    /// <summary>
+    /// <see cref="TestConfigurationBuilder"/> extension methods.
+    /// </summary>
     public static class TestConfigurationBuilderExtensions
     {
+        /// <summary>
+        /// Adds a default IdentityBase configuration. 
+        /// </summary>
+        /// <param name="builder">Instance of
+        /// <see cref="TestConfigurationBuilder"/>.</param>
+        /// <returns>Instance of
+        /// <see cref="TestConfigurationBuilder"/>.</returns>
         public static TestConfigurationBuilder UseDefaultConfiguration(
             this TestConfigurationBuilder builder)
         {
@@ -35,11 +46,21 @@ namespace IdentityBase.IntegrationTests
             return builder.UseConfiguration(configData);
         }
 
+        /// <summary>
+        /// Removes configuration for IdentityBase.DebugEmailModule
+        /// </summary>
+        /// <param name="builder">Instance of
+        /// <see cref="TestConfigurationBuilder"/>.</param>
+        /// <returns>Instance of
+        /// <see cref="TestConfigurationBuilder"/>.</returns>
         public static TestConfigurationBuilder RemoveDebugEmailModule(
             this TestConfigurationBuilder builder)
         {
+            // string typeName = typeof(DebugEmailModule).GetTypeInfo().Assembly.FullName;
+            // TODO: get name space programmatically
+
             return builder
-                .RemoveByValue("IdentityBase.DebugEmailModule, IdentityBase")
+                .RemoveByValue("IdentityBase.DebugEmailModule, IdentityBase.Shared")
                 .ReorderModules();
         }
     }

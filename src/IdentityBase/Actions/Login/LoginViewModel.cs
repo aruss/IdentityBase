@@ -21,6 +21,7 @@ namespace IdentityBase.Actions.Login
             this.ReturnUrl = inputModel.ReturnUrl;
         }
 
+            
         public bool EnableLocalLogin { get; set; }
 
         public bool EnableRememberLogin { get; set; }

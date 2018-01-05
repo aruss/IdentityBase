@@ -1,19 +1,24 @@
 namespace ServiceBase.Tests
 {
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
     using AngleSharp.Dom;
     using AngleSharp.Dom.Html;
     using AngleSharp.Parser.Html;
-    using System.Collections.Specialized;
 
     // http://www.stefanhendriks.com/2016/04/29/integration-testing-your-dot-net-core-app-with-an-in-memory-database/
     // http://www.stefanhendriks.com/2016/05/11/integration-testing-your-asp-net-core-app-dealing-with-anti-request-forgery-csrf-formdata-and-cookies/
 
     public static class IHtmlDocumentExtensions
     {
+        /// <summary>
+        /// Serialize the HTTP content to a string and parses to
+        /// <see cref="IHtmlDocument"/> as an asynchronous operation. 
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns>Instance of <see cref="HttpContent"/>.</returns>
         public static async Task<IHtmlDocument> ReadAsHtmlDocumentAsync(
             this HttpContent content)
         {
@@ -22,10 +27,12 @@ namespace ServiceBase.Tests
         }
 
         /// <summary>
-        /// Does not support options and textareas 
+        /// Returns all form element values as
+        /// <see cref="Dictionary{string, string}"/>. Does not support options
+        /// and textareas 
         /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
+        /// <param name="doc">Instance of <see cref="IHtmlDocument"/>.</param>
+        /// <returns>Instance of <see cref="IHtmlDocument"/>.</returns>
         public static Dictionary<string, string> GetFormInputs(
             this IHtmlDocument doc)
         {
@@ -50,6 +57,13 @@ namespace ServiceBase.Tests
             return result;
         }
 
+        /// <summary>
+        /// Returns value of input element with name provided via
+        /// <paramref name="name"/>.
+        /// </summary>
+        /// <param name="doc">Instance of <see cref="IHtmlDocument"/>.</param>
+        /// <param name="name">Name of the input element.</param>
+        /// <returns>Instance of <see cref="IHtmlDocument"/>.</returns>
         public static string GetInputValue(
             this IHtmlDocument doc,
             string name)
@@ -64,11 +78,21 @@ namespace ServiceBase.Tests
             return null;
         }
 
+        /// <summary>
+        /// Returns value of __RequestVerificationToken element. 
+        /// </summary>
+        /// <param name="doc">Instance of <see cref="IHtmlDocument"/>.</param>
+        /// <returns>Request verification token.</returns>
         public static string GetAntiForgeryToken(this IHtmlDocument doc)
         {
             return doc.GetInputValue("__RequestVerificationToken");
         }
 
+        /// <summary>
+        /// Returns value of action attribute of the first form element.
+        /// </summary>
+        /// <param name="doc">Instance of <see cref="IHtmlDocument"/>.</param>
+        /// <returns>Form action URL.</returns>
         public static string GetFormAction(this IHtmlDocument doc)
         {
             return doc.QuerySelector("form").GetAttribute("action");

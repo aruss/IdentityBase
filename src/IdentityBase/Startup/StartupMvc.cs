@@ -23,6 +23,8 @@ namespace IdentityBase
 
             services
                 .AddMvc()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(

@@ -26,6 +26,9 @@
   <ItemGroup>
     <Compile Remove="ConfigBuilder.cs" />
     <Compile Remove="TestServerBuilder2.cs" />
+    <Compile Remove="Tests\ApiChangeEmailTests.cs" />
+    <Compile Remove="Tests\ApiDeleteAccount.cs" />
+    <Compile Remove="Tests\ApiInvitationTests.cs" />
     <Compile Remove="Tests\GeneralTests.cs" />
     <Compile Remove="Tests\InviteTests.cs" />
     <Compile Remove="Tests\LoginTests.cs" />

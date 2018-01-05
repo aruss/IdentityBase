@@ -7,7 +7,7 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Http;
     using ServiceBase.Extensions;
 
-    public static class HttpContextExtensions
+    public static partial class HttpContextExtensions
     {
         /// <summary>
         /// Gets the public base URL for Identity Base.

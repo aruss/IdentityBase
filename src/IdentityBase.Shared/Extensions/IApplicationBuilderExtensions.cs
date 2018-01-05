@@ -13,7 +13,7 @@ namespace IdentityBase.Extensions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
-    public static class IApplicationBuilderExtensions
+    public static partial class IApplicationBuilderExtensions
     {
         public static IApplicationBuilder MapStartup /*<TStartup>*/(
             this IApplicationBuilder app,

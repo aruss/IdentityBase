@@ -7,7 +7,7 @@ namespace IdentityBase.Extensions
     using System;
     using System.Linq;
 
-    public static class UserAccountExtensions
+    public static partial class UserAccountExtensions
     {
         public static bool HasPassword(this UserAccount userAccount)
         {

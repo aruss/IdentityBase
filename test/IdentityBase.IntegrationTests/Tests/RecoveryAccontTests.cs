@@ -30,7 +30,6 @@ namespace IdentityBase.IntegrationTests
 
                     cancelUrl = viewData
                         .ToDictionary()["CancelUrl"].ToString();
-
                 });
 
             TestServer server = TestServerBuilderExtensions

@@ -7,7 +7,7 @@ namespace IdentityBase.Extensions
     using System.IO;
     using System.Text;
 
-    internal static class StreamExtensions
+    internal static partial class StreamExtensions
     {
         internal static readonly Encoding DefaultEncoding =
             new UTF8Encoding(false, true);

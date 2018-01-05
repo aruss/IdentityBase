@@ -8,7 +8,7 @@ namespace IdentityBase.Extensions
     using System.IO;
     using ServiceBase.Extensions;
 
-    public static class StringExtensions
+    public static partial class StringExtensions
     {
         private static readonly string[] UglyBase64 = { "+", "/", "=" };
 

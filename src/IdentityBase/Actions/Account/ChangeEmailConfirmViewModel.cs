@@ -3,7 +3,7 @@
 
 namespace IdentityBase.Actions.Account
 {
-    public class ConfirmViewModel
+    public class ChangeEmailConfirmViewModel
     {
         public string Email { get; set; }
         
