@@ -77,6 +77,7 @@ namespace IdentityBase
                 this._logger,
                 this._environment);
 
+            services.AddScoped<IdentityBaseContext>();
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<ClientService>();
             services.AddScoped<UserAccountService>();
@@ -141,12 +142,12 @@ namespace IdentityBase
             ApplicationOptions options = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
-            app.UseMiddleware<RequestIdMiddleware>();
-            
+            app.UseMiddleware<IdentityBaseContextMiddleware>();
+            app.UseMiddleware<RequestIdMiddleware>();            
             app.UseRequestLocalization(); 
-
             app.UseLogging();
-
+                       
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

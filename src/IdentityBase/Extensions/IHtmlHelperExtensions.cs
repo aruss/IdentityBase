@@ -9,7 +9,7 @@ namespace Microsoft.AspNetCore.Mvc.Rendering
     using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
     /// <summary>
-    /// <see cref="IHtmlHelper"/> extensions.
+    /// <see cref="IHtmlHelper"/> extension methods.
     /// </summary>
     public static class IHtmlHelperExtensions
     {

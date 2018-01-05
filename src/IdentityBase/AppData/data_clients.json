@@ -558,7 +558,10 @@
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
     "AllowedCorsOrigins": [],
-    "Properties": {}
+    "Properties": {
+      "Theme": "Default",
+      "Culture": "de-DE"
+    }
   },
   {
     "Enabled": true,

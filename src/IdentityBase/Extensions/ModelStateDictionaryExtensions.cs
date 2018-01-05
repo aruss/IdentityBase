@@ -6,6 +6,9 @@ namespace Microsoft.AspNetCore.Mvc
     using System;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+    /// <summary>
+    /// <see cref="ModelStateDictionary"/> extension methods.
+    /// </summary>
     public static class ModelStateDictionaryExtensions
     {
         /// <summary>

@@ -10,6 +10,11 @@ namespace IdentityBase
     using IdentityBase.Actions.Register;
     using IdentityBase.Configuration;
 
+    /// <summary>
+    /// Discovers WebControllers from a list of <see cref="ApplicationPart"/>
+    /// instances and adds feature controllers according to application
+    /// configuration.
+    /// </summary>
     public class WebControllerFeatureProvider :
         TypedControllerFeatureProvider<WebController>
     {

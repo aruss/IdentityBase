@@ -8,7 +8,10 @@ namespace Microsoft.AspNetCore.Mvc
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authentication;
 
-    public static class ControllerExtensions
+    /// <summary>
+    /// <see cref="WebController"/> extension methods.
+    /// </summary>
+    public static partial class WebControllerExtensions
     {
         /// <summary>
         /// Creates an challenge action result for external login

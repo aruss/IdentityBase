@@ -4,9 +4,9 @@
 namespace IdentityBase
 {
     using IdentityBase.Configuration;
+    using IdentityBase.Theming;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Razor;
 
     public static class StartupMvc
     {
@@ -28,7 +28,7 @@ namespace IdentityBase
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
-                        new ThemeViewLocationExpander(appOptions.ThemePath)
+                        new ThemedViewLocationExpander(appOptions.ThemePath)
                     );
                 })
                 .ConfigureApplicationPartManager(manager =>

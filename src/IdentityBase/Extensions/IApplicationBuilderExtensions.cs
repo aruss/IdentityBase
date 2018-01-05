@@ -13,7 +13,10 @@ namespace IdentityBase
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
-    public static class IApplicationBuilderExtensions
+    /// <summary>
+    /// <see cref="IApplicationBuilder"/> extension methods.
+    /// </summary>
+    public static partial class IApplicationBuilderExtensions
     {
         public static void AddEmbeddedWebApi(
             this IApplicationBuilder appBuilder,

@@ -7,6 +7,12 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Controllers;
 
+    // TODO: move to ServiceBase 
+
+    /// <summary>
+    /// Discovers controllers of specific type from a list of
+    /// <see cref="ApplicationPart"/> instances.
+    /// </summary>
     public class TypedControllerFeatureProvider<TController> :
         ControllerFeatureProvider where TController : ControllerBase
     {
