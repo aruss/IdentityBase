@@ -3,13 +3,16 @@
 
 namespace IdentityBase.Actions.Recover
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class RecoverInputModel
     {
         [EmailAddress]
         [StringLength(254)]
-        [Required]
+        [Required(ErrorMessage = "The {0} field is required.")]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
         [Required]

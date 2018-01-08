@@ -11,24 +11,28 @@
         <div class="col-sm-6" show-if="@Model.EnableLocalLogin">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title" localize="">Local Account</h3>
+                    <h3 class="panel-title"
+                        localize="">Local Account</h3>
                 </div>
                 <div class="panel-body">
 
-                    <form asp-controller="Login" asp-action="Index"
-                          asp-route-returnUrl="@Model.ReturnUrl" novalidate>
+                    <form asp-controller="Login"
+                          asp-action="Index"
+                          asp-route-returnUrl="@Model.ReturnUrl"
+                          novalidate>
 
                         <fieldset>
                             <div class="form-group">
                                 <label asp-for="Email"></label>
-                                <input class="form-control" placeholder="E-Mail"
+                                <input class="form-control"
+                                       placeholder="@Localizer["Enter email"]"
                                        asp-for="Email" autofocus>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Password"></label>
                                 <input type="password"
                                        class="form-control"
-                                       placeholder="@Localizer["Password"]"
+                                       placeholder="@Localizer["Enter password"]"
                                        asp-for="Password"
                                        autocomplete="off">
                             </div>
@@ -36,7 +40,7 @@
                                  class="form-group login-remember">
                                 <label asp-for="RememberLogin">
                                     <input asp-for="RememberLogin">
-                                    <strong localize="">Remember My Login</strong>
+                                    <strong localize="">Remember login</strong>
                                 </label>
                             </div>
                             <div class="form-group">
@@ -46,13 +50,17 @@
                         </fieldset>
                     </form>
                     <ul class="list-inline">
-                        <li show-if="@Model.EnableAccountRecover"><a asp-route="Recover"
-                            asp-route-returnUrl="@Model.ReturnUrl"
-                            localize="">Forgot password?</a></li>
+                        <li show-if="@Model.EnableAccountRecover">
+                            <a asp-route="Recover"
+                               asp-route-returnUrl="@Model.ReturnUrl"
+                               localize="">Forgot password?</a>
+                        </li>
 
-                        <li show-if="@Model.EnableAccountRegistration"><a asp-route="Register"
-                            asp-route-returnUrl="@Model.ReturnUrl"
-                            localize="">Register</a></li>
+                        <li show-if="@Model.EnableAccountRegistration">
+                            <a asp-route="Register"
+                               asp-route-returnUrl="@Model.ReturnUrl"
+                               localize="">Register</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -3,19 +3,24 @@
 
 namespace IdentityBase.Actions.Login
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class LoginInputModel
     {
         [EmailAddress]
         [StringLength(254)]
-        [Required]
+        [Required(ErrorMessage = "The {0} field is required.")]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The {0} field is required.")]
         [StringLength(100)]
+        [DisplayName("Password")]
         public string Password { get; set; }
 
+        [DisplayName("Remember login")]
         public bool RememberLogin { get; set; }
 
         [StringLength(2000)]

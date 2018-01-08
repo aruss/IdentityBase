@@ -1,11 +1,23 @@
 {
   "Login": "Anmelden",
   "Local Account": "Lokales Konto",
-  "E-Mail": "E-Mail",
-  "EMail": "E-Mail",
+  "Email": "E-Mail",
+  "Enter email": "E-Mail eingeben",
   "Password": "Passwort",
-  "Remember My Login": "Eingeloggt bleiben",
+  "Enter password": "Passwort eingeben",
+  "Remember login": "Eingeloggt bleiben",
   "Forgot password?": "Passwort vergessen?",
-  "Register": "Registrieren"
+  "Register": "Registrieren",
+  "Recover Account": "Account wiederherstellen",
+  "The {0} field is not a valid e-mail address.": "Das Feld {0} ist keine gültige E-Mail-Adresse.",
+  "The {0} field is required.": "Das Feld {0} ist erforderlich.",
+  "Recover": "Wiederherstellen",
+  "Toggle navigation": "Menü aufklappen",
+  "IdentityBase": "IdentityBase",
+  "Error": "Fehler",
+  "Repeat password": "Password wiederholen",
+  "The passwords do not match.": "Die passwörter stimmen nicht überein.",
+  "Invalid username or password.": "Ungültiger Benutzername oder Passwort.",
+  "User already exists.": "Benutzer existiert bereits.",
+  "User account does not exists.": "Benutzerkonto existiert nicht."
 }
-

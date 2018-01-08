@@ -21,7 +21,7 @@ namespace IdentityBase.IntegrationTests
 
             // Mock the email service to intercept the outgoing email messages
             var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
-                IdentityBaseConstants.EmailTemplates.UserAccountRecover,
+                EmailTemplates.UserAccountRecover,
                 "alice@localhost", (templateName, emailTo, viewData, isHtml) =>
                 {
                     // 2. Get confirm url and call it
@@ -75,7 +75,7 @@ namespace IdentityBase.IntegrationTests
 
             // Mock the email service to intercept the outgoing email messages
             var emailServiceMock = EmailServiceHelper.GetEmailServiceMock(
-                IdentityBaseConstants.EmailTemplates.UserAccountRecover,
+                EmailTemplates.UserAccountRecover,
                 "alice@localhost", (templateName, emailTo, viewData, isHtml) =>
                 {
                     // 2. Get confirm url and call it
@@ -106,15 +106,15 @@ namespace IdentityBase.IntegrationTests
 
         // Recovering non existing user should return a error message
         [InlineData("nothere@localhost", new string[] {
-            IdentityBaseConstants.ErrorMessages.UserAccountDoesNotExists })]
+            ErrorMessages.UserAccountDoesNotExists })]
 
         // Recovering disabled user should return a error message 
         [InlineData("jim@localhost", new string[] {
-            IdentityBaseConstants.ErrorMessages.UserAccountIsDeactivated })]
+            ErrorMessages.UserAccountIsDeactivated })]
 
         // Recovering with invalid form values should return a error message 
         [InlineData("alice_localhost", new string[] {
-            IdentityBaseConstants.ErrorMessages.InvalidEmailAddress })]
+            ErrorMessages.InvalidEmailAddress })]
 
         public async Task Try_Recover(
             string email,

@@ -14,6 +14,7 @@ namespace IdentityBase.Actions.Register
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Notification.Email;
 
@@ -26,6 +27,7 @@ namespace IdentityBase.Actions.Register
         private readonly ClientService _clientService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
+        private readonly IStringLocalizer _localizer;
 
         public RegisterController(
             ApplicationOptions applicationOptions,
@@ -35,7 +37,8 @@ namespace IdentityBase.Actions.Register
             UserAccountService userAccountService,
             ClientService clientService,
             NotificationService notificationService,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            IStringLocalizer localizer)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
@@ -44,6 +47,7 @@ namespace IdentityBase.Actions.Register
             this._clientService = clientService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
+            this._localizer = localizer;
         }
 
         [HttpGet("register", Name = "Register")]
@@ -84,8 +88,8 @@ namespace IdentityBase.Actions.Register
             // User is just disabled by whatever reason
             else if (!userAccount.IsLoginAllowed)
             {
-                this.ModelState
-                    .AddModelError("Your user account has be disabled");
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.AccountIsDesabled]);
             }
             // If user has a password then its a local account
             else if (userAccount.HasPassword())
@@ -94,14 +98,15 @@ namespace IdentityBase.Actions.Register
                 if (this._applicationOptions.RequireLocalAccountVerification &&
                     !userAccount.IsEmailVerified)
                 {
-                    this.ModelState
-                        .AddModelError("Please confirm your email account");
+                    this.ModelState.AddModelError(
+                        this._localizer[ErrorMessages.ConfirmAccount]);
 
                     // TODO: show link for resent confirmation link
                 }
 
                 // If user has a password then its a local account
-                this.ModelState.AddModelError("User already exists");
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.AccountAlreadyExists]);
             }
             else
             {
@@ -137,7 +142,7 @@ namespace IdentityBase.Actions.Register
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -168,17 +173,17 @@ namespace IdentityBase.Actions.Register
 
                 await this._userAccountService
                     .SetEmailVerifiedAsync(result.UserAccount);
-                
+
                 if (this._applicationOptions.LoginAfterAccountConfirmation)
                 {
                     await this._authenticationService
                         .SignInAsync(result.UserAccount, returnUrl);
 
                     return this.RedirectToReturnUrl(
-                        returnUrl, this._interaction); 
+                        returnUrl, this._interaction);
                 }
 
-                return this.RedirectToLogin(returnUrl); 
+                return this.RedirectToLogin(returnUrl);
             }
         }
 
@@ -209,7 +214,7 @@ namespace IdentityBase.Actions.Register
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -245,7 +250,7 @@ namespace IdentityBase.Actions.Register
                         .SignInAsync(result.UserAccount, returnUrl);
 
                     return this.RedirectToReturnUrl(
-                        returnUrl, this._interaction); 
+                        returnUrl, this._interaction);
                 }
 
                 return this.RedirectToLogin(returnUrl);
@@ -272,7 +277,7 @@ namespace IdentityBase.Actions.Register
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -486,7 +491,7 @@ namespace IdentityBase.Actions.Register
                     .SignInAsync(userAccount, model.ReturnUrl);
 
                 return this.RedirectToReturnUrl(
-                    model.ReturnUrl, this._interaction); 
+                    model.ReturnUrl, this._interaction);
             }
 
             return this.View("Success",

@@ -10,9 +10,9 @@ namespace IdentityBase.Actions.Account
     using IdentityBase.Services;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using ServiceBase.Notification.Email;
 
     public class ChangeEmailController : WebController
     {
@@ -20,19 +20,20 @@ namespace IdentityBase.Actions.Account
         private readonly ILogger<ChangeEmailController> _logger;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly UserAccountService _userAccountService;
-        
+        private readonly IStringLocalizer _localizer;
+
         public ChangeEmailController(
             ApplicationOptions applicationOptions,
             ILogger<ChangeEmailController> logger,
-            IUserAccountStore userAccountStore,
             IIdentityServerInteractionService interaction,
-            IEmailService emailService,
-            UserAccountService userAccountService)
+            UserAccountService userAccountService,
+            IStringLocalizer localizer)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
             this._interaction = interaction;
             this._userAccountService = userAccountService;
+            this._localizer = localizer; 
         }
         
         [HttpGet("email/cancel/{key}", Name = "EmailCancel")]
@@ -55,7 +56,7 @@ namespace IdentityBase.Actions.Account
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }

@@ -136,7 +136,7 @@ namespace IdentityBase.WebApi.Actions.UserAccounts
                     .GetIdentityServerBaseUrl());
 
             await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountEmailChanged,
+                EmailTemplates.UserAccountEmailChanged,
                 newEmail,
                 new
                 {

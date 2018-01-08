@@ -7,14 +7,12 @@ namespace IdentityBase.Actions.Recover
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
-    using IdentityServer4.Extensions;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Notification.Email;
 
@@ -28,6 +26,7 @@ namespace IdentityBase.Actions.Recover
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
+        private readonly IStringLocalizer _localizer;
 
         public RecoverController(
             ApplicationOptions applicationOptions,
@@ -38,7 +37,8 @@ namespace IdentityBase.Actions.Recover
             ClientService clientService,
             UserAccountService userAccountService,
             NotificationService notificationService,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            IStringLocalizer localizer)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
@@ -47,7 +47,8 @@ namespace IdentityBase.Actions.Recover
             this._clientService = clientService;
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
-            this._authenticationService = authenticationService; 
+            this._authenticationService = authenticationService;
+            this._localizer = localizer;
         }
 
         [HttpGet("recover", Name = "Recover")]
@@ -56,8 +57,7 @@ namespace IdentityBase.Actions.Recover
             RecoverViewModel vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
             {
-                this._logger.LogWarning(IdentityBaseConstants.ErrorMessages
-                    .RecoveryNoReturnUrl);
+                this._logger.LogWarning(ErrorMessages.RecoveryNoReturnUrl);
 
                 return this.RedirectToAction("Index", "Error");
             }
@@ -100,14 +100,14 @@ namespace IdentityBase.Actions.Recover
                 }
                 else
                 {
-                    this.ModelState.AddModelError(IdentityBaseConstants
-                        .ErrorMessages.UserAccountIsDeactivated);
+                    this.ModelState.AddModelError(this._localizer[
+                        ErrorMessages.UserAccountIsDeactivated]);
                 }
             }
             else
             {
-                this.ModelState.AddModelError(IdentityBaseConstants
-                    .ErrorMessages.UserAccountDoesNotExists);
+                this.ModelState.AddModelError(this._localizer[
+                    ErrorMessages.UserAccountDoesNotExists]);
             }
 
             return this.View(
@@ -127,8 +127,8 @@ namespace IdentityBase.Actions.Recover
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                this.ModelState.AddModelError(IdentityBaseConstants
-                    .ErrorMessages.TokenIsInvalid);
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -163,7 +163,7 @@ namespace IdentityBase.Actions.Recover
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -187,9 +187,9 @@ namespace IdentityBase.Actions.Recover
             if (this._applicationOptions.LoginAfterAccountRecovery)
             {
                 await this._authenticationService
-                    .SignInAsync(result.UserAccount, returnUrl); 
-            
-                return this.RedirectToReturnUrl(returnUrl, this._interaction); 
+                    .SignInAsync(result.UserAccount, returnUrl);
+
+                return this.RedirectToReturnUrl(returnUrl, this._interaction);
             }
 
             return this.RedirectToLogin(returnUrl);
@@ -215,7 +215,7 @@ namespace IdentityBase.Actions.Recover
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }

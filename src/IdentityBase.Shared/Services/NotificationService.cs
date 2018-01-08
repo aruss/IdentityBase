@@ -38,7 +38,7 @@ namespace IdentityBase.Services
                 .HttpContext.GetBaseUrl();
 
             await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountCreated,
+                EmailTemplates.UserAccountCreated,
                 userAccount.Email,
                 new
                 {
@@ -59,7 +59,7 @@ namespace IdentityBase.Services
                  .HttpContext.GetBaseUrl();
 
             await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountRecover,
+                EmailTemplates.UserAccountRecover,
                 userAccount.Email,
                 new
                 {

@@ -1,11 +1,24 @@
 {
   "Login": "Login",
   "Local Account": "Local Account",
-  "E-Mail": "E-Mail",
-  "EMail": "E-Mail",
+  "Email": "E-Mail",
+  "Enter email": "E-Mail",
   "Password": "Password",
-  "Remember My Login": "Remember My Login",
+  "Enter password": "Password",
+  "Remember login": "Remember My Login",
   "Forgot password?": "Forgot password?",
-  "Register": "Register"
+  "Register": "Register",
+  "Recover Account": "Recover Account",
+  "The {0} field is not a valid e-mail address.": "The {0} field is not a valid e-mail address.",
+  "The {0} field is required.": "The {0} field is required.",
+  "Recover": "Recover",
+  "Toggle navigation": "Toggle navigation",
+  "IdentityBase": "IdentityBase",
+  "Error": "Error",
+  "Repeat password": "Repeat password",
+  "The passwords do not match.": "The passwords do not match.",
+  "Invalid username or password.": "Invalid username or password.",
+  "User already exists.": "User already exists.",
+  "User account does not exists.": "User account does not exists."
 }
 

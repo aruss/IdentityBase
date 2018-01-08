@@ -124,7 +124,7 @@ namespace IdentityBase.WebApi.Actions.Invitations
                     .GetIdentityServerBaseUrl());
 
             await this._emailService.SendEmailAsync(
-                IdentityBaseConstants.EmailTemplates.UserAccountInvited,
+                EmailTemplates.UserAccountInvited,
                 userAccount.Email,
                 new
                 {

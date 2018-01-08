@@ -12,6 +12,7 @@ namespace IdentityBase.Actions.Login
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
     using ServiceBase;
 
@@ -23,6 +24,7 @@ namespace IdentityBase.Actions.Login
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
         private readonly AuthenticationService _authenticationService;
+        private readonly IStringLocalizer _localizer;
 
         public LoginController(
             ApplicationOptions applicationOptions,
@@ -31,7 +33,8 @@ namespace IdentityBase.Actions.Login
             UserAccountService userAccountService,
             ClientService clientService,
             IDateTimeAccessor dateTimeAccessor,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            IStringLocalizer localizer)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
@@ -39,6 +42,7 @@ namespace IdentityBase.Actions.Login
             this._userAccountService = userAccountService;
             this._clientService = clientService;
             this._authenticationService = authenticationService;
+            this._localizer = localizer;
         }
 
         /// <summary>
@@ -90,10 +94,8 @@ namespace IdentityBase.Actions.Login
                 {
                     if (!result.IsLoginAllowed)
                     {
-                        this.ModelState.AddModelError(
-                            IdentityBaseConstants.ErrorMessages
-                                .UserAccountIsDeactivated
-                        );
+                        this.ModelState.AddModelError(this._localizer[
+                            ErrorMessages.UserAccountIsDeactivated]);
                     }
                     else if (result.IsLocalAccount)
                     {
@@ -126,14 +128,13 @@ namespace IdentityBase.Actions.Login
                 }
 
                 this.ModelState.AddModelError(
-                    IdentityBaseConstants.ErrorMessages.InvalidCredentials
-                );
+                    this._localizer[ErrorMessages.InvalidCredentials]);
             }
 
             // Something went wrong, show form with error
-            return this.View(await CreateViewModelAsync(model));
+            return this.View(await this.CreateViewModelAsync(model));
         }
-        
+
         [NonAction]
         internal async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)

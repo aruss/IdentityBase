@@ -3,23 +3,27 @@
 
 namespace IdentityBase.Actions.Register
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class RegisterInputModel
     {
-        [Required]
         [EmailAddress]
         [StringLength(254)]
+        [Required(ErrorMessage = "The {0} field is required.")]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The {0} field is required.")]
         [StringLength(100)]
+        [DisplayName("Password")]
         public string Password { get; set; }
 
-        [Required]
-        [Compare("Password", ErrorMessage =
-            "The password and confirmation password do not match.")]
+        [Required(ErrorMessage = "The {0} field is required.")]
+        [Compare("Password", ErrorMessage = "The passwords do not match.")]
         [StringLength(100)]
+        [DisplayName("Repeat password")]
         public string PasswordConfirm { get; set; }
 
         [StringLength(2000)]

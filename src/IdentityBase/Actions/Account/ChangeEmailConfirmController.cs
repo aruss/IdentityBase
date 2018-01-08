@@ -10,6 +10,7 @@ namespace IdentityBase.Actions.Account
     using IdentityBase.Services;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using ServiceBase.Notification.Email;
@@ -21,20 +22,22 @@ namespace IdentityBase.Actions.Account
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEmailService _emailService;
         private readonly UserAccountService _userAccountService;
-        
+        private readonly IStringLocalizer _localizer;
+
         public ChangeEmailConfirmController(
             ApplicationOptions applicationOptions,
             ILogger<ChangeEmailConfirmController> logger,
-            IUserAccountStore userAccountStore,
             IIdentityServerInteractionService interaction,
             IEmailService emailService,
-            UserAccountService userAccountService)
+            UserAccountService userAccountService,
+            IStringLocalizer localizer)
         {
             this._applicationOptions = applicationOptions;
             this._logger = logger;
             this._interaction = interaction;
             this._emailService = emailService;
             this._userAccountService = userAccountService;
+            this._localizer = localizer;
         }
 
         [HttpGet("email/confirm/{key}", Name = "EmailConfirm")]
@@ -51,8 +54,8 @@ namespace IdentityBase.Actions.Account
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                this.ModelState.AddModelError(IdentityBaseConstants
-                    .ErrorMessages.TokenIsInvalid);
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
 
                 return this.View("InvalidToken");
             }
@@ -62,16 +65,16 @@ namespace IdentityBase.Actions.Account
                 result.UserAccount.VerificationStorage);
 
             string email = storage[0];
-            string returnUrl = storage[1]; 
-            
+            string returnUrl = storage[1];
+
             // Check if new email address is already taken
             if (await this._userAccountService
                 .LoadByEmailAsync(email) != null)
             {
-                this.ModelState.AddModelError(IdentityBaseConstants
-                    .ErrorMessages.EmailAddressAlreadyTaken);
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.EmailAddressAlreadyTaken]);
 
-                ChangeEmailConfirmViewModel vm = new ChangeEmailConfirmViewModel
+                var vm = new ChangeEmailConfirmViewModel
                 {
                     Key = key,
                     ReturnUrl = returnUrl,
@@ -86,7 +89,7 @@ namespace IdentityBase.Actions.Account
                result.UserAccount,
                email
             );
-            
+
             if (this._interaction.IsValidReturnUrl(returnUrl))
             {
                 return this.Redirect(returnUrl);

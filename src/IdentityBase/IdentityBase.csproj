@@ -52,6 +52,9 @@
     <None Remove="IdentityBase.Public.nuspec" />
     <None Remove="README.md" />
     <None Remove="tempkey.rsa" />
+    <None Remove="Themes\Default\.gitignore" />
+    <None Remove="Themes\Default\gulpfile.js" />
+    <None Remove="Themes\Default\README.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -148,7 +151,6 @@
     <Folder Include="Themes\Fancy\Public\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Themes\Default\package.json" />
     <None Include="Themes\Default\Resources\Localization\Shared.en-US.json" />
   </ItemGroup>
   <ItemGroup>
