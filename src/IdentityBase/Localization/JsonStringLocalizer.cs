@@ -25,8 +25,8 @@ namespace IdentityBase
             ApplicationOptions appOptions,
             ILogger<JsonStringLocalizer> logger)
         {
-            JsonStringLocalizer._dictionaries =
-                new ConcurrentDictionary<CultureInfo, Dictionary<string, string>>();
+            JsonStringLocalizer._dictionaries = new ConcurrentDictionary
+                <CultureInfo, Dictionary<string, string>>();
 
             this._logger = logger;
             this._appOptions = appOptions;
@@ -58,7 +58,9 @@ namespace IdentityBase
         private string GetTranslation(string key)
         {
             CultureInfo culture = CultureInfo.CurrentUICulture;
-            Dictionary<string, string> dictionary = GetDictionary(culture);
+
+            Dictionary<string, string> dictionary =
+                this.GetDictionary(culture);
 
             if (dictionary.ContainsKey(key))
             {

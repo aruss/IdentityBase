@@ -1,9 +1,0 @@
-You have been invited, please click here to confirm your email address:
-
-{ConfirmUrl}
-
-If this was in error or not requested then click to cancel the request:
-
-{CancelUrl}
-
-Thanks!

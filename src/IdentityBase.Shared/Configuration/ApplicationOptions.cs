@@ -1,6 +1,8 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using System;
+
 namespace IdentityBase.Configuration
 {
     /// <summary>
@@ -129,7 +131,10 @@ namespace IdentityBase.Configuration
         public string WindowsAuthenticationDisplayName { get; set; } =
             "Windows";
 
+        [Obsolete]
         public string ThemePath { get; set; } = "./Themes/Default";
+
+        public string ThemeDirectoryPath { get; set; } = "./Themes"; 
 
         public string DefaultCulture { get; set; } = "de-DE"; // "en-US"; 
     }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xml>
+  <subject></subject>
+  <text>
+    {Content}
+  </text>
+  <html>
+    <![CDATA[
+      <div style="max-width: 600px">
+        <h1>IdentityBase</h1>
+        {Content}
+      </div>
+    ]]>
+  </html>
+</xml>

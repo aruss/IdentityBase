@@ -1,9 +1,0 @@
-﻿Please click here to confirm account recovery request:
-
-{ConfirmUrl}
-
-If this was in error or not requested then click to cancel the request:
-
-{CancelUrl}
-
-Thanks!

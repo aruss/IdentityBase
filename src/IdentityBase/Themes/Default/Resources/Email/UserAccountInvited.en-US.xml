@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xml>
+  <subject>IdentityBase - Account Invited.</subject>
+  <text>
+    You have been invited, please click here to confirm your email address:
+    {ConfirmUrl}
+    If this was in error or not requested then click to cancel the request:
+    {CancelUrl}
+    Thanks!
+  </text>
+  <html>
+    <![CDATA[
+      You have been invited, please click here to confirm your email address:<br/>
+      <br />
+      <a href="{ConfirmUrl}">{ConfirmUrl}</a><br />
+      <br />
+      If this was in error or not requested then click to cancel the request:<br />
+      <br />
+      <a href="{CancelUrl}">{CancelUrl}</a><br />
+      <br />
+      Thanks!
+     ]]>
+  </html>
+</xml>

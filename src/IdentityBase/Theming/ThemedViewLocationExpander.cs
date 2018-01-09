@@ -52,6 +52,7 @@ namespace IdentityBase.Theming
             var clientProperties = identityBaseContext.Client
                 .Properties.ToObject<ClientProperties, string>();
 
+            // TODO: Add culture 
             context.Values["ThemePath"] = clientProperties.ThemePath ??
                 this._themePath; 
         }

@@ -15,7 +15,7 @@ namespace IdentityBase
             IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddScoped<IEmailService, DebugEmailService>(); 
+            services.AddScoped<IEmailService, DebugEmailService>();
         }
 
         public void Configure(IApplicationBuilder app)
