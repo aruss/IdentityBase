@@ -40,8 +40,8 @@ namespace IdentityBase.Actions.Account
             this._localizer = localizer;
         }
 
-        [HttpGet("email/confirm/{key}", Name = "EmailConfirm")]
-        public async Task<IActionResult> Confirm(string key)
+        [HttpGet("email/confirm", Name = "EmailConfirm")]
+        public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             // Check token integrity
             TokenVerificationResult result = await this._userAccountService

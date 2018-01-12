@@ -1,12 +1,14 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResources> Localizer
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@if(User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated)
 {
-    <h1>Logged in as: @User.Identity.Name</h1>
+    <h1>@Localizer["LoggedInAs"] @User.Identity.Name</h1>
 }
 else
 {
-    <h1>Not Logged In</h1>
+    <h1>@Localizer["NotLoggedIn"]</h1>
 }

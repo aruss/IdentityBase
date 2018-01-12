@@ -122,8 +122,8 @@ namespace IdentityBase.Actions.Register
             );
         }
 
-        [HttpGet("register/confirm/{key}", Name = "RegisterConfirm")]
-        public async Task<IActionResult> Confirm(string key)
+        [HttpGet("register/confirm", Name = "RegisterConfirm")]
+        public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(
@@ -152,11 +152,10 @@ namespace IdentityBase.Actions.Register
                 result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 // TODO: move invitation confirmation to own contoller
-                //       listening on /invitation/confirm/{key}
+                //       listening on /invitation/confirm
 
                 ConfirmViewModel vm = new ConfirmViewModel
                 {
-                    Key = key,
                     RequiresPassword = !result.UserAccount.HasPassword(),
                     Email = result.UserAccount.Email
                 };
@@ -188,9 +187,11 @@ namespace IdentityBase.Actions.Register
         }
 
         // Currently is only used for invitations 
-        [HttpPost("register/confirm/{key}")]
+        [HttpPost("register/confirm")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirm(ConfirmInputModel model)
+        public async Task<IActionResult> Confirm(
+            [FromQuery]string key,
+            ConfirmInputModel model)
         {
             if (!this._applicationOptions.EnableAccountInvitation)
             {
@@ -199,7 +200,7 @@ namespace IdentityBase.Actions.Register
 
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(
-                    model.Key,
+                    key,
                     VerificationKeyPurpose.ConfirmAccount
                 );
 
@@ -223,7 +224,6 @@ namespace IdentityBase.Actions.Register
             {
                 return this.View(new ConfirmViewModel
                 {
-                    Key = model.Key,
                     Email = result.UserAccount.Email
                 });
             }
@@ -257,8 +257,8 @@ namespace IdentityBase.Actions.Register
             }
         }
 
-        [HttpGet("register/cancel/{key}", Name = "RegisterCancel")]
-        public async Task<IActionResult> Cancel(string key)
+        [HttpGet("register/cancel", Name = "RegisterCancel")]
+        public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(

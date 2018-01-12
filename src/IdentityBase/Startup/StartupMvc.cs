@@ -28,7 +28,7 @@ namespace IdentityBase
                 .AddRazorOptions(razor =>
                 {
                     razor.ViewLocationExpanders.Add(
-                        new ThemedViewLocationExpander(appOptions.ThemePath)
+                        new ThemedViewLocationExpander()
                     );
                 })
                 .ConfigureApplicationPartManager(manager =>

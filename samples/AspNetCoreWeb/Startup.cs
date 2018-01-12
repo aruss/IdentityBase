@@ -97,7 +97,7 @@ namespace AspNetCoreWeb
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
-                    context.ProtocolMessage.SetParameter("cuture",
+                    context.ProtocolMessage.SetParameter("culture",
                         CultureInfo.CurrentUICulture.Name);
 
                     return Task.FromResult(0);

@@ -1,5 +1,4 @@
 @using Microsoft.AspNetCore.Mvc.Localization
-
 @inject IHtmlLocalizer<SharedResources> Localizer
 
 <!DOCTYPE html>
@@ -35,14 +34,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Home"
-                           asp-action="Secure">@Localizer["Secure"]</a></li>
+                           asp-action="Secure">@Localizer["Authentication"]</a></li>
                     
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a asp-controller="Home"
                                asp-action="Logout">@Localizer["Logout"]</a></li>
                     }
-
+                    
                     <li>@await Html.PartialAsync("_SelectLanguagePartial")</li>
                 </ul>
             </div>

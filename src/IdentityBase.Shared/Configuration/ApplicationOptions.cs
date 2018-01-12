@@ -131,9 +131,6 @@ namespace IdentityBase.Configuration
         public string WindowsAuthenticationDisplayName { get; set; } =
             "Windows";
 
-        [Obsolete]
-        public string ThemePath { get; set; } = "./Themes/Default";
-
         public string ThemeDirectoryPath { get; set; } = "./Themes"; 
 
         public string DefaultCulture { get; set; } = "de-DE"; // "en-US"; 

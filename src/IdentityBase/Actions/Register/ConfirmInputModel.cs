@@ -16,8 +16,5 @@ namespace IdentityBase.Actions.Register
             "The password and confirmation password do not match.")]
         [StringLength(100)]
         public string PasswordConfirm { get; set; }
-
-        [Required]
-        public string Key { get; set; }
     }
 }

@@ -1,37 +1,101 @@
 namespace IdentityBase
 {
+    using System.Collections.Generic;
     using System.IO;
     using IdentityBase.Configuration;
-    using Microsoft.Extensions.Configuration;
+    using IdentityBase.Models;
+    using Microsoft.AspNetCore.Http;
     using ServiceBase.Extensions;
 
-    public static class ThemeHelper
+    public static class ObjectExtensions
     {
-        public static string GetFullThemePath(
-            this ApplicationOptions appOptions)
+        public static TResult ToObject<TResult>(this IDictionary<string, string> source)
+            where TResult : class, new()
         {
-            string path;
+            var someObject = new TResult();
+            var someObjectType = someObject.GetType();
 
-            if (Path.IsPathRooted(appOptions.ThemePath))
+            foreach (var item in source)
             {
-                path = Path
-                    .GetFullPath(appOptions.ThemePath)
-                    .RemoveTrailingSlash();
+                try
+                {
+                    someObjectType
+                         .GetProperty(item.Key)
+                         .SetValue(someObject, item.Value, null);
+                }
+                catch (System.Exception)
+                {
+                    
+                }                
             }
-            else
+
+            return someObject;
+        }
+
+    }
+
+    public class ThemeHelper
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationOptions _applicationOptions;
+
+        public ThemeHelper(
+            ApplicationOptions applicationOptions,
+            IHttpContextAccessor httpContextAccessor)
+        {
+            this._httpContextAccessor = httpContextAccessor;
+            this._applicationOptions = applicationOptions;
+        }
+
+        // TODO: return theme object instead of string 
+        public string GetTheme()
+        {
+            HttpContext context = this._httpContextAccessor.HttpContext;
+
+            IdentityBaseContext identityBaseContext =
+                    context.GetIdentityBaseContext();
+
+            if (!identityBaseContext.IsValid)
             {
-                path = appOptions.ThemePath
-                    .RemoveTrailingSlash();
+                return "Default"; 
             }
+
+            ClientProperties clientProperties = identityBaseContext.Client
+                .Properties.ToObject<ClientProperties>();
+
+            string theme = clientProperties.Theme ?? "Default";
+
+            return theme;
+        }
+
+        public string GetThemeDirectoryPath()
+        {
+            string theme = this.GetTheme();
+
+            string path = Path.GetFullPath(
+                Path.Combine(
+                    this._applicationOptions.ThemeDirectoryPath,
+                    theme));
 
             return path;
         }
-        
-        public static string GetFullThemePath(
-            this IConfiguration configuration)
+
+        public string GetLocalizationDirectoryPath()
         {
-            return configuration.GetSection("App")
-                .Get<ApplicationOptions>().GetFullThemePath(); 
+            return Path.Combine(
+                this.GetThemeDirectoryPath(),
+                "Resources",
+                "Localization");
         }
+
+        public string GetEmailTemplatesDirectoryPath()
+        {
+            return Path.Combine(
+                this.GetThemeDirectoryPath(),
+                "Resources",
+                "Email");
+        }
+
+        // TODO: add sms templates directory path method here 
     }
 }

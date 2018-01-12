@@ -32,6 +32,7 @@ namespace IdentityBase
                 options.DefaultRequestCulture =
                     new RequestCulture(appOptions.DefaultCulture);
 
+                // TODO: read from ThemeHelper ....
                 options.SupportedCultures =
                 options.SupportedUICultures = new List<CultureInfo>
                 {

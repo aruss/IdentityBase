@@ -85,11 +85,11 @@
     
   },
   "Sms": {
-  },
 
+  },
   "Modules": [
-    // { "Type": "IdentityBase.EntityFramework.InMemoryModule, IdentityBase.EntityFramework" },
-    { "Type": "IdentityBase.EntityFramework.SqlServer.SqlServerModule, IdentityBase.EntityFramework.SqlServer" },
+    { "Type": "IdentityBase.EntityFramework.InMemoryModule, IdentityBase.EntityFramework" },
+    // { "Type": "IdentityBase.EntityFramework.SqlServer.SqlServerModule, IdentityBase.EntityFramework.SqlServer" },
     // { "type": "IdentityBase.EntityFramework.Npgsql.NpgsqlModule, IdentityBase.EntityFramework.Npgsql" },
 
     { "type": "IdentityBase.EntityFramework.ConfigBasedStoreInitializerModule, IdentityBase.EntityFramework" },

@@ -17,30 +17,32 @@ namespace IdentityBase
     {
         private readonly ApplicationOptions _appOptions;
         private readonly ILogger<JsonStringLocalizer> _logger;
+        private readonly ThemeHelper _themeHelper; 
 
         private static ConcurrentDictionary
             <CultureInfo, Dictionary<string, string>> _dictionaries;
 
         public JsonStringLocalizer(
             ApplicationOptions appOptions,
-            ILogger<JsonStringLocalizer> logger)
+            ILogger<JsonStringLocalizer> logger,
+            ThemeHelper themeHelper)
         {
             JsonStringLocalizer._dictionaries = new ConcurrentDictionary
                 <CultureInfo, Dictionary<string, string>>();
 
             this._logger = logger;
             this._appOptions = appOptions;
+            this._themeHelper = themeHelper; 
         }
 
         private Dictionary<string, string> GetDictionary(CultureInfo culture)
         {
             return JsonStringLocalizer._dictionaries.GetOrAdd(culture, (c) =>
             {
-                string resourcePath = Path.Combine(
-                    _appOptions.GetFullThemePath(),
-                    "Resources",
-                    "Localization",
-                    $"Shared.{c.Name}.json");
+                // TODO: Remove dependency on themehelper, solve it via configuration and factory, like DefaultEmailServiceOptionsFactory
+                string resourcePath = Path.GetFullPath(Path.Combine(
+                    this._themeHelper.GetLocalizationDirectoryPath(),
+                    $"Shared.{c.Name}.json"));
 
                 this._logger.LogInformation(
                     $"Loading localization dictionary: {resourcePath}");

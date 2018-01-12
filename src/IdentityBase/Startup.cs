@@ -12,6 +12,7 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -77,15 +78,23 @@ namespace IdentityBase
                 this._logger,
                 this._environment);
 
-            services.AddScoped<IdentityBaseContext>();
+            // services.AddScoped<IdentityBaseContext>();
+            services.AddFactory<
+                IdentityBaseContext,
+                IdentityBaseContextFactory>(
+                    ServiceLifetime.Scoped,
+                    ServiceLifetime.Singleton);
+
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<ClientService>();
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();
-            services.AddScoped<AuthenticationService>(); 
+            services.AddScoped<AuthenticationService>();
+            services.AddScoped<ThemeHelper>(); 
             services.AddAntiforgery();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             // // TOOD: can be moved to webapi component 
             // services.AddCors(corsOpts =>
@@ -142,7 +151,7 @@ namespace IdentityBase
             ApplicationOptions options = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
-            app.UseMiddleware<IdentityBaseContextMiddleware>();
+            // app.UseMiddleware<IdentityBaseContextMiddleware>();
             app.UseMiddleware<RequestIdMiddleware>();            
             app.UseRequestLocalization(); 
             app.UseLogging();

@@ -6,6 +6,7 @@ namespace IdentityBase
     using IdentityServer4.Extensions;
     using Microsoft.AspNetCore.Http;
     using ServiceBase.Extensions;
+    using Microsoft.Extensions.DependencyInjection;
 
     public static partial class HttpContextExtensions
     {
@@ -19,6 +20,17 @@ namespace IdentityBase
             return httpContext
                 .GetIdentityServerBaseUrl()
                 .EnsureTrailingSlash();
+        }
+
+        public static IdentityBaseContext GetIdentityBaseContext(
+            this HttpContext httpContext)
+        {
+            IdentityBaseContext identityBaseContext =
+                    httpContext
+                    .RequestServices
+                    .GetService<IdentityBaseContext>();
+
+            return identityBaseContext; 
         }
     }
 }

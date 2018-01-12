@@ -3,7 +3,6 @@
 
 namespace IdentityBase.SendGrid
 {
-    using System.IO;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -13,24 +12,13 @@ namespace IdentityBase.SendGrid
 
     public class SendGridEmailSenderModule : IModule
     {
-       
         public void ConfigureServices(
             IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddScoped<IEmailService, DefaultEmailService>();
+            services.AddDefaultEmailService(configuration);
+
             services.AddScoped<IEmailSender, SendGridEmailSender>();
-
-            DefaultEmailServiceOptions emailOptions = configuration
-                .GetSection("Email")
-                .Get<DefaultEmailServiceOptions>();
-
-            emailOptions.TemplateDirectoryPath =
-                Path.Combine(ThemeHelper.GetFullThemePath(configuration),
-                "Resources",
-                "Email");
-
-            services.AddSingleton(emailOptions);
 
             services.AddSingleton(configuration
                 .GetSection("Email:SendGrid").Get<SendGridOptions>());

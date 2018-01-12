@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceBase.Notification.SendGrid" Version="1.1.12" />
+    <PackageReference Include="ServiceBase.Notification.SendGrid" Version="1.1.14" />
   </ItemGroup>
 
   <ItemGroup>

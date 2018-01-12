@@ -21,10 +21,5 @@ namespace IdentityBase.Actions.Recover
         [DataType(DataType.Password)]
         [DisplayName("Repeat password")]
         public string PasswordConfirm { get; set; }
-
-        [Required]
-        [UIHint("Hidden")]
-        [StringLength(100)]
-        public string Key { get; set; }
     }
 }

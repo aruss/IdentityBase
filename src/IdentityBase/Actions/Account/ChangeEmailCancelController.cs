@@ -36,8 +36,8 @@ namespace IdentityBase.Actions.Account
             this._localizer = localizer; 
         }
         
-        [HttpGet("email/cancel/{key}", Name = "EmailCancel")]
-        public async Task<IActionResult> Cancel(string key)
+        [HttpGet("email/cancel", Name = "EmailCancel")]
+        public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(

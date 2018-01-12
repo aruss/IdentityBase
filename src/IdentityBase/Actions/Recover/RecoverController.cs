@@ -93,6 +93,8 @@ namespace IdentityBase.Actions.Recover
                     return this.View("Success", new SuccessViewModel()
                     {
                         ReturnUrl = model.ReturnUrl,
+
+                        // TODO: Use a provider helper or something 
                         Provider = userAccount.Email
                             .Split('@')
                             .LastOrDefault()
@@ -114,8 +116,8 @@ namespace IdentityBase.Actions.Recover
                 await this.CreateViewModelAsync(model, userAccount));
         }
 
-        [HttpGet("recover/confirm/{key}", Name = "RecoverConfirm")]
-        public async Task<IActionResult> Confirm(string key)
+        [HttpGet("recover/confirm", Name = "RecoverConfirm")]
+        public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(
@@ -135,20 +137,21 @@ namespace IdentityBase.Actions.Recover
 
             ConfirmViewModel vm = new ConfirmViewModel
             {
-                Key = key,
                 Email = result.UserAccount.Email
             };
 
             return this.View(vm);
         }
 
-        [HttpPost("recover/confirm/{key}")]
+        [HttpPost("recover/confirm")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirm(ConfirmInputModel model)
+        public async Task<IActionResult> Confirm(
+            [FromQuery]string key,
+            ConfirmInputModel model)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(
-                    model.Key,
+                    key,
                     VerificationKeyPurpose.ResetPassword
                 );
 
@@ -172,7 +175,6 @@ namespace IdentityBase.Actions.Recover
             {
                 return View(new ConfirmViewModel
                 {
-                    Key = model.Key,
                     Email = result.UserAccount.Email
                 });
             }
@@ -195,8 +197,8 @@ namespace IdentityBase.Actions.Recover
             return this.RedirectToLogin(returnUrl);
         }
 
-        [HttpGet("recover/cancel/{key}", Name = "RecoverCancel")]
-        public async Task<IActionResult> Cancel(string key)
+        [HttpGet("recover/cancel", Name = "RecoverCancel")]
+        public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
                 .HandleVerificationKeyAsync(

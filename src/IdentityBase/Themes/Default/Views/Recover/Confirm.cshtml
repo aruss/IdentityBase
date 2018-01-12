@@ -15,9 +15,7 @@
                         localize="">Change your password</h3>
                 </div>
                 <div class="panel-body">
-                    <form asp-controller="Recover"
-                          asp-action="Confirm"
-                          asp-route-key="@Model.Key">
+                    <form method="post">
 
                         <fieldset>
                             <div class="form-group">

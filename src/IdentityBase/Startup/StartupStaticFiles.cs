@@ -3,13 +3,10 @@
 
 namespace IdentityBase
 {
-    using System;
     using System.IO;
     using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.FileProviders;
-    using ServiceBase.Extensions;
 
     public static class StartupStaticFiles
     {
@@ -18,37 +15,11 @@ namespace IdentityBase
             ApplicationOptions options,
             IHostingEnvironment environment)
         {
+            var basePath = Path.GetFullPath(Path.Combine(environment.ContentRootPath, "Themes")); 
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(
-                    GetStaticFilesPath(
-                        options.ThemePath,
-                        environment.ContentRootPath
-                    )
-                ),
+                FileProvider = new ThemedFileProvider(basePath)
             });
-        }
-
-        private static string GetStaticFilesPath(
-            string themePath,
-            string contentRootPath)
-        {
-            if (String.IsNullOrWhiteSpace(themePath))
-            {
-                throw new ArgumentNullException(nameof(themePath)); 
-            }
-            
-            themePath = Path.GetFullPath(
-                Path.IsPathRooted(themePath) ?
-                    Path.Combine(themePath.RemoveTrailingSlash(), "Public") :
-                    Path.Combine(
-                        contentRootPath.RemoveTrailingSlash(),
-                        themePath.RemoveTrailingSlash(),
-                        "Public"
-                    )
-                );
-            
-            return themePath;
         }
     }
 }

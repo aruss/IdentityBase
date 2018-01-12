@@ -17,14 +17,16 @@ namespace IdentityBase
 
         public JsonStringLocalizerFactory(
             ApplicationOptions appOptions,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ThemeHelper themeHelper)
         {
             this._appOptions = appOptions;
             this._loggerFactory = loggerFactory;
 
             this._stringLocalizer = new JsonStringLocalizer(
                 appOptions,
-                loggerFactory.CreateLogger<JsonStringLocalizer>());
+                loggerFactory.CreateLogger<JsonStringLocalizer>(),
+                themeHelper);
         }
 
         public IStringLocalizer Create(Type resourceSource)

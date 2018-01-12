@@ -3,8 +3,10 @@
 
 namespace IdentityBase.Localization
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.Extensions.DependencyInjection;
@@ -15,22 +17,41 @@ namespace IdentityBase.Localization
         public async Task<ProviderCultureResult>
             DetermineProviderCultureResult(HttpContext httpContext)
         {
-            IdentityBaseContext identityBaseContext =
+            IdentityBaseContext idbContext =
                 httpContext.RequestServices
                     .GetService<IdentityBaseContext>();
 
-            if (identityBaseContext.IsValid)
-            {
-                string value = identityBaseContext
-                    .AuthorizationRequest
-                    .Parameters?
-                    .GetValues("culture")?
-                    .FirstOrDefault();
+            ApplicationOptions appOptions =
+                httpContext.RequestServices
+                    .GetService<ApplicationOptions>();
 
-                if (value != null)
+            if (idbContext.IsValid)
+            {
+                string culture = httpContext.Request.Query["culture"];
+
+                if (String.IsNullOrWhiteSpace(culture) &&
+                    idbContext.AuthorizationRequest != null)
+                {
+                    culture = idbContext
+                        .AuthorizationRequest
+                        .Parameters?
+                        .GetValues("culture")?
+                        .FirstOrDefault();
+                }
+                
+                // TODO: Get all theme supported cultures
+
+                if (String.IsNullOrWhiteSpace(culture))
+                {
+                    // TODO: Replace by client overrides for application options
+                    culture = idbContext.ClientProperties.Culture ??
+                        appOptions.DefaultCulture;
+                }
+
+                if (culture != null)
                 {
                     return new ProviderCultureResult(
-                        new StringSegment(value));
+                        new StringSegment(culture));
                 }
             }
 
