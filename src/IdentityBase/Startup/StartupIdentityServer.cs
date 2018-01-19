@@ -79,7 +79,7 @@ namespace IdentityBase
                 builder.AddDeveloperSigningCredential(
                     false,
                     Path.Combine(
-                        appOptions.TempFolder.GetFullPath(
+                        appOptions.TempPath.GetFullPath(
                             environment.ContentRootPath),
                         "tempkey.rsa"
                     )

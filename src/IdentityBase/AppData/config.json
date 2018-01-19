@@ -50,7 +50,6 @@
   },
   "App": {
     "EnableWebApi": false,
-    "TempFolder": "./AppData/Temp",
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
     "AccountLockoutDuration": 600,
@@ -74,6 +73,7 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
+    "TempPath": "./AppData/Temp",
     "ThemePath": "./Themes/Default"
   },
   "WebApi": {

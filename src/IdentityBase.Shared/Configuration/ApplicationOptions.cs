@@ -23,7 +23,7 @@ namespace IdentityBase.Configuration
         /// <summary>
         /// Location of temporary folder.
         /// </summary>
-        public string TempFolder { get; set; } = "./AppData/Temp";
+        public string TempPath { get; set; } = "./AppData/Temp";
         
         // Local account options
 

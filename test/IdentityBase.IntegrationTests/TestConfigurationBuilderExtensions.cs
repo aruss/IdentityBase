@@ -23,7 +23,7 @@ namespace IdentityBase.IntegrationTests
             var configData = new Dictionary<string, string>()
             {
                 { "App:EnableWebApi", "true" },
-                { "App:TempFolder", $"./AppData/Temp/{Guid.NewGuid()}" },
+                { "App:TempPath", $"./AppData/Temp/{Guid.NewGuid()}" },
 
                 { "WebApi:AutorityUrl", "http://localhost" },
                 { "WebApi:ApiSecret", "secret" },
