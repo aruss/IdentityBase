@@ -1,38 +1,10 @@
 namespace IdentityBase
 {
-    using System.Collections.Generic;
     using System.IO;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
     using Microsoft.AspNetCore.Http;
     using ServiceBase.Extensions;
-
-    public static class ObjectExtensions
-    {
-        public static TResult ToObject<TResult>(this IDictionary<string, string> source)
-            where TResult : class, new()
-        {
-            var someObject = new TResult();
-            var someObjectType = someObject.GetType();
-
-            foreach (var item in source)
-            {
-                try
-                {
-                    someObjectType
-                         .GetProperty(item.Key)
-                         .SetValue(someObject, item.Value, null);
-                }
-                catch (System.Exception)
-                {
-                    
-                }                
-            }
-
-            return someObject;
-        }
-
-    }
 
     public class ThemeHelper
     {

@@ -81,7 +81,7 @@ namespace IdentityBase
             // services.AddScoped<IdentityBaseContext>();
             services.AddFactory<
                 IdentityBaseContext,
-                IdentityBaseContextFactory>(
+                IdentityBaseContextIdSrvFactory>(
                     ServiceLifetime.Scoped,
                     ServiceLifetime.Singleton);
 

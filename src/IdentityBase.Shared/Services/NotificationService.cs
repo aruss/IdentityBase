@@ -109,6 +109,50 @@ namespace IdentityBase.Services
             );
         }
 
+        public async Task SendUserAccountInvitationEmailAsync(
+            UserAccount userAccount)
+        {
+            string baseUrl = this._httpContextAccessor
+                 .HttpContext
+                 .GetBaseUrl()
+                 .RemoveTrailingSlash();
+
+            UrlHelper urlHelper =
+                new UrlHelper(_actionContextAccessor.ActionContext);
+
+            IdentityBaseContext idbContext = this._httpContextAccessor
+                 .HttpContext.GetIdentityBaseContext();
+            
+            await this._emailService.SendEmailAsync(
+                EmailTemplates.UserAccountInvited,
+                userAccount.Email,
+                new
+                {
+                    ConfirmUrl = this.GetUrl(
+                        baseUrl,
+                        "/register/confirm",
+                        userAccount.VerificationKey,
+                        idbContext.Client.ClientId),
+
+                    CancelUrl = baseUrl + this.GetUrl(
+                        baseUrl,
+                        "/register/cancel",
+                        userAccount.VerificationKey,
+                        idbContext.Client.ClientId),
+                },
+                true
+            );
+        }
+
+        private string GetUrl(
+          string baseUrl,
+          string path,
+          string verificationKey,
+          string clientId)
+        {
+            return $"{baseUrl}{path}?key={verificationKey}&clientId={clientId}&culture={CultureInfo.CurrentUICulture.Name}";
+        }
+
         private string GetUrl(
             UrlHelper urlHelper,
             string actionName,

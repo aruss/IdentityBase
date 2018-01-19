@@ -203,7 +203,7 @@ namespace IdentityBase.Actions.Register
                     key,
                     VerificationKeyPurpose.ConfirmAccount
                 );
-
+            
             if (result.UserAccount == null ||
                 result.TokenExpired ||
                 !result.PurposeValid)

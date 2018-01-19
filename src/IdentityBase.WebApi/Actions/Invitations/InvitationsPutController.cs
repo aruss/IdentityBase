@@ -7,14 +7,13 @@ namespace IdentityBase.WebApi.Actions.Invitations
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityServer4.AccessTokenValidation;
-    using IdentityServer4.Extensions;
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using ServiceBase.Authorization;
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
@@ -23,16 +22,19 @@ namespace IdentityBase.WebApi.Actions.Invitations
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
-        private readonly IClientStore _clientStore; 
+        private readonly IClientStore _clientStore;
+        private readonly NotificationService _notificationService;
 
         public InvitationsPutController(
             UserAccountService userAccountService,
             IEmailService emailService,
-            IClientStore clientStore)
+            IClientStore clientStore,
+            NotificationService notificationService)
         {
             this._userAccountService = userAccountService;
             this._emailService = emailService;
             this._clientStore = clientStore;
+            this._notificationService = notificationService;
         }
 
         [HttpPut("invitations")]
@@ -52,17 +54,9 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 );
             }
 
-            string returnUri;
-            if (String.IsNullOrWhiteSpace(inputModel.ReturnUri) &&
-                client.RedirectUris.Count > 0)
-            {
-                returnUri = client.RedirectUris.First();
-            }
-            else if (client.RedirectUris.Contains(inputModel.ReturnUri))
-            {
-                returnUri = inputModel.ReturnUri;
-            }
-            else
+            string returnUri = client.TryGetReturnUri(inputModel.ReturnUri); 
+            
+            if (String.IsNullOrWhiteSpace(returnUri))
             {
                 return this.BadRequest(
                     nameof(inputModel.ReturnUri),
@@ -70,7 +64,7 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 );
             }
 
-            UserAccount invitedByUserAccount = null; 
+            UserAccount invitedByUserAccount = null;
             if (inputModel.InvitedBy.HasValue)
             {
                 invitedByUserAccount = await this._userAccountService
@@ -100,12 +94,14 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 .CreateNewLocalUserAccountAsync(
                     inputModel.Email,
                     returnUri,
-                    invitedByUserAccount                   
+                    invitedByUserAccount
                 );
 
-            await this.SendEmailAsync(userAccount);
+            await this._notificationService
+                .SendUserAccountInvitationEmailAsync(userAccount);
 
             this.Response.StatusCode = (int)HttpStatusCode.Created;
+
             return new ObjectResult(new InvitationsPutResultModel
             {
                 Id = userAccount.Id,
@@ -114,28 +110,6 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 CreatedBy = userAccount.CreatedBy,
                 VerificationKeySentAt = userAccount.VerificationKeySentAt
             });
-        }
-
-        [NonAction]
-        internal async Task SendEmailAsync(UserAccount userAccount)
-        {
-            string baseUrl = ServiceBase.Extensions.StringExtensions
-                .RemoveTrailingSlash(this.HttpContext
-                    .GetIdentityServerBaseUrl());
-
-            await this._emailService.SendEmailAsync(
-                EmailTemplates.UserAccountInvited,
-                userAccount.Email,
-                new
-                {
-                    ConfirmUrl =
-                        $"{baseUrl}/register/confirm/{userAccount.VerificationKey}",
-
-                    CancelUrl =
-                        $"{baseUrl}/register/cancel/{userAccount.VerificationKey}"
-                },
-                true
-            );
         }
     }
 }

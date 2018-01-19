@@ -590,11 +590,7 @@ namespace IdentityBase.Services
 
             return userAccount;
         }
-
-
-
-
-
+        
         public async Task SetEmailChangeVirificationKeyAsync(
             UserAccount userAccount,
             string email,

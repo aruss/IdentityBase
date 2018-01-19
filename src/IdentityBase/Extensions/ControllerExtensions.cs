@@ -3,10 +3,14 @@
 
 namespace Microsoft.AspNetCore.Mvc
 {
+    using IdentityBase.Extensions;
     using System.Text.Encodings.Web;
     using IdentityBase.Actions;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authentication;
+    using IdentityServer4.Models;
+    using System;
+    using IdentityBase;
 
     /// <summary>
     /// <see cref="WebController"/> extension methods.
@@ -75,15 +79,28 @@ namespace Microsoft.AspNetCore.Mvc
         /// the response.</returns>
         public static IActionResult RedirectToReturnUrl(
             this WebController controller,
-            string returnUrl,
+            string returnUri,
             IIdentityServerInteractionService interactionService)
         {
-            if (interactionService.IsValidReturnUrl(returnUrl))
+            if (interactionService.IsValidReturnUrl(returnUri))
             {
-                return controller.Redirect(returnUrl);
+                return controller.Redirect(returnUri);
             }
 
-            return controller.Redirect("/");
+            IdentityBaseContext idbContext =
+                controller.HttpContext.GetIdentityBaseContext();
+
+            if (idbContext?.Client != null)
+            {
+                returnUri = idbContext.Client.TryGetReturnUri(returnUri);
+            }
+
+            if (String.IsNullOrWhiteSpace(returnUri))
+            {
+                throw new ApplicationException("Invalid returnUri");
+            }
+
+            return controller.Redirect(returnUri);
         }
     }
 }

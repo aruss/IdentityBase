@@ -11,6 +11,7 @@ namespace IdentityBase.WebApi
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -57,8 +58,18 @@ namespace IdentityBase.WebApi
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<UserAccountService>();
             services.AddTransient<ClientService>();
+            services.AddScoped<NotificationService>();
+            services.AddScoped<ThemeHelper>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            // services.AddScoped<IdentityBaseContext>();
+            services.AddFactory<
+                IdentityBaseContext,
+                IdentityBaseContextBasicFactory>(
+                    ServiceLifetime.Scoped,
+                    ServiceLifetime.Singleton);
 
             services.AddCors(corsOpts =>
             {
