@@ -12,42 +12,44 @@
     <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security sso</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp2.0">
-
-        <dependency id="IdentityServer4" version="2.0.3" exclude="Build,Analyzers"/>
-        <dependency id="IdentityServer4.AccessTokenValidation" version="2.1.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Hosting" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Server.IISIntegration" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.Server.Kestrel" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.CommandLine" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.FileExtensions" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.Json" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Configuration.UserSecrets" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Logging.Console" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Logging.Debug" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" version="2.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Extensions.Logging" version="2.0.2" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers"/>
-        <dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
-
+	
+		<dependency id="IdentityServer4" version="2.1.1" exclude="Build,Analyzers"/>
+		<dependency id="IdentityServer4.AccessTokenValidation" version="2.3.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Hosting" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Mvc" version="2.0.2" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Server.IISIntegration" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.Server.Kestrel" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.AspNetCore.StaticFiles" version="2.0.1" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.CommandLine" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.FileExtensions" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.Json" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Configuration.UserSecrets" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Logging.Console" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Logging.Debug" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" version="2.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Extensions.Logging" version="2.0.2" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers"/>
+		<dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
+		<dependency id="ServiceBase" version="1.1.17" exclude="Build,Analyzers"/>
+		<dependency id="ServiceBase.Events.RabbitMQ" version="1.1.17" exclude="Build,Analyzers"/>
+	
         <!-- service base -->
-        <dependency id="ServiceBase" version="1.1.10" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.10" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.10" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Smtp" version="1.1.10" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Twilio" version="1.1.10" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase" version="1.1.17" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.17" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.17" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Smtp" version="1.1.17" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Twilio" version="1.1.17" exclude="Build,Analyzers"/>
 
         <!-- entity framework -->
-        <dependency id="AutoMapper" version="6.2.0" exclude="Build,Analyzers"/>
+        <dependency id="AutoMapper" version="6.2.2" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.EntityFrameworkCore" version="2.0.1" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="2.0.1" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.0.1" exclude="Build,Analyzers"/>
@@ -56,10 +58,10 @@
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="2.0.1" exclude="Build,Analyzers"/>
 
         <!-- entity framework npgsql -->
-        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.0" exclude="Build,Analyzers"/>
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.1" exclude="Build,Analyzers"/>
 
         <!-- entity framework mysql -->
-        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.0.1" exclude="Build,Analyzers"/>
+        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.1" exclude="Build,Analyzers"/>
       </group>
     </dependencies>
     <contentFiles>
