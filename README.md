@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h4 align="center">IdentityBase is a <a  target="_blank"  href="https://en.wikipedia.org/wiki/Security_token_service">Secure Token Service (STS)</a> built on top of <a href="https://github.com/IdentityServer/IdentityServer4" target="_blank">IdentityServer4</a>.</h4>
+<h4 align="center">IdentityBase is a Identity and Access Control solution built on top of <a href="http://identityserver.io/" target="_blank">IdentityServer</a>. <br/>It provides Single Sign On & Token Based Authentication with many other features right out of the box.</h4>
 
 <p align="center">
   <a target="_blank" href="https://ci.appveyor.com/project/aruss81994/identitybase">
@@ -15,10 +15,6 @@
   <a  target="_blank" href="https://coveralls.io/github/IdentityBaseNet/IdentityBase?branch=master">
       <img src="https://coveralls.io/repos/github/IdentityBaseNet/IdentityBase/badge.svg?branch=master" alt="Coverage Status">
   </a>
-</p>
-
-<p align="center">
-IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>  
 </p>
 
 ### Features
@@ -33,23 +29,22 @@ IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzk
   Support for external identity providers like Azure Active Directory, Google, Facebook etc. This shields your applications from the details of how to connect to these external providers.
 * **Theming**
   Support for custom themes, you can change the default [Bootstrap](http://getbootstrap.com/) styles or create completely new UI by writing your own Razor views.
+* **Localization**
+  Localization support for UI, E-Mail and SMS templates.
+* **HTTP API**
+  Manage user invitations and change users E-Mail and Password directly from your relying party app.
+* **Plugin Support**
+  Modular Architecture allows to add custom plugins and/or replace default parts of IdentityBase.
 * **Database Support for**
    - Microsoft SQL Server, LocalDB
    - PostgreSQL
    - MySQL
    - MariaDB
-   - InMemory
+   - InMemory (Recommended only for testing)
 
 #### Upcoming features
-* Authentication API
-* Multitenancy
-* Administration dashboard (WIP: [UiBase](https://github.com/aruss/UiBase))
-* Localization
-* Configuration wizzard
-* Two-Factor authentication
-* SMS OTP authentication
-* Event Messaging Support for Apache Kafka, RabbitMQ
-* Plugin support
+
+For upcoming features see [Issues](https://github.com/IdentityBaseNet/IdentityBase/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) with `enhancement` tag.
 
 ### Platform
 
@@ -63,8 +58,12 @@ IdentityBase is built against ASP.NET Core 2.0 using the tooling that ships with
 ### Docker support
 
 You can either build it from source code by running the `build.sh` script in `./docker` directory or just start it from [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/)
- 
+
   `docker run -it --rm -p 5000:5000 identitybasenet/identitybase`
+
+It will start a IdentityBase with in memory store, with default client configuration and dummy users `alice@localhost` and `bob@localhost` (password is the email).
+
+See `./samples` folder and/or [IdentityServer examples repository](https://github.com/IdentityServer/IdentityServer4.Samples) for client samples.
 
 ### Acknowledgements
 
@@ -73,7 +72,12 @@ IdentityBase is built using the following great open source projects
 * [ASP.NET Core](https://github.com/aspnet)
 * [Json.Net](http://www.newtonsoft.com/json)
 * [XUnit](https://xunit.github.io/)
-* [Autofac](https://autofac.org/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
 * [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)
+
+
+<hr/>
+<p align="center">
+IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>
+</p>
