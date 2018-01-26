@@ -12,6 +12,7 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Localization;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Localization;
+    using Microsoft.Extensions.Options;
     using ServiceBase.Extensions;
 
     public static class StartupLocalization
@@ -31,11 +32,11 @@ namespace IdentityBase
             {
                 options.DefaultRequestCulture =
                     new RequestCulture(appOptions.DefaultCulture);
-
-                // TODO: read from ThemeHelper ....
+                               
                 options.SupportedCultures =
                 options.SupportedUICultures = new List<CultureInfo>
                 {
+                    // TODO: read from ThemeHelper ...
                     new CultureInfo("en-US"),
                     new CultureInfo("de-DE")
                 };
@@ -44,6 +45,14 @@ namespace IdentityBase
                 options.RequestCultureProviders
                     .Add(new IdentityBaseRequestCultureProvider());
             });
+        }
+
+        public static void UseLocalization(this IApplicationBuilder app)
+        {
+            var options = app.ApplicationServices
+                .GetService<IOptions<RequestLocalizationOptions>>();
+
+            app.UseRequestLocalization(options.Value);
         }
     }
 }

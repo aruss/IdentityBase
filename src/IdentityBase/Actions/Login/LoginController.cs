@@ -14,7 +14,6 @@ namespace IdentityBase.Actions.Login
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using ServiceBase;
 
     public class LoginController : WebController
     {
@@ -31,8 +30,7 @@ namespace IdentityBase.Actions.Login
             ILogger<LoginController> logger,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
-            ClientService clientService,
-            IDateTimeAccessor dateTimeAccessor,
+            ClientService clientService,          
             AuthenticationService authenticationService,
             IStringLocalizer localizer)
         {

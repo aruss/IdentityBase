@@ -44,7 +44,7 @@ namespace IdentityBase.Actions.Consent
             return this.View("Error");
         }
 
-        [HttpPost("consent")]
+        [HttpPost("consent", Name = "Consent")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(
             string button,
@@ -98,6 +98,7 @@ namespace IdentityBase.Actions.Consent
             return this.View("Error");
         }
 
+        [NonAction]
         private async Task<ConsentViewModel> BuildViewModelAsync(
             string returnUrl,
             ConsentInputModel model = null)
@@ -151,6 +152,7 @@ namespace IdentityBase.Actions.Consent
             return null;
         }
 
+        [NonAction]
         private ConsentViewModel CreateConsentViewModel(
             ConsentInputModel model,
             string returnUrl,
@@ -202,7 +204,8 @@ namespace IdentityBase.Actions.Consent
             return vm;
         }
 
-        public ScopeViewModel CreateScopeViewModel(
+        [NonAction]
+        private ScopeViewModel CreateScopeViewModel(
             IdentityResource identity,
             bool check)
         {
@@ -217,7 +220,8 @@ namespace IdentityBase.Actions.Consent
             };
         }
 
-        public ScopeViewModel CreateScopeViewModel(Scope scope, bool check)
+        [NonAction]
+        private ScopeViewModel CreateScopeViewModel(Scope scope, bool check)
         {
             return new ScopeViewModel
             {
@@ -230,6 +234,7 @@ namespace IdentityBase.Actions.Consent
             };
         }
 
+        [NonAction]
         private ScopeViewModel GetOfflineAccessScope(bool check)
         {
             return new ScopeViewModel

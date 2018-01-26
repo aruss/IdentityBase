@@ -148,9 +148,6 @@
     <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Themes\Fancy\Public\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Themes\Default\Resources\Localization\Shared.en-US.json" />
   </ItemGroup>
   <ItemGroup>

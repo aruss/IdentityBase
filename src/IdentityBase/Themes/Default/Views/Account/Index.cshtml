@@ -1,25 +1,91 @@
-@model IdentityBase.Actions.Account.ConfirmViewModel
+@model IdentityBase.Actions.Account.AccountViewModel
 
 <div class="login-page">
     <div class="page-header">
-        <h1>User Account</h1>
+        <h1 localize="">User account</h1>
     </div>
 
-    @Html.Partial("_ValidationSummary")
-
     <div class="row">
+
         <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Account</h3>
+                    <h3 class="panel-title">Change your email address</h3>
                 </div>
                 <div class="panel-body">
 
+                    <form method="post" action="/account/change-email" novalidate>
 
-                    There is an error occurred
+                        @Html.AntiForgeryToken()
+
+                        <fieldset>
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input class="form-control"
+                                       placeholder="@Localizer["Enter email"]"
+                                       asp-for="Email" autofocus>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0">
+                                <button type="submit" class="btn btn-primary" localize="">
+                                    Change email
+                                </button>
+                            </div>
+                        </fieldset>
+                    </form>
 
                 </div>
             </div>
         </div>
+
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Change password</h3>
+                </div>
+                <div class="panel-body">
+
+                    <p>You will get email with confirmation link, follow that link and enter your new password.</p>
+
+                    <form method="post" action="/account/change-password">
+                        @Html.AntiForgeryToken()
+
+                        <button class="btn btn-primary" type="submit" localize="">
+                            Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+    @*
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">2-step Verification</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <p>Comming soon</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Connect your social networks</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <p>Comming soon</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    *@
 </div>
