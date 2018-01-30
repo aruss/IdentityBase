@@ -45,7 +45,7 @@
         <dependency id="ServiceBase.Notification.SendGrid" version="1.1.10" exclude="Build,Analyzers"/>
         <dependency id="ServiceBase.Notification.Smtp" version="1.1.10" exclude="Build,Analyzers"/>
         <dependency id="ServiceBase.Notification.Twilio" version="1.1.10" exclude="Build,Analyzers"/>
-
+        
         <!-- entity framework -->
         <dependency id="AutoMapper" version="6.2.0" exclude="Build,Analyzers"/>
         <dependency id="Microsoft.EntityFrameworkCore" version="2.0.1" exclude="Build,Analyzers"/>
@@ -91,6 +91,9 @@
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Shared.dll" target="lib\netcoreapp2.0\IdentityBase.Shared.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Shared.pdb" target="lib\netcoreapp2.0\IdentityBase.Shared.pdb" />
+
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.WebApi.dll" target="lib\netcoreapp2.0\IdentityBase.WebApi.dll" />
+    <file src="bin\Release\netcoreapp2.0\IdentityBase.WebApi.pdb" target="lib\netcoreapp2.0\IdentityBase.WebApi.pdb" />
 
     <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
