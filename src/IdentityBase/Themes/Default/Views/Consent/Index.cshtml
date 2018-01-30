@@ -20,7 +20,8 @@
 
                 <div localize="">Uncheck the permissions you do not wish to grant.</div>
                 
-                <div class="panel panel-default consent-buttons" show-if="Model.IdentityScopes.Any()">
+                <div class="panel panel-default consent-buttons"
+                     show-if="Model.IdentityScopes.Any()">
                     <div class="panel-heading">
                         <span class="glyphicon glyphicon-user"></span>
                         <span localize="">Personal information</span>
@@ -44,7 +45,6 @@
                             @Html.Partial("_ScopeListItem", scope)
                         }
                     </ul>
-
                 </div>
 
                 <div class="consent-remember" show-if="Model.AllowRememberConsent">
@@ -55,8 +55,10 @@
                 </div>
 
                 <div class="consent-buttons">
-                    <button name="button" value="yes" class="btn btn-primary" autofocus localize="">Yes, allow</button>
-                    <button name="button" value="no" class="btn" localize="">No, do not allow</button>
+                    <button name="button" value="yes" class="btn btn-primary"
+                            autofocus localize="">Yes, allow</button>
+                    <button name="button" value="no" class="btn"
+                            localize="">No, do not allow</button>
                 </div>
             </form>
         </div>
