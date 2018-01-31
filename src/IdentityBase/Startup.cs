@@ -9,6 +9,7 @@ namespace IdentityBase
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
+    using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -30,7 +31,7 @@ namespace IdentityBase
         private readonly ModulesStartup _modulesStartup;
         private readonly IConfiguration _configuration;
         private readonly ApplicationOptions _applicationOptions;
-        private readonly Func<HttpMessageHandler> _messageHandlerFactory; 
+        private readonly Func<HttpMessageHandler> _messageHandlerFactory;
 
         /// <summary>
         ///
@@ -77,26 +78,25 @@ namespace IdentityBase
                 this._configuration,
                 this._logger,
                 this._environment);
-
-            // services.AddScoped<IdentityBaseContext>();
+            
             services.AddFactory<
                 IdentityBaseContext,
                 IdentityBaseContextIdSrvFactory>(
                     ServiceLifetime.Scoped,
                     ServiceLifetime.Singleton);
 
+            services.AddLocalization(this._applicationOptions, this._environment);
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<ClientService>();
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<AuthenticationService>();
-            services.AddScoped<ThemeHelper>(); 
+            services.AddScoped<ThemeHelper>();
             services.AddAntiforgery();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            // // TOOD: can be moved to webapi component 
             // services.AddCors(corsOpts =>
             // {
             //     corsOpts.AddPolicy("CorsPolicy",
@@ -105,15 +105,13 @@ namespace IdentityBase
             // });
 
             services.AddDistributedMemoryCache();
-
-            services.AddLocalization(this._applicationOptions, this._environment); 
             services.AddMvc(this._applicationOptions, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
-            /*services
-                .AddAuthentication(
-                    IdentityServerConstants.ExternalCookieAuthenticationScheme)
-                .AddCookie();*/
+            // services
+            //     .AddAuthentication(
+            //         IdentityServerConstants.ExternalCookieAuthenticationScheme)
+            //     .AddCookie();
 
             this._modulesStartup.ConfigureServices(services);
 
@@ -134,7 +132,7 @@ namespace IdentityBase
         /// </summary>
         /// <param name="services"></param>
         public Action<IServiceCollection> OverrideServices { get; set; }
-        
+
         /// <summary>
         /// Configures the pipeline.
         /// </summary>
@@ -151,12 +149,11 @@ namespace IdentityBase
             ApplicationOptions options = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
+            app.UseLocalization();
             // app.UseMiddleware<IdentityBaseContextMiddleware>();
-            app.UseMiddleware<RequestIdMiddleware>();            
-            app.UseRequestLocalization(); 
+            app.UseMiddleware<RequestIdMiddleware>();
             app.UseLogging();
-                       
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

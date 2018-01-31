@@ -63,20 +63,19 @@ namespace IdentityBase.WebApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
-            // services.AddScoped<IdentityBaseContext>();
+            
             services.AddFactory<
                 IdentityBaseContext,
                 IdentityBaseContextBasicFactory>(
                     ServiceLifetime.Scoped,
                     ServiceLifetime.Singleton);
 
-            services.AddCors(corsOpts =>
-            {
-                corsOpts.AddPolicy("CorsPolicy",
-                    corsBuilder => corsBuilder.WithOrigins(
-                        this._configuration.GetValue<string>("Host:Cors")));
-            });
+            // services.AddCors(corsOpts =>
+            // {
+            //     corsOpts.AddPolicy("CorsPolicy",
+            //         corsBuilder => corsBuilder.WithOrigins(
+            //             this._configuration.GetValue<string>("Host:Cors")));
+            // });
 
             services.AddMvc(this._webApiOptions);
 
@@ -106,7 +105,8 @@ namespace IdentityBase.WebApi
 
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseLogging();
-            app.UseCors("CorsPolicy");
+
+            // app.UseCors("CorsPolicy");
             
             if (this._webApiOptions.EnableSwagger)
             {

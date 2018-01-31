@@ -133,8 +133,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-    <PackageReference Include="ServiceBase" Version="1.1.17" />
-    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.17" />
+    <PackageReference Include="ServiceBase" Version="1.1.18" />
+    <PackageReference Include="ServiceBase.Events.RabbitMQ" Version="1.1.18" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IdentityBase.EntityFramework.MySql\IdentityBase.EntityFramework.MySql.csproj" />
@@ -146,9 +146,6 @@
     <ProjectReference Include="..\IdentityBase.Twilio\IdentityBase.Twilio.csproj" />
     <ProjectReference Include="..\IdentityBase.WebApi\IdentityBase.WebApi.csproj" />
     <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Themes\Fancy\Public\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Themes\Default\Resources\Localization\Shared.en-US.json" />

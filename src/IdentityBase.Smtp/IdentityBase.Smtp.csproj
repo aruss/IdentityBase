@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.1.17" />
+    <PackageReference Include="MimeKit" Version="2.0.1" />
+    <PackageReference Include="ServiceBase.Notification.Smtp" Version="1.1.18" />
   </ItemGroup>
 
   <ItemGroup>

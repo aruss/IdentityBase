@@ -7,6 +7,7 @@
         name = user?.FindFirst("name")?.Value;
     }
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,6 +58,8 @@
     <div class="container body-content">
         @RenderBody()
         <div class="page-footer">
+            Click <a class="PostLogoutRedirectUri" href="@IdentityBaseContext.Client.ClientUri">here</a> to return to the
+            <span>@IdentityBaseContext.Client.ClientName</span> application.
         </div>
     </div>
 

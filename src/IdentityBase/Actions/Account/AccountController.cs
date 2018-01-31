@@ -5,40 +5,63 @@ namespace IdentityBase.Actions.Account
 {
     using System;
     using System.Threading.Tasks;
-    using IdentityBase.Configuration;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
-    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
-    using ServiceBase.Notification.Email;
 
-    public class ChangeEmailConfirmController : WebController
+    public class AccountController : WebController
     {
-        private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<ChangeEmailConfirmController> _logger;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IEmailService _emailService;
         private readonly UserAccountService _userAccountService;
         private readonly IStringLocalizer _localizer;
+        private readonly IIdentityServerInteractionService _interaction;
 
-        public ChangeEmailConfirmController(
-            ApplicationOptions applicationOptions,
-            ILogger<ChangeEmailConfirmController> logger,
-            IIdentityServerInteractionService interaction,
-            IEmailService emailService,
+        public AccountController(
             UserAccountService userAccountService,
-            IStringLocalizer localizer)
+            IStringLocalizer localizer,
+            IIdentityServerInteractionService interaction)
         {
-            this._applicationOptions = applicationOptions;
-            this._logger = logger;
-            this._interaction = interaction;
-            this._emailService = emailService;
             this._userAccountService = userAccountService;
             this._localizer = localizer;
+            this._interaction = interaction; 
         }
+
+        [HttpGet("account", Name = "Account")]
+        public async Task<IActionResult> Index()
+        {
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst("sub").Value);
+
+            UserAccount userAccount = await this._userAccountService
+                .LoadByIdAsync(userId);
+
+            var vm = new AccountViewModel
+            {
+                Email = userAccount.Email
+            };
+
+            return this.View("Index", vm);
+        }
+
+        [HttpPost("account/change-email", Name = "ChangeEmail")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail()
+        {
+            
+
+            return this.RedirectToRoute("Account"); 
+        }
+
+        [HttpPost("account/change-password", Name = "ChangePassword")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword()
+        {
+
+
+            return this.RedirectToRoute("Account");
+        }
+
 
         [HttpGet("email/confirm", Name = "EmailConfirm")]
         public async Task<IActionResult> Confirm([FromQuery]string key)
@@ -89,6 +112,48 @@ namespace IdentityBase.Actions.Account
                result.UserAccount,
                email
             );
+
+            if (this._interaction.IsValidReturnUrl(returnUrl))
+            {
+                return this.Redirect(returnUrl);
+            }
+
+            throw new ApplicationException("Invalid return URL");
+        }
+
+        [HttpGet("email/cancel", Name = "EmailCancel")]
+        public async Task<IActionResult> Cancel([FromQuery]string key)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ChangeEmail
+                );
+
+            if (result.UserAccount == null ||
+                !result.PurposeValid ||
+                result.TokenExpired)
+            {
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
+
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
+
+                return this.View("InvalidToken");
+            }
+
+            await this._userAccountService
+                .ClearVerificationAsync(result.UserAccount);
+
+            string[] storage = JsonConvert.DeserializeObject<string[]>(
+                result.UserAccount.VerificationStorage);
+
+            string email = storage[0];
+            string returnUrl = storage[1];
 
             if (this._interaction.IsValidReturnUrl(returnUrl))
             {

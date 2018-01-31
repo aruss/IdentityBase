@@ -15,17 +15,18 @@ namespace IdentityBase.WebApi.Actions.Invitations
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
     using ServiceBase.Authorization;
+    using ServiceBase.Collections;
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    public class InvitationsPutController : WebApiController
+    public class InvitationsController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
         private readonly IClientStore _clientStore;
         private readonly NotificationService _notificationService;
 
-        public InvitationsPutController(
+        public InvitationsController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore,
@@ -35,6 +36,33 @@ namespace IdentityBase.WebApi.Actions.Invitations
             this._emailService = emailService;
             this._clientStore = clientStore;
             this._notificationService = notificationService;
+        }
+
+        [HttpGet("invitations")]
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
+            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Get(PagedListInputModel request)
+        {
+            PagedList<UserAccount> list = await this._userAccountService
+                .LoadInvitedUserAccountsAsync(request.Take, request.Skip);
+
+            var result = new PagedList<InvitationsPutResultModel>
+            {
+                Skip = list.Skip,
+                Take = list.Take,
+                Total = list.Total,
+                Sort = list.Sort,
+                Items = list.Items.Select(s => new InvitationsPutResultModel
+                {
+                    Id = s.Id,
+                    Email = s.Email,
+                    CreatedAt = s.CreatedAt,
+                    CreatedBy = s.CreatedBy,
+                    VerificationKeySentAt = s.VerificationKeySentAt
+                }).ToArray()
+            };
+
+            return new ObjectResult(result);
         }
 
         [HttpPut("invitations")]
@@ -54,8 +82,8 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 );
             }
 
-            string returnUri = client.TryGetReturnUri(inputModel.ReturnUri); 
-            
+            string returnUri = client.TryGetReturnUri(inputModel.ReturnUri);
+
             if (String.IsNullOrWhiteSpace(returnUri))
             {
                 return this.BadRequest(
@@ -110,6 +138,31 @@ namespace IdentityBase.WebApi.Actions.Invitations
                 CreatedBy = userAccount.CreatedBy,
                 VerificationKeySentAt = userAccount.VerificationKeySentAt
             });
+        }
+
+        [HttpDelete("invitations/{UserAccountId}")]
+        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
+            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
+        {
+            UserAccount userAccount = await this._userAccountService
+                .LoadByIdAsync(userAccountId);
+
+            if (userAccount == null ||
+                userAccount.CreationKind != CreationKind.Invitation)
+            {
+                return this.NotFound();
+            }
+
+            if (userAccount.IsEmailVerified)
+            {
+                return this.BadRequest(
+                    "Invitation is already confirmed and cannot be deleted");
+            }
+
+            await this._userAccountService.DeleteByIdAsync(userAccountId);
+
+            return this.Ok();
         }
     }
 }

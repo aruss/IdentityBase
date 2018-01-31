@@ -73,8 +73,7 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
-    "TempPath": "./AppData/Temp",
-    "ThemePath": "./Themes/Default"
+    "TempPath": "./AppData/Temp"
   },
   "WebApi": {
     "AutorityUrl": "http://localhost:5000",

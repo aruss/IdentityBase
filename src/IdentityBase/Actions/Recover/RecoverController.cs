@@ -65,7 +65,7 @@ namespace IdentityBase.Actions.Recover
             return this.View(vm);
         }
 
-        [HttpPost("recover")]
+        [HttpPost("recover", Name = "Recover")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(RecoverInputModel model)
         {
@@ -116,6 +116,52 @@ namespace IdentityBase.Actions.Recover
                 await this.CreateViewModelAsync(model, userAccount));
         }
 
+        [NonAction]
+        internal async Task<RecoverViewModel> CreateViewModelAsync(
+            string returnUrl)
+        {
+            return await this.CreateViewModelAsync(
+                new RecoverInputModel { ReturnUrl = returnUrl }
+            );
+        }
+
+        [NonAction]
+        internal async Task<RecoverViewModel> CreateViewModelAsync(
+            RecoverInputModel inputModel,
+            UserAccount userAccount = null)
+        {
+            AuthorizationRequest context = await this._interaction
+                .GetAuthorizationContextAsync(inputModel.ReturnUrl);
+
+            if (context == null)
+            {
+                return null;
+            }
+
+            Client client = await this._clientService
+                .FindEnabledClientByIdAsync(context.ClientId);
+
+            IEnumerable<ExternalProvider> providers =
+                await this._clientService.GetEnabledProvidersAsync(client);
+
+            RecoverViewModel vm = new RecoverViewModel(inputModel)
+            {
+                EnableAccountRegistration =
+                    this._applicationOptions.EnableAccountRegistration,
+
+                EnableLocalLogin = (client != null ?
+                    client.EnableLocalLogin : false) &&
+                    this._applicationOptions.EnableAccountLogin,
+
+                LoginHint = context.LoginHint,
+                ExternalProviders = providers.ToArray(),
+                ExternalProviderHints = userAccount?.Accounts?
+                    .Select(c => c.Provider)
+            };
+
+            return vm;
+        }
+
         [HttpGet("recover/confirm", Name = "RecoverConfirm")]
         public async Task<IActionResult> Confirm([FromQuery]string key)
         {
@@ -140,10 +186,10 @@ namespace IdentityBase.Actions.Recover
                 Email = result.UserAccount.Email
             };
 
-            return this.View(vm);
+            return this.View("Confirm", vm);
         }
 
-        [HttpPost("recover/confirm")]
+        [HttpPost("recover/confirm", Name = "RecoverConfirm")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(
             [FromQuery]string key,
@@ -228,52 +274,6 @@ namespace IdentityBase.Actions.Recover
                 .ClearVerificationAsync(result.UserAccount);
 
             return this.RedirectToLogin(returnUrl);
-        }
-
-        [NonAction]
-        internal async Task<RecoverViewModel> CreateViewModelAsync(
-            string returnUrl)
-        {
-            return await this.CreateViewModelAsync(
-                new RecoverInputModel { ReturnUrl = returnUrl }
-            );
-        }
-
-        [NonAction]
-        internal async Task<RecoverViewModel> CreateViewModelAsync(
-            RecoverInputModel inputModel,
-            UserAccount userAccount = null)
-        {
-            AuthorizationRequest context = await this._interaction
-                .GetAuthorizationContextAsync(inputModel.ReturnUrl);
-
-            if (context == null)
-            {
-                return null;
-            }
-
-            Client client = await this._clientService
-                .FindEnabledClientByIdAsync(context.ClientId);
-
-            IEnumerable<ExternalProvider> providers =
-                await this._clientService.GetEnabledProvidersAsync(client);
-
-            RecoverViewModel vm = new RecoverViewModel(inputModel)
-            {
-                EnableAccountRegistration =
-                    this._applicationOptions.EnableAccountRegistration,
-
-                EnableLocalLogin = (client != null ?
-                    client.EnableLocalLogin : false) &&
-                    this._applicationOptions.EnableAccountLogin,
-
-                LoginHint = context.LoginHint,
-                ExternalProviders = providers.ToArray(),
-                ExternalProviderHints = userAccount?.Accounts?
-                    .Select(c => c.Provider)
-            };
-
-            return vm;
         }
     }
 }
