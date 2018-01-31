@@ -5,11 +5,11 @@ namespace IdentityBase
 {
     using System;
     using System.IO;
-    using System.Net.Http;
     using System.Security.Cryptography.X509Certificates;
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
     using IdentityBase.Services;
+    using IdentityServer4.Services;
     using IdentityServer4.Validation;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -31,7 +31,7 @@ namespace IdentityBase
 
             ApplicationOptions appOptions = config.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
-
+            
             var builder = services.AddIdentityServer((options) =>
             {
                 config.GetSection("IdentityServer").Bind(options);
@@ -53,8 +53,8 @@ namespace IdentityBase
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
 
-                options.Cors.CorsPolicyName = "CorsPolicy";
-                
+                // options.Cors.CorsPolicyName = "CorsPolicy";
+
                 // options.Authentication
                 //     .FederatedSignOutPaths.Add("/signout-oidc");
                 // 
@@ -72,8 +72,6 @@ namespace IdentityBase
             .AddSecretValidator<PrivateKeyJwtSecretValidator>()
             .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>();
 
-            
-            
             if (environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential(

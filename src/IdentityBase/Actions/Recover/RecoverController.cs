@@ -161,5 +161,119 @@ namespace IdentityBase.Actions.Recover
 
             return vm;
         }
+
+        [HttpGet("recover/confirm", Name = "RecoverConfirm")]
+        public async Task<IActionResult> Confirm([FromQuery]string key)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ResetPassword
+                );
+
+            if (result.UserAccount == null ||
+                !result.PurposeValid ||
+                result.TokenExpired)
+            {
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
+
+                return this.View("InvalidToken");
+            }
+
+            ConfirmViewModel vm = new ConfirmViewModel
+            {
+                Email = result.UserAccount.Email
+            };
+
+            return this.View("Confirm", vm);
+        }
+
+        [HttpPost("recover/confirm", Name = "RecoverConfirm")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Confirm(
+            [FromQuery]string key,
+            ConfirmInputModel model)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ResetPassword
+                );
+
+            if (result.UserAccount == null ||
+                result.TokenExpired ||
+                !result.PurposeValid)
+            {
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
+
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
+
+                return this.View("InvalidToken");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(new ConfirmViewModel
+                {
+                    Email = result.UserAccount.Email
+                });
+            }
+
+            string returnUrl = result.UserAccount.VerificationStorage;
+
+            await this._userAccountService.SetNewPasswordAsync(
+                result.UserAccount,
+                model.Password
+            );
+
+            if (this._applicationOptions.LoginAfterAccountRecovery)
+            {
+                await this._authenticationService
+                    .SignInAsync(result.UserAccount, returnUrl);
+
+                return this.RedirectToReturnUrl(returnUrl, this._interaction);
+            }
+
+            return this.RedirectToLogin(returnUrl);
+        }
+
+        [HttpGet("recover/cancel", Name = "RecoverCancel")]
+        public async Task<IActionResult> Cancel([FromQuery]string key)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .HandleVerificationKeyAsync(
+                    key,
+                    VerificationKeyPurpose.ResetPassword
+                );
+
+            if (result.UserAccount == null ||
+                !result.PurposeValid ||
+                result.TokenExpired)
+            {
+                if (result.UserAccount != null)
+                {
+                    await this._userAccountService
+                        .ClearVerificationAsync(result.UserAccount);
+                }
+
+                this.ModelState.AddModelError(
+                    this._localizer[ErrorMessages.TokenIsInvalid]);
+
+                return this.View("InvalidToken");
+            }
+
+            string returnUrl = result.UserAccount.VerificationStorage;
+
+            await this._userAccountService
+                .ClearVerificationAsync(result.UserAccount);
+
+            return this.RedirectToLogin(returnUrl);
+        }
     }
 }

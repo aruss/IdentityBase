@@ -9,6 +9,7 @@ namespace IdentityBase
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
+    using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -77,8 +78,7 @@ namespace IdentityBase
                 this._configuration,
                 this._logger,
                 this._environment);
-
-            // services.AddScoped<IdentityBaseContext>();
+            
             services.AddFactory<
                 IdentityBaseContext,
                 IdentityBaseContextIdSrvFactory>(
@@ -97,7 +97,6 @@ namespace IdentityBase
             services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            // // TOOD: can be moved to webapi component 
             // services.AddCors(corsOpts =>
             // {
             //     corsOpts.AddPolicy("CorsPolicy",
@@ -109,10 +108,10 @@ namespace IdentityBase
             services.AddMvc(this._applicationOptions, this._environment);
 
             // https://github.com/aspnet/Security/issues/1310
-            /*services
-                .AddAuthentication(
-                    IdentityServerConstants.ExternalCookieAuthenticationScheme)
-                .AddCookie();*/
+            // services
+            //     .AddAuthentication(
+            //         IdentityServerConstants.ExternalCookieAuthenticationScheme)
+            //     .AddCookie();
 
             this._modulesStartup.ConfigureServices(services);
 

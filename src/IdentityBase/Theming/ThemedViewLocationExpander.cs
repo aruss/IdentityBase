@@ -13,7 +13,7 @@ namespace IdentityBase.Theming
             ViewLocationExpanderContext context,
             IEnumerable<string> viewLocations)
         {
-            string theme = context.Values["Theme"];
+            string theme = context.Values["theme"];
 
             yield return $"~/Themes/{theme}/Views/{{1}}/{{0}}.cshtml";
             yield return $"~/Themes/{theme}/Views/Shared/{{0}}.cshtml";
@@ -26,9 +26,7 @@ namespace IdentityBase.Theming
                 .HttpContext
                 .RequestServices.GetService<ThemeHelper>();
 
-            // TODO: Add culture
-
-            context.Values["Theme"] = themeHelper.GetTheme();
+            context.Values["theme"] = themeHelper.GetTheme();
         }
     }
 }

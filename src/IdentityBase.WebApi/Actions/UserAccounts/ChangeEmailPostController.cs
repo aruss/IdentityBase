@@ -17,13 +17,13 @@ namespace IdentityBase.WebApi.Actions.UserAccounts
     using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
-    public class ChangeEmailPostController : WebApiController
+    public class ChangeEmailController : WebApiController
     {
         private readonly UserAccountService _userAccountService;
         private readonly IEmailService _emailService;
         private readonly IClientStore _clientStore;
 
-        public ChangeEmailPostController(
+        public ChangeEmailController(
             UserAccountService userAccountService,
             IEmailService emailService,
             IClientStore clientStore)
