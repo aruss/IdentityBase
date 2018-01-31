@@ -38,15 +38,13 @@
 		<dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
 		<dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers"/>
 		<dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
-		<dependency id="ServiceBase" version="1.1.17" exclude="Build,Analyzers"/>
-		<dependency id="ServiceBase.Events.RabbitMQ" version="1.1.17" exclude="Build,Analyzers"/>
 	
         <!-- service base -->
-        <dependency id="ServiceBase" version="1.1.17" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.17" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.17" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Smtp" version="1.1.17" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Twilio" version="1.1.17" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase" version="1.1.18" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.18" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.18" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Smtp" version="1.1.18" exclude="Build,Analyzers"/>
+        <dependency id="ServiceBase.Notification.Twilio" version="1.1.18" exclude="Build,Analyzers"/>
         
         <!-- entity framework -->
         <dependency id="AutoMapper" version="6.2.2" exclude="Build,Analyzers"/>
