@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>IdentityBase</id>
@@ -12,89 +12,70 @@
     <tags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security sso</tags>
     <dependencies>
       <group targetFramework=".NETCoreApp2.0">
-	
-		<dependency id="IdentityServer4" version="2.1.1" exclude="Build,Analyzers"/>
-		<dependency id="IdentityServer4.AccessTokenValidation" version="2.3.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Authentication" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Hosting" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Mvc" version="2.0.2" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Server.IISIntegration" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.Server.Kestrel" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.AspNetCore.StaticFiles" version="2.0.1" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Configuration.CommandLine" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Configuration.FileExtensions" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Configuration.Json" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Configuration.UserSecrets" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Logging.Console" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Logging.Debug" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" version="2.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers"/>
-		<dependency id="Serilog.Extensions.Logging" version="2.0.2" exclude="Build,Analyzers"/>
-		<dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers"/>
-		<dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers"/>
-		<dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers"/>
-	
-        <!-- service base -->
-        <dependency id="ServiceBase" version="1.1.18" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.18" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.18" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Smtp" version="1.1.18" exclude="Build,Analyzers"/>
-        <dependency id="ServiceBase.Notification.Twilio" version="1.1.18" exclude="Build,Analyzers"/>
-        
-        <!-- entity framework -->
-        <dependency id="AutoMapper" version="6.2.2" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.EntityFrameworkCore" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="2.0.1" exclude="Build,Analyzers"/>
-        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.0.1" exclude="Build,Analyzers"/>
-
-        <!-- entity framework sqlserver -->
-        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="2.0.1" exclude="Build,Analyzers"/>
-
-        <!-- entity framework npgsql -->
-        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.1" exclude="Build,Analyzers"/>
-
-        <!-- entity framework mysql -->
-        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.1" exclude="Build,Analyzers"/>
+        <dependency id="IdentityServer4" version="2.1.1" exclude="Build,Analyzers" />
+        <dependency id="IdentityServer4.AccessTokenValidation" version="2.3.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Authentication" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Facebook" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Google" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Diagnostics" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Hosting" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Server.IISIntegration" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Server.Kestrel" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Configuration.CommandLine" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Configuration.FileExtensions" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Configuration.Json" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Configuration.UserSecrets" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Console" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Logging.Debug" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Options.ConfigurationExtensions" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Extensions.Logging" version="2.0.2" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Settings.Configuration" version="2.4.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Sinks.Literate" version="3.0.0" exclude="Build,Analyzers" />
+        <dependency id="Serilog.Sinks.RollingFile" version="3.3.0" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase" version="1.1.18" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase.Events.RabbitMQ" version="1.1.18" exclude="Build,Analyzers" />
+        <dependency id="AutoMapper" version="6.2.2" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.InMemory" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase.Notification.SendGrid" version="1.1.18" exclude="Build,Analyzers" />
+        <dependency id="MimeKit" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase.Notification.Smtp" version="1.1.18" exclude="Build,Analyzers" />
+        <dependency id="ServiceBase.Notification.Twilio" version="1.1.18" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.PlatformAbstractions" version="1.1.0" exclude="Build,Analyzers" />
+        <dependency id="Swashbuckle.AspNetCore" version="1.1.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
     <contentFiles>
-
     </contentFiles>
   </metadata>
   <files>
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.MySql.dll" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.MySql.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.MySql.pdb" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.MySql.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.Npgsql.dll" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.Npgsql.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.Npgsql.pdb" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.Npgsql.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.SqlServer.dll" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.SqlServer.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.SqlServer.pdb" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.SqlServer.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.dll" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.EntityFramework.pdb" target="lib\netcoreapp2.0\IdentityBase.EntityFramework.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.SendGrid.dll" target="lib\netcoreapp2.0\IdentityBase.SendGrid.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.SendGrid.pdb" target="lib\netcoreapp2.0\IdentityBase.SendGrid.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Smtp.dll" target="lib\netcoreapp2.0\IdentityBase.Smtp.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Smtp.pdb" target="lib\netcoreapp2.0\IdentityBase.Smtp.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Twilio.dll" target="lib\netcoreapp2.0\IdentityBase.Twilio.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Twilio.pdb" target="lib\netcoreapp2.0\IdentityBase.Twilio.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Shared.dll" target="lib\netcoreapp2.0\IdentityBase.Shared.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.Shared.pdb" target="lib\netcoreapp2.0\IdentityBase.Shared.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.WebApi.dll" target="lib\netcoreapp2.0\IdentityBase.WebApi.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.WebApi.pdb" target="lib\netcoreapp2.0\IdentityBase.WebApi.pdb" />
-
     <file src="bin\Release\netcoreapp2.0\IdentityBase.dll" target="lib\netcoreapp2.0\IdentityBase.dll" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.pdb" target="lib\netcoreapp2.0\IdentityBase.pdb" />
     <file src="bin\Release\netcoreapp2.0\IdentityBase.runtimeconfig.json" target="lib\netcoreapp2.0\IdentityBase.runtimeconfig.json" />
