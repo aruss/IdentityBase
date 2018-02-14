@@ -60,6 +60,7 @@
     "LoginAfterAccountCreation": false,
     "LoginAfterAccountConfirmation": true,
     "LoginAfterAccountRecovery": true,
+    "CancelAfterAccountRecovery": false,
     "LoginAfterAccountInvitation": true,
     "VerificationKeyLifetime": 86400,
     "EnableAccountRegistration": true,

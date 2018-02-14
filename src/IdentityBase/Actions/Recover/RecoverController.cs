@@ -239,6 +239,11 @@ namespace IdentityBase.Actions.Recover
 
                 return this.RedirectToReturnUrl(returnUrl, this._interaction);
             }
+            // dont mind the magic, mc'giver is proud of me.
+            else if (this._applicationOptions.CancelAfterAccountRecovery)
+            {
+                return this.View("Complete"); 
+            }
 
             return this.RedirectToLogin(returnUrl);
         }

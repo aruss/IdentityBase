@@ -78,6 +78,12 @@ namespace IdentityBase.Configuration
         public bool LoginAfterAccountRecovery { get; set; } = true;
 
         /// <summary>
+        /// Cancels login flow after account recovery and stays on success
+        /// page within the Identity server. 
+        /// </summary>
+        public bool CancelAfterAccountRecovery { get; set; } = false;
+
+        /// <summary>
         /// Timespan the confirmation and concelation links a valid in seconds
         /// </summary>
         public int VerificationKeyLifetime { get; set; } = 86400; // 24 hours

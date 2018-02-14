@@ -31,5 +31,6 @@
   "Yes, allow": "Ja, erlauben",
   "No, do not allow": "Nein, nicht erlauben",
   "Logout": "Ausloggen",
-  "Remember my decision": "Merke an meine Entscheidung"
+  "Remember my decision": "Merke an meine Entscheidung",
+  "Your password has been updated successfully.": "Ihr Password wurde erfolgreich geändert."
 }
