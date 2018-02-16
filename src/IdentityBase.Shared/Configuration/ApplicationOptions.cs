@@ -73,12 +73,18 @@ namespace IdentityBase.Configuration
         public bool LoginAfterAccountConfirmation { get; set; } = true;
 
         /// <summary>
+        /// Cancels registration flow after account recovery and stays on
+        /// confirm page within the Identity server. 
+        /// </summary>
+        public bool CancelAfterAccountConfirmation { get; set; } = true;
+
+        /// <summary>
         /// Login user automatically after successful recovery
         /// </summary>
         public bool LoginAfterAccountRecovery { get; set; } = true;
 
         /// <summary>
-        /// Cancels login flow after account recovery and stays on success
+        /// Cancels login flow after account recovery and stays on confirm
         /// page within the Identity server. 
         /// </summary>
         public bool CancelAfterAccountRecovery { get; set; } = false;
