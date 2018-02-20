@@ -458,7 +458,11 @@ namespace IdentityBase.Actions.Register
                     return this.RedirectToReturnUrl(
                         returnUrl, this._interaction);
                 }
-
+                else if (this._applicationOptions.CancelAfterAccountConfirmation)
+                {
+                    return this.View("Complete");
+                }
+                
                 return this.RedirectToLogin(returnUrl);
             }
         }
