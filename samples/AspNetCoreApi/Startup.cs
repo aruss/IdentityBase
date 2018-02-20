@@ -35,8 +35,9 @@ namespace AspNetCoreApi
             app.UseCors(policy =>
             {
                 policy.WithOrigins(
-                    "http://localhost:28895",
-                    "http://localhost:7017");
+                    "http://localhost:28895", // AspNetCoreWeb
+                    "http://localhost:7017",
+                    "http://localhost:3000"); // phonegap app
 
                 policy.AllowAnyHeader();
                 policy.AllowAnyMethod();

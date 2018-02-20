@@ -37,7 +37,13 @@ namespace IdentityBase
             var context = new IdentityBaseContext();
 
             string clientId = this._httpContextAccessor
-               .HttpContext.Request.Query["ClientId"];
+               .HttpContext.Request.Query["clientid"]; 
+
+            if (String.IsNullOrWhiteSpace(clientId))
+            {
+                clientId = this._httpContextAccessor
+                    .HttpContext.Request.Query["client_id"];
+            }
 
             if (String.IsNullOrWhiteSpace(clientId))
             {
@@ -68,7 +74,7 @@ namespace IdentityBase
                 context.ClientProperties = client.Properties
                     .ToObject<ClientProperties>();
             }
-
+            
             // fill other junk
         }
     }

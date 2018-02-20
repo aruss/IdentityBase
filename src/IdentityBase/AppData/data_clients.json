@@ -229,7 +229,7 @@
   },
   {
     "Enabled": true,
-    "ClientId": "roclient.public",
+    "ClientId": "roclient",
     "ProtocolType": "oidc",
     "ClientSecrets": [],
     "RequireClientSecret": false,
@@ -558,10 +558,66 @@
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
     "AllowedCorsOrigins": [],
-    "Properties": {
-      "Theme": "Default",
-      "Culture": "de-DE"
-    }
+    "Properties": {}
+  },
+  {
+    "Enabled": true,
+    "ClientId": "phonegapclient",
+    "ProtocolType": "oidc",
+    "ClientSecrets": [],
+    "RequireClientSecret": true,
+    "ClientName": "PhoneGap Client",
+    "ClientUri": null,
+    "LogoUri": null,
+    "RequireConsent": true,
+    "AllowRememberConsent": true,
+    "AllowedGrantTypes": [
+      "implicit"
+    ],
+    "RequirePkce": false,
+    "AllowPlainTextPkce": false,
+    "AllowAccessTokensViaBrowser": true,
+    "RedirectUris": [
+      "http://localhost:3000"
+    ],
+    "PostLogoutRedirectUris": [
+      "http://localhost:3000"
+    ],
+    "FrontChannelLogoutUri": null,
+    "FrontChannelLogoutSessionRequired": true,
+    "BackChannelLogoutUri": null,
+    "BackChannelLogoutSessionRequired": true,
+    "AllowOfflineAccess": false,
+    "AllowedScopes": [
+      "openid",
+      "role",
+      "profile",
+      "email",
+      "api1",
+      "api2.read_only"
+    ],
+    "AlwaysIncludeUserClaimsInIdToken": false,
+    "IdentityTokenLifetime": 300,
+    "AccessTokenLifetime": 330,
+    "AuthorizationCodeLifetime": 300,
+    "AbsoluteRefreshTokenLifetime": 2592000,
+    "SlidingRefreshTokenLifetime": 1296000,
+    "ConsentLifetime": null,
+    "RefreshTokenUsage": 1,
+    "UpdateAccessTokenClaimsOnRefresh": false,
+    "RefreshTokenExpiration": 1,
+    "AccessTokenType": 1,
+    "EnableLocalLogin": true,
+    "IdentityProviderRestrictions": [],
+    "IncludeJwtId": false,
+    "Claims": [],
+    "AlwaysSendClientClaims": false,
+    "ClientClaimsPrefix": "client_",
+    "PairWiseSubjectSalt": null,
+    "AllowedCorsOrigins": [
+      "http://localhost:3000"
+    ],
+    "Properties": {}
   },
   {
     "Enabled": true,

@@ -451,6 +451,41 @@ namespace IdentityBase.Configuration
                 },
 
                 ///////////////////////////////////////////
+                // JS PhoneGap Sample
+                //////////////////////////////////////////
+                new Client
+                { 
+                    ClientId = "phonegapclient",
+                    ClientName = "PhoneGap Client",
+                    AccessTokenType = AccessTokenType.Reference,
+                    AccessTokenLifetime = 330,
+                    IdentityTokenLifetime = 300,
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
+                    {
+                        "http://localhost:3000"
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "http://localhost:3000"
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                        "http://localhost:3000"
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "role",
+                        "profile",
+                        "email",
+                        "api1",
+                        "api2.read_only"
+                    }
+                },
+
+                ///////////////////////////////////////////
                 // JS OAuth 2.0 Sample
                 //////////////////////////////////////////
                 new Client
