@@ -11,6 +11,14 @@ namespace IdentityBase.Configuration
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// var configBuilder = new ConfigurationBuilder()
+    ///     .SetBasePath(Directory.GetCurrentDirectory())
+    ///     .AddJsonFile("./AppData/config.json", false, false)
+    ///     .Build();
+    /// 
+    /// ExampleDataWriter.Write(configBuilder); 
+    /// </summary>
     public class ExampleDataWriter
     {
         public static void Write(IConfiguration config)
