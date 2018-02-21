@@ -57,12 +57,15 @@
 
     <div class="container body-content">
         @RenderBody()
-        <div class="page-footer">
-            @if (IdentityBaseContext.IsValid) {
-                <span>Click <a class="PostLogoutRedirectUri" href="@IdentityBaseContext.Client.ClientUri">here</a>
-                to return to the @IdentityBaseContext.Client.ClientName application.</span>
-            }
-        </div>
+        @if (IdentityBaseContext.Client != null && IdentityBaseContext.Client.ClientUri != null)
+        {
+            <div class="page-footer">
+                <span>
+                    Click <a href="@IdentityBaseContext.Client.ClientUri">here</a>
+                    to return to the @IdentityBaseContext.Client.ClientName application.
+                </span>     
+            </div>
+        }
     </div>
 
     <script src="~/Default/lib/jquery/jquery.js"></script>
