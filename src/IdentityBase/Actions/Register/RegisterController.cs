@@ -443,8 +443,12 @@ namespace IdentityBase.Actions.Register
             await this._userAccountService
                 .UpdateUserAccountAsync(result.UserAccount);
 
-            if (result.UserAccount.CreationKind == CreationKind.Invitation)
+            if (this._applicationOptions.CancelAfterAccountConfirmation)
             {
+                return this.View("Complete");
+            }
+            else if (result.UserAccount.CreationKind == CreationKind.Invitation)
+            {              
                 return this.RedirectToReturnUrl(
                         returnUrl, this._interaction);
             }
@@ -457,11 +461,7 @@ namespace IdentityBase.Actions.Register
 
                     return this.RedirectToReturnUrl(
                         returnUrl, this._interaction);
-                }
-                else if (this._applicationOptions.CancelAfterAccountConfirmation)
-                {
-                    return this.View("Complete");
-                }
+                }    
                 
                 return this.RedirectToLogin(returnUrl);
             }

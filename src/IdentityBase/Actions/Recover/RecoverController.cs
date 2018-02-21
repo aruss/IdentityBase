@@ -232,17 +232,17 @@ namespace IdentityBase.Actions.Recover
                 model.Password
             );
 
-            if (this._applicationOptions.LoginAfterAccountRecovery)
+            if (this._applicationOptions.CancelAfterAccountRecovery)
+            {
+                return this.View("Complete");
+            }
+            else if (this._applicationOptions.LoginAfterAccountRecovery)
             {
                 await this._authenticationService
                     .SignInAsync(result.UserAccount, returnUrl);
 
                 return this.RedirectToReturnUrl(returnUrl, this._interaction);
-            }
-            else if (this._applicationOptions.CancelAfterAccountRecovery)
-            {
-                return this.View("Complete");
-            }
+            }   
 
             return this.RedirectToLogin(returnUrl);
         }
