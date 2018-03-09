@@ -44,7 +44,7 @@ namespace IdentityBase.EntityFramework.Services
 
         public void Start()
         {
-            Start(CancellationToken.None);
+            this.Start(CancellationToken.None);
         }
 
         public void Start(CancellationToken cancellationToken)
