@@ -39,36 +39,39 @@
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Hello World</title>
 </head>
 
 <body>
-    <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready">
-            <div class="listening">
-                <p class="event blink">Connecting to Device</p>
-            </div>
 
-            <div class="received">
-                <p class="event blink">Device is Ready</p>
+    <div id="loading">
+        <h3>Connecting to Device</h3>
+    </div>
 
-                <div class="public">
-                    <!-- ripple adds event listeners to all btn and a tags... -->
-                    <span id="signin" class="btn btn-primary">Sign in</span>
-                </div>
+    <div id="deviceready">
+        <h3>Device is Ready</h3>
+        <div id="public">
+            <!-- ripple adds event listeners to all btn and a tags... -->
+            <span id="signin" class="btn btn-primary">Sign in</span>
+        </div>
 
-                <div class="private">
-                    <span id="getprofile" class="btn btn-primary">Get profile</span><br/><pre id="getprofile-result"></pre><br/>
-                    <span id="getapidata" class="btn btn-primary">Get api data</span><br/><pre id="getapidata-result"></pre><br/>
-                    <span id="signout" class="btn btn-primary">Sign out</span>
-                </div>
-            </div>
+        <div id="private">
+            <strong>User</strong>
+            <pre id="user-result"></pre>
+            <br/>
+            <span id="getapidata" class="btn btn-primary">Get api data</span>
+            <br/>
+            <pre id="getapidata-result"></pre>
+            <br/>
+            <span id="signout" class="btn btn-primary">Sign out</span>
         </div>
     </div>
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/oicd-client.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         initialize();
