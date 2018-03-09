@@ -27,7 +27,7 @@
   "EntityFramework": {
     "MigrateDatabase": true,
     "SeedExampleData": true,
-    "CleanupTokens": true,
+    "EnableTokenCleanup": false,
     "SeedExampleDataPath": "./AppData",
     "Npgsql": {
       "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"

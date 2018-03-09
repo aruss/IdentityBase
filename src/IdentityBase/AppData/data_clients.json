@@ -567,7 +567,7 @@
     "ClientSecrets": [],
     "RequireClientSecret": true,
     "ClientName": "PhoneGap Client",
-    "ClientUri": null,
+    "ClientUri": "",
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
@@ -578,7 +578,8 @@
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": true,
     "RedirectUris": [
-      "http://localhost:3000"
+      "http://localhost:3000",
+      "http://localhost"
     ],
     "PostLogoutRedirectUris": [
       "http://localhost:3000"
@@ -587,7 +588,7 @@
     "FrontChannelLogoutSessionRequired": true,
     "BackChannelLogoutUri": null,
     "BackChannelLogoutSessionRequired": true,
-    "AllowOfflineAccess": false,
+    "AllowOfflineAccess": true,
     "AllowedScopes": [
       "openid",
       "role",
@@ -597,7 +598,7 @@
       "api2.read_only"
     ],
     "AlwaysIncludeUserClaimsInIdToken": false,
-    "IdentityTokenLifetime": 300,
+    "IdentityTokenLifetime": 10, // one year
     "AccessTokenLifetime": 330,
     "AuthorizationCodeLifetime": 300,
     "AbsoluteRefreshTokenLifetime": 2592000,
@@ -615,10 +616,14 @@
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
     "AllowedCorsOrigins": [
-      "http://localhost:3000"
+      "http://localhost:3000",
+      "http://localhost"
     ],
     "Properties": {}
   },
+
+  
+
   {
     "Enabled": true,
     "ClientId": "js_oauth",
