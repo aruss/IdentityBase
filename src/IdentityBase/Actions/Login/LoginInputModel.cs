@@ -5,6 +5,8 @@ namespace IdentityBase.Actions.Login
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using Microsoft.AspNetCore.Mvc;
+    using ServiceBase.Mvc.ModelBinding;
 
     public class LoginInputModel
     {
@@ -13,6 +15,7 @@ namespace IdentityBase.Actions.Login
         [Required(ErrorMessage = "The {0} field is required.")]
         [DataType(DataType.EmailAddress)]
         [DisplayName("Email")]
+        [ModelBinder(BinderType = typeof(TrimStringModelBinder))]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required.")]

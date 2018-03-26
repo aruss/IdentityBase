@@ -118,6 +118,11 @@ namespace IdentityBase.Services
         /// <returns>Instance of <see cref="UserAccount"/>.</returns>
         public async Task<UserAccount> LoadByEmailAsync(string email)
         {
+            if (String.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
             return await this._userAccountStore
                 .LoadByEmailAsync(email);
         }
@@ -131,6 +136,11 @@ namespace IdentityBase.Services
         public async Task<UserAccount> LoadByEmailWithExternalAsync(
             string email)
         {
+            if (String.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
             return await this._userAccountStore
                 .LoadByEmailWithExternalAsync(email);
         }
@@ -145,8 +155,19 @@ namespace IdentityBase.Services
             string provider,
             string subject)
         {
-            return await this._userAccountStore
-                .LoadByExternalProviderAsync(provider, subject);
+            if (String.IsNullOrWhiteSpace(provider))
+            {
+                throw new ArgumentNullException(nameof(provider));
+            }
+
+            if (String.IsNullOrWhiteSpace(subject))
+            {
+                throw new ArgumentNullException(nameof(subject));
+            }
+
+            return await this._userAccountStore.LoadByExternalProviderAsync(
+                provider,
+                subject);
         }
 
         /// <summary>
@@ -285,7 +306,7 @@ namespace IdentityBase.Services
             await this.UpdateUserAccountAsync(userAccount);
         }
 
-                
+
 
 
 
@@ -590,7 +611,7 @@ namespace IdentityBase.Services
 
             return userAccount;
         }
-        
+
         public async Task SetEmailChangeVirificationKeyAsync(
             UserAccount userAccount,
             string email,

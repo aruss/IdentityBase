@@ -5,7 +5,7 @@ namespace IdentityBase.WebApi.Actions
 {
     using System.Reflection;
     using Microsoft.AspNetCore.Mvc;
-    using ServiceBase.Mvc;
+    using ServiceBase.Mvc.Filters;
 
     [TypeFilter(typeof(ExceptionFilter))]
     [TypeFilter(typeof(ModelStateFilter))]

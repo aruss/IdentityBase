@@ -20,7 +20,7 @@ namespace IdentityBase
         {
             return new DefaultEmailServiceOptions
             {
-                DefaultLocale = CultureInfo.CurrentUICulture.Name,
+                DefaultCulture = CultureInfo.CurrentUICulture.Name,
 
                 TemplateDirectoryPath =
                     this._themeHelper.GetEmailTemplatesDirectoryPath()
