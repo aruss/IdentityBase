@@ -3,6 +3,7 @@ namespace IdentityBase
     using System.IO;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using ServiceBase.Extensions;
 
@@ -10,13 +11,16 @@ namespace IdentityBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationOptions _applicationOptions;
+        private readonly IHostingEnvironment _environment; 
 
         public ThemeHelper(
             ApplicationOptions applicationOptions,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IHostingEnvironment environment)
         {
             this._httpContextAccessor = httpContextAccessor;
             this._applicationOptions = applicationOptions;
+            this._environment = environment; 
         }
 
         // TODO: return theme object instead of string 
@@ -44,12 +48,21 @@ namespace IdentityBase
         {
             string theme = this.GetTheme();
 
-            string path = Path.GetFullPath(
-                Path.Combine(
-                    this._applicationOptions.ThemeDirectoryPath,
-                    theme));
-
-            return path;
+            if (Path.IsPathRooted(this._applicationOptions.ThemeDirectoryPath))
+            {
+                return Path.GetFullPath(
+                    Path.Combine(
+                        this._applicationOptions.ThemeDirectoryPath,
+                        theme));
+            }
+            else
+            {
+                return Path.GetFullPath(
+                  Path.Combine(
+                      this._environment.ContentRootPath,
+                      this._applicationOptions.ThemeDirectoryPath,
+                      theme));                
+            }
         }
 
         public string GetLocalizationDirectoryPath()

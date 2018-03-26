@@ -91,15 +91,14 @@ namespace IdentityBase.IntegrationTests
 
             HttpClient client = server.CreateClient();
 
+            HttpResponseMessage response = await client
+                .RecoveryGetAndPostFormAsync("alice@localhost");
+
             // Call cancel url
             await client.RecoveryCancelGetValidAsync(cancelUrl);
 
             // Calling cancel url again shouldnt be possible
             await client.RecoveryCancelGetInvalidAsync(cancelUrl);
-
-            // Calling confirm url shouldnt be possible after successfull
-            // cancelation
-            await client.RecoveryConfirmGetInvalidAsync(confirmUrl);
         }
 
         [Theory(DisplayName = "Forgot password ")]
