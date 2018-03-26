@@ -84,7 +84,7 @@ namespace IdentityBase.Actions.Login
             {
                 var result = await this._userAccountService
                     .VerifyByEmailAndPasswordAsync(
-                        model.Email,
+                        model.Email.Trim(),
                         model.Password
                     );
 
