@@ -4,6 +4,7 @@ namespace IdentityBase.IntegrationTests
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.TestHost;
     using Xunit;
+    using FluentAssertions; 
 
     [Collection("FooTests")]
     public class LandingPageTests
@@ -15,8 +16,9 @@ namespace IdentityBase.IntegrationTests
 
             HttpClient client = server.CreateClient();
             HttpResponseMessage response = await client.GetAsync("/");
-            string html = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
+            
+            response.StatusCode.Should()
+                .BeEquivalentTo(System.Net.HttpStatusCode.NotFound); 
         }
     }
 }
