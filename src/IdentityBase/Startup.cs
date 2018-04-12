@@ -9,7 +9,6 @@ namespace IdentityBase
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
-    using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -107,6 +106,8 @@ namespace IdentityBase
             services.AddDistributedMemoryCache();
             services.AddMvc(this._applicationOptions, this._environment);
 
+            services.AddSession();
+
             // https://github.com/aspnet/Security/issues/1310
             // services
             //     .AddAuthentication(
@@ -169,6 +170,9 @@ namespace IdentityBase
             app.UseIdentityServer();
             //app.UseAuthentication();
             //app.UseWebApi(options);
+
+            app.UseSession();
+
             app.UseMvcWithDefaultRoute();
 
             this._modulesStartup.Configure(app);

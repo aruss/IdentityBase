@@ -23,6 +23,7 @@ namespace IdentityBase
 
             services
                 .AddMvc()
+                .AddSessionStateTempDataProvider()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
                 .AddRazorOptions(razor =>
@@ -33,7 +34,7 @@ namespace IdentityBase
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
-                    
+
                     manager.FeatureProviders.ReplaceControllerFeatureProvider(
                         new WebControllerFeatureProvider(appOptions));
                 });

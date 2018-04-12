@@ -8,12 +8,15 @@ namespace IdentityBase.Actions.Login
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
+    using IdentityBase.ModelState;
     using IdentityBase.Services;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
+    using IdentityBase.Extensions;
+    using Newtonsoft.Json;
 
     public class LoginController : WebController
     {
@@ -30,7 +33,7 @@ namespace IdentityBase.Actions.Login
             ILogger<LoginController> logger,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
-            ClientService clientService,          
+            ClientService clientService,
             AuthenticationService authenticationService,
             IStringLocalizer localizer)
         {
@@ -47,9 +50,18 @@ namespace IdentityBase.Actions.Login
         /// Shows the login page.
         /// </summary>
         [HttpGet("login", Name = "Login")]
+        [ImportModelState]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            LoginInputModel model = null;
+
+            if (TempData.TryRetrieveData(out model) && model != null)
+            {
+                return this.View(await this.CreateViewModelAsync(model));
+            }
+
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
+
             if (vm == null)
             {
                 this._logger.LogError(
@@ -73,6 +85,7 @@ namespace IdentityBase.Actions.Login
         /// </summary>
         [HttpPost("login", Name = "Login")]
         [ValidateAntiForgeryToken]
+        [ExportModelState]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
             if (!this._applicationOptions.EnableAccountLogin)
@@ -129,8 +142,10 @@ namespace IdentityBase.Actions.Login
                     this._localizer[ErrorMessages.InvalidCredentials]);
             }
 
+            TempData.StoreData(model);
+
             // Something went wrong, show form with error
-            return this.View(await this.CreateViewModelAsync(model));
+            return this.RedirectToLogin(model.ReturnUrl);
         }
 
         [NonAction]
