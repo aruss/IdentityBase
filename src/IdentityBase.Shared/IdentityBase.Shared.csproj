@@ -33,7 +33,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.2" />
-    <PackageReference Include="ServiceBase" Version="1.1.20" />
+    <PackageReference Include="ServiceBase" Version="1.1.21" />
   </ItemGroup>
 
 </Project>
