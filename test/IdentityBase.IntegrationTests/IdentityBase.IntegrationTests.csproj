@@ -31,6 +31,7 @@
     <Compile Remove="Tests\ApiInvitationTests.cs" />
     <Compile Remove="Tests\GeneralTests.cs" />
     <Compile Remove="Tests\InviteTests.cs" />
+    <Compile Remove="Tests\LandingPageTests.cs" />
     <Compile Remove="Tests\LoginTests.cs" />
     <Compile Remove="Tests\RecoverTests.cs" />
     <Compile Remove="Tests\RecoveryAccontTests.cs" />
@@ -63,6 +64,10 @@
 
   <ItemGroup>
     <None Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\" />
   </ItemGroup>
   
   <!--

@@ -11,7 +11,7 @@ namespace IdentityBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationOptions _applicationOptions;
-        private readonly IHostingEnvironment _environment;
+        private readonly IHostingEnvironment _environment; 
 
         public ThemeHelper(
             ApplicationOptions applicationOptions,
@@ -20,7 +20,7 @@ namespace IdentityBase
         {
             this._httpContextAccessor = httpContextAccessor;
             this._applicationOptions = applicationOptions;
-            this._environment = environment;
+            this._environment = environment; 
         }
 
         // TODO: return theme object instead of string 
@@ -33,7 +33,7 @@ namespace IdentityBase
 
             if (!identityBaseContext.IsValid)
             {
-                return "Default";
+                return "Default"; 
             }
 
             ClientProperties clientProperties = identityBaseContext.Client
@@ -48,15 +48,21 @@ namespace IdentityBase
         {
             string theme = this.GetTheme();
 
-            // TODO: support rooted ThemeDirectoryPath
-
-            string path = Path.GetFullPath(
-                Path.Combine(
-                    this._environment.ContentRootPath,
-                    this._applicationOptions.ThemeDirectoryPath,
-                    theme));
-
-            return path;
+            if (Path.IsPathRooted(this._applicationOptions.ThemeDirectoryPath))
+            {
+                return Path.GetFullPath(
+                    Path.Combine(
+                        this._applicationOptions.ThemeDirectoryPath,
+                        theme));
+            }
+            else
+            {
+                return Path.GetFullPath(
+                  Path.Combine(
+                      this._environment.ContentRootPath,
+                      this._applicationOptions.ThemeDirectoryPath,
+                      theme));                
+            }
         }
 
         public string GetLocalizationDirectoryPath()
