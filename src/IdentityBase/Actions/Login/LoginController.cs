@@ -4,7 +4,6 @@
 namespace IdentityBase.Actions.Login
 {
     using IdentityBase.Configuration;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.ModelState;
     using IdentityBase.Services;
@@ -52,13 +51,6 @@ namespace IdentityBase.Actions.Login
         [ImportModelState]
         public async Task<IActionResult> Login(string returnUrl)
         {
-            LoginInputModel model = null;
-
-            if (this.TempData.TryLoadData(out model))
-            {
-                return this.View(await this.CreateViewModelAsync(model));
-            }
-
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
 
             if (vm == null)
@@ -140,8 +132,6 @@ namespace IdentityBase.Actions.Login
                 this.ModelState.AddModelError(
                     this._localizer[ErrorMessages.InvalidCredentials]);
             }
-
-            this.TempData.StoreData(model);
 
             // Something went wrong, show form with error
             return this.RedirectToLogin(model.ReturnUrl);
