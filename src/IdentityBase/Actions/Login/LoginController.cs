@@ -3,6 +3,9 @@
 
 namespace IdentityBase.Actions.Login
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
     using IdentityBase.ModelState;
@@ -12,9 +15,6 @@ namespace IdentityBase.Actions.Login
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class LoginController : WebController
     {
@@ -48,7 +48,7 @@ namespace IdentityBase.Actions.Login
         /// Shows the login page.
         /// </summary>
         [HttpGet("login", Name = "Login")]
-        [ImportModelState]
+        [RestoreModelState]
         public async Task<IActionResult> Login(string returnUrl)
         {
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
@@ -76,7 +76,7 @@ namespace IdentityBase.Actions.Login
         /// </summary>
         [HttpPost("login", Name = "Login")]
         [ValidateAntiForgeryToken]
-        [ExportModelState]
+        [StoreModelState]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
             if (!this._applicationOptions.EnableAccountLogin)
@@ -86,11 +86,12 @@ namespace IdentityBase.Actions.Login
 
             if (this.ModelState.IsValid)
             {
-                var result = await this._userAccountService
-                    .VerifyByEmailAndPasswordAsync(
-                        model.Email,
-                        model.Password
-                    );
+                UserAccountVerificationResult result =
+                    await this._userAccountService
+                        .VerifyByEmailAndPasswordAsync(
+                            model.Email,
+                            model.Password
+                        );
 
                 if (result.UserAccount != null)
                 {

@@ -3,25 +3,30 @@ namespace IdentityBase.ModelState
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 
-    public class ExportModelStateAttribute : ModelStateTransfer
+    public class StoreModelStateAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        public override void OnActionExecuted(
+            ActionExecutedContext filterContext)
         {
-            //Only export when ModelState is not valid
+            // Only export when ModelState is not valid
             if (!filterContext.ModelState.IsValid)
             {
-                //Export if we are redirecting
+                // Export if we are redirecting
                 if (filterContext.Result is RedirectResult
                     || filterContext.Result is RedirectToRouteResult
                     || filterContext.Result is RedirectToActionResult)
                 {
-                    Controller controller = filterContext.Controller as Controller;
+                    Controller controller =
+                        filterContext.Controller as Controller;
 
-                    if (controller != null && filterContext.ModelState != null)
+                    if (controller != null &&
+                        filterContext.ModelState != null)
                     {
-                        string modelState = ModelStateHelper.SerialiseModelState(filterContext.ModelState);
+                        string modelState = ModelStateHelper
+                            .SerialiseModelState(filterContext.ModelState);
 
-                        controller.TempData[Key] = modelState;
+                        controller.TempData[ModelStateHelper.Key] =
+                            modelState;
                     }
                 }
             }
