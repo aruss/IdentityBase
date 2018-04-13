@@ -4,7 +4,6 @@
 namespace IdentityBase.Actions.Login
 {
     using IdentityBase.Configuration;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.ModelState;
     using IdentityBase.Services;
