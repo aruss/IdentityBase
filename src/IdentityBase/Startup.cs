@@ -9,7 +9,6 @@ namespace IdentityBase
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
-    using IdentityServer4;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
