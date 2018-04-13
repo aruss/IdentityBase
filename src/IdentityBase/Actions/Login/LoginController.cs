@@ -3,10 +3,8 @@
 
 namespace IdentityBase.Actions.Login
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using IdentityBase.Configuration;
+    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.ModelState;
     using IdentityBase.Services;
@@ -15,8 +13,9 @@ namespace IdentityBase.Actions.Login
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using IdentityBase.Extensions;
-    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class LoginController : WebController
     {
@@ -55,7 +54,7 @@ namespace IdentityBase.Actions.Login
         {
             LoginInputModel model = null;
 
-            if (TempData.TryLoadData(out model))
+            if (this.TempData.TryLoadData(out model))
             {
                 return this.View(await this.CreateViewModelAsync(model));
             }
@@ -142,7 +141,7 @@ namespace IdentityBase.Actions.Login
                     this._localizer[ErrorMessages.InvalidCredentials]);
             }
 
-            TempData.StoreData(model);
+            this.TempData.StoreData(model);
 
             // Something went wrong, show form with error
             return this.RedirectToLogin(model.ReturnUrl);

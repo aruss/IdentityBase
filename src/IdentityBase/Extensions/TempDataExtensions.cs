@@ -9,7 +9,9 @@ namespace IdentityBase.Extensions
 
     public static class TempDataExtensions
     {
-        public static bool TryLoadData<T>(this ITempDataDictionary tempData, out T data)
+        public static bool TryLoadData<T>(
+            this ITempDataDictionary tempData,
+            out T data)
         {
             data = default(T);
 
@@ -21,7 +23,7 @@ namespace IdentityBase.Extensions
                 string value = tempData[entryKey] as string;
 
                 // decode data
-                var bytes = Convert.FromBase64String(value);
+                byte[] bytes = Convert.FromBase64String(value);
 
                 //decompress
                 value = Decompress(bytes);
@@ -65,13 +67,16 @@ namespace IdentityBase.Extensions
 
         private static byte[] Compress(string value)
         {
-            if (value == null) return null;
+            if (value == null)
+            {
+                return null;
+            }
 
             byte[] data = Encoding.UTF8.GetBytes(value);
 
-            using (var input = new MemoryStream(data))
+            using (MemoryStream input = new MemoryStream(data))
             {
-                using (var output = new MemoryStream())
+                using (MemoryStream output = new MemoryStream())
                 {
                     using (Stream cs = new DeflateStream(output, CompressionMode.Compress))
                     {
@@ -90,9 +95,9 @@ namespace IdentityBase.Extensions
                 return null;
             }
 
-            using (var input = new MemoryStream(data))
+            using (MemoryStream input = new MemoryStream(data))
             {
-                using (var output = new MemoryStream())
+                using (MemoryStream output = new MemoryStream())
                 {
                     using (Stream cs = new DeflateStream(input, CompressionMode.Decompress))
                     {

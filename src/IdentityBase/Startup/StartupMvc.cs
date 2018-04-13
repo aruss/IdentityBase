@@ -33,7 +33,6 @@ namespace IdentityBase
                 })
                 .ConfigureApplicationPartManager(manager =>
                 {
-
                     manager.FeatureProviders.ReplaceControllerFeatureProvider(
                         new WebControllerFeatureProvider(appOptions));
                 });
