@@ -63,7 +63,6 @@ namespace IdentityBase.Extensions
             }
         }
 
-
         private static byte[] Compress(string value)
         {
             if (value == null) return null;

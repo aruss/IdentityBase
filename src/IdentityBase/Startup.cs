@@ -168,7 +168,6 @@ namespace IdentityBase
             app.UseIdentityServer();
             //app.UseAuthentication();
             //app.UseWebApi(options);
-
             app.UseMvcWithDefaultRoute();
 
             this._modulesStartup.Configure(app);

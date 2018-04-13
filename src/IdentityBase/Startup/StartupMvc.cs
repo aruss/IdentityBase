@@ -23,7 +23,6 @@ namespace IdentityBase
 
             services
                 .AddMvc()
-                //.AddSessionStateTempDataProvider()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
                 .AddRazorOptions(razor =>
