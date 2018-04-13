@@ -106,8 +106,6 @@ namespace IdentityBase
             services.AddDistributedMemoryCache();
             services.AddMvc(this._applicationOptions, this._environment);
 
-            services.AddSession();
-
             // https://github.com/aspnet/Security/issues/1310
             // services
             //     .AddAuthentication(
@@ -170,8 +168,6 @@ namespace IdentityBase
             app.UseIdentityServer();
             //app.UseAuthentication();
             //app.UseWebApi(options);
-
-            app.UseSession();
 
             app.UseMvcWithDefaultRoute();
 

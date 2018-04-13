@@ -55,7 +55,7 @@ namespace IdentityBase.Actions.Login
         {
             LoginInputModel model = null;
 
-            if (TempData.TryRetrieveData(out model) && model != null)
+            if (TempData.TryLoadData(out model))
             {
                 return this.View(await this.CreateViewModelAsync(model));
             }
