@@ -199,7 +199,7 @@ FakesAssemblies/
 *.opt
 
 .DS_STORE
-samples/AspNetCoreWeb/wwwroot/lib/
+examples/AspNetCoreWeb/wwwroot/lib/
 .build/
 coverage/
 src/IdentityBase/TempData/
