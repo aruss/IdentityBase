@@ -20,6 +20,8 @@
     <Compile Remove="Controllers\External\**" />
     <Compile Remove="Api\**" />
     <Compile Remove="AppData\Logs\**" />
+    <Compile Remove="Localization\**" />
+    <Compile Remove="ModelState\**" />
     <Compile Remove="Plugins\**" />
     <Compile Remove="TempData\**" />
     <Compile Remove="Themes\**" />
@@ -27,6 +29,8 @@
     <Content Remove="Controllers\External\**" />
     <Content Remove="Api\**" />
     <Content Remove="AppData\Logs\**" />
+    <Content Remove="Localization\**" />
+    <Content Remove="ModelState\**" />
     <Content Remove="Plugins\**" />
     <Content Remove="TempData\**" />
     <Content Remove="Themes\**" />
@@ -34,6 +38,8 @@
     <EmbeddedResource Remove="Controllers\External\**" />
     <EmbeddedResource Remove="Api\**" />
     <EmbeddedResource Remove="AppData\Logs\**" />
+    <EmbeddedResource Remove="Localization\**" />
+    <EmbeddedResource Remove="ModelState\**" />
     <EmbeddedResource Remove="Plugins\**" />
     <EmbeddedResource Remove="TempData\**" />
     <EmbeddedResource Remove="Themes\**" />
@@ -41,6 +47,8 @@
     <None Remove="Controllers\External\**" />
     <None Remove="Api\**" />
     <None Remove="AppData\Logs\**" />
+    <None Remove="Localization\**" />
+    <None Remove="ModelState\**" />
     <None Remove="Plugins\**" />
     <None Remove="TempData\**" />
     <None Remove="Themes\**" />
@@ -48,6 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\ControllerExtensions.cs" />
+    <Compile Remove="Extensions\IHtmlHelperExtensions.cs" />
+    <Compile Remove="Extensions\ModelStateDictionaryExtensions.cs" />
+    <Compile Remove="Extensions\TempDataExtensions.cs" />
     <Compile Remove="Startup\StartupDataLayer.cs" />
     <Compile Remove="Startup\StartupEmailSender.cs" />
     <Compile Remove="Startup\StartupLogging.cs" />
@@ -94,7 +106,7 @@
     <ProjectReference Include="..\..\..\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
     <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
     <ProjectReference Include="Plugins\DefaultTheme\DefaultTheme.csproj" />
-    <ProjectReference Include="Plugins\IdentityBase.EntityFramework.SqlServer\IdentityBase.EntityFramework.SqlServer.csproj" />
+    <ProjectReference Include="Plugins\IdentityBase.EntityFramework.InMemory\IdentityBase.EntityFramework.InMemory.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="AppData\idsvr3test.pfx">

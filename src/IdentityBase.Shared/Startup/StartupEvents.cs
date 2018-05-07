@@ -4,6 +4,7 @@
 namespace IdentityBase
 {
     using System;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Events;
@@ -16,7 +17,22 @@ namespace IdentityBase
         {
             if (!services.IsAdded<IEventService>())
             {
-                throw new Exception("IEventService not registered.");
+                logger.LogWarning(
+                    $"IEventService not registered. Registering \"{nameof(DefaultEventService)}\" and \"{ nameof(DefaultEventSink)}\"");
+
+                IServiceProvider serviceProvider = services
+                    .BuildServiceProvider();
+
+                IConfiguration config = serviceProvider
+                    .GetService<IConfiguration>();
+
+                services.AddSingleton(config.GetSection("Events")
+                    .Get<EventOptions>() ?? new EventOptions());
+
+                services.AddScoped<IEventService, DefaultEventService>();
+                services.AddScoped<IEventSink, DefaultEventSink>();
+
+                // throw new Exception("IEventService not registered.");
             }
         }
     }

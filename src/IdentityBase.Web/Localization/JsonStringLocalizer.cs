@@ -7,53 +7,53 @@ namespace IdentityBase
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.IO;
     using IdentityBase.Configuration;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json;
+
 
     public class JsonStringLocalizer : IStringLocalizer
     {
         private readonly ApplicationOptions _appOptions;
         private readonly ILogger<JsonStringLocalizer> _logger;
-        private readonly ThemeHelper _themeHelper; 
+        //private readonly ThemeHelper _themeHelper; 
 
         private static ConcurrentDictionary
             <CultureInfo, Dictionary<string, string>> _dictionaries;
 
         public JsonStringLocalizer(
             ApplicationOptions appOptions,
-            ILogger<JsonStringLocalizer> logger,
-            ThemeHelper themeHelper)
+            ILogger<JsonStringLocalizer> logger/*,
+            ThemeHelper themeHelper*/)
         {
             JsonStringLocalizer._dictionaries = new ConcurrentDictionary
                 <CultureInfo, Dictionary<string, string>>();
 
             this._logger = logger;
             this._appOptions = appOptions;
-            this._themeHelper = themeHelper; 
+            // this._themeHelper = themeHelper; 
         }
 
         private Dictionary<string, string> GetDictionary(CultureInfo culture)
         {
             return JsonStringLocalizer._dictionaries.GetOrAdd(culture, (c) =>
             {
+                return new Dictionary<string, string>();
                 // TODO: Remove dependency on themehelper, solve it via configuration and factory, like DefaultEmailServiceOptionsFactory
-                string resourcePath = Path.GetFullPath(Path.Combine(
-                    this._themeHelper.GetLocalizationDirectoryPath(),
-                    $"Shared.{c.Name}.json"));
-
-                this._logger.LogInformation(
-                    $"Loading localization dictionary: {resourcePath}");
-
-                using (StreamReader r = new StreamReader(resourcePath))
-                {
-                    string json = r.ReadToEnd();
-
-                    return JsonConvert
-                        .DeserializeObject<Dictionary<string, string>>(json);
-                }
+                //string resourcePath = Path.GetFullPath(Path.Combine(
+                //    this._themeHelper.GetLocalizationDirectoryPath(),
+                //    $"Shared.{c.Name}.json"));
+                //
+                //this._logger.LogInformation(
+                //    $"Loading localization dictionary: {resourcePath}");
+                //
+                //using (StreamReader r = new StreamReader(resourcePath))
+                //{
+                //    string json = r.ReadToEnd();
+                //
+                //    return JsonConvert
+                //        .DeserializeObject<Dictionary<string, string>>(json);
+                //}
             });
         }
 

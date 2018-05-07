@@ -28,6 +28,7 @@ namespace IdentityBase
 
             if (!services.IsAdded<ICorsPolicyService>())
             {
+                
                 throw new Exception("ICorsPolicyService not registered.");
             }
 

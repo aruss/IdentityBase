@@ -6,8 +6,8 @@ namespace IdentityBase
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using IdentityBase.Configuration;
-    using IdentityBase.Localization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Localization;
@@ -15,48 +15,8 @@ namespace IdentityBase
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Options;
     using ServiceBase.Extensions;
-
-    public class DummyStringLocalizer : IStringLocalizer
-    {
-        public LocalizedString this[string name]
-        {
-            get
-            {
-                return new LocalizedString(name, name);
-            }
-        }
-
-        public LocalizedString this[string name, params object[] arguments]
-        {
-            get
-            {
-                return new LocalizedString(name, name); 
-            }
-        }
-
-        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IStringLocalizer WithCulture(CultureInfo culture)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public class DummyStringLocalizerFactory : IStringLocalizerFactory
-    {
-        public IStringLocalizer Create(Type resourceSource)
-        {
-            return new DummyStringLocalizer(); 
-        }
-
-        public IStringLocalizer Create(string baseName, string location)
-        {
-            return new DummyStringLocalizer();
-        }
-    }
+    using ServiceBase.Localization;
+    using ServiceBase.Resources;
 
     public static class StartupLocalization
     {
@@ -65,40 +25,43 @@ namespace IdentityBase
            ApplicationOptions appOptions,
            IHostingEnvironment environment)
         {
-            //services.TryAdd<IStringLocalizerFactory,
-            //    JsonStringLocalizerFactory>(ServiceLifetime.Singleton);
-
-            //services.TryAdd<IStringLocalizer,
-            //   JsonStringLocalizer>(ServiceLifetime.Singleton);
+            services.TryAdd<IResourceStore,
+                InMemoryResourceStore>(ServiceLifetime.Scoped);
 
             services.TryAdd<IStringLocalizerFactory,
-                DummyStringLocalizerFactory>(ServiceLifetime.Singleton);
+                StringLocalizerFactory>(ServiceLifetime.Singleton);
 
             services.TryAdd<IStringLocalizer,
-               DummyStringLocalizer>(ServiceLifetime.Singleton);
+                StringLocalizer>(ServiceLifetime.Singleton);
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
+                IServiceProvider provider = services.BuildServiceProvider();
+
+                IResourceStore resourceStore =
+                    provider.GetRequiredService<IResourceStore>();
+                
+                IEnumerable<string> cultures =
+                    resourceStore.GetAllLocalizationCulturesAsync().Result;
+                
                 options.DefaultRequestCulture =
                     new RequestCulture(appOptions.DefaultCulture);
-                               
+
                 options.SupportedCultures =
-                options.SupportedUICultures = new List<CultureInfo>
-                {
-                    // TODO: read from ThemeHelper ...
-                    new CultureInfo("en-US"),
-                    new CultureInfo("de-DE")
-                };
+                options.SupportedUICultures =
+                     cultures.Select(s => new CultureInfo(s)).ToList();
 
                 options.RequestCultureProviders.Clear();
+
                 options.RequestCultureProviders
-                    .Add(new IdentityBaseRequestCultureProvider());
+                    .Add(new IdentityBase.RequestCultureProvider());
             });
         }
 
         public static void UseLocalization(this IApplicationBuilder app)
         {
-            var options = app.ApplicationServices
+            IOptions<RequestLocalizationOptions> options = app
+                .ApplicationServices
                 .GetService<IOptions<RequestLocalizationOptions>>();
 
             app.UseRequestLocalization(options.Value);

@@ -27,7 +27,7 @@ namespace IdentityBase.EntityFramework.SqlServer
             dbBuilder.UseSqlServer(connString,
                 o => o.MigrationsAssembly(migrationsAssembly));
 
-            var options = new EntityFrameworkOptions();
+            EntityFrameworkOptions options = new EntityFrameworkOptions();
 
             return new MigrationDbContext(dbBuilder.Options, options);
         }

@@ -5,7 +5,7 @@ namespace IdentityBase.EntityFramework.Npgsql
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Mvc.Plugins;
+    using ServiceBase.Plugins;
 
     public class ConfigureServicesAction : IConfigureServicesAction
     {

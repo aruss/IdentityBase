@@ -9,6 +9,8 @@ namespace IdentityBase
     using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
+    using IdentityBase.DependencyInjection;
+    using IdentityBase.Extensions;
     using IdentityBase.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -20,9 +22,10 @@ namespace IdentityBase
     using Microsoft.Extensions.Logging;
     using ServiceBase;
     using ServiceBase.Events;
-    using ServiceBase.Modules;
-    using ServiceBase.Mvc.Plugins;
+    using ServiceBase.Extensions;
+    using ServiceBase.Mvc.Theming;
     using ServiceBase.Notification.Email;
+    using ServiceBase.Plugins;
 
     /// <summary>
     /// Application startup class
@@ -33,6 +36,7 @@ namespace IdentityBase
         private readonly IHostingEnvironment _environment;
         private readonly IConfiguration _configuration;
         private readonly ApplicationOptions _applicationOptions;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _pluginsPath;
 
         /// <summary>
@@ -48,34 +52,32 @@ namespace IdentityBase
             IConfiguration configuration,
             IHostingEnvironment environment,
             ILoggerFactory loggerFactory,
+            IHttpContextAccessor httpContextAccessor,
             Func<HttpMessageHandler> messageHandlerFactory = null)
         {
             this._logger = loggerFactory.CreateLogger<Startup>();
             this._environment = environment;
             this._configuration = configuration;
+            this._httpContextAccessor = httpContextAccessor;
 
             this._applicationOptions = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
+            // TODO: Add as extension to applicationoptions
+            this._pluginsPath = this._applicationOptions.PluginsPath
+                .GetFullPath(this._environment.ContentRootPath);
+
 #if DYNAMIC
             // Load plugins dynamically at tuntime 
-            Console.WriteLine("Loading plugins dynamically");
-
-            this._pluginsPath = Path.GetFullPath(
-                Path.Combine(environment.ContentRootPath, "plugins"));
-
+            this._logger.LogInformation("Loading plugins dynamically.");
             PluginAssembyLoader.LoadAssemblies(this._pluginsPath);
 #else
             // Statically add plugin assemblies for debugging 
             // You can add and remove active plugins here
-
-            this._pluginsPath = Path.GetFullPath(
-                Path.Combine(environment.ContentRootPath, "Plugins"));
-
-            Console.WriteLine("Loading plugins statically.");
+            this._logger.LogInformation("Loading plugins statically.");
             Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
-            //Console.WriteLine(typeof(EntityFramework.MySql.ConfigureServicesAction));
-            Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
+            Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
+            //Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
             //Console.WriteLine(typeof(PluginB.PluginBPlugin));
 #endif
         }
@@ -100,25 +102,30 @@ namespace IdentityBase
                 this._configuration,
                 this._logger,
                 this._environment);
-            
+
             services.AddFactory<
                 IdentityBaseContext,
                 IdentityBaseContextIdSrvFactory>(
                     ServiceLifetime.Scoped,
                     ServiceLifetime.Singleton);
 
-            services.AddLocalization(this._applicationOptions, this._environment);
+            services.AddLocalization(
+                this._applicationOptions,
+                this._environment);
+
             services.AddTransient<ICrypto, DefaultCrypto>();
             services.AddTransient<ClientService>();
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<AuthenticationService>();
 
-            //services.AddScoped<ThemeHelper>();
             services.AddAntiforgery();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            services
+                .AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
+
+            services
+                .AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             // services.AddCors(corsOpts =>
             // {
@@ -129,9 +136,12 @@ namespace IdentityBase
 
             services.AddDistributedMemoryCache();
 
+            IThemeInfoProvider provider =
+                new ThemeInfoProvider(this._httpContextAccessor);
+
+            services.AddSingleton(provider);
             services.AddPlugins();
-            services.AddPluginsMvcHost(this._pluginsPath); 
-            //services.AddMvc(this._applicationOptions, this._environment);
+            services.AddPluginsMvc(provider);
 
             // https://github.com/aspnet/Security/issues/1310
             // services
@@ -142,21 +152,8 @@ namespace IdentityBase
             OverrideServices?.Invoke(services);
 
             services.ValidateDataLayerServices(this._logger);
-            //services.ValidateEmailSenderServices(this._logger);
-            //services.ValidateSmsServices(this._logger);
-            //services.ValidateEventServices(this._logger);
-
-
-            // default email
-            services.AddDefaultEmailService(this._configuration);
-            services.AddScoped<IEmailSender, DebugEmailSender>();
-
-            // default event services
-            services.AddSingleton(this._configuration.GetSection("Events")
-               .Get<EventOptions>() ?? new EventOptions());
-
-            services.AddScoped<IEventService, DefaultEventService>();
-            services.AddScoped<IEventSink, DefaultEventSink>();
+            services.ValidateEmailSenderServices(this._logger);
+            services.ValidateEventServices(this._logger);
 
             this._logger.LogInformation("Services configured.");
 
@@ -182,8 +179,8 @@ namespace IdentityBase
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
 
-            ApplicationOptions options = app.ApplicationServices
-                .GetRequiredService<ApplicationOptions>();
+            //ApplicationOptions options = app.ApplicationServices
+            //    .GetRequiredService<ApplicationOptions>();
 
             app.UseLocalization();
             // app.UseMiddleware<IdentityBaseContextMiddleware>();
@@ -203,9 +200,12 @@ namespace IdentityBase
             //app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
             app.UsePlugins();
-            app.UsePluginsMvcHost(this._pluginsPath);
+            app.UsePluginsMvc();
+            app.UsePluginsStaticFiles(this._pluginsPath);
 
-            this._logger.LogInformation("Configure application.");          
+        
+
+            this._logger.LogInformation("Configure application.");
         }
     }
 }

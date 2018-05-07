@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Notification.SendGrid\ServiceBase.Notification.SendGrid.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
+    <ProjectReference Include="..\..\..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

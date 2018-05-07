@@ -1,12 +1,13 @@
 {
-  "name": "idbase-theme-default",
+  "name": "default-theme",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "Default theme for IdentityBase frontend.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Russlan Akiev",
+  "license": "MIT",
   "devDependencies": {
     "bootstrap-sass": "3.3.7",
     "browser-sync": "2.18.8",

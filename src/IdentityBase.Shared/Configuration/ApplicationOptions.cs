@@ -143,7 +143,7 @@ namespace IdentityBase.Configuration
         public string WindowsAuthenticationDisplayName { get; set; } =
             "Windows";
 
-        public string ThemeDirectoryPath { get; set; } = "./Themes"; 
+        public string PluginsPath { get; set; } = "./Plugins"; 
 
         public string DefaultCulture { get; set; } = "de-DE"; // "en-US"; 
     }

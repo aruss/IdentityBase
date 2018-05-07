@@ -4,6 +4,7 @@
 namespace IdentityBase
 {
     using System.Linq;
+    using IdentityBase.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Notification.Email;

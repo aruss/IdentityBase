@@ -4,6 +4,7 @@
 namespace IdentityBase
 {
     using System;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Notification.Email;
@@ -16,8 +17,18 @@ namespace IdentityBase
         {
             if (!services.IsAdded<IEmailService>())
             {
-                throw new Exception("IEmailService not registered.");
-            }
+                logger.LogWarning(
+                    $"IEmailService not registered. Registering \"{nameof(DebugEmailSender)}\"");
+
+                IServiceProvider serviceProvider = services
+                    .BuildServiceProvider();
+
+                IConfiguration config = serviceProvider
+                    .GetService<IConfiguration>();
+
+                services.AddDefaultEmailService(config);
+                services.AddScoped<IEmailSender, DebugEmailSender>();
+            }            
         }
     }
 }

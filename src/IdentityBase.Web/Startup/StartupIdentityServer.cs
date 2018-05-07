@@ -16,6 +16,7 @@ namespace IdentityBase
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase.Events;
+    using ServiceBase.Extensions;
 
     // https://github.com/IdentityServer/IdentityServer4/blob/dev/src/Host/Startup.cs
     public static class StartupIdentityServer

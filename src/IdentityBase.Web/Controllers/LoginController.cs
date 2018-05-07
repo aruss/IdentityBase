@@ -8,7 +8,6 @@ namespace IdentityBase.Actions.Login
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
-    using IdentityBase.ModelState;
     using IdentityBase.Services;
     using IdentityBase.Web;
     using IdentityBase.Web.InputModels.Login;
@@ -18,6 +17,7 @@ namespace IdentityBase.Actions.Login
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
+    using ServiceBase.Mvc;
 
     public class LoginController : WebController
     {

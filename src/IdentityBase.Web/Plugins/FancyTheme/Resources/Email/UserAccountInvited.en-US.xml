@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<EmailTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Subject>IdentityBase - Account Invited.</Subject>
+  <Text>
+    You have been invited, please click here to confirm your email address:
+    {ConfirmUrl}
+    If this was in error or not requested then click to cancel the request:
+    {CancelUrl}
+    Thanks!
+  </Text>
+  <Html>
+    <![CDATA[
+      You have been invited, please click here to confirm your email address:<br/>
+      <br />
+      <a href="{ConfirmUrl}">{ConfirmUrl}</a><br />
+      <br />
+      If this was in error or not requested then click to cancel the request:<br />
+      <br />
+      <a href="{CancelUrl}">{CancelUrl}</a><br />
+      <br />
+      Thanks!
+     ]]>
+  </Html>
+</EmailTemplate>

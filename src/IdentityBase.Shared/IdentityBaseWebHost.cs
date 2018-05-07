@@ -7,8 +7,10 @@ namespace IdentityBase
     using System.IO;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.DependencyInjection; 
 
     public static class IdentityBaseWebHost
     {
@@ -43,6 +45,10 @@ namespace IdentityBase
                 .UseUrls(configHost.GetValue<string>("Urls"))
                 .UseContentRoot(basePath)
                 .UseConfiguration(config)
+                .ConfigureServices((services) =>
+                {
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.AddSerilog(hostingContext.Configuration);

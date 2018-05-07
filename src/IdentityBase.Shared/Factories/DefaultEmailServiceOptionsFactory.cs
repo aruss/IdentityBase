@@ -4,16 +4,19 @@
 namespace IdentityBase
 {
     using System.Globalization;
+    using IdentityBase.DependencyInjection;
+    using ServiceBase.Mvc.Theming;
     using ServiceBase.Notification.Email;
 
     public class DefaultEmailServiceOptionsFactory :
         IServiceFactory<DefaultEmailServiceOptions>
     {
-        private readonly ThemeHelper _themeHelper;
+        private readonly IThemeInfoProvider _themeInfoProvider;
 
-        public DefaultEmailServiceOptionsFactory(ThemeHelper themeHelper)
+        public DefaultEmailServiceOptionsFactory(
+            IThemeInfoProvider themeInfoProvider)
         {
-            this._themeHelper = themeHelper;
+            this._themeInfoProvider = themeInfoProvider;
         }
 
         public DefaultEmailServiceOptions Build()
@@ -22,8 +25,8 @@ namespace IdentityBase
             {
                 DefaultCulture = CultureInfo.CurrentUICulture.Name,
 
-                TemplateDirectoryPath =
-                    this._themeHelper.GetEmailTemplatesDirectoryPath()
+                // TemplateDirectoryPath = ""
+                    // this._themeInfoProvider.GetEmailTemplatesDirectoryPath()
             };
         }
     }

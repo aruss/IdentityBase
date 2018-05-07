@@ -2,7 +2,7 @@ namespace DefaultTheme
 {
     using System;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Mvc.Plugins;
+    using ServiceBase.Plugins;
 
     public class ConfigureServicesAction : IConfigureServicesAction
     {

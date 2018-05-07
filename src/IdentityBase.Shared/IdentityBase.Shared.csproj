@@ -13,8 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Factories\**" />
+    <Compile Remove="Modules\**" />
     <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Factories\**" />
+    <EmbeddedResource Remove="Modules\**" />
     <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Factories\**" />
+    <None Remove="Modules\**" />
     <None Remove="Validation\**" />
   </ItemGroup>
 
@@ -24,6 +30,12 @@
     <Compile Remove="Configuration\Resources.cs" />
     <Compile Remove="Configuration\UserAccounts.cs" />
     <Compile Remove="Extensions\AuthenticationManagerExtensions.cs" />
+    <Compile Remove="ThemeHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Factories\DefaultEmailServiceOptionsFactory.cs" />
+    <Compile Include="Factories\IdentityBaseContextFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
     <ProjectReference Include="..\..\..\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
   </ItemGroup>
 

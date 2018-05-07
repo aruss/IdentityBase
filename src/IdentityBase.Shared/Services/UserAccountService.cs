@@ -15,6 +15,7 @@ namespace IdentityBase.Services
     using ServiceBase;
     using ServiceBase.Collections;
     using ServiceBase.Events;
+    using ServiceBase.Extensions;
 
     public class UserAccountService
     {

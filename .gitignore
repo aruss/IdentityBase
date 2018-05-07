@@ -204,3 +204,4 @@ examples/AspNetCoreWeb/wwwroot/lib/
 coverage/
 src/IdentityBase/TempData/
 src/IdentityBase/AppData/Logs/
+src/IdentityBase.Web/AppData/Logs/

@@ -4,7 +4,7 @@ namespace IdentityBase.ModelState
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-    public class RestoreModelState : ActionFilterAttribute
+    public class RestoreModelStateAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuted(
             ActionExecutedContext filterContext)

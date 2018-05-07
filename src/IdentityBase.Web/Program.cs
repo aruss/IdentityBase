@@ -3,10 +3,17 @@
 
 namespace IdentityBase
 {
+    using System;
+    using System.Diagnostics;
+
     public class Program
     {
         public static void Main(string[] args)
         {
+            int processId = Process.GetCurrentProcess().Id;
+            Console.WriteLine($"Process ID: {processId}");
+            Console.Title = $"IdentityBase.Web ({processId})"; 
+
             IdentityBaseWebHost.Run<Startup>(args);
         }
     }

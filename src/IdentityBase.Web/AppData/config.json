@@ -74,12 +74,13 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
-    "TempPath": "./AppData/Temp"
+    "TempPath": "./AppData/Temp",
+    "PluginsPath":  "./Plugins"
   },
   "WebApi": {
     "AutorityUrl": "http://localhost:5000",
     "ApiSecret": "secret",
-    "EnableSwagger":  true
+    "EnableSwagger": true
   },
   "Email": {
     
