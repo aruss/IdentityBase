@@ -1,10 +1,12 @@
-namespace FancyTheme
+namespace DefaultTheme
 {
     using System;
     using System.IO;
     using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Extensions;
     using ServiceBase.Plugins;
     using ServiceBase.Resources;
 
@@ -12,7 +14,7 @@ namespace FancyTheme
     {
         public void Execute(IApplicationBuilder app)
         {
-            Console.WriteLine("FancyTheme execute ConfigureAction");
+            Console.WriteLine("DefaultTheme execute ConfigureAction");
 
             IResourceStore resourceStore = app.ApplicationServices
                 .GetRequiredService<IResourceStore>();
@@ -20,29 +22,38 @@ namespace FancyTheme
             ApplicationOptions appOptions = app.ApplicationServices
                 .GetRequiredService<ApplicationOptions>();
 
-            // TODO: move to install action 
+            IHostingEnvironment env = app.ApplicationServices
+                .GetRequiredService<IHostingEnvironment>();
+
+            // TODO: Move to plugin definition 
+            string pluginName = "DefaultTheme";
+
+            string pluginPath = Path.Combine(
+                appOptions.PluginsPath.GetFullPath(env.ContentRootPath),
+                pluginName); 
+
+            // TODO: Move to install action 
             string localePath = Path.Combine(
-                appOptions.PluginsPath,
-                "FancyTheme",
+                pluginPath,
                 "Resources",
                 "Localization");
 
             resourceStore
                 .LoadLocalizationFromDirectoryAsync(
                     localePath,
-                    "FancyTheme")
+                    pluginName)
                 .Wait();
 
+            // TODO: Move to install action
             string emailTemplatePath = Path.Combine(
-                appOptions.PluginsPath,
-                "DefaultTheme",
+                pluginPath,
                 "Resources",
                 "Email");
 
             resourceStore
                 .LoadEmailTemplateFromDirectoryAsync(
-                    localePath,
-                    "DefaultTheme")
+                    emailTemplatePath,
+                    pluginName)
                 .Wait();
         }
     }

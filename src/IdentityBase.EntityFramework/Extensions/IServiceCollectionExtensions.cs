@@ -12,7 +12,7 @@ namespace IdentityBase.EntityFramework
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
-    public static class IServiceCollectionExtensions
+    public static partial class IServiceCollectionExtensions
     {
         public static void AddEntityFrameworkStores(
             this IServiceCollection services,

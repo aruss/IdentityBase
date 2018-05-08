@@ -47,22 +47,19 @@ namespace IdentityBase.Web.Controllers.Account
 
         [HttpPost("account/change-email", Name = "ChangeEmail")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeEmail()
+        public Task<IActionResult> ChangeEmail()
         {
-            
-
-            return this.RedirectToRoute("Account"); 
+            return Task.FromResult<IActionResult>(
+                this.RedirectToRoute("Account")); 
         }
 
         [HttpPost("account/change-password", Name = "ChangePassword")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword()
+        public Task<IActionResult> ChangePassword()
         {
-
-
-            return this.RedirectToRoute("Account");
+            return Task.FromResult<IActionResult>(
+                this.RedirectToRoute("Account")); 
         }
-
 
         [HttpGet("email/confirm", Name = "EmailConfirm")]
         public async Task<IActionResult> Confirm([FromQuery]string key)

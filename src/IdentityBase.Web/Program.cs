@@ -5,6 +5,9 @@ namespace IdentityBase
 {
     using System;
     using System.Diagnostics;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase;
 
     public class Program
     {
@@ -12,9 +15,13 @@ namespace IdentityBase
         {
             int processId = Process.GetCurrentProcess().Id;
             Console.WriteLine($"Process ID: {processId}");
-            Console.Title = $"IdentityBase.Web ({processId})"; 
+            Console.Title = $"IdentityBase.Web ({processId})";
 
-            IdentityBaseWebHost.Run<Startup>(args);
+            WebHostWrapper.Start<Startup>(args, (services) =>
+            {
+                services
+                    .AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            });
         }
     }
 }

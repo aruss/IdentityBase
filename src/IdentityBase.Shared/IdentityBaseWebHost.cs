@@ -10,12 +10,14 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.DependencyInjection; 
+    using Microsoft.Extensions.DependencyInjection;
+    using System.Diagnostics;
 
-    public static class IdentityBaseWebHost
+    public static class IdentityBaseWebHostXXXX
     {
         public static void Run<TStartup>(string[] args) where TStartup : class
         {
+
             IdentityBaseWebHost.Run<TStartup>(
                 args,
                 Directory.GetCurrentDirectory());

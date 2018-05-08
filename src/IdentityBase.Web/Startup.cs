@@ -67,7 +67,7 @@ namespace IdentityBase
             this._pluginsPath = this._applicationOptions.PluginsPath
                 .GetFullPath(this._environment.ContentRootPath);
 
-#if DYNAMIC
+#if PUBLISH
             // Load plugins dynamically at tuntime 
             this._logger.LogInformation("Loading plugins dynamically.");
             PluginAssembyLoader.LoadAssemblies(this._pluginsPath);
@@ -75,8 +75,8 @@ namespace IdentityBase
             // Statically add plugin assemblies for debugging 
             // You can add and remove active plugins here
             this._logger.LogInformation("Loading plugins statically.");
-            Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
-            Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
+            //Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
+            //Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
             //Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
             //Console.WriteLine(typeof(PluginB.PluginBPlugin));
 #endif

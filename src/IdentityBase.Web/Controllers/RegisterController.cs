@@ -415,9 +415,9 @@ namespace IdentityBase.Web.Controllers.Register
         }
 
         [HttpGet("register/complete", Name = "RegisterComplete")]
-        public async Task<IActionResult> Complete()
+        public Task<IActionResult> Complete()
         {
-            return this.View("Complete");
+            return Task.FromResult<IActionResult>(this.View("Complete"));
         }
 
         // Currently is only used for invitations 

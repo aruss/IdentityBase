@@ -1,4 +1,4 @@
-namespace IdentityBase.EntityFramework
+namespace IdentityBase.EntityFramework.DbInitializer
 {
     using System.Linq;
     using IdentityBase.Configuration;

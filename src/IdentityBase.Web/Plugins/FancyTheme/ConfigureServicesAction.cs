@@ -1,4 +1,4 @@
-namespace FancyTheme
+namespace DefaultTheme
 {
     using System;
     using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +8,7 @@ namespace FancyTheme
     {
         public void Execute(IServiceCollection services)
         {
-            Console.WriteLine("FancyTheme execute ConfigureServicesAction");
-
-            //return Task.CompletedTask;
+            Console.WriteLine("DefaultTheme execute ConfigureServicesAction");
         }
     }
 }

@@ -1,10 +1,10 @@
 {
-  "name": "fancy-theme",
-  "version": "1.0.0",
+  "name": "default-theme",
   "private": true,
-  "description": "Fancy theme for IdentityBase, it contains more AJAX thingies.",
+  "version": "1.0.0",
+  "description": "Default theme for IdentityBase frontend.",
   "scripts": {
-    
+
   },
   "author": "Russlan Akiev",
   "license": "MIT",

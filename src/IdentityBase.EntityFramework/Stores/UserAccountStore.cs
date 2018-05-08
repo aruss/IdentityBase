@@ -246,12 +246,13 @@ namespace IdentityBase.EntityFramework.Stores
             return Task.FromResult<ExternalAccount>(null);
         }
 
-        public async Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(
+        public Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(
             int take,
             int skip = 0,
             Guid? invitedBy = null)
         {
-            var baseQuery = this._context.UserAccounts
+            IQueryable<Entities.UserAccount> baseQuery = this._context
+                .UserAccounts
                 .Where(c => c.CreationKind == (int)CreationKind.Invitation);
 
             if (invitedBy.HasValue)
@@ -259,7 +260,7 @@ namespace IdentityBase.EntityFramework.Stores
                 baseQuery = baseQuery.Where(c => c.CreatedBy == invitedBy);
             }
 
-            var result = new PagedList<UserAccount>
+            PagedList<UserAccount> result = new PagedList<UserAccount>
             {
                 Skip = skip,
                 Take = take,
@@ -282,7 +283,7 @@ namespace IdentityBase.EntityFramework.Stores
             //    email,
             //    model != null);
 
-            return result;
+            return Task.FromResult(result); 
         }
     }
 }

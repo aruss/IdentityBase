@@ -1,4 +1,4 @@
-namespace IdentityBase.EntityFramework
+namespace IdentityBase.EntityFramework.DbInitializer
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,6 @@ namespace IdentityBase.EntityFramework
     using IdentityBase.EntityFramework.Configuration;
     using IdentityBase.EntityFramework.Interfaces;
     using IdentityBase.EntityFramework.Mappers;
-    using IdentityBase.EntityFramework.Services;
     using IdentityBase.Models;
     using IdentityServer4.Models;
     using Microsoft.AspNetCore.Hosting;
@@ -16,6 +15,7 @@ namespace IdentityBase.EntityFramework
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
+    using ServiceBase.Extensions;
 
     public class ConfigBasedStoreInitializer
     {
@@ -78,16 +78,16 @@ namespace IdentityBase.EntityFramework
                 this._logger.LogDebug("Initial data seeded");
             }
 
-            if (this._options.EnableTokenCleanup)
-            {
-                using (var serviceScope = _serviceProvider
-                    .GetRequiredService<IServiceScopeFactory>()
-                    .CreateScope())
-                {
-                    serviceScope.ServiceProvider
-                        .GetService<TokenCleanupService>().Start();
-                }
-            }
+            // if (this._options.EnableTokenCleanup)
+            // {
+            //     using (var serviceScope = _serviceProvider
+            //         .GetRequiredService<IServiceScopeFactory>()
+            //         .CreateScope())
+            //     {
+            //         serviceScope.ServiceProvider
+            //             .GetService<TokenCleanupService>().Start();
+            //     }
+            // }
         }
 
         public void CleanupStores()
@@ -102,16 +102,16 @@ namespace IdentityBase.EntityFramework
                 this._logger.LogDebug("Database deleted");
             }
 
-            if (this._options.EnableTokenCleanup)
-            {
-                using (var serviceScope = _serviceProvider
-                    .GetRequiredService<IServiceScopeFactory>()
-                    .CreateScope())
-                {
-                    serviceScope.ServiceProvider
-                        .GetService<TokenCleanupService>().Stop();
-                }
-            }
+            // if (this._options.EnableTokenCleanup)
+            // {
+            //     using (var serviceScope = _serviceProvider
+            //         .GetRequiredService<IServiceScopeFactory>()
+            //         .CreateScope())
+            //     {
+            //         serviceScope.ServiceProvider
+            //             .GetService<TokenCleanupService>().Stop();
+            //     }
+            // }
         }
 
         internal virtual void EnsureSeedData()
