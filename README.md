@@ -76,8 +76,3 @@ IdentityBase is built using the following great open source projects
 * [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
 * [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)
 
-
-<hr/>
-<p align="center">
-IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>
-</p>
