@@ -77,6 +77,7 @@ namespace IdentityBase
             this._logger.LogInformation("Loading plugins statically.");
             //Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
             Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
+            Console.WriteLine(typeof(EntityFramework.DbInitializer.ConfigureServicesAction));
             //Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
             //Console.WriteLine(typeof(PluginB.PluginBPlugin));
 #endif

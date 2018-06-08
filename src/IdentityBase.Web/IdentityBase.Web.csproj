@@ -107,6 +107,7 @@
     <ProjectReference Include="..\..\..\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
     <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
     <ProjectReference Include="Plugins\IdentityBase.EntityFramework.InMemory\IdentityBase.EntityFramework.InMemory.csproj" />
+    <ProjectReference Include="Plugins\IdentityBase.EntityFramework.zDbInitializer\IdentityBase.EntityFramework.zDbInitializer.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="AppData\idsvr3test.pfx">
