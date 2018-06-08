@@ -75,6 +75,7 @@ namespace IdentityBase
 
             if (environment.IsDevelopment())
             {
+
                 builder.AddDeveloperSigningCredential(
                     false,
                     Path.Combine(

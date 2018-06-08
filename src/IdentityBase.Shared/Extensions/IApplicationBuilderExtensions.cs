@@ -24,17 +24,6 @@ namespace IdentityBase.Extensions
             Action<IApplicationBuilder> appBuilderConfiguration)
             // where TStartup : class
         {
-            /*var webHost = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(environment.ContentRootPath)
-                .UseConfiguration(configuration)
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.AddSerilog(hostingContext.Configuration);
-                })
-                .UseStartup<TStartup>()
-                .Build();*/
-
             IWebHost webHost = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(environment.ContentRootPath)

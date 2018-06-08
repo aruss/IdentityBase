@@ -1,5 +1,2 @@
-FROM microsoft/aspnetcore:2.0
-WORKDIR /app
-EXPOSE 5000
-COPY ./app .
-ENTRYPOINT ["dotnet", "IdentityBase.dll"]
+FROM nginx
+COPY ./html /usr/share/nginx/html

@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\IdentityBase\bin\Debug\netcoreapp2.0\</OutputPath>
-    <DocumentationFile>..\IdentityBase\bin\Debug\netcoreapp2.0\netcoreapp2.0\IdentityBase.WebApi.xml</DocumentationFile>
+    <OutputPath>..\IdentityBase\bin\Debug\netcoreapp2.1\</OutputPath>
+    <DocumentationFile>..\IdentityBase\bin\Debug\netcoreapp2.1\netcoreapp2.1\IdentityBase.WebApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

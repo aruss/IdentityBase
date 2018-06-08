@@ -3,7 +3,6 @@
 
 namespace IdentityBase
 {
-    using System.Linq;
     using IdentityBase.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -11,12 +10,6 @@ namespace IdentityBase
 
     public static partial class IServiceCollectionExtensions
     {
-        public static bool IsAdded<TService>(
-            this IServiceCollection services)
-        {
-            return services.Any(d => d.ServiceType == typeof(TService));
-        }
-
         public static void AddDefaultEmailService(
             this IServiceCollection services,
             IConfiguration configuration)

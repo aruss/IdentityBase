@@ -7,7 +7,7 @@ namespace IdentityBase.Extensions
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Newtonsoft.Json;
 
-    public static partial class TempDataExtensions
+    public static partial class ITempDataDictionaryExtensions
     {
         public static bool TryLoadData<T>(
             this ITempDataDictionary tempData,
@@ -20,7 +20,7 @@ namespace IdentityBase.Extensions
             {
                 string value = tempData[entryKey] as string;
                 byte[] bytes = Convert.FromBase64String(value);
-                value = TempDataExtensions.Decompress(bytes);
+                value = ITempDataDictionaryExtensions.Decompress(bytes);
                 data = JsonConvert.DeserializeObject<T>(value);
                 tempData.Remove(entryKey);
 
@@ -41,7 +41,7 @@ namespace IdentityBase.Extensions
 
             string entryKey = data.GetType().Name;
             string value = JsonConvert.SerializeObject(data);
-            byte[] bytes = TempDataExtensions.Compress(value);
+            byte[] bytes = ITempDataDictionaryExtensions.Compress(value);
 
             if (bytes != null)
             {

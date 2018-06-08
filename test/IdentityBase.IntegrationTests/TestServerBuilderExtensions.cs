@@ -69,6 +69,7 @@ namespace IdentityBase.IntegrationTests
                         builder.Build(),
                         environment,
                         new NullLoggerFactory(),
+                        null,
                         messageHandlerFactory
                     );
 

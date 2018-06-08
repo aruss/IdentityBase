@@ -76,7 +76,7 @@ namespace IdentityBase
             // You can add and remove active plugins here
             this._logger.LogInformation("Loading plugins statically.");
             //Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
-            //Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
+            Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
             //Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
             //Console.WriteLine(typeof(PluginB.PluginBPlugin));
 #endif
@@ -202,8 +202,6 @@ namespace IdentityBase
             app.UsePlugins();
             app.UsePluginsMvc();
             app.UsePluginsStaticFiles(this._pluginsPath);
-
-        
 
             this._logger.LogInformation("Configure application.");
         }

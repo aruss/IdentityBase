@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors>Russlan Akiev</Authors>
     <Company />
@@ -30,6 +30,11 @@
     <Compile Remove="Configuration\Resources.cs" />
     <Compile Remove="Configuration\UserAccounts.cs" />
     <Compile Remove="Extensions\AuthenticationManagerExtensions.cs" />
+    <Compile Remove="Extensions\IHtmlHelperExtensions.cs" />
+    <Compile Remove="Extensions\ITempDataDictionaryExtensions.cs" />
+    <Compile Remove="Extensions\ModelStateDictionaryExtensions.cs" />
+    <Compile Remove="Extensions\StreamExtensions.cs" />
+    <Compile Remove="Extensions\StringExtensions.cs" />
     <Compile Remove="IdentityBaseWebHost.cs" />
     <Compile Remove="ThemeHelper.cs" />
   </ItemGroup>
@@ -41,11 +46,11 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

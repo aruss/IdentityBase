@@ -1,0 +1,13 @@
+version: "2.0"
+
+services:
+     
+  # https://hub.docker.com/_/mysql/
+  mysql:
+    container_name: idbase-mysql
+    restart: unless-stopped
+    image: mysql
+    ports:
+      - 8080:8080
+    environment:
+      - MYSQL_ROOT_PASSWORD: example
