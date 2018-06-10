@@ -5,7 +5,7 @@ services:
   # https://hub.docker.com/_/postgres/
   postgres:  
     container_name: idbase-postgres
-    image: postgres
+    image: postgres:9.6.3-alpine
     restart: unless-stopped
     ports:
       - 5432:5432

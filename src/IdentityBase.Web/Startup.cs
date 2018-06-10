@@ -4,13 +4,9 @@
 
 namespace IdentityBase
 {
-    using System;
-    using System.IO;
-    using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.DependencyInjection;
-    using IdentityBase.Extensions;
     using IdentityBase.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -21,11 +17,11 @@ namespace IdentityBase
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase;
-    using ServiceBase.Events;
     using ServiceBase.Extensions;
     using ServiceBase.Mvc.Theming;
-    using ServiceBase.Notification.Email;
     using ServiceBase.Plugins;
+    using System;
+    using System.Net.Http;
 
     /// <summary>
     /// Application startup class
@@ -67,20 +63,16 @@ namespace IdentityBase
             this._pluginsPath = this._applicationOptions.PluginsPath
                 .GetFullPath(this._environment.ContentRootPath);
 
-#if PUBLISH
-            // Load plugins dynamically at tuntime 
+            string[] whiteList = this._configuration.GetSection("Plugins")
+                .Get<string[]>() ?? new string[]
+                {
+                    "DefaultTheme",
+                    "IdentityBase.EntityFramework.InMemory",
+                    "IdentityBase.EntityFramework.zDbInitializer"
+                }; 
+
             this._logger.LogInformation("Loading plugins dynamically.");
-            PluginAssembyLoader.LoadAssemblies(this._pluginsPath);
-#else
-            // Statically add plugin assemblies for debugging 
-            // You can add and remove active plugins here
-            this._logger.LogInformation("Loading plugins statically.");
-            //Console.WriteLine(typeof(DefaultTheme.ConfigureServicesAction));
-            Console.WriteLine(typeof(EntityFramework.InMemory.ConfigureServicesAction));
-            Console.WriteLine(typeof(EntityFramework.DbInitializer.ConfigureServicesAction));
-            //Console.WriteLine(typeof(EntityFramework.SqlServer.ConfigureServicesAction));
-            //Console.WriteLine(typeof(PluginB.PluginBPlugin));
-#endif
+            PluginAssembyLoader.LoadAssemblies(this._pluginsPath, whiteList);
         }
 
         /// <summary>

@@ -1,14 +1,22 @@
 #!/bin/bash
 
+# Creates a dist package for selected runtime and plugins
+
 RUNTIMES=( \
 "win7-x64" \
 #"linux-x64" \
 )
 
-PLUGINS=(\
+PLUGINS=( \
 "DefaultTheme" \
 "IdentityBase.EntityFramework.InMemory" \
-"IdentityBase.EntityFramework.DbInitializer" \
+"IdentityBase.EntityFramework.MySql" \
+"IdentityBase.EntityFramework.Npgsql" \
+"IdentityBase.EntityFramework.SqlServer" \
+"IdentityBase.EntityFramework.zDbInitializer" \
+"IdentityBase.SendGrid" \
+"IdentityBase.Smtp" \
+"IdentityBase.Twilio"
 )
 
 for runtime in "${RUNTIMES[@]}"
@@ -21,7 +29,7 @@ do
 
     # Publish the host application
     dotnet publish ./src/IdentityBase.Web/IdentityBase.Web.csproj \
-        -c Publish -r $runtime -o ../../$output
+        -c Release -r $runtime -o ../../$output
 
     # Publish all the plugins
     for plugin in "${PLUGINS[@]}"
@@ -43,3 +51,7 @@ do
         done
     done
 done
+
+# Windows specific stuff
+
+# Linux specific stuff

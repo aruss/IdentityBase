@@ -8,7 +8,6 @@ namespace AspNetCoreWeb
     using IdentityModel;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Authentication.OAuth.Claims;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.Extensions.DependencyInjection;

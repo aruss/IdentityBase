@@ -48,11 +48,11 @@ For upcoming features see [Issues](https://github.com/IdentityBaseNet/IdentityBa
 
 ### Platform
 
-IdentityBase is built against ASP.NET Core 2.0 using the tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
+IdentityBase is built against ASP.NET Core 2.1 using the tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
 
 ### How to build
 
-* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 2.0
+* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 2.1
 * Use Visual Studio 2017 to build it
 
 ### Docker support
@@ -63,21 +63,24 @@ You can either build it from source code by running the `build.sh` script in `./
 
 It will start a IdentityBase with in memory store, with default client configuration and dummy users `alice@localhost` and `bob@localhost` (password is the email).
 
-See `./samples` folder and/or [IdentityServer examples repository](https://github.com/IdentityServer/IdentityServer4.Samples) for client samples.
+See `./examples` folder and/or [IdentityServer examples repository](https://github.com/IdentityServer/IdentityServer4.Samples) for client examples.
 
 ### Acknowledgements
 
 IdentityBase is built using the following great open source projects
 
 * [ASP.NET Core](https://github.com/aspnet)
+* [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
+* [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)
 * [Json.Net](http://www.newtonsoft.com/json)
 * [XUnit](https://xunit.github.io/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
-* [IdentityServer4](https://github.com/IdentityServer/IdentityServer4)
-* [BrockAllen.MembershipReboot](https://github.com/brockallen/BrockAllen.MembershipReboot)
+* [Serilog](https://serilog.net/)
 
 
-<hr/>
-<p align="center">
-IdentityBase is sponsored by <a  target="_blank" href="http://netzkern.de">netzkern AG</a>
-</p>
+### Long Paths
+If you find after cloning the repository that some files are checked out or marked for deletion make sure to run this command.
+
+  git config --global core.longpaths true
+
+Then clone the repository again.

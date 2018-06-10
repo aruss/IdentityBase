@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ./tools/updeps.exe \
 	./src/IdentityBase/IdentityBase.csproj \
 	./src/IdentityBase.EntityFramework/IdentityBase.EntityFramework.csproj \

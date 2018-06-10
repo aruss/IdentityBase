@@ -32,8 +32,4 @@
   <ItemGroup>
     <ProjectReference Include="..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Modules\" />
-  </ItemGroup>
 </Project>

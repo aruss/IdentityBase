@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace AspNetCoreWeb
 {
+    /// <summary>
+    /// This is a place holder class for all the resources.
+    /// </summary>
     public class SharedResources
     {
     }

@@ -1,9 +1,9 @@
 namespace AspNetCoreApi
 {
+    using System;
+    using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
-    using IdentityServer4.AccessTokenValidation;
-    using System;
 
     public class Startup
     {
@@ -27,12 +27,12 @@ namespace AspNetCoreApi
                     options.RequireHttpsMetadata = false;
 
                     options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromSeconds(5); 
+                    options.CacheDuration = TimeSpan.FromSeconds(5);
 
-                    // used for retrospection calls
+                    // Used for retrospection calls
                     options.ApiName = "api1";
                     options.ApiSecret = "secret";
-                });            
+                });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -40,9 +40,8 @@ namespace AspNetCoreApi
             app.UseCors(policy =>
             {
                 policy.WithOrigins(
-                    "http://localhost:28895", // AspNetCoreWeb
-                    "http://localhost:7017",
-                    "http://localhost:3000"); // phonegap app
+                    "http://localhost:21402", // AspNetCoreWeb
+                    "http://localhost:3000"); // PhoneGap app
 
                 policy.AllowAnyHeader();
                 policy.AllowAnyMethod();

@@ -17,7 +17,7 @@
         "Name": "RollingFile",
         "Args": {
           "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-          "pathFormat": "./AppData/Logs/IdentityBase.json",
+          "pathFormat": "./logs/identitybase.json",
           "fileSizeLimitBytes": 1234567
         }
       }
@@ -28,9 +28,9 @@
     "MigrateDatabase": true,
     "SeedExampleData": true,
     "EnableTokenCleanup": false,
-    "SeedExampleDataPath": "./AppData",
+    "SeedExampleDataPath": "./config",
     "Npgsql": {
-      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;"
     },
     "SqlServer": {
       "ConnectionString": "Server=.\\SQLEXPRESS;Database=IdentityBase;User ID=dev;Password=dev"
@@ -44,10 +44,21 @@
   },
   "IdentityServer": {
     "SigningCredentialFromPfx": {
-      "Path": "./AppData/idsvr3test.pfx",
+      "Path": "./temp/idsvr3test.pfx",
       "Password": "idsrv3test"
     }
   },
+  "Plugins": [
+    "DefaultTheme",
+    "IdentityBase.EntityFramework.InMemory",
+    //"IdentityBase.EntityFramework.MySql",
+    //"IdentityBase.EntityFramework.Npgsql",
+    //"IdentityBase.EntityFramework.SqlServer",
+    "IdentityBase.EntityFramework.zDbInitializer",
+    //"IdentityBase.SendGrid",
+    //"IdentityBase.Smtp",
+    //"IdentityBase.Twilio"
+  ],
   "App": {
     "EnableWebApi": false,
     "PasswordHashingIterationCount": 0,
@@ -74,8 +85,8 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
-    "TempPath": "./AppData/Temp",
-    "PluginsPath":  "./Plugins"
+    "TempPath": "./temp",
+    "PluginsPath": "./Plugins"
   },
   "WebApi": {
     "AutorityUrl": "http://localhost:5000",
@@ -83,9 +94,9 @@
     "EnableSwagger": true
   },
   "Email": {
-    
+
   },
   "Sms": {
 
-  }  
+  }
 }

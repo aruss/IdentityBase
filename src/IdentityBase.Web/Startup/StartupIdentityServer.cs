@@ -75,13 +75,12 @@ namespace IdentityBase
 
             if (environment.IsDevelopment())
             {
-
                 builder.AddDeveloperSigningCredential(
                     false,
                     Path.Combine(
                         appOptions.TempPath.GetFullPath(
                             environment.ContentRootPath),
-                        "tempkey.rsa"
+                            "tempkey.rsa"
                     )
                 );
             }

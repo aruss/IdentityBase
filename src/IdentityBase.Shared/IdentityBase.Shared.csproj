@@ -13,35 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Factories\**" />
-    <Compile Remove="Modules\**" />
-    <Compile Remove="Validation\**" />
-    <EmbeddedResource Remove="Factories\**" />
-    <EmbeddedResource Remove="Modules\**" />
-    <EmbeddedResource Remove="Validation\**" />
-    <None Remove="Factories\**" />
-    <None Remove="Modules\**" />
-    <None Remove="Validation\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Configuration\ApplicationOptionsExtensions.cs" />
-    <Compile Remove="Configuration\Clients.cs" />
-    <Compile Remove="Configuration\Resources.cs" />
-    <Compile Remove="Configuration\UserAccounts.cs" />
-    <Compile Remove="Extensions\AuthenticationManagerExtensions.cs" />
-    <Compile Remove="Extensions\IHtmlHelperExtensions.cs" />
-    <Compile Remove="Extensions\ITempDataDictionaryExtensions.cs" />
-    <Compile Remove="Extensions\ModelStateDictionaryExtensions.cs" />
-    <Compile Remove="Extensions\StreamExtensions.cs" />
-    <Compile Remove="Extensions\StringExtensions.cs" />
-    <Compile Remove="IdentityBaseWebHost.cs" />
-    <Compile Remove="ThemeHelper.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Factories\DefaultEmailServiceOptionsFactory.cs" />
-    <Compile Include="Factories\IdentityBaseContextFactory.cs" />
+    <None Remove="README.md" />
   </ItemGroup>
 
   <ItemGroup>
