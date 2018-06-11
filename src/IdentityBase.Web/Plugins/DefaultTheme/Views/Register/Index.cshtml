@@ -17,17 +17,15 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-
                     <form asp-controller="Register"
                           asp-action="Index"
                           asp-route-returnUrl="@Model.ReturnUrl" novalidate>
-
                         <fieldset>
                             <div class="form-group">
                                 <label asp-for="Email"></label>
                                 <input class="form-control"
                                        placeholder="@Localizer["Enter email"]"
-                                       asp-for="Email" autofocus>
+                                       asp-for="Email" autofocus />
                             </div>
                             <div class="form-group">
                                 <label asp-for="Password"></label>
@@ -35,7 +33,7 @@
                                        class="form-control"
                                        placeholder="@Localizer["Enter password"]"
                                        asp-for="Password"
-                                       autocomplete="off">
+                                       autocomplete="off" />
                             </div>
                             <div class="form-group">
                                 <label asp-for="PasswordConfirm"></label>
@@ -43,9 +41,8 @@
                                        class="form-control"
                                        placeholder="@Localizer["Enter password"]"
                                        asp-for="PasswordConfirm"
-                                       autocomplete="off">
+                                       autocomplete="off" />
                             </div>
-
                             <div class="form-group">
                                 <button class="btn btn-primary" localize="">
                                     Register
@@ -53,7 +50,6 @@
                             </div>
                         </fieldset>
                     </form>
-
                     <ul class="list-inline">
                         <li show-if="@Model.EnableLocalLogin">
                             <a asp-route="Login"
