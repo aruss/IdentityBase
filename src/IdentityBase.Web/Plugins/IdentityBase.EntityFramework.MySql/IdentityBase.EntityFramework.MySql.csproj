@@ -12,11 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
-  </ItemGroup>
-  
+   
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
     <ProjectReference Include="..\..\..\IdentityBase.EntityFramework\IdentityBase.EntityFramework.csproj" />
