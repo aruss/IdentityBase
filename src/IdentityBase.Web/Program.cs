@@ -13,9 +13,7 @@ namespace IdentityBase
     {
         public static void Main(string[] args)
         {
-            int processId = Process.GetCurrentProcess().Id;
-            Console.WriteLine($"Process ID: {processId}");
-            Console.Title = $"IdentityBase.Web ({processId})"; // test how this behaves in docker environment
+            Console.WriteLine($"Process ID: {Process.GetCurrentProcess().Id}");
 
             WebHostWrapper.Start<Startup>(args, (services) =>
             {

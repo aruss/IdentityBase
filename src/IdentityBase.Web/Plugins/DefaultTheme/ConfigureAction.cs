@@ -1,6 +1,5 @@
 namespace DefaultTheme
 {
-    using System;
     using System.IO;
     using IdentityBase.Configuration;
     using Microsoft.AspNetCore.Builder;
@@ -14,8 +13,6 @@ namespace DefaultTheme
     {
         public void Execute(IApplicationBuilder app)
         {
-            Console.WriteLine("DefaultTheme execute ConfigureAction");
-
             IResourceStore resourceStore = app.ApplicationServices
                 .GetRequiredService<IResourceStore>();
 

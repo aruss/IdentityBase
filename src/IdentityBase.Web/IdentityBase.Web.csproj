@@ -11,6 +11,7 @@
     <PackageTags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</PackageTags>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
+	<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
   </PropertyGroup>
 
   <Target Name="CustomCollectFiles">

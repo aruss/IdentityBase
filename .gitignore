@@ -202,7 +202,6 @@ FakesAssemblies/
 examples/AspNetCoreWeb/wwwroot/lib/
 .build/
 coverage/
-src/IdentityBase/TempData/
-src/IdentityBase/AppData/Logs/
-src/IdentityBase.Web/AppData/Logs/
+dist/
+src/IdentityBase.Web/temp/
 src/IdentityBase.Web/logs/

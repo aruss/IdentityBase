@@ -1,6 +1,5 @@
 namespace DefaultTheme
 {
-    using System;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Plugins;
 
@@ -8,7 +7,7 @@ namespace DefaultTheme
     {
         public void Execute(IServiceCollection services)
         {
-            Console.WriteLine("DefaultTheme execute ConfigureServicesAction");
+            
         }
     }
 }

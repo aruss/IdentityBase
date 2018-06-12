@@ -134,7 +134,9 @@ namespace IdentityBase
 
             services.AddSingleton(provider);
             services.AddPlugins();
-            services.AddPluginsMvc(provider);
+            services.AddPluginsMvc(
+                provider,
+                this._applicationOptions.PluginsPath);
 
             // https://github.com/aspnet/Security/issues/1310
             // services
