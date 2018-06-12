@@ -1,13 +1,3 @@
-@using IdentityServer4.Extensions
-@{
-    string name = null;
-    if (!true.Equals(ViewData["signed-out"]))
-    {
-        var user = Context.User;
-        name = user?.FindFirst("name")?.Value;
-    }
-}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,61 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IdentityBase</title>
-    <link rel="icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
-    <link rel="shortcut icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
-    <link rel="stylesheet" href="~/DefaultTheme/lib/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/DefaultTheme/css/site.css" />
+    <link rel="icon" type="image/x-icon" href="~/FancyTheme/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/FancyTheme/favicon.ico" />
 </head>
 <body>
-
-    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed"
-                        data-toggle="collapse"
-                        data-target="#navbar"
-                        aria-expanded="false"
-                        aria-controls="navbar">
-                    <span class="sr-only" localize="">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <span class="navbar-brand"><img src="~/DefaultTheme/icon.png" class="icon-banner"> <span localize="">IdentityBase</span></span>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                @if (name != null)
-                {
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-route="account" localize="">Account</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a asp-route="logout" localize="">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                }
-            </div>
-        </div>
-    </nav>
-
-    <div class="container body-content">
-        @RenderBody()
-        @if (IdentityBaseContext.Client != null && IdentityBaseContext.Client.ClientUri != null)
-        {
-            <div class="page-footer">
-                <span>
-                    Click <a href="@IdentityBaseContext.Client.ClientUri">here</a>
-                    to return to the @IdentityBaseContext.Client.ClientName application.
-                </span>     
-            </div>
-        }
-    </div>
-
-    <script src="~/DefaultTheme/lib/jquery/jquery.js"></script>
-    <script src="~/DefaultTheme/lib/bootstrap/js/bootstrap.js"></script>
+    @RenderBody()
     @RenderSection("scripts", required: false)
 </body>
 </html>
