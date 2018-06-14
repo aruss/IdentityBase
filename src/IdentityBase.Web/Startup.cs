@@ -6,7 +6,7 @@ namespace IdentityBase
 {
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
-    using IdentityBase.DependencyInjection;
+    using ServiceBase.DependencyInjection;
     using IdentityBase.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

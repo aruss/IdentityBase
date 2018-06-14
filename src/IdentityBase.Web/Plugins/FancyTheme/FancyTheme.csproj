@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\submodules\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,7 +18,7 @@
   </ItemGroup>
    
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\submodules\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
     <ProjectReference Include="..\..\..\IdentityBase.EntityFramework\IdentityBase.EntityFramework.csproj" />
     <ProjectReference Include="..\..\..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
   </ItemGroup>

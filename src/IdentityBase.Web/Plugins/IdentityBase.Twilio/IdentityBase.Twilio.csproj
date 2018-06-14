@@ -14,9 +14,9 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase.Notification.Twilio\ServiceBase.Notification.Twilio.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
+    <ProjectReference Include="..\..\..\..\submodules\ServiceBase\src\ServiceBase.Mvc\ServiceBase.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\submodules\ServiceBase\src\ServiceBase.Notification.Twilio\ServiceBase.Notification.Twilio.csproj" />
+    <ProjectReference Include="..\..\..\..\submodules\ServiceBase\src\ServiceBase\ServiceBase.csproj" />
     <ProjectReference Include="..\..\..\IdentityBase.Shared\IdentityBase.Shared.csproj" />
   </ItemGroup>
 
