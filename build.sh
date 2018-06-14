@@ -28,8 +28,6 @@ for PATH1 in $SOURCEDIR/Plugins/*/ ; do
 	PLUGINSOURCEDIR=$SOURCEDIR/Plugins/$PLUGIN
     PLUGINBUILDDIR=$BUILDDIR/plugins/$PLUGIN
 
-    echo $PLUGIN
-
 	# Cleanup, restore and compile plugins
 	rm -rf $PLUGINSOURCEDIR/bin
     rm -rf $PLUGINSOURCEDIR/obj
