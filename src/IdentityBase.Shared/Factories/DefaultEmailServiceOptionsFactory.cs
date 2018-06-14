@@ -4,7 +4,7 @@
 namespace IdentityBase
 {
     using System.Globalization;
-    using IdentityBase.DependencyInjection;
+    using ServiceBase.DependencyInjection;
     using ServiceBase.Mvc.Theming;
     using ServiceBase.Notification.Email;
 

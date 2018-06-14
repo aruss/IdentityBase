@@ -3,7 +3,7 @@
 
 namespace IdentityBase
 {
-    using IdentityBase.DependencyInjection;
+    using ServiceBase.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Notification.Email;

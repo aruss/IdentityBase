@@ -81,6 +81,6 @@ IdentityBase is built using the following great open source projects
 ### Long Paths
 If you find after cloning the repository that some files are checked out or marked for deletion make sure to run this command.
 
-  git config --global core.longpaths true
+  `git config --global core.longpaths true`
 
 Then clone the repository again.
