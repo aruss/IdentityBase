@@ -3,7 +3,8 @@
 # move files to git releases
 # publish docker image
 
-echo "publish here"
+#docker login -u="$DOCKER_USER" -p="$eDOCKER_PASS"
+#docker push identitybasenet/identitybase:$APPVEYOR_BUILD_VERSION
 
-#docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASS"
-#docker push me/myfavoriteapp
+echo "create GitHub release"
+./tools/ghr -t "$GITHUB_TOKEN" -u "IdentityBaseNet" -r "IdentityBase" -c "$APPVEYOR_REPO_COMMIT" -delete -draft v$APPVEYOR_BUILD_VERSION ./build
