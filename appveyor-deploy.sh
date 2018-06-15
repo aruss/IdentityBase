@@ -7,4 +7,4 @@
 #docker push identitybasenet/identitybase:$APPVEYOR_BUILD_VERSION
 
 echo "create GitHub release"
-./tools/ghr -t "$GITHUB_TOKEN" -u "IdentityBaseNet" -r "IdentityBase" -c "$APPVEYOR_REPO_COMMIT" -delete -draft v$APPVEYOR_BUILD_VERSION ./build
+sudo ./tools/ghr -t "$GITHUB_TOKEN" -u "IdentityBaseNet" -r "IdentityBase" -c "$APPVEYOR_REPO_COMMIT" -delete -draft v$APPVEYOR_BUILD_VERSION ./build

@@ -3,8 +3,8 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 echo "install required tools"
-apt-get update
-apt-get --assume-yes install zip
+sudo apt-get update
+sudo apt-get --assume-yes install zip
 
 echo "build windows version"
 sh build.sh win7-x64 $APPVEYOR_BUILD_VERSION
