@@ -10,8 +10,8 @@ echo "create GitHub release"
 
 echo "debug -------------------------------------------"
 echo "DIR = $DIR"
-cd ls $DIR/tools -l
-cd ls $DIR/build -l
-ehco "debug -------------------------------------------"
+ls $DIR/tools -l
+ls $DIR/build -l
+echo "debug -------------------------------------------"
 
 sudo $DIR/tools/ghr -t "$GITHUB_TOKEN" -u "IdentityBaseNet" -r "IdentityBase" -c "$APPVEYOR_REPO_COMMIT" -delete -draft v$APPVEYOR_BUILD_VERSION $DIR/build
