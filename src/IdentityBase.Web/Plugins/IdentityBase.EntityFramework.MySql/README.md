@@ -9,7 +9,7 @@ MySQL data provider for IdentityBase.
 
 ### Used libraries
 
-- EntityFramework 7 https://docs.microsoft.com/en-us/ef/
+- EntityFramework https://docs.microsoft.com/en-us/ef/
 - Pomelo MySQL data provider https://docs.microsoft.com/en-us/ef/core/providers/pomelo/
 
 ### Create migration files
@@ -25,7 +25,6 @@ version: "2.0"
 
 services:
   mysql-svc:
-    container_name: idbase-dev-mysql
     image: mysql:5.7
     restart: always
     environment:

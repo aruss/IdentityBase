@@ -1,20 +1,17 @@
-# IdentityBase.EntityFramework.InMemory
+# IdentityBase.EntityFramework.zDbInitializer
 
-Microsoft SQL Server data provider for IdentityBase.
+Data base initializer. This library will check if tables a present in the
+database and it will run the migration scripts of a used data access plugin.
 
-### Requirements 
+If configured it will also seed example data. 
 
-- SQL Server Express
-    - Database named `IdentityBase` with login (username: `dev`, password `dev`) as `db_owner`
+### Note!
+
+The prefix `z` in the name `zDbInitializer` is a hack to load the plugin after
+all the data access plugins, check that your plugin does not starts with
+`IdentityBase.EntityFramework.zz` This will be obsolete as soon plugin meta
+data will be introduced.
 
 ### Used libraries
 
-- EntityFramework 7 https://docs.microsoft.com/en-us/ef/
-- Microsoft SQL Server data provider https://docs.microsoft.com/en-us/ef/core/providers/sql-server/
-
-### Create migration files, for development only 
-
-```sh
-dotnet ef migrations add init --context MigrationDbContext
-```
-
+- EntityFramework https://docs.microsoft.com/en-us/ef/

@@ -8,7 +8,7 @@ PostgreSQL data provider for IdentityBase.
 
 ### Used libraries
 
-- EntityFramework 7 https://docs.microsoft.com/en-us/ef/
+- EntityFramework https://docs.microsoft.com/en-us/ef/
 - Npgsql PostgreSQL data provider https://docs.microsoft.com/en-us/ef/core/providers/npgsql/
 
 ### Create migration files
@@ -24,7 +24,6 @@ version: "2.0"
 
 services:
   postgres-svc:  
-    container_name: idbase-dev-postgres
     image: postgres:9.6.3-alpine
     restart: always
     ports:
