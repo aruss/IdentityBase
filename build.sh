@@ -1,8 +1,23 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-RUNTIME="linux-x64"
-VERSION="2.0.0"
+
+# checking for runtime ./build.sh linux-x64
+if [ "$0" != "" ]; then
+    RUNTIME=$0
+else
+    echo "Runtime is not specified"
+    exit 1
+fi
+
+# checking for version ./build.sh linux-x64 2.0.0
+if [ "$2" != "" ]; then
+    VERSION=$2
+else
+    echo "Version is not specified"
+    exit 1
+fi
+
 SOURCEDIR=$DIR/src/IdentityBase.Web
 BUILDDIR=$DIR/build/$RUNTIME/identitybase-$VERSION
 
@@ -14,33 +29,34 @@ echo "Copy distribution files"
 cp -r $DIR/distribution/$RUNTIME/. $BUILDDIR
 
 echo "Cleanup, restore and compile host application"
-rm -rf $SOURCEDIR/bin
-rm -rf $SOURCEDIR/obj
+rm -rf $SOURCEDIR/bin 2> /dev/null
+rm -rf $SOURCEDIR/obj 2> /dev/null
 dotnet publish $SOURCEDIR/IdentityBase.Web.csproj -c Release -r $RUNTIME -o $BUILDDIR/lib --force
 
 # Get a list of all host application assemblies
 HOSTASSEMBLIES=$( ls $BUILDDIR/lib/*.* )
 
-# Loop throw all plugin source folders
+echo "Loop throw all plugin source folders"
 for PATH1 in $SOURCEDIR/Plugins/*/ ; do
 
 	PLUGIN=$(basename $PATH1)
 	PLUGINSOURCEDIR=$SOURCEDIR/Plugins/$PLUGIN
     PLUGINBUILDDIR=$BUILDDIR/plugins/$PLUGIN
 
-	# Cleanup, restore and compile plugins
-	rm -rf $PLUGINSOURCEDIR/bin
-    rm -rf $PLUGINSOURCEDIR/obj
+	echo "Cleanup, restore and compile plugins"
+	rm -rf $PLUGINSOURCEDIR/bin 2> /dev/null
+    rm -rf $PLUGINSOURCEDIR/obj 2> /dev/null
 	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR --force
 
-	# Remove assemblies from plugin directories that a present in host application
+	echo "Remove assemblies from plugin directories that a present in host application"
     for PATH2 in $HOSTASSEMBLIES ; do
 
         FILE=$(basename $PATH2)
         rm $PLUGINBUILDDIR/$FILE
     done
 
-    rm -rf $PLUGINBUILDDIR/refs
-    rm $PLUGINBUILDDIR/*.pdb
-    rm $PLUGINBUILDDIR/apphost
+    rm -rf $PLUGINBUILDDIR/refs 2> /dev/null
+    rm $PLUGINBUILDDIR/*.pdb 2> /dev/null
+    rm $PLUGINBUILDDIR/apphost 2> /dev/null
+    rm $PLUGINBUILDDIR/apphost.exe 2> /dev/null
 done
