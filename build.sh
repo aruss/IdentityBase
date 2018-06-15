@@ -61,7 +61,7 @@ for PATH1 in $SOURCEDIR/Plugins/*/ ; do
     for PATH2 in $HOSTASSEMBLIES ; do
 
         FILE=$(basename $PATH2)
-        rm $PLUGINBUILDDIR/$FILE
+        rm $PLUGINBUILDDIR/$FILE 2> /dev/null
     done
 
     rm -rf $PLUGINBUILDDIR/refs 2> /dev/null
