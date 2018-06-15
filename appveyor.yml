@@ -12,7 +12,7 @@ branches:
 configuration: Release
 platform: x64
 clone_script:
-- sh: sh ./appveyor-build.sh
+- sh: git clone -q --branch=$APPVEYOR_REPO_BRANCH https://github.com/$APPVEYOR_REPO_NAME.git $APPVEYOR_BUILD_FOLDER && git checkout -qf $APPVEYOR_REPO_COMMIT && git submodule update --init
 build_script:
 - sh: sh ./appveyor-build.sh
 test_script:
