@@ -11,13 +11,13 @@ rm -rf $SOURCEDIR/obj
 
 # Loop throw all plugin source folders
 for PATH1 in $SOURCEDIR/Plugins/*/ ; do
-		
+
 	PLUGIN=$(basename $PATH1)
 	PLUGINSOURCEDIR=$SOURCEDIR/Plugins/$PLUGIN
-	
+
 	echo "Removing $PLUGINSOURCEDIR/bin"
 	rm -rf $PLUGINSOURCEDIR/bin
-	
+
 	echo "Removing $PLUGINSOURCEDIR/obj"
     rm -rf $PLUGINSOURCEDIR/obj
 

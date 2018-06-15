@@ -1,33 +1,21 @@
-version: 1.1.{build}
-skip_tags: true
-image: Visual Studio 2017 Preview
-configuration: Release
-platform: Any CPU
-environment:
-  # Don't report back to the mothership
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  
-services:
-  - mssql2014
-  - postgresql
-
+version: 1.2.{build}
+branches:
+  only:
+  - release
+  - master
+image: Ubuntu
 branches:
   only:
     - master
     - release
     - /^(.*\/)?ci-.*$/
-  
-before_build:
-  - appveyor-retry dotnet restore -v Minimal
-
+configuration: Release
+platform: x64
+clone_script:
+- sh: sh ./appveyor-build.sh
 build_script:
-  - dotnet build ./IdentityBase.sln -c Release /property:Version=%APPVEYOR_BUILD_VERSION%
-
-after_build:
-  - nuget pack ./src/IdentityBase/IdentityBase.nuspec -OutputDirectory ./artifacts/packages -version %APPVEYOR_BUILD_VERSION%
-  
+- sh: sh ./appveyor-build.sh
 test_script:
-  - bash coveralls.sh
-  
-artifacts:
-  - path: artifacts\**\*.*
+- sh: sh ./appveyor-test.sh
+deploy_script:
+- sh: sh ./appveyor-deploy.sh

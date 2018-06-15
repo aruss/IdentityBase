@@ -1,6 +1,6 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
 
-COPY ./identitybase-2.0.0 /usr/local/identitybase
+COPY ./identitybase-$VERSION /usr/local/identitybase
 
 RUN ["chmod", "+x", "/usr/local/identitybase/run.sh"]
 

@@ -2,13 +2,17 @@
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
+echo "Working directory: \"$DIR\""
+
 # checking for runtime ./build.sh linux-x64
-if [ "$0" != "" ]; then
-    RUNTIME=$0
+if [ "$1" != "" ]; then
+    RUNTIME=$1
 else
     echo "Runtime is not specified"
     exit 1
 fi
+
+echo "Runtime: \"$RUNTIME\""
 
 # checking for version ./build.sh linux-x64 2.0.0
 if [ "$2" != "" ]; then
@@ -18,8 +22,13 @@ else
     exit 1
 fi
 
+echo "Version: \"$VERSION\""
+
 SOURCEDIR=$DIR/src/IdentityBase.Web
 BUILDDIR=$DIR/build/$RUNTIME/identitybase-$VERSION
+
+echo "Source directory: \"$SOURCEDIR\""
+echo "Buid directory: \"$BUILDDIR\""
 
 echo "Cleanup old build files \"$BUILDDIR\""
 rm -rf $BUILDDIR
