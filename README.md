@@ -50,7 +50,7 @@ For upcoming features see [Issues](https://github.com/IdentityBaseNet/IdentityBa
 
 IdentityBase is available on [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/) alongside with [Github Releases](https://github.com/IdentityBaseNet/IdentityBase/releases)
 
-To get started with IdentityBase see the [getting started] documentation(/dics/getting-started)
+To get started with IdentityBase see the [getting started](/dics/getting-started) documentation.
 
 ## Development
 
