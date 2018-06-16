@@ -46,26 +46,71 @@
 
 For upcoming features see [Issues](https://github.com/IdentityBaseNet/IdentityBase/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) with `enhancement` tag.
 
+## Getting started
+
+IdentityBase is available on [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/) alongside with [Github Releases](https://github.com/IdentityBaseNet/IdentityBase/releases)
+
+To get started with IdentityBase see the [getting started] documentation(/dics/getting-started)
+
+## Development
+
 ### Platform
 
-IdentityBase is built against ASP.NET Core 2.1 using the tooling that ships with Visual Studio 2017. This is the only configuration we support on the issue tracker.
+IdentityBase is built against ASP.NET Core 2.1 using the tooling that ships with Visual Studio 2017 on Windows 10. This is the only configuration we support on the issue tracker.
+
+### Clone
+
+```sh
+git clone -q --branch=develop https://github.com/IdentityBaseNet/IdentityBase.git
+cd IdentityBase
+git submodule update --init
+```
+
+If you find after cloning the repository that some files are checked
+out or marked for deletion make sure to run this command.
+
+```sh
+git config --global core.longpaths true
+```
+
+Then clone the repository again.
+
+### Requirements
+
+* [Visual Studio 2017](https://www.visualstudio.com/de/vs/community)
+* [.NET Core 2.1](https://www.microsoft.com/net/download/core#/current)
+* [Docker](https://www.docker.com/docker-windows)
 
 ### How to build
 
-* [Install](https://www.microsoft.com/net/download/core#/current) .NET Core 2.1
-* Use Visual Studio 2017 to build it
+You can build all three version on windows.
 
-### Docker support
+#### Windows version
 
-You can either build it from source code by running the `build.sh` script in `./docker` directory or just start it from [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/)
+```cmd
+build-windows.bat
+```
 
-  `docker run -it --rm -p 5000:5000 identitybasenet/identitybase`
+It will publish the application in `./build/win7-x64/identitybase-latest` directory, switch in
+that direcotry and run `run.bat` to start the IdentityServer on Windows.
 
-It will start a IdentityBase with in memory store, with default client configuration and dummy users `alice@localhost` and `bob@localhost` (password is the email).
+#### Linux version
 
-See `./examples` folder and/or [IdentityServer examples repository](https://github.com/IdentityServer/IdentityServer4.Samples) for client examples.
+```cmd
+build-linux.bat
+```
+It will publish the application in `./build/linux-x64/identitybase-latest` directory, switch in
+that direcotry and run `chmod +x && ./run` to start the IdentityServer on Linux.
 
-### Acknowledgements
+#### Docker image
+
+```cmd
+build-docker.bat
+```
+
+This command will create a Docker image `identitybasenet/identitybase` with `latest` tag.
+
+## Acknowledgements
 
 IdentityBase is built using the following great open source projects
 
@@ -76,11 +121,3 @@ IdentityBase is built using the following great open source projects
 * [XUnit](https://xunit.github.io/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [Serilog](https://serilog.net/)
-
-
-### Long Paths
-If you find after cloning the repository that some files are checked out or marked for deletion make sure to run this command.
-
-  `git config --global core.longpaths true`
-
-Then clone the repository again.

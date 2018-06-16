@@ -57,7 +57,7 @@ for PATH1 in $SOURCEDIR/Plugins/*/ ; do
     rm -rf $PLUGINSOURCEDIR/obj 2> /dev/null
 	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR --force
 
-	echo "Remove assemblies from plugin directories that a present in host application"
+	echo "Removing assemblies from plugin directories that a present in host application"
     for PATH2 in $HOSTASSEMBLIES ; do
 
         FILE=$(basename $PATH2)
@@ -69,3 +69,5 @@ for PATH1 in $SOURCEDIR/Plugins/*/ ; do
     rm $PLUGINBUILDDIR/apphost 2> /dev/null
     rm $PLUGINBUILDDIR/apphost.exe 2> /dev/null
 done
+
+echo "Building $RUNTIME v$VERSION successfully done"
