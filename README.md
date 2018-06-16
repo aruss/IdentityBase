@@ -10,7 +10,7 @@
 
 <p align="center">
   <a target="_blank" href="https://ci.appveyor.com/project/aruss81994/identitybase">
-    <img src="https://ci.appveyor.com/api/projects/status/19295tvl5vhu3p0s?svg=true" alt="Build status">
+    <img src="https://ci.appveyor.com/api/projects/status/fub9f3dhuctubpxr?svg=true" alt="Build status">
   </a>
   <a  target="_blank" href="https://coveralls.io/github/IdentityBaseNet/IdentityBase?branch=master">
       <img src="https://coveralls.io/repos/github/IdentityBaseNet/IdentityBase/badge.svg?branch=master" alt="Coverage Status">
@@ -50,7 +50,7 @@ For upcoming features see [Issues](https://github.com/IdentityBaseNet/IdentityBa
 
 IdentityBase is available on [Docker Hub](https://hub.docker.com/r/identitybasenet/identitybase/) alongside with [Github Releases](https://github.com/IdentityBaseNet/IdentityBase/releases)
 
-To get started with IdentityBase see the [getting started](/dics/getting-started) documentation.
+To get started with IdentityBase see the [getting started](/docs/getting-started) documentation.
 
 ## Development
 

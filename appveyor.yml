@@ -4,15 +4,12 @@ branches:
   - release
   - master
 image: Ubuntu
-branches:
-  only:
-    - master
-    - release
-    - /^(.*\/)?ci-.*$/
 configuration: Release
 platform: x64
 clone_script:
 - sh: git clone -q --branch=$APPVEYOR_REPO_BRANCH https://github.com/$APPVEYOR_REPO_NAME.git $APPVEYOR_BUILD_FOLDER && git checkout -qf $APPVEYOR_REPO_COMMIT && git submodule update --init
+install:
+- sh: uname -a && sudo apt-get update && sudo apt-get --assume-yes install zip
 build_script:
 - sh: sh ./appveyor-build.sh
 test_script:
