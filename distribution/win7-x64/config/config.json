@@ -50,12 +50,11 @@
   },
   "Plugins": [
     "DefaultTheme",
-    "FancyTheme",
+    "IdentityBase.WebApi",
     "IdentityBase.EntityFramework.InMemory",
     "IdentityBase.EntityFramework.zDbInitializer"
   ],
   "App": {
-    "EnableWebApi": false,
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
     "AccountLockoutDuration": 600,

@@ -11,16 +11,6 @@ namespace IdentityBase.Configuration
     public class ApplicationOptions
     {
         /// <summary>
-        /// Enables public web api on /api
-        /// </summary>
-        public bool EnableWebApi { get; set; }
-
-        /// <summary>
-        /// Enables administrative dashboard on /admin
-        /// </summary>
-        public bool EnableAdmin { get; set; }
-
-        /// <summary>
         /// Location of temporary folder.
         /// </summary>
         public string TempPath { get; set; } = "./AppData/Temp";

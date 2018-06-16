@@ -8,7 +8,6 @@ namespace IdentityBase.WebApi.Actions.UserAccounts
     using System.Threading.Tasks;
     using IdentityBase.Models;
     using IdentityBase.Services;
-    using IdentityServer4.AccessTokenValidation;
     using IdentityServer4.Extensions;
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
@@ -33,9 +32,8 @@ namespace IdentityBase.WebApi.Actions.UserAccounts
             this._clientStore = clientStore;
         }
 
-        [HttpPost("useraccounts/{UserAccountId}/change_email")]
-        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        [HttpPost("/api/useraccounts/{UserAccountId}/change_email")]
+        [ScopeAuthorize(WebApiConstants.ApiName)]
         public async Task<IActionResult> Post(
             [FromRoute]Guid userAccountId,
             [FromBody]ChangeEmailInputModel inputModel)

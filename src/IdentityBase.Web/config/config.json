@@ -50,17 +50,17 @@
   },
   "Plugins": [
     "DefaultTheme",
+    "IdentityBase.WebApi",
     "IdentityBase.EntityFramework.InMemory",
     //"IdentityBase.EntityFramework.MySql",
     //"IdentityBase.EntityFramework.Npgsql",
     //"IdentityBase.EntityFramework.SqlServer",
-    "IdentityBase.EntityFramework.zDbInitializer",
+    "IdentityBase.EntityFramework.zDbInitializer"
     //"IdentityBase.SendGrid",
     //"IdentityBase.Smtp",
     //"IdentityBase.Twilio"
   ],
   "App": {
-    "EnableWebApi": false,
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
     "AccountLockoutDuration": 600,

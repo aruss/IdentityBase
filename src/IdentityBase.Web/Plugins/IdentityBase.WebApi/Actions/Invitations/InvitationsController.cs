@@ -10,7 +10,6 @@ namespace IdentityBase.WebApi.Actions.Invitations
     using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
-    using IdentityServer4.AccessTokenValidation;
     using IdentityServer4.Models;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
@@ -38,9 +37,8 @@ namespace IdentityBase.WebApi.Actions.Invitations
             this._notificationService = notificationService;
         }
 
-        [HttpGet("invitations")]
-        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        [HttpGet("/api/invitations")]
+        [ScopeAuthorize(WebApiConstants.ApiName)]
         public async Task<IActionResult> Get(PagedListInputModel request)
         {
             PagedList<UserAccount> list = await this._userAccountService
@@ -65,9 +63,8 @@ namespace IdentityBase.WebApi.Actions.Invitations
             return new ObjectResult(result);
         }
 
-        [HttpPut("invitations")]
-        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
-             IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        [HttpPut("/api/invitations")]
+        [ScopeAuthorize(WebApiConstants.ApiName)]
         public async Task<IActionResult> Put(
             [FromBody]InvitationsPutInputModel inputModel)
         {
@@ -140,9 +137,8 @@ namespace IdentityBase.WebApi.Actions.Invitations
             });
         }
 
-        [HttpDelete("invitations/{UserAccountId}")]
-        [ScopeAuthorize(WebApiConstants.ApiName, AuthenticationSchemes =
-            IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        [HttpDelete("/api/invitations/{UserAccountId}")]
+        [ScopeAuthorize(WebApiConstants.ApiName)]
         public async Task<IActionResult> Delete([FromRoute]Guid userAccountId)
         {
             UserAccount userAccount = await this._userAccountService
