@@ -44,7 +44,7 @@
   },
   "IdentityServer": {
     "SigningCredentialFromPfx": {
-      "Path": "./temp/idsvr3test.pfx",
+      "Path": "./config/idsvr3test.pfx",
       "Password": "idsrv3test"
     }
   },
