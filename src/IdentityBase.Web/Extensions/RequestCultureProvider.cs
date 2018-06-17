@@ -47,8 +47,7 @@ namespace IdentityBase
                     culture = idbContext.ClientProperties.Culture ??
                         appOptions.DefaultCulture;
                 }
-
-                if (culture != null)
+                else
                 {
                     return Task.FromResult(
                         new ProviderCultureResult(new StringSegment(culture)));
