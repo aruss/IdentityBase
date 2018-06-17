@@ -61,6 +61,8 @@ namespace IdentityBase.Actions.Login
                 this._logger.LogError(
                     "Login attempt with missing returnUrl parameter");
 
+                // TODO: throw error instead of redirect 
+                //throw new ApplicationException()
                 return this.RedirectToAction("Index", "Error");
             }
 
@@ -82,6 +84,7 @@ namespace IdentityBase.Actions.Login
         [StoreModelState]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
+            // TODO: extract in own controller and not add it 
             if (!this._applicationOptions.EnableAccountLogin)
             {
                 return this.NotFound();
@@ -200,7 +203,8 @@ namespace IdentityBase.Actions.Login
             IEnumerable<ExternalProvider> providers = await this._clientService
                 .GetEnabledProvidersAsync(client);
 
-            vm.ExternalProviders = providers.Select(s => new Web.ViewModels.External.ExternalProvider
+            vm.ExternalProviders = providers.Select(s => new
+                Web.ViewModels.External.ExternalProvider
             {
                 AuthenticationScheme = s.AuthenticationScheme,
                 DisplayName = s.DisplayName

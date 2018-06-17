@@ -4,9 +4,10 @@
 
 namespace IdentityBase
 {
+    using System;
+    using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
-    using ServiceBase.DependencyInjection;
     using IdentityBase.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -17,11 +18,10 @@ namespace IdentityBase
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using ServiceBase;
+    using ServiceBase.DependencyInjection;
     using ServiceBase.Extensions;
     using ServiceBase.Mvc.Theming;
     using ServiceBase.Plugins;
-    using System;
-    using System.Net.Http;
 
     /// <summary>
     /// Application startup class
@@ -63,16 +63,14 @@ namespace IdentityBase
             this._pluginsPath = this._applicationOptions.PluginsPath
                 .GetFullPath(this._environment.ContentRootPath);
 
-            string[] whiteList = this._configuration.GetSection("Plugins")
-                .Get<string[]>() ?? new string[]
-                {
-                    "DefaultTheme",
-                    "IdentityBase.EntityFramework.InMemory",
-                    "IdentityBase.EntityFramework.zDbInitializer"
-                }; 
+            string[] whiteList = this._configuration
+                .GetSection("Plugins")
+                .Get<string[]>();
 
-            this._logger.LogInformation("Loading plugins dynamically.");
-            PluginAssembyLoader.LoadAssemblies(this._pluginsPath, whiteList);
+            PluginAssembyLoader.LoadAssemblies(
+                this._pluginsPath,
+                loggerFactory,
+                whiteList);
         }
 
         /// <summary>
@@ -120,13 +118,6 @@ namespace IdentityBase
             services
                 .AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            // services.AddCors(corsOpts =>
-            // {
-            //     corsOpts.AddPolicy("CorsPolicy",
-            //         corsBuilder => corsBuilder.WithOrigins(
-            //             this._configuration.GetValue<string>("Host:Cors")));
-            // });
-
             services.AddDistributedMemoryCache();
 
             IThemeInfoProvider provider =
@@ -134,17 +125,10 @@ namespace IdentityBase
 
             services.AddSingleton(provider);
             services.AddPlugins();
-            services.AddPluginsMvc(
-                provider,
+            services.AddPluginsMvc(provider,
                 this._applicationOptions.PluginsPath);
 
-            // https://github.com/aspnet/Security/issues/1310
-            // services
-            //     .AddAuthentication(
-            //         IdentityServerConstants.ExternalCookieAuthenticationScheme)
-            //     .AddCookie();
-
-            OverrideServices?.Invoke(services);
+            this.OverrideServices?.Invoke(services);
 
             services.ValidateDataLayerServices(this._logger);
             services.ValidateEmailSenderServices(this._logger);
@@ -174,11 +158,7 @@ namespace IdentityBase
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
 
-            //ApplicationOptions options = app.ApplicationServices
-            //    .GetRequiredService<ApplicationOptions>();
-
             app.UseLocalization();
-            // app.UseMiddleware<IdentityBaseContextMiddleware>();
             app.UseMiddleware<RequestIdMiddleware>();
             app.UseLogging();
 
@@ -191,8 +171,6 @@ namespace IdentityBase
                 app.UseExceptionHandler("/error");
             }
 
-            //app.UseCors("CorsPolicy");
-            //app.UseStaticFiles(options, this._environment);
             app.UseIdentityServer();
             app.UsePlugins();
             app.UsePluginsMvc();
