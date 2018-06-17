@@ -1,4 +1,5 @@
-FROM microsoft/dotnet:2.1-runtime-alpine
+# code does not run on alpine image yet
+FROM microsoft/dotnet:2.1-runtime
 
 ARG VERSION
 
