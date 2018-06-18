@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
 
 namespace IdentityBase.EntityFramework.SqlServer.Migrations
 {
@@ -13,11 +11,11 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiResources",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,42 +26,41 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AbsoluteRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    AccessTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    AccessTokenType = table.Column<int>(type: "int", nullable: false),
-                    AllowAccessTokensViaBrowser = table.Column<bool>(type: "bit", nullable: false),
-                    AllowOfflineAccess = table.Column<bool>(type: "bit", nullable: false),
-                    AllowPlainTextPkce = table.Column<bool>(type: "bit", nullable: false),
-                    AllowRememberConsent = table.Column<bool>(type: "bit", nullable: false),
-                    AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(type: "bit", nullable: false),
-                    AlwaysSendClientClaims = table.Column<bool>(type: "bit", nullable: false),
-                    AuthorizationCodeLifetime = table.Column<int>(type: "int", nullable: false),
-                    BackChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    ClientClaimsPrefix = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ClientName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    ClientUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    ConsentLifetime = table.Column<int>(type: "int", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    EnableLocalLogin = table.Column<bool>(type: "bit", nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    FrontChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    IdentityTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    IncludeJwtId = table.Column<bool>(type: "bit", nullable: false),
-                    LogoUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    ProtocolType = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    RefreshTokenExpiration = table.Column<int>(type: "int", nullable: false),
-                    RefreshTokenUsage = table.Column<int>(type: "int", nullable: false),
-                    RequireClientSecret = table.Column<bool>(type: "bit", nullable: false),
-                    RequireConsent = table.Column<bool>(type: "bit", nullable: false),
-                    RequirePkce = table.Column<bool>(type: "bit", nullable: false),
-                    SlidingRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
-                    UpdateAccessTokenClaimsOnRefresh = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    ClientId = table.Column<string>(maxLength: 200, nullable: false),
+                    ProtocolType = table.Column<string>(maxLength: 200, nullable: false),
+                    RequireClientSecret = table.Column<bool>(nullable: false),
+                    ClientName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    ClientUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    LogoUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    RequireConsent = table.Column<bool>(nullable: false),
+                    AllowRememberConsent = table.Column<bool>(nullable: false),
+                    AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(nullable: false),
+                    RequirePkce = table.Column<bool>(nullable: false),
+                    AllowPlainTextPkce = table.Column<bool>(nullable: false),
+                    AllowAccessTokensViaBrowser = table.Column<bool>(nullable: false),
+                    FrontChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    FrontChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
+                    BackChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    BackChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
+                    AllowOfflineAccess = table.Column<bool>(nullable: false),
+                    IdentityTokenLifetime = table.Column<int>(nullable: false),
+                    AccessTokenLifetime = table.Column<int>(nullable: false),
+                    AuthorizationCodeLifetime = table.Column<int>(nullable: false),
+                    ConsentLifetime = table.Column<int>(nullable: true),
+                    AbsoluteRefreshTokenLifetime = table.Column<int>(nullable: false),
+                    SlidingRefreshTokenLifetime = table.Column<int>(nullable: false),
+                    RefreshTokenUsage = table.Column<int>(nullable: false),
+                    UpdateAccessTokenClaimsOnRefresh = table.Column<bool>(nullable: false),
+                    RefreshTokenExpiration = table.Column<int>(nullable: false),
+                    AccessTokenType = table.Column<int>(nullable: false),
+                    EnableLocalLogin = table.Column<bool>(nullable: false),
+                    IncludeJwtId = table.Column<bool>(nullable: false),
+                    AlwaysSendClientClaims = table.Column<bool>(nullable: false),
+                    ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,14 +71,14 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "IdentityResources",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Enabled = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(nullable: false),
+                    Emphasize = table.Column<bool>(nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,13 +89,13 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "PersistedGrants",
                 columns: table => new
                 {
-                    Key = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SubjectId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Key = table.Column<string>(maxLength: 200, nullable: false),
+                    Type = table.Column<string>(maxLength: 50, nullable: false),
+                    SubjectId = table.Column<string>(maxLength: 200, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 200, nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    Expiration = table.Column<DateTime>(nullable: true),
+                    Data = table.Column<string>(maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,24 +106,24 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "UserAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreationKind = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
-                    EmailVerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FailedLoginCount = table.Column<int>(type: "int", nullable: false),
-                    IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
-                    IsLoginAllowed = table.Column<bool>(type: "bit", nullable: false),
-                    LastFailedLoginAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastLoginAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PasswordChangedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PasswordHash = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    VerificationKey = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    VerificationKeySentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    VerificationPurpose = table.Column<int>(type: "int", nullable: true),
-                    VerificationStorage = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(maxLength: 254, nullable: false),
+                    IsEmailVerified = table.Column<bool>(nullable: false),
+                    EmailVerifiedAt = table.Column<DateTime>(nullable: true),
+                    IsLoginAllowed = table.Column<bool>(nullable: false),
+                    LastLoginAt = table.Column<DateTime>(nullable: true),
+                    LastFailedLoginAt = table.Column<DateTime>(nullable: true),
+                    FailedLoginCount = table.Column<int>(nullable: false),
+                    PasswordHash = table.Column<string>(maxLength: 200, nullable: true),
+                    PasswordChangedAt = table.Column<DateTime>(nullable: true),
+                    VerificationKey = table.Column<string>(maxLength: 100, nullable: true),
+                    VerificationPurpose = table.Column<int>(nullable: true),
+                    VerificationKeySentAt = table.Column<DateTime>(nullable: true),
+                    VerificationStorage = table.Column<string>(maxLength: 2000, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<Guid>(nullable: true),
+                    CreationKind = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,9 +134,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
+                    ApiResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,14 +153,14 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiScopes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Required = table.Column<bool>(type: "bit", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(nullable: false),
+                    Emphasize = table.Column<bool>(nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    ApiResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,12 +177,12 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiSecrets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
+                    Expiration = table.Column<DateTime>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Value = table.Column<string>(maxLength: 2000, nullable: true),
+                    Type = table.Column<string>(maxLength: 250, nullable: true),
+                    ApiResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -202,10 +199,10 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 250, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,9 +219,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientCorsOrigins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Origin = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Origin = table.Column<string>(maxLength: 150, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -241,9 +238,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientGrantTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    GrantType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    GrantType = table.Column<string>(maxLength: 250, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -260,9 +257,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientIdPRestrictions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Provider = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Provider = table.Column<string>(maxLength: 200, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,9 +276,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientPostLogoutRedirectUris",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    PostLogoutRedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    PostLogoutRedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -298,10 +295,10 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientProperties",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,9 +315,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientRedirectUris",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    RedirectUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    RedirectUri = table.Column<string>(maxLength: 2000, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -337,9 +334,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientScopes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Scope = table.Column<string>(maxLength: 200, nullable: false),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -356,12 +353,12 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientSecrets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
+                    Expiration = table.Column<DateTime>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: true),
+                    ClientId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -378,9 +375,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "IdentityClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityResourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
+                    IdentityResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -397,14 +394,14 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ExternalAccounts",
                 columns: table => new
                 {
-                    UserAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Provider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
-                    IsLoginAllowed = table.Column<bool>(type: "bit", nullable: false),
-                    LastLoginAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UserAccountId = table.Column<Guid>(nullable: false),
+                    Provider = table.Column<string>(nullable: false),
+                    Subject = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(maxLength: 254, nullable: false),
+                    IsLoginAllowed = table.Column<bool>(nullable: false),
+                    LastLoginAt = table.Column<DateTime>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -421,11 +418,11 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "UserAccountClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    UserAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    ValueType = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 250, nullable: false),
+                    ValueType = table.Column<string>(maxLength: 2000, nullable: true),
+                    UserAccountId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -442,9 +439,9 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiScopeClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApiScopeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
+                    ApiScopeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {

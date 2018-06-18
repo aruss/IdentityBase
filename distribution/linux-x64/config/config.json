@@ -50,7 +50,7 @@
   },
   "Plugins": [
     "DefaultTheme",
-	"IdentityBase.WebApi",
+    "IdentityBase.WebApi",
     "IdentityBase.EntityFramework.InMemory",
     "IdentityBase.EntityFramework.zDbInitializer"
   ],

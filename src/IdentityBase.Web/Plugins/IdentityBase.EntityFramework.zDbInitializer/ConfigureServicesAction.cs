@@ -10,7 +10,9 @@ namespace IdentityBase.EntityFramework.DbInitializer
     {
         public void Execute(IServiceCollection services)
         {
-            services.AddTransient<ExampleDataStoreInitializer>();
+            services.AddTransient<
+                IExampleDataStoreInitializer,
+                ConfigBasedStoreInitializer>();
         }
     }
 }

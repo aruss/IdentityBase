@@ -14,9 +14,9 @@ namespace IdentityBase.EntityFramework.DbInitializer
             using (IServiceScope serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                ExampleDataStoreInitializer initializer = serviceScope
+                IExampleDataStoreInitializer initializer = serviceScope
                     .ServiceProvider
-                    .GetService<ExampleDataStoreInitializer>();
+                    .GetService<IExampleDataStoreInitializer>();
 
                 if (initializer != null)
                 {

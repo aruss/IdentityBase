@@ -1,16 +1,16 @@
 version: "2.0"
 
 services:
-     
+
   # https://hub.docker.com/_/mysql/
   mysql:
-    container_name: idbase-mysql
+    container_name: idbase-dev-mysql
     restart: unless-stopped
     image: mysql:5.7
     ports:
-      - 8080:8080
+      -  3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD: root
-      - MYSQL_DATABASE: identitybase
-      - MYSQL_USER: dev
-      - MYSQL_PASSWORD: dev
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=identitybase
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=dev

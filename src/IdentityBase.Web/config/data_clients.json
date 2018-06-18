@@ -229,7 +229,7 @@
   },
   {
     "Enabled": true,
-    "ClientId": "roclient",
+    "ClientId": "roclient2",
     "ProtocolType": "oidc",
     "ClientSecrets": [],
     "RequireClientSecret": false,

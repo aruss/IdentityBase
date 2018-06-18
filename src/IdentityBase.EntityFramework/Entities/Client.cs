@@ -5,13 +5,14 @@
 
 namespace IdentityBase.EntityFramework.Entities
 {
+    using System;
     using System.Collections.Generic;
     using IdentityServer4.Models;
     using static IdentityServer4.IdentityServerConstants;
 
     public class Client
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public bool Enabled { get; set; } = true;
 

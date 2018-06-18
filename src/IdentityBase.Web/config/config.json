@@ -24,42 +24,6 @@
     ],
     "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
   },
-  "EntityFramework": {
-    "MigrateDatabase": true,
-    "SeedExampleData": true,
-    "EnableTokenCleanup": false,
-    "SeedExampleDataPath": "./config",
-    "Npgsql": {
-      "ConnectionString": "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;"
-    },
-    "SqlServer": {
-      "ConnectionString": "Server=.\\SQLEXPRESS;Database=IdentityBase;User ID=dev;Password=dev"
-    }
-  },
-  "Events": {
-    "RaiseErrorEvents": true,
-    "RaiseFailureEvents": true,
-    "RaiseInformationEvents": true,
-    "RaiseSuccessEvents": true
-  },
-  "IdentityServer": {
-    "SigningCredentialFromPfx": {
-      "Path": "./config/idsvr3test.pfx",
-      "Password": "idsrv3test"
-    }
-  },
-  "Plugins": [
-    "DefaultTheme",
-    "IdentityBase.WebApi",
-    "IdentityBase.EntityFramework.InMemory",
-    //"IdentityBase.EntityFramework.MySql",
-    //"IdentityBase.EntityFramework.Npgsql",
-    //"IdentityBase.EntityFramework.SqlServer",
-    "IdentityBase.EntityFramework.zDbInitializer"
-    //"IdentityBase.SendGrid",
-    //"IdentityBase.Smtp",
-    //"IdentityBase.Twilio"
-  ],
   "App": {
     "PasswordHashingIterationCount": 0,
     "AccountLockoutFailedLoginAttempts": 5,
@@ -88,15 +52,48 @@
     "TempPath": "./temp",
     "PluginsPath": "./Plugins"
   },
+  "Plugins": [
+    "DefaultTheme",
+    "IdentityBase.WebApi",
+    //"IdentityBase.EntityFramework.InMemory",
+    //"IdentityBase.EntityFramework.MySql",
+    "IdentityBase.EntityFramework.Npgsql",
+    //"IdentityBase.EntityFramework.SqlServer",
+    "IdentityBase.EntityFramework.zDbInitializer"
+    //"IdentityBase.SendGrid",
+    //"IdentityBase.Smtp",
+    //"IdentityBase.Twilio"
+  ],
+  "EntityFramework": {
+    "MigrateDatabase": true,
+    "SeedExampleData": true,
+    "EnableTokenCleanup": false,
+    "SeedExampleDataPath": "./config",
+    "Npgsql": {
+      "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+    },
+    "SqlServer": {
+      "ConnectionString": "Server=localhost,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
+    },
+    "MySql": {
+      "ConnectionString": "server=localhost;port=3306;database=identitybase;uid=dev;password=dev"
+    }
+  },
+  "Events": {
+    "RaiseErrorEvents": true,
+    "RaiseFailureEvents": true,
+    "RaiseInformationEvents": true,
+    "RaiseSuccessEvents": true
+  },
+  "IdentityServer": {
+    "SigningCredentialFromPfx": {
+      "Path": "./config/idsvr3test.pfx",
+      "Password": "idsrv3test"
+    }
+  },
   "WebApi": {
     "AutorityUrl": "http://localhost:5000",
     "ApiSecret": "secret",
     "EnableSwagger": true
-  },
-  "Email": {
-
-  },
-  "Sms": {
-
   }
 }

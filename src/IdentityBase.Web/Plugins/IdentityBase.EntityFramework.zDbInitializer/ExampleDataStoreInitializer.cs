@@ -1,5 +1,7 @@
 namespace IdentityBase.EntityFramework.DbInitializer
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
@@ -9,7 +11,7 @@ namespace IdentityBase.EntityFramework.DbInitializer
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
-    public class ExampleDataStoreInitializer
+    public class ExampleDataStoreInitializer : IExampleDataStoreInitializer
     {
         private readonly EntityFrameworkOptions options;
         private readonly ApplicationOptions appOptions;
@@ -45,14 +47,14 @@ namespace IdentityBase.EntityFramework.DbInitializer
             if (this.options.MigrateDatabase)
             {
                 this.logger.LogInformation("Try migrate database");
-                this.migrationDbContext.Database.Migrate(); 
+                this.migrationDbContext.Database.Migrate();
             }
 
             if (this.options.SeedExampleData)
             {
                 this.logger.LogInformation("Try seed initial data");
                 this.EnsureSeedData();
-            }            
+            }
         }
 
         public void CleanupStores()
@@ -67,6 +69,7 @@ namespace IdentityBase.EntityFramework.DbInitializer
         internal virtual void EnsureSeedData()
         {
             var exampleData = new ExampleData();
+
 
             if (!this.configurationDbContext.IdentityResources.Any())
             {
@@ -90,9 +93,16 @@ namespace IdentityBase.EntityFramework.DbInitializer
 
             if (!this.configurationDbContext.Clients.Any())
             {
+                var entities = new List<Entities.Client>();
+
                 foreach (var client in exampleData.GetClients())
                 {
-                    this.configurationDbContext.Clients.Add(client.ToEntity());
+                    var entity = client.ToEntity();
+                    entity.Id = System.Guid.NewGuid();
+
+                    entities.Add(entity);
+
+                    this.configurationDbContext.Clients.Add(entity);
                 }
                 this.configurationDbContext.SaveChanges();
             }

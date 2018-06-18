@@ -30,7 +30,7 @@ namespace IdentityBase.Configuration
 
             ExampleDataWriter writer = new ExampleDataWriter(crypto, options);
 
-            writer.WriteConfigFiles("./AppData");
+            writer.WriteConfigFiles("./config");
         }
 
         private readonly ICrypto crypto;

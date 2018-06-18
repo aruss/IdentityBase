@@ -5,5 +5,3 @@ You can start all requred services like mssql, mysql, postgres, rabbitmq by runn
 No need to install it all on your dev machine.
 
     docker-compose -f postgres.yml up
-
-    docker-compose -f rabbitmq.yml up

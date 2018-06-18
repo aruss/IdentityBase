@@ -19,7 +19,7 @@ namespace IdentityBase.EntityFramework.Npgsql
                 = new DbContextOptionsBuilder<MigrationDbContext>();
 
             string connString =
-                "Host=localhost;Database=identitybase;Username=postgres;Password=root";
+                "Host=localhost;Database=identitybase;Username=dev;Password=dev";
 
             string migrationsAssembly = typeof(DesignTimeDbContextFactory)
                 .GetTypeInfo().Assembly.GetName().Name;

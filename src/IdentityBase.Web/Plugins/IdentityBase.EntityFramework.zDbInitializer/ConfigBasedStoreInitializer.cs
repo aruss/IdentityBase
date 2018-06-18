@@ -17,7 +17,7 @@ namespace IdentityBase.EntityFramework.DbInitializer
     using Newtonsoft.Json;
     using ServiceBase.Extensions;
 
-    public class ConfigBasedStoreInitializer
+    public class ConfigBasedStoreInitializer : IExampleDataStoreInitializer
     {
         private readonly EntityFrameworkOptions _options;
         private readonly ApplicationOptions _appOptions;
@@ -123,10 +123,10 @@ namespace IdentityBase.EntityFramework.DbInitializer
 
             if (!_configurationDbContext.IdentityResources.Any())
             {
-                var path = Path.Combine(rootPath,
+                string path = Path.Combine(rootPath,
                     "data_resources_identity.json");
 
-                _logger.LogDebug($"Loading file: {path}");
+                this._logger.LogDebug($"Loading file: {path}");
 
                 var resources = JsonConvert
                     .DeserializeObject<List<IdentityResource>>(
@@ -134,18 +134,18 @@ namespace IdentityBase.EntityFramework.DbInitializer
 
                 foreach (var resource in resources)
                 {
-                    _configurationDbContext.IdentityResources
+                    this._configurationDbContext.IdentityResources
                         .Add(resource.ToEntity());
                 }
 
-                _configurationDbContext.SaveChanges();
-                _logger.LogDebug("Saved Resource Identities");
+                this._configurationDbContext.SaveChanges();
+                this._logger.LogDebug("Saved Resource Identities");
             }
 
             if (!_configurationDbContext.ApiResources.Any())
             {
-                var path = Path.Combine(rootPath, "data_resources_api.json");
-                _logger.LogDebug($"Loading file: {path}");
+                string path = Path.Combine(rootPath, "data_resources_api.json");
+                this._logger.LogDebug($"Loading file: {path}");
 
                 var resources = JsonConvert
                     .DeserializeObject<List<ApiResource>>(
@@ -153,34 +153,37 @@ namespace IdentityBase.EntityFramework.DbInitializer
 
                 foreach (var resource in resources)
                 {
-                    _configurationDbContext.ApiResources
+                    this._configurationDbContext.ApiResources
                         .Add(resource.ToEntity());
                 }
 
-                _configurationDbContext.SaveChanges();
-                _logger.LogDebug("Saved Resource API");
+                this._configurationDbContext.SaveChanges();
+                this._logger.LogDebug("Saved Resource API");
             }
 
-            if (!_configurationDbContext.Clients.Any())
+            if (!this._configurationDbContext.Clients.Any())
             {
-                var path = Path.Combine(rootPath, "data_clients.json");
-                _logger.LogDebug($"Loading file: {path}");
+                string path = Path.Combine(rootPath, "data_clients.json");
+                this._logger.LogDebug($"Loading file: {path}");
 
                 var clients = JsonConvert
                     .DeserializeObject<List<Client>>(File.ReadAllText(path));
 
                 foreach (var client in clients)
                 {
-                    _configurationDbContext.Clients.Add(client.ToEntity());
+                    var entity = client.ToEntity();
+                    entity.Id = System.Guid.NewGuid();
+
+                    this._configurationDbContext.Clients.Add(entity);
                 }
-                _configurationDbContext.SaveChanges();
-                _logger.LogDebug("Saved Clients");
+                this._configurationDbContext.SaveChanges();
+                this._logger.LogDebug("Saved Clients");
             }
 
-            if (!_userAccountDbContext.UserAccounts.Any())
+            if (!this._userAccountDbContext.UserAccounts.Any())
             {
-                var path = Path.Combine(rootPath, "data_users.json");
-                _logger.LogDebug($"Loading file: {path}");
+                string path = Path.Combine(rootPath, "data_users.json");
+                this._logger.LogDebug($"Loading file: {path}");
 
                 var userAccounts = JsonConvert
                     .DeserializeObject<List<UserAccount>>(
@@ -188,12 +191,12 @@ namespace IdentityBase.EntityFramework.DbInitializer
 
                 foreach (var userAccount in userAccounts)
                 {
-                    _userAccountDbContext.UserAccounts
+                    this._userAccountDbContext.UserAccounts
                         .Add(userAccount.ToEntity());
                 }
 
-                _userAccountDbContext.SaveChanges();
-                _logger.LogDebug("Saved Users");
+                this._userAccountDbContext.SaveChanges();
+                this._logger.LogDebug("Saved Users");
             }
         }
     }

@@ -199,7 +199,7 @@ namespace IdentityBase.Configuration
                 // Console Client Credentials Flow Sample
                 //////////////////////////////////////////
                 new Client
-                {
+                {   
                     ClientId = "client",
                     ClientSecrets =
                     {
@@ -287,7 +287,7 @@ namespace IdentityBase.Configuration
                 //////////////////////////////////////////
                 new Client
                 {
-                    ClientId = "roclient",
+                    ClientId = "roclient2",
                     RequireClientSecret = false,
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,

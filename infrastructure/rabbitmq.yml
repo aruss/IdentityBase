@@ -1,10 +1,10 @@
 version: "2.0"
 
 services:
-  
-  # https://hub.docker.com/_/rabbitmq/  
+
+  # https://hub.docker.com/_/rabbitmq/
   rabbitmq:
-    container_name: idbase-rabbitmq
+    container_name: idbase-dev-rabbitmq
     restart: unless-stopped
     image: rabbitmq:3-management
     ports:

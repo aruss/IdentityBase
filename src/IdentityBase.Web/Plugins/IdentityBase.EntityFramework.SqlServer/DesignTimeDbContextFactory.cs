@@ -19,7 +19,7 @@ namespace IdentityBase.EntityFramework.SqlServer
                 = new DbContextOptionsBuilder<MigrationDbContext>();
 
             string connString =
-                "Server=.\\MSSQL;Database=IdentityBase;User ID=dev;Password=dev";
+                "Server=localhost,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password";
 
             string migrationsAssembly = typeof(DesignTimeDbContextFactory)
                 .GetTypeInfo().Assembly.GetName().Name;
