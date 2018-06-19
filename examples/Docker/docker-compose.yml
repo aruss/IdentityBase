@@ -1,33 +1,27 @@
 version: "2.0"
 
 services:
-  
+
   # https://hub.docker.com/_/postgres/
   postgres:
+    container_name: idbase-dev-postgres
+    image: postgres:9.6.9-alpine
     restart: unless-stopped
     ports:
       - 5432:5432
       - 5433:5433
     environment:
-      - POSTGRES_PASSWORD=root
-  
-  # https://hub.docker.com/_/rabbitmq/  
-  rabbitmq:
-    restart: unless-stopped
-    image: rabbitmq:3-management
-    ports:
-      - 15672:15672
-      - 5672:5672
-    environment:
-      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
-      - RABBITMQ_DEFAULT_USER=rabbitmq
-      - RABBITMQ_DEFAULT_PASS=rabbitmq
-      - RABBITMQ_DEFAULT_VHOST=/
-      
+      - POSTGRES_DB=identitybase
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=dev
+
+  # https://hub.docker.com/r/identitybasenet/identitybase/
   identitybase:
     restart: unless-stopped
-    image: identitybasenet/identitybase
-    ports: 
+    image: identitybasenet/identitybase:latest
+    ports:
       - 5000:5000
-    environment: 
+    volumes:
+      - ./identitybase/config:/usr/local/identitybase/config
+    environment:
       - FOO=bar

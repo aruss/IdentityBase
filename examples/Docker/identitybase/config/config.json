@@ -70,13 +70,13 @@
     "EnableTokenCleanup": false,
     "SeedExampleDataPath": "./config",
     "Npgsql": {
-      "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
+      "ConnectionString": "User ID=dev;Password=dev;Host=postgres;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      "ConnectionString": "Server=localhost,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
+      "ConnectionString": "Server=sqlserver,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
     },
     "MySql": {
-      "ConnectionString": "server=localhost;port=3306;database=identitybase;uid=dev;password=dev"
+      "ConnectionString": "server=mysql;port=3306;database=identitybase;uid=dev;password=dev"
     }
   },
   "Events": {
