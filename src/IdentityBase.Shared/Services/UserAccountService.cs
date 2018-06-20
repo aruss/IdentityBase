@@ -17,6 +17,12 @@ namespace IdentityBase.Services
     using ServiceBase.Events;
     using ServiceBase.Extensions;
 
+    public class UserAccountVerificationInput
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
     public class UserAccountService
     {
         private readonly ApplicationOptions _applicationOptions;
@@ -42,6 +48,7 @@ namespace IdentityBase.Services
             this._dateTimeAccessor = dateTimeAccessor;
         }
 
+
         /// <summary>
         /// Used for local authentication
         /// </summary>
@@ -58,41 +65,49 @@ namespace IdentityBase.Services
                 throw new ArgumentNullException(nameof(email));
             }
 
+            if (String.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
             var result = new UserAccountVerificationResult();
 
             UserAccount userAccount = await this._userAccountStore
                 .LoadByEmailAsync(email);
 
+            // No uesr, nothing to do here 
             if (userAccount == null)
             {
                 return result;
             }
 
+            // If user has a password so it has a local account credentials
             if (userAccount.HasPassword())
             {
+                // It has a local account, so dont ask the user to create a
+                // local account 
                 result.IsLocalAccount = true;
 
+                // Check if password is valid 
                 result.IsPasswordValid = this.VerifiyPasswordHash(
                     userAccount, password);
+
+                // TODO: implement invalid passowrd policy 
             }
 
             result.UserAccount = userAccount;
+
+            // User might be disabled 
             result.IsLoginAllowed = userAccount.IsLoginAllowed;
 
-            // TODO: validate if user need a password change, eg. time expired
-            // or explicit flag is set.
+            // TODO: Implement password invalidation policy
             result.NeedChangePassword = false;
 
-            // In case user tries to login and has external accounts
-            //if (!result.IsPasswordValid && !result.IsLocalAccount)
-            //{
-            //    result.Hints = userAccount.Accounts
-            //        .Select(s => s.Provider).ToArray();
-            //}
-
-            return result;
+            // TODO: implement hints if user should get help to get authenticated
+            
+            return result; 
         }
-
+        
         private bool VerifiyPasswordHash(UserAccount userAccount, string password)
         {
             return this._crypto.VerifyPasswordHash(
@@ -648,15 +663,5 @@ namespace IdentityBase.Services
         public UserAccount UserAccount { get; set; }
         public bool TokenExpired { get; set; }
         public bool PurposeValid { get; set; }
-    }
-
-    public class UserAccountVerificationResult
-    {
-        public UserAccount UserAccount { get; set; }
-        public bool NeedChangePassword { get; set; }
-        public bool IsLoginAllowed { get; set; }
-        public bool IsLocalAccount { get; set; }
-        public bool IsPasswordValid { get; set; }
-        public string[] Hints { get; internal set; }
     }
 }

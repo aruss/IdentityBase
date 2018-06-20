@@ -64,6 +64,43 @@ namespace Microsoft.AspNetCore.Mvc
             );
         }
 
+        public static IActionResult RedirectToLoginWithError(
+            this WebController controller,
+            string returnUrl,
+            string errorMessage)
+        {
+            controller.AddModelStateError(errorMessage);
+            return controller.RedirectToLogin(returnUrl);
+        }
+
+        public static IActionResult RedirectToLoginWithError(
+            this WebController controller,
+            string returnUrl,
+            string key,
+            string errorMessage)
+        {
+            controller.AddModelStateError(key, errorMessage);
+            return controller.RedirectToLogin(returnUrl);
+        }
+
+        public static void AddModelStateError(
+            this WebController controller,
+            string key,
+            string errorMessage)
+        {
+            controller.ModelState.AddModelError(
+                key,
+                controller.Localizer[errorMessage]);
+        }
+
+        public static void AddModelStateError(
+            this WebController controller,
+            string errorMessage)
+        {
+            controller.ModelState.AddModelError(
+                controller.Localizer[errorMessage]);
+        }
+
         /// <summary>
         /// If <paramref name="returnUrl"/> is valid it will redirect to it,
         /// otherwise will redirect to landing page

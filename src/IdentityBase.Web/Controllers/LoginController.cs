@@ -3,6 +3,7 @@
 
 namespace IdentityBase.Actions.Login
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -22,29 +23,26 @@ namespace IdentityBase.Actions.Login
     public class LoginController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<LoginController> _logger;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
         private readonly AuthenticationService _authenticationService;
-        private readonly IStringLocalizer _localizer;
 
         public LoginController(
-            ApplicationOptions applicationOptions,
             ILogger<LoginController> logger,
+            IStringLocalizer localizer,
+            ApplicationOptions applicationOptions,
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
             ClientService clientService,
-            AuthenticationService authenticationService,
-            IStringLocalizer localizer)
+            AuthenticationService authenticationService)
+            : base(localizer, logger)
         {
             this._applicationOptions = applicationOptions;
-            this._logger = logger;
             this._interaction = interaction;
             this._userAccountService = userAccountService;
             this._clientService = clientService;
             this._authenticationService = authenticationService;
-            this._localizer = localizer;
         }
 
         /// <summary>
@@ -58,14 +56,13 @@ namespace IdentityBase.Actions.Login
 
             if (vm == null)
             {
-                this._logger.LogError(
+                base.Logger.LogError(
                     "Login attempt with missing returnUrl parameter");
-
-                // TODO: throw error instead of redirect 
-                //throw new ApplicationException()
-                return this.RedirectToAction("Index", "Error");
             }
 
+            // If local authentication is disbaled and there is only one
+            // external provider provided so do just external authentication
+            // without showing the login page 
             if (vm.IsExternalLoginOnly)
             {
                 return this.ChallengeExternalLogin(
@@ -90,58 +87,70 @@ namespace IdentityBase.Actions.Login
                 return this.NotFound();
             }
 
-            if (this.ModelState.IsValid)
+            // invalid input (return to same login)
+            if (!this.ModelState.IsValid)
             {
-                UserAccountVerificationResult result =
-                    await this._userAccountService
-                        .VerifyByEmailAndPasswordAsync(
-                            model.Email,
-                            model.Password
-                        );
-
-                if (result.UserAccount != null)
-                {
-                    if (!result.IsLoginAllowed)
-                    {
-                        this.ModelState.AddModelError(this._localizer[
-                            ErrorMessages.UserAccountIsDeactivated]);
-                    }
-                    else if (result.IsLocalAccount)
-                    {
-                        if (result.IsPasswordValid)
-                        {
-                            await this._authenticationService.SignInAsync(
-                                result.UserAccount,
-                                model.ReturnUrl,
-                                model.RememberLogin);
-
-                            return this.RedirectToReturnUrl(
-                                model.ReturnUrl,
-                                this._interaction);
-                        }
-                        else
-                        {
-                            await this._userAccountService
-                                .PerceiveFailedLoginAsync(result.UserAccount);
-                        }
-                    }
-                    else
-                    {
-                        LoginViewModel vm = await this.CreateViewModelAsync(
-                            model,
-                            result.UserAccount
-                        );
-
-                        return this.View(vm);
-                    }
-                }
-
-                this.ModelState.AddModelError(
-                    this._localizer[ErrorMessages.InvalidCredentials]);
+                return this.RedirectToLogin(model.ReturnUrl);
             }
 
-            // Something went wrong, show form with error
-            return this.RedirectToLogin(model.ReturnUrl);
+            UserAccountVerificationResult result =
+                await this._userAccountService.VerifyByEmailAndPasswordAsync(
+                    model.Email,
+                    model.Password
+                );
+
+            // user not present (wrong email)
+            if (result.UserAccount == null)
+            {
+                // Show email or password is invalid
+                return this.RedirectToLoginWithError(
+                    model.ReturnUrl, ErrorMessages.InvalidCredentials);
+            }
+
+            // User may not login (deactivated)
+            if (!result.IsLoginAllowed)
+            {
+                // If paranoya mode is on, do not epose any existence
+                // of user prensentce 
+                if (this._applicationOptions.ObfuscateUserAccountPresence)
+                {
+                    // And then send an email with info what actually happened.
+                    throw new NotImplementedException(
+                        "Send email with information that user account is disabled.");
+
+                    // Show "email or password is invalid" message 
+                    return this.RedirectToLoginWithError(
+                        model.ReturnUrl, ErrorMessages.InvalidCredentials);
+                }
+                else
+                {
+                    return this.RedirectToLoginWithError(
+                        model.ReturnUrl, ErrorMessages.AccountIsDesabled); 
+                }
+            }
+
+            // User has to change password (password change is required)
+            if (result.NeedChangePassword)
+            {
+                throw new NotImplementedException("Changing passwords not implemented yet."); 
+            }
+
+            // User has invalid password (handle penalty)
+            if (!result.IsPasswordValid)
+            {
+                // Show "email or password is invalid" message 
+                return this.RedirectToLoginWithError(
+                    model.ReturnUrl, ErrorMessages.InvalidCredentials);
+            }
+
+            await this._authenticationService.SignInAsync(
+                result.UserAccount,
+                model.ReturnUrl,
+                model.RememberLogin);
+
+            return this.RedirectToReturnUrl(
+                model.ReturnUrl,
+                this._interaction);           
         }
 
         [NonAction]

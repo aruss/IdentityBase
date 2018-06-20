@@ -17,7 +17,7 @@
   "Error": "Error",
   "Repeat password": "Repeat password",
   "The passwords do not match.": "The passwords do not match.",
-  "Invalid username or password.": "Invalid username or password.",
+  "Invalid email or password.": "Invalid email or password.",
   "User already exists.": "User already exists.",
   "User account does not exists.": "User account does not exists.",
   "User account": "User account",

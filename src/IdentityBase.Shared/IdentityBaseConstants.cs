@@ -36,7 +36,7 @@ namespace IdentityBase
             "Email address is already taken.";
 
         public const string InvalidCredentials =
-            "Invalid username or password.";
+            "Invalid email or password.";
 
         public const string AccountIsDesabled =
             "Your user account has be disabled";

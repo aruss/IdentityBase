@@ -55,9 +55,9 @@
   "Plugins": [
     "DefaultTheme",
     "IdentityBase.WebApi",
-    //"IdentityBase.EntityFramework.InMemory",
+    "IdentityBase.EntityFramework.InMemory",
     //"IdentityBase.EntityFramework.MySql",
-    "IdentityBase.EntityFramework.Npgsql",
+    //"IdentityBase.EntityFramework.Npgsql",
     //"IdentityBase.EntityFramework.SqlServer",
     "IdentityBase.EntityFramework.zDbInitializer"
     //"IdentityBase.SendGrid",

@@ -17,7 +17,7 @@
   "Error": "Fehler",
   "Repeat password": "Password wiederholen",
   "The passwords do not match.": "Die passwörter stimmen nicht überein.",
-  "Invalid username or password.": "Ungültiger Benutzername oder Passwort.",
+  "Invalid email or password.": "Ungültige Email oder Passwort.",
   "User already exists.": "Benutzer existiert bereits.",
   "User account does not exists.": "Benutzerkonto existiert nicht.",
   "User account": "Benutzerkonto",

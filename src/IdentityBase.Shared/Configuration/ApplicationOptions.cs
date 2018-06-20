@@ -135,6 +135,16 @@ namespace IdentityBase.Configuration
 
         public string PluginsPath { get; set; } = "./Plugins"; 
 
-        public string DefaultCulture { get; set; } = "de-DE"; // "en-US"; 
+        /// <summary>
+        /// Default UI culture of IdentityServer.
+        /// </summary>
+        public string DefaultCulture { get; set; } = "de-DE"; // "en-US";
+
+        /// <summary>
+        /// If set to true IdentityServer won't reveal any existence of the
+        /// user account, instead a generic message will be displayed and a
+        /// mail with further information will be sent to the user account email.
+        /// </summary>
+        public bool ObfuscateUserAccountPresence { get; set; } = false; 
     }
 }
