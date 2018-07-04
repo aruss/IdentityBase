@@ -7,6 +7,7 @@ namespace IdentityBase.Web.ViewModels.Login
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using IdentityBase.Forms;
     using IdentityBase.Web.ViewModels.External;
 
     public class LoginViewModel : IExternalLoginsViewModel
@@ -39,5 +40,7 @@ namespace IdentityBase.Web.ViewModels.Login
         public IEnumerable<string> ExternalProviderHints { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        public IEnumerable<FormElement> FormElements { get; set; }
     }
 }

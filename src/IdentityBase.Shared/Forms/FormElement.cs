@@ -7,6 +7,10 @@ namespace IdentityBase.Forms
      /// </summary>
     public class FormElement
     {
+        public string Name { get; set; }
+
+        public string Before { get; set; }
+
         /// <summary>
         /// The name or path of the view that is rendered to the response.
         /// </summary>

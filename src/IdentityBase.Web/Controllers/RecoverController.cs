@@ -7,6 +7,7 @@ namespace IdentityBase.Actions.Recover
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
+    using IdentityBase.Forms;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityBase.Web;
@@ -17,6 +18,7 @@ namespace IdentityBase.Actions.Recover
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
+    using ServiceBase.Mvc;
     using ServiceBase.Notification.Email;
 
     public class RecoverController : WebController
@@ -55,7 +57,8 @@ namespace IdentityBase.Actions.Recover
         }
 
         [HttpGet("recover", Name = "Recover")]
-        public async Task<IActionResult> Index(string returnUrl)
+        [RestoreModelState]
+        public async Task<IActionResult> Recover(string returnUrl)
         {
             RecoverViewModel vm = await this.CreateViewModelAsync(returnUrl);
             if (vm == null)
@@ -65,16 +68,29 @@ namespace IdentityBase.Actions.Recover
                 return this.RedirectToAction("Index", "Error");
             }
 
+            CreateViewModelResult result =
+                await this.CreateViewModel<IRecoverCreateViewModelAction>();
+
+            vm.FormElements = result.FormElements;
+
             return this.View(vm);
         }
 
         [HttpPost("recover", Name = "Recover")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(RecoverInputModel model)
+        [StoreModelState]
+        public async Task<IActionResult> Recover(RecoverInputModel model)
         {
+            BindInputModelResult formResult =
+                await this.BindInputModel<IRecoverBindInputModelAction>();
+
             if (!ModelState.IsValid)
             {
-                return this.View(await this.CreateViewModelAsync(model));
+                return this.RedirectToAction(
+                    "Recover",
+                    "Recover",
+                    new { ReturnUrl = model.ReturnUrl }
+                );
             }
 
             // Check if user with same email exists
@@ -115,8 +131,12 @@ namespace IdentityBase.Actions.Recover
                     ErrorMessages.UserAccountDoesNotExists]);
             }
 
-            return this.View(
-                await this.CreateViewModelAsync(model, userAccount));
+            // there was an error
+            return this.RedirectToAction(
+                     "Recover",
+                     "Recover",
+                     new { ReturnUrl = model.ReturnUrl }
+                 );
         }
 
         [NonAction]

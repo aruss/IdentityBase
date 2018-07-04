@@ -8,6 +8,7 @@ namespace IdentityBase.Actions.Login
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
+    using IdentityBase.Forms;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityBase.Web;
@@ -46,7 +47,7 @@ namespace IdentityBase.Actions.Login
         }
 
         /// <summary>
-        /// Shows the login page.
+        /// Shows the login page with local and external logins.
         /// </summary>
         [HttpGet("login", Name = "Login")]
         [RestoreModelState]
@@ -69,6 +70,11 @@ namespace IdentityBase.Actions.Login
                     vm.ExternalProviders.First().AuthenticationScheme,
                     returnUrl);
             }
+            
+            CreateViewModelResult result =
+                await this.CreateViewModel<ILoginCreateViewModelAction>();
+
+            vm.FormElements = result.FormElements; 
 
             return this.View(vm);
         }
@@ -87,20 +93,23 @@ namespace IdentityBase.Actions.Login
                 return this.NotFound();
             }
 
+            BindInputModelResult formResult =
+               await this.BindInputModel<ILoginBindInputModelAction>();
+
             // invalid input (return to same login)
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
-            UserAccountVerificationResult result =
+            UserAccountVerificationResult verificationResult =
                 await this._userAccountService.VerifyByEmailAndPasswordAsync(
                     model.Email,
                     model.Password
                 );
 
             // user not present (wrong email)
-            if (result.UserAccount == null)
+            if (verificationResult.UserAccount == null)
             {
                 // Show email or password is invalid
                 return this.RedirectToLoginWithError(
@@ -108,7 +117,7 @@ namespace IdentityBase.Actions.Login
             }
 
             // User may not login (deactivated)
-            if (!result.IsLoginAllowed)
+            if (!verificationResult.IsLoginAllowed)
             {
                 // If paranoya mode is on, do not epose any existence
                 // of user prensentce 
@@ -116,7 +125,8 @@ namespace IdentityBase.Actions.Login
                 {
                     // And then send an email with info what actually happened.
                     throw new NotImplementedException(
-                        "Send email with information that user account is disabled.");
+                        "Send email with information that user account is disabled."
+                    );
 
                     // Show "email or password is invalid" message 
                     return this.RedirectToLoginWithError(
@@ -130,13 +140,14 @@ namespace IdentityBase.Actions.Login
             }
 
             // User has to change password (password change is required)
-            if (result.NeedChangePassword)
+            if (verificationResult.NeedChangePassword)
             {
-                throw new NotImplementedException("Changing passwords not implemented yet."); 
+                throw new NotImplementedException(
+                    "Changing passwords not implemented yet."); 
             }
 
             // User has invalid password (handle penalty)
-            if (!result.IsPasswordValid)
+            if (!verificationResult.IsPasswordValid)
             {
                 // Show "email or password is invalid" message 
                 return this.RedirectToLoginWithError(
@@ -144,7 +155,7 @@ namespace IdentityBase.Actions.Login
             }
 
             await this._authenticationService.SignInAsync(
-                result.UserAccount,
+                verificationResult.UserAccount,
                 model.ReturnUrl,
                 model.RememberLogin);
 
@@ -157,19 +168,8 @@ namespace IdentityBase.Actions.Login
         internal async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)
         {
-            return await this.CreateViewModelAsync(new LoginInputModel
-            {
-                ReturnUrl = returnUrl
-            });
-        }
-
-        [NonAction]
-        internal async Task<LoginViewModel> CreateViewModelAsync(
-            LoginInputModel inputModel,
-            UserAccount userAccount = null)
-        {
             AuthorizationRequest context = await this._interaction
-                .GetAuthorizationContextAsync(inputModel.ReturnUrl);
+                .GetAuthorizationContextAsync(returnUrl);
 
             if (context == null)
             {
@@ -178,7 +178,7 @@ namespace IdentityBase.Actions.Login
 
             LoginViewModel vm = new LoginViewModel
             {
-                ReturnUrl = inputModel.ReturnUrl,
+                ReturnUrl = returnUrl,
 
                 EnableRememberLogin = this._applicationOptions
                     .EnableRememberLogin,
@@ -223,11 +223,11 @@ namespace IdentityBase.Actions.Login
                 client.EnableLocalLogin : false) &&
                 this._applicationOptions.EnableAccountLogin;
 
-            if (userAccount != null)
-            {
-                vm.ExternalProviderHints = userAccount?.Accounts
-                    .Select(c => c.Provider);
-            }
+            // if (userAccount != null)
+            // {
+            //     vm.ExternalProviderHints = userAccount?.Accounts
+            //         .Select(c => c.Provider);
+            // }
 
             return vm;
         }

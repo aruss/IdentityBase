@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Themes",
+  "FriendlyName": "Default IdentityBase Theme",
+  "SystemName": "DefaultTheme",
+  "Version": "1.0",
+  "SupportedVersions": [ "1.0" ],
+  "Author": "Russlan Akiev",
+  "DisplayOrder": 1,
+  "FileName": "DefaultTheme.dll",
+  "Description": "This is a default clean bootstrap theme for IdentityBase"
+}

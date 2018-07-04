@@ -59,7 +59,8 @@
     //"IdentityBase.EntityFramework.MySql",
     //"IdentityBase.EntityFramework.Npgsql",
     //"IdentityBase.EntityFramework.SqlServer",
-    "IdentityBase.EntityFramework.zDbInitializer"
+    "IdentityBase.EntityFramework.zDbInitializer",
+    //"IdentityBase.GoogleRecaptcha"
     //"IdentityBase.SendGrid",
     //"IdentityBase.Smtp",
     //"IdentityBase.Twilio"
@@ -95,5 +96,11 @@
     "AutorityUrl": "http://localhost:5000",
     "ApiSecret": "secret",
     "EnableSwagger": true
+  },
+  
+  // Create your credentials here https://www.google.com/recaptcha/admin
+  "GoogleRecaptcha": {
+    "SiteKey": "",
+    "Secret": ""
   }
 }

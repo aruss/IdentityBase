@@ -20,33 +20,10 @@
                           asp-route-returnUrl="@Model.ReturnUrl"
                           novalidate>
                         <fieldset>
-                            <div class="form-group">
-                                <label asp-for="Email"></label>
-                                <input class="form-control"
-                                       placeholder="@Localizer["Enter email"]"
-                                       asp-for="Email" autofocus />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Password"></label>
-                                <input type="password"
-                                       class="form-control"
-                                       placeholder="@Localizer["Enter password"]"
-                                       asp-for="Password"
-                                       autocomplete="off" />
-                            </div>
-                            <div show-if="@Model.EnableRememberLogin"
-                                 class="form-group login-remember">
-                                <label asp-for="RememberLogin">
-                                    <input asp-for="RememberLogin" />
-                                    <strong localize="">Remember login</strong>
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary"
-                                        localize="">
-                                    Login
-                                </button>
-                            </div>
+                            @foreach (var component in Model.FormElements)
+                            {
+                                await Html.RenderPartialAsync(component.ViewName, component.Model);
+                            }
                         </fieldset>
                     </form>
                     <ul class="list-inline">

@@ -4,6 +4,7 @@
 namespace IdentityBase.Web.ViewModels.Recover
 {
     using System.Collections.Generic;
+    using IdentityBase.Forms;
     using IdentityBase.Web.ViewModels.External;
 
     public class RecoverViewModel : IExternalLoginsViewModel
@@ -21,5 +22,7 @@ namespace IdentityBase.Web.ViewModels.Recover
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        public IEnumerable<FormElement> FormElements { get; set; }
     }
 }

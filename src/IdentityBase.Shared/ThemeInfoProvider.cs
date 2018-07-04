@@ -29,8 +29,7 @@ namespace IdentityBase
 
             ThemeInfoResult result = new ThemeInfoResult
             {
-                RequestTheme = "DefaultTheme",
-                DefaultTheme = "DefaultTheme"
+                ThemeName = "DefaultTheme"
             };
 
             if (!identityBaseContext.IsValid)
@@ -41,7 +40,7 @@ namespace IdentityBase
             ClientProperties clientProperties = identityBaseContext.Client
                 .Properties.ToObject<ClientProperties>();
 
-            result.RequestTheme = clientProperties.Theme ?? "DefaultTheme";
+            result.ThemeName = clientProperties.Theme ?? "DefaultTheme";
 
             // TODO: check if plugin exists
             return Task.FromResult(result);

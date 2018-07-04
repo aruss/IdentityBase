@@ -3,18 +3,17 @@
 
 namespace IdentityBase.Forms
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Extensions;
-    using System.Reflection;
-    using ServiceBase.Plugins;
-    using System.Linq;
 
     public static class IBindInputModelActionControllerExtensions
     {
-        public static async Task<CreateViewModelResult> 
+        public static async Task<CreateViewModelResult>
             CreateViewModel<TCreateViewModelAction>(
             this ControllerBase controller)
             where TCreateViewModelAction : ICreateViewModelAction
@@ -28,19 +27,19 @@ namespace IdentityBase.Forms
                .GetServices<TCreateViewModelAction>();
 
 
-            actions.ElementAt(0).GetType()
-                .GetCustomAttributes<DependsOnPluginAttribute>(true)
-                .Select(s => s.GetType())
-                .ExpandInterfaces()
-
-
-
-
-            actions.TopologicalSort(x => x.GetType()
+            /* actions.ElementAt(0).GetType()
                  .GetCustomAttributes<DependsOnPluginAttribute>(true)
-                .Select(s => s.GetType())
-                .ExpandInterfaces());
-               
+                 .Select(s => s.GetType())
+                 .ExpandInterfaces()
+
+
+
+
+             actions.TopologicalSort(x => x.GetType()
+                  .GetCustomAttributes<DependsOnPluginAttribute>(true)
+                 .Select(s => s.GetType())
+                 .ExpandInterfaces());*/
+
 
             // TODO: filter by step and sort topologically
 
@@ -54,10 +53,19 @@ namespace IdentityBase.Forms
                 }
             }
 
-            // TODO: soft FormElements topologically
+            // Dont mind the rocket science with reverses and stuff
+            IEnumerable<FormElement> formElements = context.FormElements
+                .AsEnumerable()
+                .Reverse()
+                .TopologicalSort(x => context.FormElements.Where(c =>
+                     !String.IsNullOrWhiteSpace(c.Name) &&
+                     !String.IsNullOrWhiteSpace(x.Before) &&
+                     c.Name.Equals(x.Before)))
+                .Reverse();
+
             return new CreateViewModelResult(
                 context.Items,
-                context.FormElements
+                formElements
             );
         }
 
@@ -75,7 +83,6 @@ namespace IdentityBase.Forms
                 .GetServices<TBindInputModelAction>();
 
             // TODO: filter by step and sort topologically
-
             foreach (var formComponent in actions)
             {
                 await formComponent.Execute(context);

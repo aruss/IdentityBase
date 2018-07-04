@@ -9,6 +9,7 @@ namespace IdentityBase
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Services;
+    using IdentityBase.Web.Forms;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -109,8 +110,9 @@ namespace IdentityBase
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<AuthenticationService>();
-
+            services.AddDefaultForms(); 
             services.AddAntiforgery();
+            services.AddHttpClient(); 
 
             services
                 .AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
