@@ -1,1 +1,0 @@
-<p>Account page</p>

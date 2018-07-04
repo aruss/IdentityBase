@@ -1,1 +1,0 @@
-<p>Login page</p>
