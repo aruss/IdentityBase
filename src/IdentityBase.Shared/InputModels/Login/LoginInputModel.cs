@@ -1,14 +1,14 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Web.InputModels.Register
+namespace IdentityBase.Shared.InputModels.Login
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Mvc;
     using ServiceBase.Mvc.ModelBinding;
 
-    public class RegisterInputModel
+    public class LoginInputModel
     {
         [EmailAddress]
         [StringLength(254)]
@@ -23,11 +23,8 @@ namespace IdentityBase.Web.InputModels.Register
         [DisplayName("Password")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "The {0} field is required.")]
-        [Compare("Password", ErrorMessage = "The passwords do not match.")]
-        [StringLength(100)]
-        [DisplayName("Repeat password")]
-        public string PasswordConfirm { get; set; }
+        [DisplayName("Remember login")]
+        public bool RememberLogin { get; set; }
 
         [StringLength(2000)]
         public string ReturnUrl { get; set; }

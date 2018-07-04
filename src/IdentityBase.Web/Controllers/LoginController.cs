@@ -11,8 +11,8 @@ namespace IdentityBase.Actions.Login
     using IdentityBase.Forms;
     using IdentityBase.Models;
     using IdentityBase.Services;
+    using IdentityBase.Shared.InputModels.Login;
     using IdentityBase.Web;
-    using IdentityBase.Web.InputModels.Login;
     using IdentityBase.Web.ViewModels.Login;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
@@ -24,23 +24,26 @@ namespace IdentityBase.Actions.Login
     public class LoginController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
-        private readonly IIdentityServerInteractionService _interaction;
         private readonly UserAccountService _userAccountService;
         private readonly ClientService _clientService;
         private readonly AuthenticationService _authenticationService;
 
         public LoginController(
-            ILogger<LoginController> logger,
-            IStringLocalizer localizer,
-            ApplicationOptions applicationOptions,
             IIdentityServerInteractionService interaction,
+            IStringLocalizer localizer,
+            ILogger<LoginController> logger,
+            ApplicationOptions applicationOptions,
             UserAccountService userAccountService,
             ClientService clientService,
             AuthenticationService authenticationService)
-            : base(localizer, logger)
         {
+            // setting it this way since interaction service is null in the
+            // base class oO
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger; 
+
             this._applicationOptions = applicationOptions;
-            this._interaction = interaction;
             this._userAccountService = userAccountService;
             this._clientService = clientService;
             this._authenticationService = authenticationService;
@@ -70,11 +73,11 @@ namespace IdentityBase.Actions.Login
                     vm.ExternalProviders.First().AuthenticationScheme,
                     returnUrl);
             }
-            
-            CreateViewModelResult result =
-                await this.CreateViewModel<ILoginCreateViewModelAction>();
 
-            vm.FormElements = result.FormElements; 
+            CreateViewModelResult result =
+                await this.CreateViewModel<ILoginCreateViewModelAction>(vm);
+
+            vm.FormElements = result.FormElements;
 
             return this.View(vm);
         }
@@ -135,7 +138,7 @@ namespace IdentityBase.Actions.Login
                 else
                 {
                     return this.RedirectToLoginWithError(
-                        model.ReturnUrl, ErrorMessages.AccountIsDesabled); 
+                        model.ReturnUrl, ErrorMessages.AccountIsDesabled);
                 }
             }
 
@@ -143,7 +146,7 @@ namespace IdentityBase.Actions.Login
             if (verificationResult.NeedChangePassword)
             {
                 throw new NotImplementedException(
-                    "Changing passwords not implemented yet."); 
+                    "Changing passwords not implemented yet.");
             }
 
             // User has invalid password (handle penalty)
@@ -159,16 +162,14 @@ namespace IdentityBase.Actions.Login
                 model.ReturnUrl,
                 model.RememberLogin);
 
-            return this.RedirectToReturnUrl(
-                model.ReturnUrl,
-                this._interaction);           
+            return this.RedirectToReturnUrl(model.ReturnUrl);
         }
 
         [NonAction]
         internal async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)
         {
-            AuthorizationRequest context = await this._interaction
+            AuthorizationRequest context = await this.InteractionService
                 .GetAuthorizationContextAsync(returnUrl);
 
             if (context == null)

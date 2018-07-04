@@ -11,4 +11,10 @@ namespace IdentityBase.Forms
     public interface IRecoverCreateViewModelAction : ICreateViewModelAction { }
 
     public interface IRecoverHandleInputModelAction : IHandleInputModelAction { }
+
+    public interface IRegisterBindInputModelAction : IBindInputModelAction { }
+
+    public interface IRegisterCreateViewModelAction : ICreateViewModelAction { }
+
+    public interface IRegisterHandleInputModelAction : IHandleInputModelAction { }
 }

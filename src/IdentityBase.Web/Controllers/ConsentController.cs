@@ -5,44 +5,44 @@ namespace IdentityBase.Controllers.Consent
 {
     using System.Linq;
     using System.Threading.Tasks;
+    using IdentityBase.Shared.InputModels.Consent;
     using IdentityBase.Web;
-    using IdentityBase.Web.InputModels.Consent;
-    using IdentityBase.Web.ViewModels;
     using IdentityBase.Web.ViewModels.Consent;
     using IdentityServer4;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
 
     public class ConsentController : WebController
     {
-        private readonly ILogger<ConsentController> _logger;
         private readonly IClientStore _clientStore;
-        private readonly IIdentityServerInteractionService _interaction;
         private readonly IResourceStore _resourceStore;
 
         public ConsentController(
-            ILogger<ConsentController> logger,
             IIdentityServerInteractionService interaction,
+            IStringLocalizer localizer,
+            ILogger<ConsentController> logger,
             IClientStore clientStore,
             IResourceStore resourceStore)
         {
-            this._logger = logger;
-            this._interaction = interaction;
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger;
             this._clientStore = clientStore;
             this._resourceStore = resourceStore;
         }
 
         [HttpGet("consent", Name = "Consent")]
-        public async Task<IActionResult> Index(string returnUrl)
+        public async Task<IActionResult> Consent(string returnUrl)
         {
             ConsentViewModel vm = await this.BuildViewModelAsync(returnUrl);
 
             if (vm != null)
             {
-                return this.View("Index", vm);
+                return this.View(vm);
             }
 
             return this.View("Error");
@@ -54,7 +54,7 @@ namespace IdentityBase.Controllers.Consent
             string button,
             ConsentInputModel model)
         {
-            AuthorizationRequest request = await this._interaction
+            AuthorizationRequest request = await this.InteractionService
                 .GetAuthorizationContextAsync(model.ReturnUrl);
 
             ConsentResponse response = null;
@@ -87,7 +87,9 @@ namespace IdentityBase.Controllers.Consent
 
             if (response != null)
             {
-                await this._interaction.GrantConsentAsync(request, response);
+                await this.InteractionService
+                    .GrantConsentAsync(request, response);
+
                 return this.Redirect(model.ReturnUrl);
             }
 
@@ -96,7 +98,7 @@ namespace IdentityBase.Controllers.Consent
 
             if (vm != null)
             {
-                return this.View("Index", vm);
+                return this.View(vm);
             }
 
             return this.View("Error");
@@ -107,7 +109,7 @@ namespace IdentityBase.Controllers.Consent
             string returnUrl,
             ConsentInputModel model = null)
         {
-            AuthorizationRequest request = await this._interaction
+            AuthorizationRequest request = await this.InteractionService
                 .GetAuthorizationContextAsync(returnUrl);
 
             if (request != null)
@@ -133,7 +135,7 @@ namespace IdentityBase.Controllers.Consent
                     }
                     else
                     {
-                        this._logger.LogError(
+                        this.Logger.LogError(
                             "No scopes matching: {0}",
                             request.ScopesRequested
                                 .Aggregate((x, y) => x + ", " + y));
@@ -141,14 +143,14 @@ namespace IdentityBase.Controllers.Consent
                 }
                 else
                 {
-                    this._logger.LogError(
+                    this.Logger.LogError(
                         "Invalid client id: {0}",
                         request.ClientId);
                 }
             }
             else
             {
-                this._logger.LogError(
+                this.Logger.LogError(
                     "No consent request matching request: {0}",
                     returnUrl);
             }

@@ -11,26 +11,28 @@ namespace IdentityBase.Web.Controllers.Account
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
     public class AccountController : WebController
     {
         private readonly UserAccountService _userAccountService;
-        private readonly IStringLocalizer _localizer;
-        private readonly IIdentityServerInteractionService _interaction;
 
         public AccountController(
-            UserAccountService userAccountService,
+            IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
-            IIdentityServerInteractionService interaction)
+            ILogger<AccountController> logger,
+            UserAccountService userAccountService)
+            
         {
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger;
             this._userAccountService = userAccountService;
-            this._localizer = localizer;
-            this._interaction = interaction; 
         }
 
         [HttpGet("account", Name = "Account")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Account()
         {
             Guid userId = Guid.Parse(HttpContext.User.FindFirst("sub").Value);
 
@@ -75,8 +77,7 @@ namespace IdentityBase.Web.Controllers.Account
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                this.ModelState.AddModelError(
-                    this._localizer[ErrorMessages.TokenIsInvalid]);
+                this.AddModelError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -92,8 +93,7 @@ namespace IdentityBase.Web.Controllers.Account
             if (await this._userAccountService
                 .LoadByEmailAsync(email) != null)
             {
-                this.ModelState.AddModelError(
-                    this._localizer[ErrorMessages.EmailAddressAlreadyTaken]);
+                this.AddModelError(ErrorMessages.EmailAddressAlreadyTaken);
 
                 var vm = new ChangeEmailConfirmViewModel
                 {
@@ -111,12 +111,7 @@ namespace IdentityBase.Web.Controllers.Account
                email
             );
 
-            if (this._interaction.IsValidReturnUrl(returnUrl))
-            {
-                return this.Redirect(returnUrl);
-            }
-
-            throw new ApplicationException("Invalid return URL");
+            return this.RedirectToReturnUrl(returnUrl); 
         }
 
         [HttpGet("email/cancel", Name = "EmailCancel")]
@@ -138,8 +133,7 @@ namespace IdentityBase.Web.Controllers.Account
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.ModelState.AddModelError(
-                    this._localizer[ErrorMessages.TokenIsInvalid]);
+                this.AddModelError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -153,12 +147,7 @@ namespace IdentityBase.Web.Controllers.Account
             string email = storage[0];
             string returnUrl = storage[1];
 
-            if (this._interaction.IsValidReturnUrl(returnUrl))
-            {
-                return this.Redirect(returnUrl);
-            }
-
-            throw new ApplicationException("Invalid return URL");
+            return this.RedirectToReturnUrl(returnUrl);           
         }
     }
 }

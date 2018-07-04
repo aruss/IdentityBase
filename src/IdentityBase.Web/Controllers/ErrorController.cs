@@ -9,24 +9,29 @@ namespace IdentityBase.Actions.Error
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
+    using Microsoft.Extensions.Logging;
 
     public class ErrorController : WebController
     {
-        private readonly IIdentityServerInteractionService _interaction;
-
-        public ErrorController(IIdentityServerInteractionService interaction)
+        public ErrorController(
+            IIdentityServerInteractionService interaction,
+            IStringLocalizer localizer,
+            ILogger<ErrorController> logger)
         {
-            this._interaction = interaction;
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger;
         }
 
-        [Route("error", Name ="Error")]
-        public async Task<IActionResult> Index(string errorId)
+        [Route("error", Name = "Error")]
+        public async Task<IActionResult> Error(string errorId)
         {
             ErrorViewModel vm = new ErrorViewModel();
 
             if (errorId != null)
             {
-                ErrorMessage message = await this._interaction
+                ErrorMessage message = await this.InteractionService
                     .GetErrorContextAsync(errorId);
 
                 if (message != null)
@@ -35,7 +40,7 @@ namespace IdentityBase.Actions.Error
                 }
             }
 
-            return this.View("Error", vm);
+            return this.View(vm);
         }
     }
 }

@@ -16,23 +16,24 @@ namespace IdentityBase.Actions.Logout
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
 
     public class LogoutController : WebController
     {
-        private readonly IIdentityServerInteractionService _interaction;
         private readonly ApplicationOptions _applicationOptions;
-        private readonly ILogger<LogoutController> _logger;
 
         public LogoutController(
             IIdentityServerInteractionService interaction,
+            IStringLocalizer localizer,
+            ILogger<LogoutController> logger,
             ApplicationOptions applicationOptions,
-            IEventService eventService,
-            ILogger<LogoutController> logger)
+            IEventService eventService)            
         {
-            this._interaction = interaction;
-            this._applicationOptions = applicationOptions;
-            this._logger = logger;
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger;
+            this._applicationOptions = applicationOptions;         
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace IdentityBase.Actions.Logout
                 return vm;
             }
 
-            LogoutRequest context = await this._interaction
+            LogoutRequest context = await this.InteractionService
                 .GetLogoutContextAsync(logoutId);
 
             if (context?.ShowSignoutPrompt == false)
@@ -139,8 +140,9 @@ namespace IdentityBase.Actions.Logout
         private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(
             string logoutId)
         {
-            // get context information (client name, post logout redirect URI and iframe for federated signout)
-            LogoutRequest logout = await this._interaction
+            // get context information (client name, post logout redirect URI
+            // and iframe for federated signout)
+            LogoutRequest logout = await this.InteractionService
                 .GetLogoutContextAsync(logoutId);
 
             LoggedOutViewModel vm = new LoggedOutViewModel
@@ -168,7 +170,7 @@ namespace IdentityBase.Actions.Logout
                         // if there's no current logout context, we need to create one
                         // this captures necessary info from the current logged in user
                         // before we signout and redirect away to the external IdP for signout
-                        vm.LogoutId = await this._interaction
+                        vm.LogoutId = await this.InteractionService
                             .CreateLogoutContextAsync();
                     }
 

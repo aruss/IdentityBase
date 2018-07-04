@@ -15,7 +15,8 @@ namespace IdentityBase.Forms
     {
         public static async Task<CreateViewModelResult>
             CreateViewModel<TCreateViewModelAction>(
-            this ControllerBase controller)
+            this ControllerBase controller,
+            object defaultViewModel = null)
             where TCreateViewModelAction : ICreateViewModelAction
         {
             CreateViewModelContext context = new CreateViewModelContext(
@@ -26,21 +27,11 @@ namespace IdentityBase.Forms
                .RequestServices
                .GetServices<TCreateViewModelAction>();
 
-
-            /* actions.ElementAt(0).GetType()
-                 .GetCustomAttributes<DependsOnPluginAttribute>(true)
-                 .Select(s => s.GetType())
-                 .ExpandInterfaces()
-
-
-
-
-             actions.TopologicalSort(x => x.GetType()
-                  .GetCustomAttributes<DependsOnPluginAttribute>(true)
-                 .Select(s => s.GetType())
-                 .ExpandInterfaces());*/
-
-
+            if (defaultViewModel != null)
+            {
+                context.Items["DefaultViewModel"] = defaultViewModel;
+            }
+            
             // TODO: filter by step and sort topologically
 
             foreach (var formComponent in actions)

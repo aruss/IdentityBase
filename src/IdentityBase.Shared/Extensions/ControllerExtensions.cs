@@ -115,10 +115,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// the response.</returns>
         public static IActionResult RedirectToReturnUrl(
             this WebController controller,
-            string returnUri,
-            IIdentityServerInteractionService interactionService)
+            string returnUri)
         {
-            if (interactionService.IsValidReturnUrl(returnUri))
+            if (controller.InteractionService.IsValidReturnUrl(returnUri))
             {
                 return controller.Redirect(returnUri);
             }
