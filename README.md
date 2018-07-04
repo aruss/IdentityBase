@@ -17,6 +17,8 @@
   </a>-->
 </p>
 
+### Status: Development, not recommended for production use yet!
+
 ### Features
 
 * **Single Sign-on / Sign-out**
