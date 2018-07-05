@@ -29,7 +29,7 @@ namespace IdentityBase
         public string VerificationKey { get; set; }
 
         /// <summary>
-        /// Current context user client 
+        /// Current context client 
         /// </summary>
         public Client Client { get; set; }
 

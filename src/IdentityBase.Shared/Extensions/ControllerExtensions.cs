@@ -58,29 +58,10 @@ namespace Microsoft.AspNetCore.Mvc
             string returnUrl)
         {
             return controller.RedirectToAction(
-                "Index",
+                "Login",
                 "Login",
                 new { ReturnUrl = returnUrl }
             );
-        }
-
-        public static IActionResult RedirectToLoginWithError(
-            this WebController controller,
-            string returnUrl,
-            string errorMessage)
-        {
-            controller.AddModelStateError(errorMessage);
-            return controller.RedirectToLogin(returnUrl);
-        }
-
-        public static IActionResult RedirectToLoginWithError(
-            this WebController controller,
-            string returnUrl,
-            string key,
-            string errorMessage)
-        {
-            controller.AddModelStateError(key, errorMessage);
-            return controller.RedirectToLogin(returnUrl);
         }
 
         public static void AddModelStateError(

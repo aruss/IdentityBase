@@ -4,12 +4,10 @@
 namespace IdentityBase.Actions.Login
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Forms;
-    using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityBase.Shared.InputModels.Login;
     using IdentityBase.Web;
@@ -25,27 +23,25 @@ namespace IdentityBase.Actions.Login
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly UserAccountService _userAccountService;
-        private readonly ClientService _clientService;
         private readonly AuthenticationService _authenticationService;
 
         public LoginController(
             IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
             ILogger<LoginController> logger,
+            IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
             UserAccountService userAccountService,
-            ClientService clientService,
             AuthenticationService authenticationService)
         {
             // setting it this way since interaction service is null in the
             // base class oO
             this.InteractionService = interaction;
             this.Localizer = localizer;
-            this.Logger = logger; 
-
+            this.Logger = logger;
+            this.IdentityBaseContext = identityBaseContext; 
             this._applicationOptions = applicationOptions;
             this._userAccountService = userAccountService;
-            this._clientService = clientService;
             this._authenticationService = authenticationService;
         }
 
@@ -57,13 +53,7 @@ namespace IdentityBase.Actions.Login
         public async Task<IActionResult> Login(string returnUrl)
         {
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
-
-            if (vm == null)
-            {
-                base.Logger.LogError(
-                    "Login attempt with missing returnUrl parameter");
-            }
-
+            
             // If local authentication is disbaled and there is only one
             // external provider provided so do just external authentication
             // without showing the login page 
@@ -115,8 +105,8 @@ namespace IdentityBase.Actions.Login
             if (verificationResult.UserAccount == null)
             {
                 // Show email or password is invalid
-                return this.RedirectToLoginWithError(
-                    model.ReturnUrl, ErrorMessages.InvalidCredentials);
+                this.AddModelStateError(ErrorMessages.InvalidCredentials);
+                return this.RedirectToLogin(model.ReturnUrl);
             }
 
             // User may not login (deactivated)
@@ -131,15 +121,15 @@ namespace IdentityBase.Actions.Login
                         "Send email with information that user account is disabled."
                     );
 
-                    // Show "email or password is invalid" message 
-                    return this.RedirectToLoginWithError(
-                        model.ReturnUrl, ErrorMessages.InvalidCredentials);
+                    // Show "email or password is invalid" message
+                    this.AddModelStateError(ErrorMessages.InvalidCredentials);
                 }
                 else
                 {
-                    return this.RedirectToLoginWithError(
-                        model.ReturnUrl, ErrorMessages.AccountIsDesabled);
+                    this.AddModelStateError(ErrorMessages.AccountIsDesabled); 
                 }
+
+                return this.RedirectToLogin(model.ReturnUrl); 
             }
 
             // User has to change password (password change is required)
@@ -152,9 +142,8 @@ namespace IdentityBase.Actions.Login
             // User has invalid password (handle penalty)
             if (!verificationResult.IsPasswordValid)
             {
-                // Show "email or password is invalid" message 
-                return this.RedirectToLoginWithError(
-                    model.ReturnUrl, ErrorMessages.InvalidCredentials);
+                this.AddModelStateError(ErrorMessages.InvalidCredentials);
+                return this.RedirectToLogin(model.ReturnUrl); 
             }
 
             await this._authenticationService.SignInAsync(
@@ -169,14 +158,6 @@ namespace IdentityBase.Actions.Login
         internal async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)
         {
-            AuthorizationRequest context = await this.InteractionService
-                .GetAuthorizationContextAsync(returnUrl);
-
-            if (context == null)
-            {
-                return null;
-            }
-
             LoginViewModel vm = new LoginViewModel
             {
                 ReturnUrl = returnUrl,
@@ -191,7 +172,8 @@ namespace IdentityBase.Actions.Login
                     .EnableAccountRecovery,
 
                 // TODO: expose AuthorizationRequest
-                LoginHint = context.LoginHint,
+                LoginHint = this.IdentityBaseContext
+                    .AuthorizationRequest.LoginHint,
             };
 
             /*
@@ -207,19 +189,20 @@ namespace IdentityBase.Actions.Login
                 return vm;
             }*/
 
-            Client client = await this._clientService
-                .FindEnabledClientByIdAsync(context.ClientId);
 
-            IEnumerable<ExternalProvider> providers = await this._clientService
-                .GetEnabledProvidersAsync(client);
+            Client client = this.IdentityBaseContext.Client;
 
-            vm.ExternalProviders = providers.Select(s => new
-                Web.ViewModels.External.ExternalProvider
-            {
-                AuthenticationScheme = s.AuthenticationScheme,
-                DisplayName = s.DisplayName
-            }).ToArray();
+           // IEnumerable<ExternalProvider> providers = await this._clientService
+           //     .GetEnabledProvidersAsync(client);
 
+           //  vm.ExternalProviders = providers.Select(s => new
+           //      Web.ViewModels.External.ExternalProvider
+           //  {
+           //      AuthenticationScheme = s.AuthenticationScheme,
+           //      DisplayName = s.DisplayName
+           //  }).ToArray();
+
+            // TODO: remove as soon 
             vm.EnableLocalLogin = (client != null ?
                 client.EnableLocalLogin : false) &&
                 this._applicationOptions.EnableAccountLogin;

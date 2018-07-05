@@ -10,10 +10,8 @@ namespace IdentityBase.Web
         public IStringLocalizer Localizer { get; set; }
         public ILogger Logger { get; set; }
         public IIdentityServerInteractionService InteractionService { get; set; }
+        public IdentityBaseContext IdentityBaseContext { get; set; }
+
         
-        public void AddModelError(string message)
-        {
-            this.ModelState.AddModelError(this.Localizer[message]);
-        }
     }
 }

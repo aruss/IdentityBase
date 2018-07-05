@@ -18,20 +18,20 @@ namespace IdentityBase.Controllers.Consent
 
     public class ConsentController : WebController
     {
-        private readonly IClientStore _clientStore;
+        //private readonly IClientStore _clientStore;
         private readonly IResourceStore _resourceStore;
 
         public ConsentController(
             IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
             ILogger<ConsentController> logger,
-            IClientStore clientStore,
+            IdentityBaseContext identityBaseContext,
             IResourceStore resourceStore)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
-            this._clientStore = clientStore;
+            this.IdentityBaseContext = identityBaseContext; 
             this._resourceStore = resourceStore;
         }
 
@@ -114,8 +114,9 @@ namespace IdentityBase.Controllers.Consent
 
             if (request != null)
             {
-                Client client = await this._clientStore
-                    .FindEnabledClientByIdAsync(request.ClientId);
+                //Client client = await this._clientStore
+                //    .FindEnabledClientByIdAsync(request.ClientId);
+                Client client = this.IdentityBaseContext.Client; 
 
                 if (client != null)
                 {

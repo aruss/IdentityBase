@@ -25,7 +25,6 @@ namespace IdentityBase.Web.Controllers.Register
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly UserAccountService _userAccountService;
-        private readonly ClientService _clientService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
 
@@ -33,6 +32,7 @@ namespace IdentityBase.Web.Controllers.Register
             IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
             ILogger<RegisterController> logger,
+            IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
             UserAccountService userAccountService,
             ClientService clientService,
@@ -42,9 +42,9 @@ namespace IdentityBase.Web.Controllers.Register
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
+            this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
             this._userAccountService = userAccountService;
-            this._clientService = clientService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
         }
@@ -54,14 +54,6 @@ namespace IdentityBase.Web.Controllers.Register
         public async Task<IActionResult> Register(string returnUrl)
         {
             RegisterViewModel vm = await this.CreateViewModelAsync(returnUrl);
-            if (vm == null)
-            {
-                this.Logger.LogError(
-                    "Register attempt with missing returnUrl parameter");
-
-                return this.RedirectToAction("Index", "Error");
-            }
-
             return this.View(vm);
         }
 
@@ -72,7 +64,11 @@ namespace IdentityBase.Web.Controllers.Register
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(await this.CreateViewModelAsync(model));
+                return this.RedirectToAction(
+                      "Register",
+                      "Register",
+                      new { ReturnUrl = model.ReturnUrl }
+                  );
             }
 
             string email = model.Email.ToLower();
@@ -89,7 +85,7 @@ namespace IdentityBase.Web.Controllers.Register
             // User is just disabled by whatever reason
             else if (!userAccount.IsLoginAllowed)
             {
-                this.AddModelError(ErrorMessages.AccountIsDesabled);
+                this.AddModelStateError(ErrorMessages.AccountIsDesabled);
             }
             // If user has a password then its a local account
             else if (userAccount.HasPassword())
@@ -98,7 +94,7 @@ namespace IdentityBase.Web.Controllers.Register
                 if (this._applicationOptions.RequireLocalAccountVerification &&
                     !userAccount.IsEmailVerified)
                 {
-                    this.AddModelError(ErrorMessages.ConfirmAccount);
+                    this.AddModelStateError(ErrorMessages.ConfirmAccount);
 
                     // TODO: show link for resent confirmation link
                 }
@@ -215,11 +211,13 @@ namespace IdentityBase.Web.Controllers.Register
                 return null;
             }
 
-            Client client = await this._clientService
-                .FindEnabledClientByIdAsync(context.ClientId);
+            Client client = this.IdentityBaseContext.Client;
 
-            IEnumerable<ExternalProvider> providers = await this._clientService
-                .GetEnabledProvidersAsync(client);
+            //Client client = await this._clientService
+            //    .FindEnabledClientByIdAsync(context.ClientId);
+
+            //IEnumerable<ExternalProvider> providers = await this._clientService
+            //    .GetEnabledProvidersAsync(client);
 
             RegisterViewModel vm = new RegisterViewModel
             {
@@ -235,12 +233,12 @@ namespace IdentityBase.Web.Controllers.Register
                     client.EnableLocalLogin :
                     false && this._applicationOptions.EnableAccountLogin,
 
-                ExternalProviders = providers.Select(s =>
+                /*ExternalProviders = providers.Select(s =>
                     new Web.ViewModels.External.ExternalProvider
                     {
                         AuthenticationScheme = s.AuthenticationScheme,
                         DisplayName = s.DisplayName
-                    }).ToArray(),
+                    }).ToArray(),*/
 
                 ExternalProviderHints = userAccount?.Accounts?
                     .Select(c => c.Provider)
@@ -358,7 +356,7 @@ namespace IdentityBase.Web.Controllers.Register
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -442,7 +440,7 @@ namespace IdentityBase.Web.Controllers.Register
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -509,7 +507,7 @@ namespace IdentityBase.Web.Controllers.Register
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }

@@ -25,7 +25,6 @@ namespace IdentityBase.Actions.Recover
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly IEmailService _emailService;
-        private readonly ClientService _clientService;
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
@@ -37,7 +36,7 @@ namespace IdentityBase.Actions.Recover
             ApplicationOptions applicationOptions,
             IUserAccountStore userAccountStore,
             IEmailService emailService,
-            ClientService clientService,
+            IdentityBaseContext identityBaseContext,
             UserAccountService userAccountService,
             NotificationService notificationService,
             AuthenticationService authenticationService)
@@ -45,9 +44,9 @@ namespace IdentityBase.Actions.Recover
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
+            this.IdentityBaseContext = identityBaseContext; 
             this._applicationOptions = applicationOptions;
             this._emailService = emailService;
-            this._clientService = clientService;
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
@@ -58,12 +57,6 @@ namespace IdentityBase.Actions.Recover
         public async Task<IActionResult> Recover(string returnUrl)
         {
             RecoverViewModel vm = await this.CreateViewModelAsync(returnUrl);
-            if (vm == null)
-            {
-                this.Logger.LogWarning(ErrorMessages.RecoveryNoReturnUrl);
-
-                return this.RedirectToAction("Index", "Error");
-            }
 
             CreateViewModelResult result =
                 await this.CreateViewModel<IRecoverCreateViewModelAction>();
@@ -118,12 +111,12 @@ namespace IdentityBase.Actions.Recover
                 }
                 else
                 {
-                    this.AddModelError(ErrorMessages.UserAccountIsDeactivated);
+                    this.AddModelStateError(ErrorMessages.UserAccountIsDeactivated);
                 }
             }
             else
             {
-                this.AddModelError(ErrorMessages.UserAccountDoesNotExists);
+                this.AddModelStateError(ErrorMessages.UserAccountDoesNotExists);
             }
 
             // there was an error
@@ -155,11 +148,10 @@ namespace IdentityBase.Actions.Recover
                 return null;
             }
 
-            Client client = await this._clientService
-                .FindEnabledClientByIdAsync(context.ClientId);
+            Client client = this.IdentityBaseContext.Client; 
 
-            IEnumerable<ExternalProvider> providers =
-                await this._clientService.GetEnabledProvidersAsync(client);
+            //IEnumerable<ExternalProvider> providers =
+            //    await this._clientService.GetEnabledProvidersAsync(client);
 
             RecoverViewModel vm = new RecoverViewModel
             {
@@ -174,12 +166,12 @@ namespace IdentityBase.Actions.Recover
                     this._applicationOptions.EnableAccountLogin,
 
                 LoginHint = context.LoginHint,
-                ExternalProviders = providers.Select(s =>
-                    new Web.ViewModels.External.ExternalProvider
-                    {
-                        AuthenticationScheme = s.AuthenticationScheme,
-                        DisplayName = s.DisplayName
-                    }).ToArray(),
+                // ExternalProviders = providers.Select(s =>
+                //     new Web.ViewModels.External.ExternalProvider
+                //     {
+                //         AuthenticationScheme = s.AuthenticationScheme,
+                //         DisplayName = s.DisplayName
+                //     }).ToArray(),
                 ExternalProviderHints = userAccount?.Accounts?
                     .Select(c => c.Provider)
             };
@@ -200,7 +192,7 @@ namespace IdentityBase.Actions.Recover
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -235,7 +227,7 @@ namespace IdentityBase.Actions.Recover
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -289,7 +281,7 @@ namespace IdentityBase.Actions.Recover
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }

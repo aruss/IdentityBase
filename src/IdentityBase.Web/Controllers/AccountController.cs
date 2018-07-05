@@ -77,7 +77,7 @@ namespace IdentityBase.Web.Controllers.Account
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
@@ -93,7 +93,7 @@ namespace IdentityBase.Web.Controllers.Account
             if (await this._userAccountService
                 .LoadByEmailAsync(email) != null)
             {
-                this.AddModelError(ErrorMessages.EmailAddressAlreadyTaken);
+                this.AddModelStateError(ErrorMessages.EmailAddressAlreadyTaken);
 
                 var vm = new ChangeEmailConfirmViewModel
                 {
@@ -133,7 +133,7 @@ namespace IdentityBase.Web.Controllers.Account
                         .ClearVerificationAsync(result.UserAccount);
                 }
 
-                this.AddModelError(ErrorMessages.TokenIsInvalid);
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
 
                 return this.View("InvalidToken");
             }
