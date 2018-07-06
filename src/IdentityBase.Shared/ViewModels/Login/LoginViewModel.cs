@@ -41,6 +41,6 @@ namespace IdentityBase.Web.ViewModels.Login
 
         public string ReturnUrl { get; set; }
 
-        public IEnumerable<FormElement> FormElements { get; set; }
+        public CreateViewModelResult FormModel { get; set; }
     }
 }

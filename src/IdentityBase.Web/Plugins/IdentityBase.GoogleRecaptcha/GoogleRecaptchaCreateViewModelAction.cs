@@ -28,8 +28,8 @@ namespace IdentityBase.GoogleRecaptcha
 
             context.FormElements.Add(new FormElement
             {
-                Name = "recapcha",
-                Before = "submit",
+                Name = "ReCapcha",
+                Before = "Submit",
                 ViewName = "FormElements/Recapcha",
                 Model = new GoogleRecaptchaViewModel
                 {

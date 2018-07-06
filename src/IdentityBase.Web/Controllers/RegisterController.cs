@@ -4,11 +4,11 @@
 namespace IdentityBase.Web.Controllers.Register
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Extensions;
+    using IdentityBase.Forms;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityBase.Shared.InputModels.Register;
@@ -241,8 +241,11 @@ namespace IdentityBase.Web.Controllers.Register
                     }).ToArray(),*/
 
                 ExternalProviderHints = userAccount?.Accounts?
-                    .Select(c => c.Provider)
+                    .Select(c => c.Provider),
             };
+
+            vm.FormModel =
+                 await this.CreateViewModel<IRegisterCreateViewModelAction>(vm); 
 
             return vm;
         }

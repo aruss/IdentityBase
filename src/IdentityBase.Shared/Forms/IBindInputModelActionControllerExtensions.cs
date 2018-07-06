@@ -51,7 +51,8 @@ namespace IdentityBase.Forms
                 .TopologicalSort(x => context.FormElements.Where(c =>
                      !String.IsNullOrWhiteSpace(c.Name) &&
                      !String.IsNullOrWhiteSpace(x.Before) &&
-                     c.Name.Equals(x.Before)))
+                     c.Name.Equals(x.Before,
+                        StringComparison.InvariantCultureIgnoreCase)))
                 .Reverse();
 
             return new CreateViewModelResult(

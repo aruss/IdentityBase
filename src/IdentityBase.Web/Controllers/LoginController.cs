@@ -64,10 +64,8 @@ namespace IdentityBase.Actions.Login
                     returnUrl);
             }
 
-            CreateViewModelResult result =
-                await this.CreateViewModel<ILoginCreateViewModelAction>(vm);
-
-            vm.FormElements = result.FormElements;
+            vm.FormModel =
+                await this.CreateViewModel<ILoginCreateViewModelAction>(vm); 
 
             return this.View(vm);
         }

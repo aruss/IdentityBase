@@ -5,7 +5,7 @@ namespace IdentityBase.Web.Forms
     using System.Threading.Tasks;
     using IdentityBase.Forms;
 
-    public class LoginCreateViewModelAction : ILoginCreateViewModelAction
+    public class RegisterCreateViewModelAction : IRegisterCreateViewModelAction
     {
         public int Step => 0;
 
@@ -25,8 +25,8 @@ namespace IdentityBase.Web.Forms
 
             context.FormElements.Add(new FormElement
             {
-                Name = "RememberMe",
-                ViewName = "FormElements/RememberMe"
+                Name = "PasswordConfirm",
+                ViewName = "FormElements/PasswordConfirm"
             });
 
             context.FormElements.Add(new FormElement

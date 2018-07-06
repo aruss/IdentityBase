@@ -13,6 +13,9 @@ namespace IdentityBase.Web.Forms
 
             service.AddScoped<IRecoverCreateViewModelAction,
                 RecoverCreateViewModelAction>();
+
+            service.AddScoped<IRegisterCreateViewModelAction,
+                RegisterCreateViewModelAction>(); 
         }
     }
 }

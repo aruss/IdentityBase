@@ -13,13 +13,13 @@ namespace IdentityBase.Web.Forms
         {
             context.FormElements.Add(new FormElement
             {
-                Name = "email",
+                Name = "Email",
                 ViewName = "FormElements/Email"
             });
-                      
+
             context.FormElements.Add(new FormElement
             {
-                Name = "submit",
+                Name = "Submit",
                 ViewName = "FormElements/Submit"
             });
         }

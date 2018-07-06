@@ -4,6 +4,7 @@
 namespace IdentityBase.Web.ViewModels.Register
 {
     using System.Collections.Generic;
+    using IdentityBase.Forms;
     using IdentityBase.Web.ViewModels.External;
 
     public class RegisterViewModel : IExternalLoginsViewModel
@@ -23,5 +24,6 @@ namespace IdentityBase.Web.ViewModels.Register
         public IEnumerable<string> ExternalProviderHints { get; set; }
 
         public string ReturnUrl { get; set; }
+        public CreateViewModelResult FormModel { get; set; }
     }
 }

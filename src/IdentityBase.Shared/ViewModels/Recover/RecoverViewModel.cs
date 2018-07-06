@@ -23,6 +23,6 @@ namespace IdentityBase.Web.ViewModels.Recover
 
         public string ReturnUrl { get; set; }
 
-        public IEnumerable<FormElement> FormElements { get; set; }
+        public CreateViewModelResult FormModel { get; set; }
     }
 }

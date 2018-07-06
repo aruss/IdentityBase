@@ -44,7 +44,7 @@ namespace IdentityBase.Actions.Recover
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
-            this.IdentityBaseContext = identityBaseContext; 
+            this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
             this._emailService = emailService;
             this._userAccountService = userAccountService;
@@ -57,11 +57,6 @@ namespace IdentityBase.Actions.Recover
         public async Task<IActionResult> Recover(string returnUrl)
         {
             RecoverViewModel vm = await this.CreateViewModelAsync(returnUrl);
-
-            CreateViewModelResult result =
-                await this.CreateViewModel<IRecoverCreateViewModelAction>();
-
-            vm.FormElements = result.FormElements;
 
             return this.View(vm);
         }
@@ -148,7 +143,7 @@ namespace IdentityBase.Actions.Recover
                 return null;
             }
 
-            Client client = this.IdentityBaseContext.Client; 
+            Client client = this.IdentityBaseContext.Client;
 
             //IEnumerable<ExternalProvider> providers =
             //    await this._clientService.GetEnabledProvidersAsync(client);
@@ -173,7 +168,10 @@ namespace IdentityBase.Actions.Recover
                 //         DisplayName = s.DisplayName
                 //     }).ToArray(),
                 ExternalProviderHints = userAccount?.Accounts?
-                    .Select(c => c.Provider)
+                    .Select(c => c.Provider),
+                
+                FormModel = await this
+                    .CreateViewModel<IRecoverCreateViewModelAction>()
             };
 
             return vm;

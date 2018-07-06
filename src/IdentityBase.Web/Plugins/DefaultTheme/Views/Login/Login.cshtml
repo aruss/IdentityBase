@@ -20,7 +20,7 @@
                           asp-route-returnUrl="@Model.ReturnUrl"
                           novalidate>
                         <fieldset>
-                            @foreach (var component in Model.FormElements)
+                            @foreach (var component in Model.FormModel.FormElements)
                             {
                                 await Html.RenderPartialAsync(component.ViewName, component.Model);
                             }
