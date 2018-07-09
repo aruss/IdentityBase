@@ -3,7 +3,6 @@
 
 namespace IdentityBase.Actions.Recover
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
@@ -33,10 +32,10 @@ namespace IdentityBase.Actions.Recover
             IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
             ILogger<RecoverController> logger,
+            IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
             IUserAccountStore userAccountStore,
             IEmailService emailService,
-            IdentityBaseContext identityBaseContext,
             UserAccountService userAccountService,
             NotificationService notificationService,
             AuthenticationService authenticationService)
@@ -168,11 +167,11 @@ namespace IdentityBase.Actions.Recover
                 //         DisplayName = s.DisplayName
                 //     }).ToArray(),
                 ExternalProviderHints = userAccount?.Accounts?
-                    .Select(c => c.Provider),
-                
-                FormModel = await this
-                    .CreateViewModel<IRecoverCreateViewModelAction>()
+                    .Select(c => c.Provider)
             };
+
+            vm.FormModel = await this
+                .CreateViewModel<IRecoverCreateViewModelAction>(vm);
 
             return vm;
         }

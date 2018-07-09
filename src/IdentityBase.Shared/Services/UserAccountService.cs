@@ -108,7 +108,9 @@ namespace IdentityBase.Services
             return result; 
         }
         
-        private bool VerifiyPasswordHash(UserAccount userAccount, string password)
+        private bool VerifiyPasswordHash(
+            UserAccount userAccount,
+            string password)
         {
             return this._crypto.VerifyPasswordHash(
                 userAccount.PasswordHash,

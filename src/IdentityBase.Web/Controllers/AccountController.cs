@@ -22,12 +22,14 @@ namespace IdentityBase.Web.Controllers.Account
             IIdentityServerInteractionService interaction,
             IStringLocalizer localizer,
             ILogger<AccountController> logger,
+            IdentityBaseContext identityBaseContext,
             UserAccountService userAccountService)
             
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
+            this.IdentityBaseContext = identityBaseContext;
             this._userAccountService = userAccountService;
         }
 
@@ -39,12 +41,12 @@ namespace IdentityBase.Web.Controllers.Account
             UserAccount userAccount = await this._userAccountService
                 .LoadByIdAsync(userId);
 
-            var vm = new AccountViewModel
+            AccountViewModel vm = new AccountViewModel
             {
                 Email = userAccount.Email
             };
 
-            return this.View("Index", vm);
+            return this.View(vm);
         }
 
         [HttpPost("account/change-email", Name = "ChangeEmail")]
