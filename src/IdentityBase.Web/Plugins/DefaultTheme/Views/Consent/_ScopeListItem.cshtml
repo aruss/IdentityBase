@@ -6,18 +6,18 @@
                type="checkbox"
                name="ScopesConsented"
                id="scopes_@Model.Name"
-               value="@Model.Name"
+               value="Model.Name"
                checked="@Model.Checked"
                disabled="@Model.Required" />
         <input show-if="@Model.Required"
                type="hidden"
                name="ScopesConsented"
                value="@Model.Name" />
-        <strong>@Model.DisplayName</strong>
+        <strong>@Localizer[Model.DisplayName]</strong>
         <span show-if="Model.Emphasize" class="glyphicon glyphicon-exclamation-sign"></span>
     </label>
     <span show-if="Model.Required"><em localize="">(required)</em></span>
     <div class="consent-description" hide-if-null="@Model.Description">
-        <label for="scopes_@Model.Name" localize="">@Model.Description</label>
+        <label for="scopes_@Model.Name">@Localizer[Model.Description]</label>
     </div>
 </li>

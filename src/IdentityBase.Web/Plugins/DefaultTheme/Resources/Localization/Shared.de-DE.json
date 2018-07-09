@@ -32,5 +32,11 @@
   "No, do not allow": "Nein, nicht erlauben",
   "Logout": "Ausloggen",
   "Remember my decision": "Merke an meine Entscheidung",
-  "Your password has been updated successfully.": "Ihr Password wurde erfolgreich geändert."
+  "Your password has been updated successfully.": "Ihr Password wurde erfolgreich geändert.",
+  "User profile": "Benutzerprofil",
+  "Your email address": "Deine E-Mail adresse",
+  "Your user identifier": "Deine Benutzer ID",
+  "Full access to IdentityBase API": "Voller Zugriff auf IdentityBase API",
+  "Offline Access": "Offline-Zugriff",
+  "Account": "Konto"
 }

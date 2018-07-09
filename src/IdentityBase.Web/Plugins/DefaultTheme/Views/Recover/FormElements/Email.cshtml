@@ -1,8 +1,8 @@
 @model IdentityBase.Web.ViewModels.Recover.RecoverViewModel
-       
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input class="form-control"
-               placeholder="Enter email"
-               asp-for="Email" />
-    </div>
+
+<div class="form-group">
+    <label asp-for="Email" localize="">Email</label>
+    <input class="form-control"
+           placeholder="@Localizer["Enter email"]"
+           asp-for="Email" />
+</div>

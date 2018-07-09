@@ -32,6 +32,12 @@
   "No, do not allow": "No, do not allow",
   "Logout": "Logout",
   "Remember my decision": "Remember my decision",
-  "Your password has been updated successfully.": "Your password has been updated successfully."
+  "Your password has been updated successfully.": "Your password has been updated successfully.",
+  "User profile": "User profile",
+  "Your email address": "Your email address",
+  "Your user identifier": "Your user identifier",
+  "Full access to IdentityBase API": "Full access to IdentityBase API",
+  "Offline Access": "Offline Access",
+  "Account": "Account"
 }
 
