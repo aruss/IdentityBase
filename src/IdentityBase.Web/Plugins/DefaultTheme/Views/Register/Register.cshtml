@@ -1,25 +1,22 @@
-@model IdentityBase.Web.ViewModels.Register.RegisterViewModel
-
+@model IdentityBase.Actions.Register.RegisterViewModel
 <div class="login-page">
     <div class="page-header">
         <h1 localize="">Register</h1>
     </div>
-
     @Html.Partial("_ValidationSummary")
-
     <div class="row">
         <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"
-                        localize="">
+                    <h3 class="panel-title" localize="">
                         Local Account
                     </h3>
                 </div>
                 <div class="panel-body">
                     <form asp-controller="Register"
                           asp-action="Register"
-                          asp-route-returnUrl="@Model.ReturnUrl" novalidate>
+                          asp-route-returnUrl="@Model.ReturnUrl"
+                          novalidate>
                         <fieldset>
                             @foreach (var component in Model.FormModel.FormElements)
                             {
@@ -42,7 +39,6 @@
                 </div>
             </div>
         </div>
-
         @Html.Partial("_ExternalLogins", Model)
     </div>
 </div>

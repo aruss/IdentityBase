@@ -50,7 +50,9 @@ namespace IdentityBase.Models
         /// </summary>
         public DateTime? PasswordChangedAt { get; set; }
 
-        //public string Phone { get; set; }
+        public string Phone { get; set; }
+        public bool IsPhoneVerified { get; set; }
+        public DateTime? PhoneVerifiedAt { get; set; }
 
         [StringLength(100)]
         public virtual string VerificationKey { get; set; }

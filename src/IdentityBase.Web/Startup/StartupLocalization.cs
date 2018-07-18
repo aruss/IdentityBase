@@ -14,7 +14,6 @@ namespace IdentityBase
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Options;
-    using ServiceBase.Extensions;
     using ServiceBase.Localization;
     using ServiceBase.Resources;
 

@@ -4,12 +4,10 @@
 namespace IdentityBase.Services
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
     using IdentityBase.Events;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using Microsoft.AspNetCore.Http;
     using ServiceBase;
@@ -88,9 +86,10 @@ namespace IdentityBase.Services
                 // local account 
                 result.IsLocalAccount = true;
 
-                // Check if password is valid 
-                result.IsPasswordValid = this.VerifiyPasswordHash(
-                    userAccount, password);
+                // Check if password is valid
+                result.IsPasswordValid = this.IsPasswordValid(
+                   userAccount.PasswordHash,
+                   password);
 
                 // TODO: implement invalid passowrd policy 
             }
@@ -104,19 +103,16 @@ namespace IdentityBase.Services
             result.NeedChangePassword = false;
 
             // TODO: implement hints if user should get help to get authenticated
-            
-            return result; 
+
+            return result;
         }
-        
-        private bool VerifiyPasswordHash(
-            UserAccount userAccount,
-            string password)
+
+        public bool IsPasswordValid(string hash, string password)
         {
             return this._crypto.VerifyPasswordHash(
-                userAccount.PasswordHash,
-                password,
-                this._applicationOptions.PasswordHashingIterationCount
-            );
+                    hash,
+                    password,
+                    this._applicationOptions.PasswordHashingIterationCount);
         }
 
         /// <summary>
@@ -332,7 +328,7 @@ namespace IdentityBase.Services
 
 
 
-
+        // Refactor this
         public async Task ClearVerificationAsync(UserAccount userAccount)
         {
             this.ClearVerificationData(userAccount);

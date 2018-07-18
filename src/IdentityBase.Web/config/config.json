@@ -35,7 +35,6 @@
     "LoginAfterAccountCreation": false,
     "LoginAfterAccountConfirmation": true,
     "LoginAfterAccountRecovery": true,
-    "CancelAfterAccountRecovery": false,
     "LoginAfterAccountInvitation": true,
     "VerificationKeyLifetime": 86400,
     "EnableAccountRegistration": true,
@@ -74,7 +73,7 @@
       "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      "ConnectionString": "Server=localhost,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=identitybase-2B4D44E6-F6C7-4A32-B082-71C956322B05;Trusted_Connection=True;MultipleActiveResultSets=true"
     },
     "MySql": {
       "ConnectionString": "server=localhost;port=3306;database=identitybase;uid=dev;password=dev"

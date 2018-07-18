@@ -1,0 +1,16 @@
+@model IdentityBase.Mvc.AccountMenuViewModel
+
+<ul class="nav nav-pills nav-stacked">
+
+    @foreach (var item in Model.Items)
+    {
+        <li id="@item.Name"
+            is-active-route
+            asp-controller="@item.Controller"
+            asp-action="@item.Action">
+            <a asp-controller="@item.Controller"
+               asp-action="@item.Action"
+               asp-route-returnUrl="@Model.ReturnUrl">@item.Name</a>
+        </li>
+    }
+</ul>

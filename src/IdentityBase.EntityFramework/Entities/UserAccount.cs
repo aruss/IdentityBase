@@ -15,6 +15,12 @@ namespace IdentityBase.EntityFramework.Entities
 
         public bool IsLoginAllowed { get; set; }
 
+        /*public bool IsPhoneVerified { get; set; }
+
+        public DateTime? PhoneVerifiedAt { get; set; }
+
+        public bool IsPhoneAllowed { get; set; }*/
+
         public virtual DateTime? LastLoginAt { get; set; }
 
         public virtual DateTime? LastFailedLoginAt { get; set; }

@@ -3,9 +3,9 @@
 
 namespace IdentityBase
 {
-    using ServiceBase.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.DependencyInjection;
     using ServiceBase.Notification.Email;
 
     public static partial class IServiceCollectionExtensions

@@ -5,8 +5,8 @@ namespace IdentityBase
 {
     using IdentityServer4.Extensions;
     using Microsoft.AspNetCore.Http;
-    using ServiceBase.Extensions;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase.Extensions;
 
     public static partial class HttpContextExtensions
     {

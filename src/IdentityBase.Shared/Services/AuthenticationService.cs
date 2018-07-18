@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Services
 {
     using System;
@@ -28,7 +31,7 @@ namespace IdentityBase.Services
             this._userAccountService = userAccountService;
             this._httpContextAccessor = httpContextAccessor;
             this._applicationOptions = applicationOptions;
-            this._dateTimeAccessor = dateTimeAccessor; 
+            this._dateTimeAccessor = dateTimeAccessor;
         }
 
         /// <summary>
@@ -63,15 +66,26 @@ namespace IdentityBase.Services
                 userAccount.Id.ToString(),
                 userAccount.Email,
                 properties);
-            
+
             await this._userAccountService
-                    .PerceiveSuccessfulLoginAsync(userAccount);         
+                    .PerceiveSuccessfulLoginAsync(userAccount);
         }
 
         public async Task SignOutAsync()
         {
             // TODO: signout
             // TODO: log signout event 
+        }
+
+        public async Task<UserAccount> GetAuthenticatedUserAccountAsync()
+        {
+            Guid userId = Guid.Parse(this._httpContextAccessor.HttpContext
+                .User.FindFirst("sub").Value);
+
+            UserAccount userAccount = await this._userAccountService
+                .LoadByIdAsync(userId);
+
+            return userAccount; 
         }
     }
 }

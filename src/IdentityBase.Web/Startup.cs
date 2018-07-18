@@ -1,15 +1,14 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
 namespace IdentityBase
 {
     using System;
     using System.Net.Http;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
+    using IdentityBase.Forms;
     using IdentityBase.Services;
-    using IdentityBase.Web.Forms;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;

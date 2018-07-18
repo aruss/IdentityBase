@@ -1,9 +1,8 @@
-@model IdentityBase.Web.ViewModels.Login.LoginViewModel
+@model IdentityBase.Actions.Login.LoginViewModel
 <div class="login-page">
     <div class="page-header">
         <h1 localize="">Login</h1>
     </div>
-
     @Html.Partial("_ValidationSummary")
     <div class="row">
         <div class="col-sm-6" show-if="@Model.EnableLocalLogin">
@@ -16,7 +15,7 @@
                 </div>
                 <div class="panel-body">
                     <form asp-controller="Login"
-                          asp-action="Index"
+                          asp-action="Login"
                           asp-route-returnUrl="@Model.ReturnUrl"
                           novalidate>
                         <fieldset>
@@ -40,7 +39,7 @@
                     </ul>
                 </div>
             </div>
-            @Html.Partial("_ExternalLogins", Model)
         </div>
+        @Html.Partial("_ExternalLogins", Model)
     </div>
 </div>

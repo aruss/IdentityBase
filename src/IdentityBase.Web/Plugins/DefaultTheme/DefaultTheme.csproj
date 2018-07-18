@@ -206,34 +206,61 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Login\FormElements\Submit.cshtml">
+    <Content Update="Views\AccountExternalLogins\ExternalLogins.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Login\FormElements\RememberMe.cshtml">
+    <Content Update="Views\AccountChangePassword\ChangePassword.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Login\FormElements\Password.cshtml">
+    <Content Update="Views\AccountTwoFactorAuth\TwoFactorAuth.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Login\FormElements\Email.cshtml">
+    <Content Update="Views\Login\LoginFormElements\Submit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Recover\FormElements\Email.cshtml">
+    <Content Update="Views\Login\LoginFormElements\RememberMe.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Recover\FormElements\Submit.cshtml">
+    <Content Update="Views\Login\LoginFormElements\Password.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Register\FormElements\Email.cshtml">
+    <Content Update="Views\Login\LoginFormElements\Email.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Register\FormElements\PasswordConfirm.cshtml">
+    <Content Update="Views\Recover\RecoverFormElements\Email.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Register\FormElements\Password.cshtml">
+    <Content Update="Views\Recover\RecoverFormElements\Submit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Register\FormElements\Submit.cshtml">
+    <Content Update="Views\Recover\ConfirmFormElements\Email.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Recover\ConfirmFormElements\Submit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\ConfirmFormElements\Password.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\ConfirmFormElements\PasswordConfirm.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\ConfirmFormElements\Submit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\RegisterFormElements\Email.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\RegisterFormElements\PasswordConfirm.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\RegisterFormElements\Password.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Register\RegisterFormElements\Submit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\Components\AccountMenu\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

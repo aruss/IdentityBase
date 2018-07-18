@@ -1,4 +1,4 @@
-@model IdentityBase.Web.ViewModels.External.IExternalLoginsViewModel
+@model IdentityBase.Actions.External.IExternalLoginsViewModel
 
 @if (Model.ExternalProviders != null && Model.ExternalProviders.Count() > 0)
 {
@@ -9,7 +9,6 @@
             </div>
             <div class="panel-body">
                 <ul class="list-inline">
-
                     @foreach (var item in Model.ExternalProviders)
                     {
                         <li>

@@ -35,7 +35,7 @@ namespace IdentityBase.Configuration
 
             var users = new List<UserAccount>
             {
-                 // Active user account with local account but no external accounts
+                // Active user account with local account but no external accounts
                 new UserAccount
                 {
                     Id = Guid.Parse("0c2954d2-4c73-44e3-b0f2-c00403e4adef"),

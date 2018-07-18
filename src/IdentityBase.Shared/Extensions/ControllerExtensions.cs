@@ -1,15 +1,13 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace Microsoft.AspNetCore.Mvc
+namespace IdentityBase.Mvc
 {
     using System;
     using System.Text.Encodings.Web;
     using IdentityBase;
-    using IdentityBase.Extensions;
-    using IdentityBase.Web;
-    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// <see cref="WebController"/> extension methods.

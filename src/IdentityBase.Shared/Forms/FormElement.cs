@@ -2,9 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 namespace IdentityBase.Forms
-{    /// <summary>
-     /// Represents one form element, like text box or recaptcha widget
-     /// </summary>
+{
+    /// <summary>
+    /// Represents one form element, like text box or recaptcha widget
+    /// </summary>
     public class FormElement
     {
         public string Name { get; set; }

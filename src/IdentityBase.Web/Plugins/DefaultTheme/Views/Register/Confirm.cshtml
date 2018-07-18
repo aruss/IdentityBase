@@ -1,4 +1,4 @@
-@model IdentityBase.Web.ViewModels.Register.ConfirmViewModel
+@model IdentityBase.Actions.Register.ConfirmViewModel
 
 <div class="login-page">
     <div class="page-header">
@@ -18,18 +18,18 @@
 
                         <fieldset>
                             <div class="form-group">
-                                <label asp-for="Password"></label>
+                                <label asp-for="Password "localize="">Password</label>
                                 <input type="password"
                                        class="form-control"
-                                       placeholder="Password"
+                                       placeholder="@Localizer["Enter password"]"
                                        asp-for="Password"
                                        autocomplete="off" />
                             </div>
                             <div class="form-group">
-                                <label asp-for="PasswordConfirm"></label>
+                                <label asp-for="PasswordConfirm" localize="">Repeat password</label>
                                 <input type="password"
                                        class="form-control"
-                                       placeholder="Password"
+                                       placeholder="@Localizer["Enter password"]"
                                        asp-for="PasswordConfirm"
                                        autocomplete="off" />
                             </div>

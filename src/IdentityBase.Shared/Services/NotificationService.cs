@@ -1,3 +1,6 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 namespace IdentityBase.Services
 {
     using System.Globalization;
@@ -145,10 +148,10 @@ namespace IdentityBase.Services
         }
 
         private string GetUrl(
-          string baseUrl,
-          string path,
-          string verificationKey,
-          string clientId)
+            string baseUrl,
+            string path,
+            string verificationKey,
+            string clientId)
         {
             return $"{baseUrl}{path}?key={verificationKey}&clientId={clientId}&culture={CultureInfo.CurrentUICulture.Name}";
         }

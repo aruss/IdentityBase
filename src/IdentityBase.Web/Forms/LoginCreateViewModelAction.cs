@@ -1,9 +1,9 @@
+// Copyright (c) Russlan Akiev. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
-namespace IdentityBase.Web.Forms
+namespace IdentityBase.Forms
 {
     using System.Threading.Tasks;
-    using IdentityBase.Forms;
 
     public class LoginCreateViewModelAction : ILoginCreateViewModelAction
     {
@@ -14,25 +14,25 @@ namespace IdentityBase.Web.Forms
             context.FormElements.Add(new FormElement
             {
                 Name = "Email",
-                ViewName = "FormElements/Email"
+                ViewName = "LoginFormElements/Email"
             });
 
             context.FormElements.Add(new FormElement
             {
                 Name = "Password",
-                ViewName = "FormElements/Password"
+                ViewName = "LoginFormElements/Password"
             });
 
             context.FormElements.Add(new FormElement
             {
                 Name = "RememberMe",
-                ViewName = "FormElements/RememberMe"
+                ViewName = "LoginFormElements/RememberMe"
             });
 
             context.FormElements.Add(new FormElement
             {
                 Name = "Submit",
-                ViewName = "FormElements/Submit"
+                ViewName = "LoginFormElements/Submit"
             });
         }
     }

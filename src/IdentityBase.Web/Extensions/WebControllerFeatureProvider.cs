@@ -6,9 +6,9 @@ namespace IdentityBase
     using System.Collections.Generic;
     using System.Reflection;
     using IdentityBase.Actions.Recover;
+    using IdentityBase.Actions.Register;
     using IdentityBase.Configuration;
-    using IdentityBase.Web;
-    using IdentityBase.Web.Controllers.Register;
+    using IdentityBase.Mvc;
 
     /// <summary>
     /// Discovers WebControllers from a list of <see cref="ApplicationPart"/>

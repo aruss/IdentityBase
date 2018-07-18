@@ -7,7 +7,6 @@ namespace IdentityBase.WebApi.Actions.Invitations
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
-    using IdentityBase.Extensions;
     using IdentityBase.Models;
     using IdentityBase.Services;
     using IdentityServer4.Models;

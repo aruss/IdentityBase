@@ -4,11 +4,10 @@
  *
  * Code borrowed from: https://github.com/brockallen/BrockAllen.MembershipReboot/tree/master/src/BrockAllen.MembershipReboot/Crypto
  */
- 
+
 namespace IdentityBase.Crypto
 {
     using System;
-    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Security.Cryptography;
     using System.Text;
