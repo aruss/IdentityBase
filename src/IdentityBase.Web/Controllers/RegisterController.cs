@@ -397,13 +397,6 @@ namespace IdentityBase.Web.Controllers.Register
 
                     return this.RedirectToReturnUrl(returnUrl);
                 }
-                else if (this._applicationOptions.CancelAfterAccountConfirmation)
-                {
-                    return this.RedirectToAction(
-                        "complete",
-                        new { ReturnUrl = returnUrl }
-                    );
-                }
 
                 return this.RedirectToLogin(returnUrl);
             }
@@ -465,15 +458,7 @@ namespace IdentityBase.Web.Controllers.Register
             await this._userAccountService
                 .UpdateUserAccountAsync(result.UserAccount);
 
-            if (this._applicationOptions.CancelAfterAccountConfirmation)
-            {
-                // return this.View("Complete");
-                return this.RedirectToAction(
-                        "complete",
-                        new { ReturnUrl = returnUrl }
-                    );
-            }
-            else if (result.UserAccount.CreationKind == CreationKind.Invitation)
+            if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 return this.RedirectToReturnUrl(returnUrl);
             }

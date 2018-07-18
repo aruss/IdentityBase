@@ -244,11 +244,7 @@ namespace IdentityBase.Actions.Recover
                 model.Password
             );
 
-            if (this._applicationOptions.CancelAfterAccountRecovery)
-            {
-                return this.View("Complete");
-            }
-            else if (this._applicationOptions.LoginAfterAccountRecovery)
+            if (this._applicationOptions.LoginAfterAccountRecovery)
             {
                 await this._authenticationService
                     .SignInAsync(result.UserAccount, returnUrl);
