@@ -38,6 +38,12 @@
   "Your user identifier": "Your user identifier",
   "Full access to IdentityBase API": "Full access to IdentityBase API",
   "Offline Access": "Offline Access",
-  "Account": "Account"
+  "Account": "Account",
+  "External logins": "External logins",
+  "Two factor authentication": "Two-factor authentication (2FA)",
+  "Change password": "Change password",
+  "Current password": "Current password",
+  "Update password": "Update password",
+  "Profile": "Profile",
+  "Save": "Save"
 }
-

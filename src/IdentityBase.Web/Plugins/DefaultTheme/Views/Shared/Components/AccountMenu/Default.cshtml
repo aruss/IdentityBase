@@ -1,4 +1,5 @@
 @model IdentityBase.Mvc.AccountMenuViewModel
+@using ServiceBase
 
 <ul class="nav nav-pills nav-stacked">
 
@@ -10,7 +11,9 @@
             asp-action="@item.Action">
             <a asp-controller="@item.Controller"
                asp-action="@item.Action"
-               asp-route-returnUrl="@Model.ReturnUrl">@item.Name</a>
+               asp-route-returnUrl="@Model.ReturnUrl">@Localizer[item.Name
+                                                     .HumanizeCamelCased()
+                                                     .Capitalize()]</a>
         </li>
     }
 </ul>
