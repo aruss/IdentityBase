@@ -4,6 +4,9 @@
 namespace IdentityBase.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Crypto;
@@ -361,6 +364,7 @@ namespace IdentityBase.Services
             string password = null,
             string returnUrl = null)
         {
+            // TODO:
             DateTime now = DateTime.UtcNow;
 
             UserAccount userAccount = new UserAccount
@@ -535,30 +539,31 @@ namespace IdentityBase.Services
         //         userAccount);
         // }
 
-        //public async Task<UserAccount> CreateNewExternalUserAccountAsync(
-        //    string email,
-        //    string provider,
-        //    string subject,
-        //    string returnUrl = null)
-        //{
-        //    var userAccount = CreateNewLocalUserAccount(email);
-        //    userAccount.Accounts = new ExternalAccount[]
-        //    {
-        //        new ExternalAccount
-        //        {
-        //            Email = email,
-        //            UserAccountId = userAccount.Id,
-        //            Provider = provider,
-        //            Subject = subject,
-        //            CreatedAt = userAccount.CreatedAt,
-        //            UpdatedAt  = userAccount.UpdatedAt,
-        //            LastLoginAt = null,
-        //            IsLoginAllowed = true
-        //        }
-        //    };
-        //
-        //    return await WriteUserAccountAsync(userAccount);
-        //}
+        public async Task<UserAccount> CreateNewExternalUserAccountAsync(
+            string provider,
+            string subject,
+            string email,
+            IEnumerable<Claim> claims)
+        {
+            UserAccount userAccount = this.CreateNewLocalUserAccount(email);
+
+            userAccount.Accounts = new ExternalAccount[]
+            {
+               new ExternalAccount
+               {
+                   Email = email,
+                   UserAccountId = userAccount.Id,
+                   Provider = provider,
+                   Subject = subject,
+                   CreatedAt = userAccount.CreatedAt,
+                   UpdatedAt  = userAccount.UpdatedAt,
+                   LastLoginAt = null,
+                   IsLoginAllowed = true
+               }
+            };
+
+            return await this.WriteUserAccountAsync(userAccount);
+        }
 
         //public async Task<ExternalAccount> AddExternalAccountAsync(
         //    UserAccount userAccount,

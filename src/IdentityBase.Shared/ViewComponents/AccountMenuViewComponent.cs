@@ -19,7 +19,7 @@ namespace IdentityBase.Mvc
         {
             this.Name = name;
             this.Controller = controller;
-            this.Action = action; 
+            this.Action = action;
         }
 
         public string Name { get; set; }
@@ -33,14 +33,14 @@ namespace IdentityBase.Mvc
 
         public AccountMenuViewComponent(IdentityBaseContext idbContext)
         {
-            this._idbContext = idbContext; 
+            this._idbContext = idbContext;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var vm = new AccountMenuViewModel
             {
-                ReturnUrl = this._idbContext.ReturnUrl, 
+                ReturnUrl = this._idbContext.ReturnUrl,
                 Items = new AccountMenuItem[]
                 {
                     new AccountMenuItem("Account", "AccountProfile", "Profile"),
@@ -48,9 +48,9 @@ namespace IdentityBase.Mvc
                     new AccountMenuItem("ExternalLogins", "AccountExternalLogins", "ExternalLogins"),
                     new AccountMenuItem("TwoFactorAuthentication", "AccountTwoFactorAuth", "TwoFactorAuth"),
                 }
-            }; 
-            
-            return View(vm);
+            };
+
+            return this.View(vm);
         }
     }
 }

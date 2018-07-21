@@ -9,8 +9,9 @@ namespace IdentityBase.Actions.Login
     using System.Linq;
     using IdentityBase.Actions.External;
     using IdentityBase.Forms;
+    using IdentityBase.Models;
 
-    public class LoginViewModel : IExternalLoginsViewModel
+    public class LoginViewModel : IExternalProvidersViewModel
     {
         [EmailAddress]
         [StringLength(254)]

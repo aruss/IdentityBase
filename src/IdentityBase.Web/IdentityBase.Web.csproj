@@ -25,31 +25,26 @@
   </Target>
 
   <ItemGroup>
-    <Compile Remove="Actions\External\**" />
     <Compile Remove="config\**" />
     <Compile Remove="Controllers\External\**" />
     <Compile Remove="logs\**" />
     <Compile Remove="Plugins\**" />
     <Compile Remove="temp\**" />
-    <Content Remove="Actions\External\**" />
     <Content Remove="config\**" />
     <Content Remove="Controllers\External\**" />
     <Content Remove="logs\**" />
     <Content Remove="Plugins\**" />
     <Content Remove="temp\**" />
-    <EmbeddedResource Remove="Actions\External\**" />
     <EmbeddedResource Remove="config\**" />
     <EmbeddedResource Remove="Controllers\External\**" />
     <EmbeddedResource Remove="logs\**" />
     <EmbeddedResource Remove="Plugins\**" />
     <EmbeddedResource Remove="temp\**" />
-    <None Remove="Actions\External\**" />
     <None Remove="config\**" />
     <None Remove="Controllers\External\**" />
     <None Remove="logs\**" />
     <None Remove="Plugins\**" />
     <None Remove="temp\**" />
-    <Compile Remove="Startup\StartupExternalProviders.cs" />
     <Content Remove="web.config" />
     <None Remove="IdentityBase.Web.nuspec" />
     <None Remove="README.md" />
@@ -57,6 +52,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.1.1" />
 	<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
 	<PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />

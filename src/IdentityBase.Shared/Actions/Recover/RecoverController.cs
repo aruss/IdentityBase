@@ -158,12 +158,10 @@ namespace IdentityBase.Actions.Recover
                     this._applicationOptions.EnableAccountLogin,
 
                 LoginHint = context.LoginHint,
-                // ExternalProviders = providers.Select(s =>
-                //     new Web.ViewModels.External.ExternalProvider
-                //     {
-                //         AuthenticationScheme = s.AuthenticationScheme,
-                //         DisplayName = s.DisplayName
-                //     }).ToArray(),
+
+                ExternalProviders = await this._authenticationService
+                    .GetExternalProvidersAsync(),
+
                 ExternalProviderHints = userAccount?.Accounts?
                     .Select(c => c.Provider)
             };

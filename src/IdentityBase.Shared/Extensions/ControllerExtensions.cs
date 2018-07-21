@@ -4,8 +4,9 @@
 namespace IdentityBase.Mvc
 {
     using System;
-    using System.Text.Encodings.Web;
+    using System.Security.Policy;
     using IdentityBase;
+    using IdentityBase.Actions.External;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,35 +15,6 @@ namespace IdentityBase.Mvc
     /// </summary>
     public static partial class WebControllerExtensions
     {
-        /// <summary>
-        /// Creates an challenge action result for external login
-        /// </summary>
-        /// <param name="provider">
-        /// Name of external provider, eg. facebook, google, hotmail
-        /// </param>
-        /// <returns>Instance of <see cref="ChallengeResult"/>.</returns>
-        public static IActionResult ChallengeExternalLogin(
-            this WebController controller,
-            string provider,
-            string returnUrl)
-        {
-            if (returnUrl != null)
-            {
-                returnUrl = UrlEncoder.Default.Encode(returnUrl);
-            }
-
-            returnUrl = "external-callback?returnUrl=" + returnUrl;
-
-            // Start challenge and roundtrip the return URL
-            AuthenticationProperties props = new AuthenticationProperties
-            {
-                RedirectUri = returnUrl,
-                Items = { { "scheme", provider } }
-            };
-
-            return new ChallengeResult(provider, props);
-        }
-
         /// <summary>
         /// Redirects to login page.
         /// </summary>

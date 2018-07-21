@@ -58,7 +58,7 @@
     //"IdentityBase.EntityFramework.MySql",
     //"IdentityBase.EntityFramework.Npgsql",
     //"IdentityBase.EntityFramework.SqlServer",
-    "IdentityBase.EntityFramework.zDbInitializer",
+    "IdentityBase.EntityFramework.zDbInitializer"
     //"IdentityBase.GoogleRecaptcha",
     //"IdentityBase.SendGrid",
     //"IdentityBase.Smtp",
@@ -96,8 +96,26 @@
     "ApiSecret": "secret",
     "EnableSwagger": true
   },
-  "GoogleRecaptcha": {
-    "SiteKey": "",
-    "Secret": ""
-  }
+
+  // https://www.google.com/recaptcha/admin#list
+  // "GoogleRecaptcha": {
+  //   "SiteKey": "",
+  //   "Secret": ""
+  // },
+
+  // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-2.1
+  // "ThirdPartyAuth": {
+  //   "Google": {
+  //     "ClientId": "",
+  //     "ClientSecret": ""
+  //   },
+  //   "Facebook": {
+  //     "ClientId": "",
+  //     "ClientSecret": ""
+  //   },
+  //   "Microsoft": {
+  //     "ClientId": "",
+  //     "ClientSecret": ""
+  //   }
+  // }
 }

@@ -37,7 +37,7 @@ namespace IdentityBase.Actions.Login
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
-            this.IdentityBaseContext = identityBaseContext; 
+            this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
             this._userAccountService = userAccountService;
             this._authenticationService = authenticationService;
@@ -51,19 +51,23 @@ namespace IdentityBase.Actions.Login
         public async Task<IActionResult> Login(string returnUrl)
         {
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
-            
+
             // If local authentication is disbaled and there is only one
             // external provider provided so do just external authentication
             // without showing the login page 
             if (vm.IsExternalLoginOnly)
             {
-                return this.ChallengeExternalLogin(
-                    vm.ExternalProviders.First().AuthenticationScheme,
-                    returnUrl);
+                return this.RedirectToAction("ExternalChallenge", new
+                {
+                    provider = vm.ExternalProviders
+                        .First().AuthenticationScheme,
+
+                    returnUrl = returnUrl
+                });
             }
 
             vm.FormModel =
-                await this.CreateViewModel<ILoginCreateViewModelAction>(vm); 
+                await this.CreateViewModel<ILoginCreateViewModelAction>(vm);
 
             return this.View(vm);
         }
@@ -122,10 +126,10 @@ namespace IdentityBase.Actions.Login
                 }
                 else
                 {
-                    this.AddModelStateError(ErrorMessages.AccountIsDesabled); 
+                    this.AddModelStateError(ErrorMessages.AccountIsDesabled);
                 }
 
-                return this.RedirectToLogin(model.ReturnUrl); 
+                return this.RedirectToLogin(model.ReturnUrl);
             }
 
             // User has to change password (password change is required)
@@ -139,7 +143,7 @@ namespace IdentityBase.Actions.Login
             if (!verificationResult.IsPasswordValid)
             {
                 this.AddModelStateError(ErrorMessages.InvalidCredentials);
-                return this.RedirectToLogin(model.ReturnUrl); 
+                return this.RedirectToLogin(model.ReturnUrl);
             }
 
             await this._authenticationService.SignInAsync(
@@ -188,15 +192,11 @@ namespace IdentityBase.Actions.Login
 
             Client client = this.IdentityBaseContext.Client;
 
-           // IEnumerable<ExternalProvider> providers = await this._clientService
-           //     .GetEnabledProvidersAsync(client);
+            // IEnumerable<ExternalProvider> providers = await this._clientService
+            //     .GetEnabledProvidersAsync(client);
 
-           //  vm.ExternalProviders = providers.Select(s => new
-           //      Web.ViewModels.External.ExternalProvider
-           //  {
-           //      AuthenticationScheme = s.AuthenticationScheme,
-           //      DisplayName = s.DisplayName
-           //  }).ToArray();
+            vm.ExternalProviders = await this._authenticationService
+                .GetExternalProvidersAsync();
 
             // TODO: remove as soon 
             vm.EnableLocalLogin = (client != null ?

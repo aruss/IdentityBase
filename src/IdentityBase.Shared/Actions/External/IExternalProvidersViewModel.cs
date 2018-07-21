@@ -4,8 +4,9 @@
 namespace IdentityBase.Actions.External
 {
     using System.Collections.Generic;
+    using IdentityBase.Models;
 
-    public interface IExternalLoginsViewModel
+    public interface IExternalProvidersViewModel
     {
         string ReturnUrl { get; set; }
 

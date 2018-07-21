@@ -100,7 +100,7 @@ namespace IdentityBase.EntityFramework.Stores
                 .Include(x => x.Claims)
                 .FirstOrDefault(x =>
                     x.Accounts.Any(c => c.Provider.Equals(
-                        provider, StringComparison.OrdinalIgnoreCase)) ||
+                        provider, StringComparison.OrdinalIgnoreCase)) && 
                     x.Accounts.Any(c => c.Subject.Equals(
                         subject, StringComparison.OrdinalIgnoreCase)));
 

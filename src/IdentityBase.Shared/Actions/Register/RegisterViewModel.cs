@@ -4,10 +4,11 @@
 namespace IdentityBase.Actions.Register
 {
     using System.Collections.Generic;
-    using IdentityBase.Forms;
     using IdentityBase.Actions.External;
+    using IdentityBase.Forms;
+    using IdentityBase.Models;
 
-    public class RegisterViewModel : IExternalLoginsViewModel
+    public class RegisterViewModel : IExternalProvidersViewModel
     {
         public string Email { get; set; }
 

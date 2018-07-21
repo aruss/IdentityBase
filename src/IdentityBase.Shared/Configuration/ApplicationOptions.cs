@@ -111,7 +111,7 @@ namespace IdentityBase.Configuration
         public bool AutomaticRedirectAfterSignOut { get; set; } = true;
 
         public bool WindowsAuthenticationEnabled { get; set; } = false;
-
+        
         // specify the Windows authentication schemes you want to use for authentication
         public string[] WindowsAuthenticationSchemes { get; set; } =
             new string[] { "Negotiate", "NTLM" };

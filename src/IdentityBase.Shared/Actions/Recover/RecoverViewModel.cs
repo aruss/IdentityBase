@@ -6,8 +6,9 @@ namespace IdentityBase.Actions.Recover
     using System.Collections.Generic;
     using IdentityBase.Actions.External;
     using IdentityBase.Forms;
+    using IdentityBase.Models;
 
-    public class RecoverViewModel : IExternalLoginsViewModel
+    public class RecoverViewModel : IExternalProvidersViewModel
     {
         public string Email { get; set; }
 

@@ -4,6 +4,8 @@
 namespace IdentityBase.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
@@ -19,19 +21,22 @@ namespace IdentityBase.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationOptions _applicationOptions;
         private readonly IDateTimeAccessor _dateTimeAccessor;
+        private readonly IAuthenticationSchemeProvider _schemeProvider;
 
         public AuthenticationService(
             IIdentityServerInteractionService interaction,
             UserAccountService userAccountService,
             IHttpContextAccessor httpContextAccessor,
             ApplicationOptions applicationOptions,
-            IDateTimeAccessor dateTimeAccessor)
+            IDateTimeAccessor dateTimeAccessor,
+            IAuthenticationSchemeProvider schemeProvider)
         {
             this._interaction = interaction;
             this._userAccountService = userAccountService;
             this._httpContextAccessor = httpContextAccessor;
             this._applicationOptions = applicationOptions;
             this._dateTimeAccessor = dateTimeAccessor;
+            this._schemeProvider = schemeProvider;
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace IdentityBase.Services
         /// <see cref="UserAccount"/>.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="properties">The properties.</param>
-        public async Task SignInAsync(
+        public async Task SignInAsync(  
            UserAccount userAccount,
            string returnUrl,
            bool rememberLogin = false)
@@ -85,7 +90,27 @@ namespace IdentityBase.Services
             UserAccount userAccount = await this._userAccountService
                 .LoadByIdAsync(userId);
 
-            return userAccount; 
+            return userAccount;
+        }
+
+        public async Task<IEnumerable<ExternalProvider>> GetExternalProvidersAsync()
+        {
+            IEnumerable<AuthenticationScheme> schemes =
+                await this._schemeProvider.GetAllSchemesAsync();
+
+            IEnumerable<ExternalProvider> providers = schemes
+                .Where(x => x.DisplayName != null
+                /* || (x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))*/
+                )
+                .Select(x => new ExternalProvider
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                }).ToList();
+
+            // TODO: filter providers by current active client
+
+            return providers.ToArray();
         }
     }
 }

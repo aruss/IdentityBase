@@ -230,19 +230,15 @@ namespace IdentityBase.Actions.Register
                     client.EnableLocalLogin :
                     false && this._applicationOptions.EnableAccountLogin,
 
-                /*ExternalProviders = providers.Select(s =>
-                    new Web.ViewModels.External.ExternalProvider
-                    {
-                        AuthenticationScheme = s.AuthenticationScheme,
-                        DisplayName = s.DisplayName
-                    }).ToArray(),*/
+                ExternalProviders = await this._authenticationService
+                    .GetExternalProvidersAsync(),
 
                 ExternalProviderHints = userAccount?.Accounts?
                     .Select(c => c.Provider),
             };
 
             vm.FormModel =
-                 await this.CreateViewModel<IRegisterCreateViewModelAction>(vm); 
+                 await this.CreateViewModel<IRegisterCreateViewModelAction>(vm);
 
             return vm;
         }

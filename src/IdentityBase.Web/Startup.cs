@@ -129,6 +129,8 @@ namespace IdentityBase
             services.AddPluginsMvc(provider,
                 this._applicationOptions.PluginsPath);
 
+            services.AddExternalProviders(this._configuration, this._logger);                 
+
             this.OverrideServices?.Invoke(services);
 
             services.ValidateDataLayerServices(this._logger);
