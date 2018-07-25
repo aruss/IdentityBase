@@ -1,30 +1,50 @@
 namespace IdentityBase.EntityFramework.UnitTests.Mappers
 {
     using System.Collections.Generic;
-    using IdentityBase.EntityFramework.Entities;
+    using System.Linq;
     using IdentityBase.EntityFramework.Mappers;
+    using IdentityBase.Models;
     using Xunit;
+    using ExternalAccountEntity = Entities.ExternalAccount;
+    using UserAccountClaimEntity = Entities.UserAccountClaim;
+    using UserAccountEntity = Entities.UserAccount;
 
     public class UserAccountMappersTest
     {
         [Fact]
         public void UserAccountModelToEntityConfigurationIsValid()
         {
-            var model = new Models.UserAccount();
-
-            model.Accounts = new List<Models.ExternalAccount>
+            var model = new UserAccount
             {
-                new Models.ExternalAccount
+                Email = "test@test",
+                Claims = new List<UserAccountClaim>
                 {
-                    UserAccount = model
+                    new UserAccountClaim("foo", "foovalue", "footype")
+                },
+                Accounts = new List<ExternalAccount>
+                {
+                    new ExternalAccount
+                    {
+                        Email = "test@test"
+                    }
                 }
             };
+            
+            var entity = model.ToEntity();
 
-            var mappedEntity = model.ToEntity();
-            var mappedModel = mappedEntity.ToModel();
+            Assert.NotNull(entity);
+            Assert.NotSame(entity, model);
 
-            Assert.NotNull(mappedModel);
-            Assert.NotNull(mappedEntity);
+            Assert.NotSame(
+                entity.Claims.FirstOrDefault(c => c.Type.Equals("foo")),
+                model.Claims.FirstOrDefault(c => c.Type.Equals("foo"))
+            );
+
+            Assert.NotSame(
+                entity.Accounts.FirstOrDefault(c => c.Email.Equals("test@test")),
+                model.Accounts.FirstOrDefault(c => c.Email.Equals("test@test"))
+            );
+
             UserAccountMappers.Mapper.ConfigurationProvider
                 .AssertConfigurationIsValid();
         }
@@ -32,11 +52,11 @@ namespace IdentityBase.EntityFramework.UnitTests.Mappers
         [Fact]
         public void UserAccountEntityToModelConfigurationIsValid()
         {
-            var model = new UserAccount();
+            var model = new UserAccountEntity();
 
-            model.Accounts = new List<ExternalAccount>
+            model.Accounts = new List<ExternalAccountEntity>
             {
-                new ExternalAccount
+                new ExternalAccountEntity
                 {
                     UserAccount = model
                 }

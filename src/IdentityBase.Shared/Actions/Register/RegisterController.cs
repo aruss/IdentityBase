@@ -72,7 +72,7 @@ namespace IdentityBase.Actions.Register
 
             // Check if user with same email exists
             UserAccount userAccount = await this._userAccountService
-                .LoadByEmailWithExternalAsync(email);
+                .LoadByEmailAsync(email);
 
             // If user dont exists create a new one
             if (userAccount == null)
@@ -242,17 +242,19 @@ namespace IdentityBase.Actions.Register
 
             return vm;
         }
-
-        [NonAction]
-        internal SuccessViewModel CreateSuccessViewModel(
+        
+        private IActionResult CreateSuccessResult(
             UserAccount userAccount,
             string returnUrl)
         {
-            return new SuccessViewModel
+            // TODO: Create provider via some helper
+            return this.View("Success", new SuccessViewModel
             {
                 ReturnUrl = returnUrl,
-                Provider = userAccount.Email.Split('@').LastOrDefault()
-            };
+                Provider = userAccount.Email
+                    .Split('@')
+                    .LastOrDefault()
+            });
         }
 
         [NonAction]
@@ -273,10 +275,8 @@ namespace IdentityBase.Actions.Register
                 }
                 else
                 {
-                    return this.View("Success",
-                        this.CreateSuccessViewModel(
-                            userAccount, inputModel.ReturnUrl)
-                    );
+                    return this.CreateSuccessResult(
+                        userAccount, inputModel.ReturnUrl);
                 }
             }
             // Ask user if he wants to merge accounts
@@ -328,9 +328,7 @@ namespace IdentityBase.Actions.Register
                 return this.RedirectToReturnUrl(model.ReturnUrl);
             }
 
-            return this.View("Success",
-                this.CreateSuccessViewModel(userAccount, model.ReturnUrl)
-            );
+            return this.CreateSuccessResult(userAccount, model.ReturnUrl);
         }
 
         [HttpGet("register/confirm", Name = "RegisterConfirm")]

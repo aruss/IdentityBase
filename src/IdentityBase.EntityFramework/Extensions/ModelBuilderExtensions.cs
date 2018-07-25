@@ -495,7 +495,6 @@ namespace IdentityBase.EntityFramework.Extensions
 
                 externalAccount.HasKey(x => new
                 {
-                    x.UserAccountId,
                     x.Provider,
                     x.Subject
                 });

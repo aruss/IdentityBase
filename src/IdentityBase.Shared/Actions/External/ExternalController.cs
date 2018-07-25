@@ -5,8 +5,8 @@ namespace IdentityBase.Actions.External
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using IdentityBase.Actions.Shared;
     using IdentityBase.Configuration;
+    using IdentityBase.Crypto;
     using IdentityBase.Models;
     using IdentityBase.Mvc;
     using IdentityBase.Services;
@@ -19,15 +19,17 @@ namespace IdentityBase.Actions.External
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
+    using ServiceBase.Extensions;
     using IdBaseAuthService = IdentityBase.Services.AuthenticationService;
 
     public class ExternalController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
-        private readonly UserAccountService _userAccountService;
+        private readonly IUserAccountStore _userAccountStore;
         private readonly IdBaseAuthService _authenticationService;
         private readonly IClientStore _clientStore;
-
+        private readonly ICrypto _crypto;
+        private readonly NotificationService _notificationService;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -35,9 +37,11 @@ namespace IdentityBase.Actions.External
             ILogger<ExternalController> logger,
             IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
-            UserAccountService userAccountService,
+            IUserAccountStore userAccountStore,
             IdBaseAuthService authenticationService,
-             IClientStore clientStore)
+            IClientStore clientStore,
+            ICrypto crypto,
+           NotificationService notificationService)
         {
             // setting it this way since interaction service is null in the
             // base class oO
@@ -46,9 +50,11 @@ namespace IdentityBase.Actions.External
             this.Logger = logger;
             this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
-            this._userAccountService = userAccountService;
+            this._userAccountStore = userAccountStore;
             this._authenticationService = authenticationService;
             this._clientStore = clientStore;
+            this._crypto = crypto;
+            this._notificationService = notificationService;
         }
 
         /// <summary>
@@ -115,29 +121,116 @@ namespace IdentityBase.Actions.External
                     provider);
             }
 
-            userAccount = await this._userAccountService
-                .LoadByEmailAsync(email);
+            userAccount = await this._userAccountStore
+               .LoadByEmailAsync(email);
 
             if (userAccount == null)
             {
-                // Create new user
-                userAccount = await this._userAccountService
-                    .CreateNewExternalUserAccountAsync(
-                        provider,
-                        subject,
-                        email,
-                        claims); 
+                string returnUrl = authResult.Properties.Items["returnUrl"];
+
+                if (String.IsNullOrWhiteSpace(returnUrl))
+                {
+                    throw new Exception("External authentication error");
+                }
 
                 if (this._applicationOptions
                     .RequireExternalAccountVerification)
                 {
-                    // Send verification mail and display message
-                    throw new NotImplementedException();
+                    DateTime now = DateTime.UtcNow;
+                    Guid userAccountId = Guid.NewGuid();
+
+                    // Create new user account that has to be confirmed first
+                    // before login
+                    userAccount = new UserAccount
+                    {
+                        Id = userAccountId,
+                        Email = email,
+                        FailedLoginCount = 0,
+                        IsEmailVerified = false,
+                        PasswordChangedAt = now,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        IsLoginAllowed = false,
+
+                        VerificationKey = this._crypto
+                            .Hash(this._crypto.GenerateSalt())
+                            .StripUglyBase64()
+                            .ToLowerInvariant(),
+
+                        VerificationPurpose = (int)VerificationKeyPurpose
+                            .ConfirmAccount,
+
+                        VerificationStorage = returnUrl,
+                        VerificationKeySentAt = now,
+                        Accounts = new ExternalAccount[]
+                        {
+                           new ExternalAccount
+                           {
+                               Email = email,
+                               UserAccountId = userAccountId,
+                               Provider = provider,
+                               Subject = subject,
+                               CreatedAt = now,
+                               UpdatedAt  = now,
+                               LastLoginAt = null,
+                               IsLoginAllowed = false
+                           }
+                        }
+                    };
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    await this._notificationService
+                        .SendUserAccountCreatedEmailAsync(userAccount);
+
+                    // TODO: Emit user created event
+
+                    // TODO: Create provider via some helper
+                    return this.View("Success", new SuccessViewModel
+                    {
+                        ReturnUrl = returnUrl,
+                        Provider = userAccount.Email
+                            .Split('@')
+                            .LastOrDefault()
+                    });
                 }
                 else
                 {
-                    // Update last authenticated flags
-                    // Emit user authenticated event 
+                    DateTime now = DateTime.UtcNow;
+                    Guid userAccountId = Guid.NewGuid();
+
+                    // Create new user account that has to be confirmed first
+                    // before login
+                    userAccount = new UserAccount
+                    {
+                        Id = userAccountId,
+                        Email = email,
+                        FailedLoginCount = 0,
+                        IsEmailVerified = false,
+                        PasswordChangedAt = now,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        LastLoginAt = now,
+                        IsLoginAllowed = true,
+                        Accounts = new ExternalAccount[]
+                        {
+                           new ExternalAccount
+                           {
+                               Email = email,
+                               UserAccountId = userAccountId,
+                               Provider = provider,
+                               Subject = subject,
+                               CreatedAt = now,
+                               UpdatedAt  = now,
+                               LastLoginAt = now,
+                               IsLoginAllowed = true
+                           }
+                        }
+                    };
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: Emit user created event
 
                     // Authenticate and redirect to return url
                     return await this.SignInAsync(
@@ -152,27 +245,60 @@ namespace IdentityBase.Actions.External
                 if (this._applicationOptions.AutomaticAccountMerge)
                 {
                     // Merge accounts automaticly without asking the user
-                    // Update last authenticated flags
-                    // Emit user authenticated event 
-                    // Sign in
-                    // Check if additional information is required, if yes redirect to form 
-                    // Redirect to return url
-                    throw new NotImplementedException();
+
+                    DateTime now = DateTime.UtcNow;
+                    var externalAccount = new ExternalAccount
+                    {
+                        Email = email,
+                        UserAccountId = userAccount.Id,
+                        Provider = provider,
+                        Subject = subject,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        LastLoginAt = now,
+                        IsLoginAllowed = true
+                    };
+
+                    if (userAccount.Accounts != null)
+                    {
+                        (userAccount.Accounts as List<ExternalAccount>)
+                            .Add(externalAccount); 
+                    }
+                    else
+                    {
+                        userAccount.Accounts = new ExternalAccount[]
+                        {
+                            externalAccount
+                        };
+                    }
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: Emit user account updated event
+
+                    return await this.SignInAsync(
+                      userAccount,
+                      authResult,
+                      provider);
                 }
                 else
                 {
-                    // Ask user if he wants to merge accounts or use another account.
+                    // Ask user if he wants to merge accounts or use another
+                    // account.
                     throw new NotImplementedException();
                 }
             }
         }
 
-
-        private async Task<IActionResult> SignInAsync(UserAccount userAccount, AuthenticateResult authResult, string provider)
+        private async Task<IActionResult> SignInAsync(
+            UserAccount userAccount,
+            AuthenticateResult authResult,
+            string provider)
         {
             // this allows us to collect any additonal claims or properties
-            // for the specific prtotocols used and store them in the local auth cookie.
-            // this is typically used to store data needed for signout from those protocols.
+            // for the specific prtotocols used and store them in the local
+            // auth cookie. This is typically used to store data needed for
+            // signout from those protocols.
             var additionalLocalClaims = new List<Claim>();
             var localSignInProps = new AuthenticationProperties();
 
@@ -195,7 +321,12 @@ namespace IdentityBase.Actions.External
                     .ExternalCookieAuthenticationScheme);
 
             // retrieve return URL
-            string returnUrl = authResult.Properties.Items["returnUrl"] ?? "~/";
+            string returnUrl = authResult.Properties.Items["returnUrl"];
+
+            if (String.IsNullOrWhiteSpace(returnUrl))
+            {
+                throw new Exception("External authentication error");
+            }
 
             // check if external login is in the context of an OIDC request
             AuthorizationRequest context = await this.InteractionService
@@ -221,6 +352,8 @@ namespace IdentityBase.Actions.External
             // 
             // }
 
+            // TODO: Emit user authenticated event
+
             return this.Redirect(returnUrl);
         }
 
@@ -228,7 +361,7 @@ namespace IdentityBase.Actions.External
             UserAccount userAccount,
             string provider,
             string subject,
-            string email, 
+            string email,
             IEnumerable<Claim> claims)>
             FindUserFromExternalProviderAsync(AuthenticateResult result)
         {
@@ -258,7 +391,7 @@ namespace IdentityBase.Actions.External
             Claim emailClaim = claims
                     .FirstOrDefault(c => c.Type == ClaimTypes.Email);
 
-            string email = emailClaim.Value; 
+            string email = emailClaim.Value;
 
             if (emailClaim == null)
             {
@@ -266,7 +399,7 @@ namespace IdentityBase.Actions.External
             }
 
             // Find external user
-            UserAccount userAccount = await _userAccountService
+            UserAccount userAccount = await this._userAccountStore
                 .LoadByExternalProviderAsync(provider, subject);
 
             return (userAccount, provider, subject, email, claims);
@@ -287,166 +420,20 @@ namespace IdentityBase.Actions.External
                 localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
             }
 
-            // if the external provider issued an id_token, we'll keep it for signout
-            string id_token = externalResult.Properties
+            // If the external provider issued an id_token, we'll keep it for
+            // signout
+            string idToken = externalResult.Properties
                 .GetTokenValue("id_token");
 
-            if (id_token != null)
+            if (idToken != null)
             {
                 localSignInProps.StoreTokens(new[] {
                     new AuthenticationToken {
-                        Name = "id_token", Value = id_token
+                        Name = "id_token",
+                        Value = idToken
                     }
                 });
             }
         }
-
-
-
-
-        /*
-        [HttpGet("external/{provider}", Name = "External")]
-        public IActionResult Index(string provider, string returnUrl)
-        {
-            return this.ChallengeExternalLogin(provider, returnUrl);
-        }
-
-        private async Task<IActionResult> IssueCookieAndRedirectAsync(
-            UserAccount userAccount,
-            string provider,
-            string returnUrl,
-            AuthenticateInfo info,
-            List<Claim> claims)
-        {
-            var additionalClaims = new List<Claim>();
-
-            // if the external system sent a session id claim, copy it over
-            var sid = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
-            if (sid != null)
-            {
-                additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
-            }
-
-            // if the external provider issued an id_token, we'll keep it for signout
-            AuthenticationProperties props = null;
-            var id_token = info.Properties.GetTokenValue("id_token");
-            if (id_token != null)
-            {
-                props = new AuthenticationProperties();
-                props.StoreTokens(new[] { new AuthenticationToken {
-                    Name = "id_token", Value = id_token } });
-            }
-
-            // Issue authentication cookie for user
-            await HttpContext.SignInAsync(
-                userAccount.Id.ToString(), userAccount.Email, provider, props,
-                additionalClaims.ToArray());
-
-            // Delete temporary cookie used during external authentication
-            await HttpContext.Authentication.SignOutAsync(
-                IdentityServerConstants.ExternalCookieAuthenticationScheme);
-
-            // Validate return URL and redirect back to authorization endpoint
-            if (_interaction.IsValidReturnUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return Redirect("~/");
-        }
-
-        [HttpGet("external-callback")]
-        public async Task<IActionResult> Index(string returnUrl)
-        {
-            var info = await HttpContext.GetAuthenticateInfoAsync(
-                IdentityServerConstants.ExternalCookieAuthenticationScheme);
-            var tempUser = info?.Principal;
-            if (tempUser == null)
-            {
-                throw new Exception("External authentication error");
-            }
-
-            var claims = tempUser.Claims.ToList();
-
-            var subjectClaim = claims
-                .FirstOrDefault(x => x.Type == JwtClaimTypes.Subject);
-            if (subjectClaim == null)
-            {
-                subjectClaim = claims
-                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-            }
-
-            if (subjectClaim == null)
-            {
-                throw new Exception("Unknown user account ID");
-            }
-
-            claims.Remove(subjectClaim);
-
-            var emailClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
-            if (emailClaim == null)
-            {
-                throw new Exception("Unknown email");
-            }
-
-            var provider = subjectClaim.Issuer.ToLowerInvariant();
-            var subject = subjectClaim.Value;
-            var email = emailClaim.Value.ToLowerInvariant();
-
-            var userAccount = await _userAccountService.LoadByExternalProviderAsync(
-                provider, subject);
-            if (userAccount != null)
-            {
-                await _userAccountService.UpdateLastUsedExternalAccountAsync(userAccount, provider, subject);
-                return await IssueCookieAndRedirectAsync(userAccount, provider, returnUrl, info, claims);
-            }
-            else
-            {
-                userAccount = await _userAccountService.LoadByEmailWithExternalAsync(email);
-                if (userAccount == null)
-                {
-                    userAccount = await _userAccountService.CreateNewExternalUserAccountAsync(
-                        email, provider, subject, returnUrl);
-
-                    if (_applicationOptions.RequireExternalAccountVerification)
-                    {
-                        // TODO: send confirmation mail and redirect to success page
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        await _userAccountService.UpdateLastUsedExternalAccountAsync(
-                            userAccount, provider, subject);
-
-                        return await IssueCookieAndRedirectAsync(userAccount,
-                            provider, returnUrl, info, claims);
-                    }
-                }
-                else
-                {
-                    if (_applicationOptions.AutomaticAccountMerge)
-                    {
-                        // Add external account to existing one
-                        var externalAccount = _userAccountService.AddExternalAccountAsync(
-                            userAccount.Id,
-                            email,
-                            provider,
-                            subject
-                        );
-
-                        await _userAccountService.UpdateLastUsedExternalAccountAsync(
-                            userAccount, provider, subject);
-
-                        return await IssueCookieAndRedirectAsync(userAccount,
-                            provider, returnUrl, info, claims);
-                    }
-                    else
-                    {
-                        // Ask user of he wants to join accounts or create new user
-                        throw new NotImplementedException();
-                    }
-                }
-            }
-        }*/
     }
 }

@@ -19,9 +19,10 @@ namespace IdentityBase.EntityFramework.IntegrationTests
         {
             var builder = new DbContextOptionsBuilder<T>();
             builder.UseInMemoryDatabase(name);
-            var options = builder.Options;
+            builder.EnableSensitiveDataLogging();
+            DbContextOptions<T> options = builder.Options;
 
-            using (var context = (T)Activator
+            using (T context = (T)Activator
                 .CreateInstance(typeof(T), options, tableOptions))
             {
                 context.Database.EnsureCreated();
@@ -41,9 +42,10 @@ namespace IdentityBase.EntityFramework.IntegrationTests
                 $"Filename=./Test.IdentityBase.EntityFramework.{name}-2.0.0.db"
             );
 
-            var options = builder.Options;
+            builder.EnableSensitiveDataLogging();
+            DbContextOptions<T> options = builder.Options;
 
-            using (var context = (T)Activator
+            using (T context = (T)Activator
                 .CreateInstance(typeof(T), options, tableOptions))
             {
                 context.Database.OpenConnection();
@@ -64,9 +66,12 @@ namespace IdentityBase.EntityFramework.IntegrationTests
                 $@"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityBase.EntityFramework-2.0.0.{name};trusted_connection=yes;"
             );
 
-            var options = builder.Options;
+            //builder.UseSqlServer($@"Server=localhost\SQLEXPRESS;Database=identitybase-{name};Trusted_Connection=True;MultipleActiveResultSets=true"); 
 
-            using (var context = (T)Activator
+            builder.EnableSensitiveDataLogging();
+            DbContextOptions<T> options = builder.Options;
+
+            using (T context = (T)Activator
                 .CreateInstance(typeof(T), options, tableOptions))
             {
                 context.Database.EnsureCreated();

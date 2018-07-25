@@ -29,7 +29,7 @@ namespace IdentityBase.Services
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        Task<UserAccount> LoadByEmailWithExternalAsync(string email);
+        // Task<UserAccount> LoadByEmailWithExternalAsync(string email);
 
         // Task<User> LoadByExternalEmailAsync(string email);
 
@@ -59,10 +59,10 @@ namespace IdentityBase.Services
 
         Task DeleteByIdAsync(Guid id);
 
-        Task<ExternalAccount> WriteExternalAccountAsync(
-            ExternalAccount externalAccount);
+        //Task<ExternalAccount> WriteExternalAccountAsync(
+        //    ExternalAccount externalAccount);
 
-        Task DeleteExternalAccountAsync(Guid id);
+        // Task DeleteExternalAccountAsync(Guid id);
 
         Task<PagedList<UserAccount>> LoadInvitedUserAccountsAsync(
             int take,

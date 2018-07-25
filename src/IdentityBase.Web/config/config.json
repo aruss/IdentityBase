@@ -73,7 +73,8 @@
       "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=identitybase-2B4D44E6-F6C7-4A32-B082-71C956322B05;Trusted_Connection=True;MultipleActiveResultSets=true"
+      //"ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=identitybase-2B4D44E6-F6C7-4A32-B082-71C956322B05;Trusted_Connection=True;MultipleActiveResultSets=true",
+      "ConnectionString": "Server=localhost\\SQLEXPRESS;Database=identitybase;Trusted_Connection=True;MultipleActiveResultSets=true"
     },
     "MySql": {
       "ConnectionString": "server=localhost;port=3306;database=identitybase;uid=dev;password=dev"

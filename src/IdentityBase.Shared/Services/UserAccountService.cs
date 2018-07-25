@@ -150,17 +150,17 @@ namespace IdentityBase.Services
         /// </summary>
         /// <param name="id">UserAccount email address.</param>
         /// <returns>Instance of <see cref="UserAccount"/>.</returns>
-        public async Task<UserAccount> LoadByEmailWithExternalAsync(
-            string email)
-        {
-            if (String.IsNullOrWhiteSpace(email))
-            {
-                throw new ArgumentNullException(nameof(email));
-            }
-
-            return await this._userAccountStore
-                .LoadByEmailWithExternalAsync(email);
-        }
+        //public async Task<UserAccount> LoadByEmailWithExternalAsync(
+        //    string email)
+        //{
+        //    if (String.IsNullOrWhiteSpace(email))
+        //    {
+        //        throw new ArgumentNullException(nameof(email));
+        //    }
+        //
+        //    return await this._userAccountStore
+        //        .LoadByEmailWithExternalAsync(email);
+        //}
 
         /// <summary>
         /// Loads <see cref="UserAccount"/> by external provider information.

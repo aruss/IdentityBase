@@ -49,7 +49,7 @@ namespace IdentityBase.Actions.Account
             ProfileViewModel vm = new ProfileViewModel
             {
                 Email = userAccount.Email,
-                Phone = userAccount.Phone,
+                // Phone = userAccount.Phone,
                 ReturnUrl = this.IdentityBaseContext.ReturnUrl
             };
 

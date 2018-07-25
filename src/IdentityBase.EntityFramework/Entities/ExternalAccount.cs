@@ -21,5 +21,24 @@ namespace IdentityBase.EntityFramework.Entities
         public DateTime UpdatedAt { get; set; }
 
         public UserAccount UserAccount { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as ExternalAccount;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Provider.Equals(item.Provider) &&
+               this.Subject.Equals(item.Subject);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Provider.GetHashCode() ^
+                this.Subject.GetHashCode(); 
+        }
     }
 }

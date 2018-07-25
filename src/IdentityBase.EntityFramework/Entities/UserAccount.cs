@@ -21,23 +21,23 @@ namespace IdentityBase.EntityFramework.Entities
 
         public bool IsPhoneAllowed { get; set; }*/
 
-        public virtual DateTime? LastLoginAt { get; set; }
+        public DateTime? LastLoginAt { get; set; }
 
-        public virtual DateTime? LastFailedLoginAt { get; set; }
+        public DateTime? LastFailedLoginAt { get; set; }
 
-        public virtual int FailedLoginCount { get; set; }
+        public int FailedLoginCount { get; set; }
 
         public string PasswordHash { get; set; }
 
         public DateTime? PasswordChangedAt { get; set; }
 
-        public virtual string VerificationKey { get; set; }
+        public string VerificationKey { get; set; }
 
-        public virtual int? VerificationPurpose { get; set; }
+        public int? VerificationPurpose { get; set; }
 
-        public virtual DateTime? VerificationKeySentAt { get; set; }
+        public DateTime? VerificationKeySentAt { get; set; }
 
-        public virtual string VerificationStorage { get; set; }
+        public string VerificationStorage { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

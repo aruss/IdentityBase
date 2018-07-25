@@ -212,7 +212,13 @@
     <Content Update="Views\AccountChangePassword\ChangePassword.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\External\Merge.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\AccountTwoFactorAuth\TwoFactorAuth.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\External\Success.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Login\LoginFormElements\Submit.cshtml">

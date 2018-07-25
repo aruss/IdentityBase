@@ -1,35 +1,26 @@
 namespace IdentityBase.EntityFramework.Mappers
 {
     using AutoMapper;
-    using IdentityBase.EntityFramework.Entities;
+    using IdentityBase.Models;
+    using ExternalAccountEntity = Entities.ExternalAccount;
+    using UserAccountClaimEntity = Entities.UserAccountClaim;
+    using UserAccountEntity = Entities.UserAccount;
 
     public class UserAccountProfile : Profile
     {
         public UserAccountProfile()
         {
-            CreateMap<UserAccount,
-                Models.UserAccount>(MemberList.Destination)
-                .PreserveReferences();
+            this.CreateMap<UserAccountEntity, UserAccount>(MemberList.Destination).PreserveReferences();
 
-            CreateMap<Models.UserAccount,
-                UserAccount>(MemberList.Source)
-                .PreserveReferences();
+            this.CreateMap<UserAccount, UserAccountEntity>(MemberList.Source).PreserveReferences();
 
-            CreateMap<ExternalAccount,
-                Models.ExternalAccount>(MemberList.Destination)
-                .PreserveReferences();
+            this.CreateMap<ExternalAccountEntity, ExternalAccount>(MemberList.Destination).PreserveReferences();
 
-            CreateMap<Models.ExternalAccount,
-                ExternalAccount>(MemberList.Source)
-                .PreserveReferences();
+            this.CreateMap<ExternalAccount, ExternalAccountEntity>(MemberList.Source).PreserveReferences();
 
-            CreateMap<UserAccountClaim,
-                Models.UserAccountClaim>(MemberList.Destination)
-                .PreserveReferences();
+            this.CreateMap<UserAccountClaimEntity, UserAccountClaim>(MemberList.Destination).PreserveReferences();
 
-            CreateMap<Models.UserAccountClaim,
-                UserAccountClaim>(MemberList.Source)
-                .PreserveReferences();
+            this.CreateMap<UserAccountClaim, UserAccountClaimEntity>(MemberList.Source).PreserveReferences();
         }
     }
 }

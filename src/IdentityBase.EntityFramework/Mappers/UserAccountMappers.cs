@@ -29,7 +29,7 @@ namespace IdentityBase.EntityFramework.Mappers
         public static void UpdateEntity(
             this Models.UserAccount model, UserAccount entity)
         {
-            Mapper.Map(model, entity);
+            Mapper.Map(model, entity);                
         }
 
         public static Models.ExternalAccount ToModel(

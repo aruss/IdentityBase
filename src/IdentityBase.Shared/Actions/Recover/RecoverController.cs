@@ -91,11 +91,10 @@ namespace IdentityBase.Actions.Recover
                     await this._notificationService
                         .SendUserAccountRecoverEmailAsync(userAccount);
 
+                    // TODO: Create provider via some helper
                     return this.View("Success", new SuccessViewModel
                     {
                         ReturnUrl = model.ReturnUrl,
-
-                        // TODO: Use a provider helper or something 
                         Provider = userAccount.Email
                             .Split('@')
                             .LastOrDefault()
