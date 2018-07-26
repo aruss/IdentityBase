@@ -93,7 +93,8 @@ namespace IdentityBase.Services
             return userAccount;
         }
 
-        public async Task<IEnumerable<ExternalProvider>> GetExternalProvidersAsync()
+        public async Task<IEnumerable<ExternalProvider>>
+            GetExternalProvidersAsync()
         {
             IEnumerable<AuthenticationScheme> schemes =
                 await this._schemeProvider.GetAllSchemesAsync();

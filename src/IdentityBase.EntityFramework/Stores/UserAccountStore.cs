@@ -173,44 +173,72 @@ namespace IdentityBase.EntityFramework.Stores
                     userAccount.Id);
 
                 // Update parent
-                var entityUpdated = userAccount.ToEntity();
+                UserAccountEntity entityUpdated = userAccount.ToEntity();
 
                 this._context.Entry(entity)
                     .CurrentValues.SetValues(entityUpdated);
 
-                #region Update, remove, add external accounts
-
-                var (removed, added, updated) =
-                    entity.Accounts.Diff(entityUpdated.Accounts);
-
-                foreach (var item in removed)
-                {
-                    this._context.ExternalAccounts.Remove(item);
-                    entity.Accounts.Remove(item);
-                }
-
-                foreach (var item in added)
-                {
-                    this._context.ExternalAccounts.Add(item);
-                    entity.Accounts.Add(item);
-                }
-
-                foreach (var item in updated)
-                {
-                    this._context.Entry(
-                        entity.Accounts.FirstOrDefault(c => c.Equals(item))
-                    ).CurrentValues.SetValues(item);
-                }
-
-                #endregion
+                this.UpdateExternalAccounts(entity, entityUpdated);
+                this.UpdateUserAccountClaims(entity, entityUpdated); 
             }
 
             await this._context.SaveChangesAsync();
             return entity.ToModel();
         }
 
+        private void UpdateExternalAccounts(
+            UserAccountEntity entity,
+            UserAccountEntity entityUpdated)
+        {
+            var (removed, added, updated) =
+                entity.Accounts.Diff(entityUpdated.Accounts);
 
+            foreach (var item in removed)
+            {
+                this._context.ExternalAccounts.Remove(item);
+                entity.Accounts.Remove(item);
+            }
 
+            foreach (var item in added)
+            {
+                this._context.ExternalAccounts.Add(item);
+                entity.Accounts.Add(item);
+            }
+
+            foreach (var item in updated)
+            {
+                this._context.Entry(
+                    entity.Accounts.FirstOrDefault(c => c.Equals(item))
+                ).CurrentValues.SetValues(item);
+            }
+        }
+
+        private void UpdateUserAccountClaims(
+            UserAccountEntity entity,
+            UserAccountEntity entityUpdated)
+        {
+            var (removed, added, updated) =
+                entity.Claims.Diff(entityUpdated.Claims);
+
+            foreach (var item in removed)
+            {
+                this._context.UserAccountClaims.Remove(item);
+                entity.Claims.Remove(item);
+            }
+
+            foreach (var item in added)
+            {
+                this._context.UserAccountClaims.Add(item);
+                entity.Claims.Add(item);
+            }
+
+            foreach (var item in updated)
+            {
+                this._context.Entry(
+                    entity.Claims.FirstOrDefault(c => c.Equals(item))
+                ).CurrentValues.SetValues(item);
+            }
+        }
 
         //public Task<ExternalAccount> WriteExternalAccountAsync(
         //    ExternalAccount externalAccount)

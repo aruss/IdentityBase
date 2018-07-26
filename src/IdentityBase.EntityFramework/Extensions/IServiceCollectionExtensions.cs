@@ -21,7 +21,6 @@ namespace IdentityBase.EntityFramework
             // services.Configure<EntityFrameworkOptions>(configure);
             var options = new EntityFrameworkOptions();
             configure?.Invoke(options);
-
             services.AddEntityFrameworkStores(options);
         }
 

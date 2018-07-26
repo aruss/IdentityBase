@@ -7,7 +7,9 @@ namespace IdentityBase.Actions.Login
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
+    using IdentityBase.Crypto;
     using IdentityBase.Forms;
+    using IdentityBase.Models;
     using IdentityBase.Mvc;
     using IdentityBase.Services;
     using IdentityServer4.Models;
@@ -20,7 +22,8 @@ namespace IdentityBase.Actions.Login
     public class LoginController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
-        private readonly UserAccountService _userAccountService;
+        private readonly IUserAccountStore _userAccountStore;
+        private readonly ICrypto _cryptoService;
         private readonly AuthenticationService _authenticationService;
 
         public LoginController(
@@ -29,17 +32,17 @@ namespace IdentityBase.Actions.Login
             ILogger<LoginController> logger,
             IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
-            UserAccountService userAccountService,
+            ICrypto cryptoService,
+            IUserAccountStore userAccountStore,
             AuthenticationService authenticationService)
         {
-            // setting it this way since interaction service is null in the
-            // base class oO
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
             this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
-            this._userAccountService = userAccountService;
+            this._cryptoService = cryptoService;
+            this._userAccountStore = userAccountStore;
             this._authenticationService = authenticationService;
         }
 
@@ -95,14 +98,19 @@ namespace IdentityBase.Actions.Login
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
-            UserAccountVerificationResult verificationResult =
-                await this._userAccountService.VerifyByEmailAndPasswordAsync(
-                    model.Email,
-                    model.Password
-                );
-
+            (
+                UserAccount userAccount,
+                bool isLocalAccount,
+                bool isLoginAllowed,
+                bool isPasswordValid,
+                bool needChangePassword,
+                string[] hints
+            ) = await this.VerifyByEmailAndPasswordAsync(
+                model.Email,
+                model.Password); 
+            
             // user not present (wrong email)
-            if (verificationResult.UserAccount == null)
+            if (userAccount == null)
             {
                 // Show email or password is invalid
                 this.AddModelStateError(ErrorMessages.InvalidCredentials);
@@ -110,7 +118,7 @@ namespace IdentityBase.Actions.Login
             }
 
             // User may not login (deactivated)
-            if (!verificationResult.IsLoginAllowed)
+            if (!isLoginAllowed)
             {
                 // If paranoya mode is on, do not epose any existence
                 // of user prensentce 
@@ -133,21 +141,21 @@ namespace IdentityBase.Actions.Login
             }
 
             // User has to change password (password change is required)
-            if (verificationResult.NeedChangePassword)
+            if (needChangePassword)
             {
                 throw new NotImplementedException(
                     "Changing passwords not implemented yet.");
             }
 
             // User has invalid password (handle penalty)
-            if (!verificationResult.IsPasswordValid)
+            if (!isPasswordValid)
             {
                 this.AddModelStateError(ErrorMessages.InvalidCredentials);
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
             await this._authenticationService.SignInAsync(
-                verificationResult.UserAccount,
+                userAccount,
                 model.ReturnUrl,
                 model.RememberLogin);
 
@@ -210,6 +218,103 @@ namespace IdentityBase.Actions.Login
             // }
 
             return vm;
+        }
+
+
+        /// <summary>
+        /// User account that is trying to login.
+        /// </summary>
+        public UserAccount UserAccount { get; set; }
+
+        /// <summary>
+        /// Indicated if user has to change password, redirect the user to
+        /// public password change page.
+        /// </summary>
+        public bool NeedChangePassword { get; set; }
+
+        /// <summary>
+        /// Indicated if user is allowed to login, possible cause is, user got banned. 
+        /// </summary>
+        public bool IsLoginAllowed { get; set; }
+
+        /// <summary>
+        /// Has user a local account, if false the user only has external accounts.
+        /// </summary>
+        public bool IsLocalAccount { get; set; }
+
+
+        public bool IsPasswordValid { get; set; }
+
+        public string[] Hints { get; internal set; }
+
+        public async Task<(
+            UserAccount userAccount,
+            bool isLocalAccount,
+            bool isLoginAllowed,
+            bool isPasswordValid,
+            bool needChangePassword,
+            string[] hints
+        )>
+        VerifyByEmailAndPasswordAsync(
+            string email,
+            string password
+        )
+        {
+            UserAccount userAccount = await this._userAccountStore
+               .LoadByEmailAsync(email);
+
+            var isLocalAccount = false;
+            var isLoginAllowed = false;
+            var isPasswordValid = false;
+            var needChangePassword = false;
+            string[] hints = null;
+
+            // No uesr, nothing to do here 
+            if (userAccount == null)
+            {
+                return (
+                    userAccount,
+                    isLocalAccount,
+                    isLoginAllowed,
+                    isPasswordValid,
+                    needChangePassword,
+                    hints
+                );
+            }
+
+            // If user has a password so it has a local account credentials
+            if (userAccount.HasPassword())
+            {
+                // It has a local account, so dont ask the user to create a
+                // local account 
+                isLocalAccount = true;
+
+                // Check if password is valid
+                isPasswordValid = this._cryptoService.VerifyPasswordHash(
+                    userAccount.PasswordHash,
+                    password,
+                    this._applicationOptions.PasswordHashingIterationCount);
+
+                // TODO: implement invalid passowrd policy 
+            }
+
+
+            // User might be disabled 
+            isLoginAllowed = userAccount.IsLoginAllowed;
+
+            // TODO: Implement password invalidation policy
+            needChangePassword = false;
+
+            // TODO: implement hints if user should get help to get authenticated
+
+            return (
+                userAccount,
+                isLocalAccount,
+                isLoginAllowed,
+                isPasswordValid,
+                needChangePassword,
+                hints
+            );
         }
     }
 }

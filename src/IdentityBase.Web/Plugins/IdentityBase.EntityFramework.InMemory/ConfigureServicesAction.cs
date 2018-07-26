@@ -22,6 +22,8 @@ namespace IdentityBase.EntityFramework.InMemory
                 {
                     dbBuilder
                         .UseInMemoryDatabase("Put_value_from_config_here");
+
+                    dbBuilder.EnableSensitiveDataLogging(); 
                 };
 
                 config.GetSection("EntityFramework").Bind(options);

@@ -41,7 +41,7 @@ namespace IdentityBase.Actions.External
             IdBaseAuthService authenticationService,
             IClientStore clientStore,
             ICrypto crypto,
-           NotificationService notificationService)
+            NotificationService notificationService)
         {
             // setting it this way since interaction service is null in the
             // base class oO
