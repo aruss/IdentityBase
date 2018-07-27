@@ -25,10 +25,13 @@ namespace IdentityBase
                 httpContext.RequestServices
                     .GetService<ApplicationOptions>();
 
+            string culture = null;
+
+            // Try get culture from authorization request 
             if (idbContext.IsValid)
             {
-                string culture = httpContext.Request.Query["culture"];
-
+                // If query param is empty but authorization request is present
+                // check inside authorization request 
                 if (String.IsNullOrWhiteSpace(culture) &&
                     idbContext.AuthorizationRequest != null)
                 {
@@ -38,23 +41,45 @@ namespace IdentityBase
                         .GetValues("culture")?
                         .FirstOrDefault();
                 }
-
-                // TODO: Get all client supported cultures
-
-                if (String.IsNullOrWhiteSpace(culture))
-                {
-                    // TODO: Replace by client overrides for application options
-                    culture = idbContext.ClientProperties.Culture ??
-                        appOptions.DefaultCulture;
-                }
-                else
-                {
-                    return Task.FromResult(
-                        new ProviderCultureResult(new StringSegment(culture)));
-                }
             }
 
-            return Task.FromResult<ProviderCultureResult>(null);
+            // Try get culture from query string
+            if (String.IsNullOrWhiteSpace(culture))
+            {
+                culture = httpContext.Request.Query["culture"];
+            }
+            // Try get from client properties 
+            else if (idbContext.ClientProperties != null)
+            {
+                culture = idbContext.ClientProperties.Culture;
+            }
+
+            // Try get from cookie
+            string cookieValue = httpContext.Request.Cookies["idb.c"];
+            if (String.IsNullOrWhiteSpace(culture))
+            {
+                culture = cookieValue;
+            }
+
+            // Set default
+            if (String.IsNullOrWhiteSpace(culture))
+            {
+                culture = appOptions.DefaultCulture;
+            }
+
+            // Set cookie
+            if (!culture.Equals(cookieValue))
+            {
+                CookieOptions option = new CookieOptions
+                {
+                    HttpOnly = true
+                };
+
+                httpContext.Response.Cookies.Append("idb.c", culture, option);
+            }
+
+            return Task.FromResult(
+                new ProviderCultureResult(new StringSegment(culture)));
         }
     }
 }
