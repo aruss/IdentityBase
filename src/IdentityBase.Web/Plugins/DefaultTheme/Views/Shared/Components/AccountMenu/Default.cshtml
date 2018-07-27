@@ -11,6 +11,7 @@
             asp-action="@item.Action">
             <a asp-controller="@item.Controller"
                asp-action="@item.Action"
+               asp-route-clientId="@Model.ClientId"
                asp-route-returnUrl="@Model.ReturnUrl">@Localizer[item.Name
                                                      .HumanizeCamelCased()
                                                      .Capitalize()]</a>

@@ -3,6 +3,7 @@
 
 namespace IdentityBase.Mvc
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace IdentityBase.Mvc
     public class AccountMenuViewModel
     {
         public string ReturnUrl { get; set; }
+        public string ClientId { get; set; }
         public IEnumerable<AccountMenuItem> Items { get; set; }
     }
 
@@ -40,6 +42,7 @@ namespace IdentityBase.Mvc
         {
             var vm = new AccountMenuViewModel
             {
+
                 ReturnUrl = this._idbContext.ReturnUrl,
                 Items = new AccountMenuItem[]
                 {
@@ -49,6 +52,11 @@ namespace IdentityBase.Mvc
                     new AccountMenuItem("TwoFactorAuthentication", "AccountTwoFactorAuth", "TwoFactorAuth"),
                 }
             };
+
+            if (String.IsNullOrWhiteSpace(vm.ReturnUrl))
+            {
+                vm.ClientId = this._idbContext.Client.ClientId;
+            }
 
             return this.View(vm);
         }
