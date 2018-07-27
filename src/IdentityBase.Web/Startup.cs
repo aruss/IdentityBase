@@ -109,10 +109,14 @@ namespace IdentityBase
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<AuthenticationService>();
-            services.AddDefaultForms(); 
-            services.AddAntiforgery();
-            services.AddHttpClient(); 
+            services.AddDefaultForms();
+            services.AddHttpClient();
 
+            services.AddAntiforgery((options) =>
+            {
+                options.Cookie.Name = "idb.srf"; 
+            });
+            
             services
                 .AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
 
