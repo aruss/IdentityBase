@@ -51,7 +51,6 @@ namespace IdentityBase
                      cultures.Select(s => new CultureInfo(s)).ToList();
 
                 options.RequestCultureProviders.Clear();
-
                 options.RequestCultureProviders
                     .Add(new IdentityBase.RequestCultureProvider());
             });

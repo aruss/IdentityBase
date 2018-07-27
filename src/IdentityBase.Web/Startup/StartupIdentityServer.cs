@@ -15,7 +15,7 @@ namespace IdentityBase
     using Microsoft.Extensions.Logging;
     using ServiceBase.Events;
     using ServiceBase.Extensions;
-
+    
     // TODO: evaluate this http://docs.identityserver.io/en/release/topics/discovery.html
 
     // https://github.com/IdentityServer/IdentityServer4/blob/dev/src/Host/Startup.cs
