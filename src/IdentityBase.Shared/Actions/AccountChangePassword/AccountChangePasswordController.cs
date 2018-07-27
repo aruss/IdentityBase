@@ -19,6 +19,7 @@ namespace IdentityBase.Actions.AccountChangePassword
     public class AccountChangePasswordController : WebController
     {
         private readonly UserAccountService _userAccountService;
+        private readonly IUserAccountStore _userAccountStore;
         private readonly AuthenticationService _authService;
 
         public AccountChangePasswordController(
@@ -27,6 +28,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             ILogger<AccountChangePasswordController> logger,
             IdentityBaseContext identityBaseContext,
             UserAccountService userAccountService,
+            IUserAccountStore userAccountStore,
             AuthenticationService authService)
 
         {
@@ -35,6 +37,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             this.Logger = logger;
             this.IdentityBaseContext = identityBaseContext;
             this._userAccountService = userAccountService;
+            this._userAccountStore = userAccountStore;
             this._authService = authService;
         }
 
@@ -77,8 +80,12 @@ namespace IdentityBase.Actions.AccountChangePassword
                 return this.RedirectToInitialAction();
             }
 
-            await this._userAccountService
-                .SetNewPasswordAsync(userAccount, inputModel.Password); 
+            this._userAccountService
+                .SetPassword(userAccount, inputModel.Password);
+
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: Emit user updated event 
 
             return this.RedirectToInitialAction();
         }

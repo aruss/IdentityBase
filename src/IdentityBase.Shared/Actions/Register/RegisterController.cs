@@ -24,6 +24,7 @@ namespace IdentityBase.Actions.Register
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
+        private readonly IUserAccountStore _userAccountStore;
 
         public RegisterController(
             IIdentityServerInteractionService interaction,
@@ -34,7 +35,8 @@ namespace IdentityBase.Actions.Register
             UserAccountService userAccountService,
             ClientService clientService,
             NotificationService notificationService,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            IUserAccountStore userAccountStore)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
@@ -44,6 +46,7 @@ namespace IdentityBase.Actions.Register
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
+            this._userAccountStore = userAccountStore;
         }
 
         [HttpGet("register", Name = "Register")]
@@ -71,7 +74,7 @@ namespace IdentityBase.Actions.Register
             string email = model.Email.ToLower();
 
             // Check if user with same email exists
-            UserAccount userAccount = await this._userAccountService
+            UserAccount userAccount = await this._userAccountStore
                 .LoadByEmailAsync(email);
 
             // If user dont exists create a new one
@@ -242,7 +245,7 @@ namespace IdentityBase.Actions.Register
 
             return vm;
         }
-        
+
         private IActionResult CreateSuccessResult(
             UserAccount userAccount,
             string returnUrl)
@@ -257,21 +260,30 @@ namespace IdentityBase.Actions.Register
             });
         }
 
-        [NonAction]
-        internal async Task<IActionResult> TryMergeWithExistingUserAccount(
+        private async Task<IActionResult> TryMergeWithExistingUserAccount(
             UserAccount userAccount,
             RegisterInputModel inputModel)
         {
             // Merge accounts without user consent
             if (this._applicationOptions.AutomaticAccountMerge)
             {
-                await this._userAccountService
-                    .AddLocalCredentialsAsync(userAccount, inputModel.Password);
+                this._userAccountService
+                    .SetPassword(userAccount, inputModel.Password);
+
+                await this._userAccountStore.WriteAsync(userAccount);
+
+                // TODO: emit user updated event 
 
                 if (this._applicationOptions.LoginAfterAccountCreation)
                 {
                     await this._authenticationService
                         .SignInAsync(userAccount, inputModel.ReturnUrl);
+
+                    this._userAccountService.SetSuccessfullSignIn(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user authenticated event 
                 }
                 else
                 {
@@ -302,29 +314,56 @@ namespace IdentityBase.Actions.Register
             return View(vm);
         }
 
-        [NonAction]
-        internal async Task<IActionResult> TryCreateNewUserAccount(
+        private async Task<IActionResult> TryCreateNewUserAccount(
             RegisterInputModel model)
         {
-            UserAccount userAccount = await this._userAccountService
-                .CreateNewLocalUserAccountAsync(
-                    model.Email,
-                    model.Password,
-                    model.ReturnUrl
-                );
+            DateTime now = DateTime.UtcNow;
+            Guid userAccountId = Guid.NewGuid();
 
-            // Send confirmation mail
+            var userAccount = new UserAccount
+            {
+                Id = userAccountId,
+                Email = model.Email,
+                FailedLoginCount = 0,
+                IsEmailVerified = false,
+                IsLoginAllowed = !this._applicationOptions
+                    .RequireLocalAccountVerification,
+            };
+
+            this._userAccountService.SetPassword(userAccount, model.Password);
+
+            if (this._applicationOptions.RequireLocalAccountVerification)
+            {
+                this._userAccountService.SetVerificationData(
+                     userAccount,
+                     VerificationKeyPurpose.ConfirmAccount,
+                     model.ReturnUrl,
+                     now
+                );
+            }
+
+            if (this._applicationOptions.LoginAfterAccountCreation)
+            {
+                this._userAccountService.SetSuccessfullSignIn(userAccount);
+            }
+
+            await this._userAccountStore.WriteAsync(userAccount);
+            // TODO: Emit user updated event
+
+            // Send email but only after successfull user account update 
             if (this._applicationOptions.RequireLocalAccountVerification)
             {
                 await this._notificationService
                     .SendUserAccountCreatedEmailAsync(userAccount);
             }
 
+            // Authenticate user but only after success account update 
             if (this._applicationOptions.LoginAfterAccountCreation)
             {
                 await this._authenticationService
-                    .SignInAsync(userAccount, model.ReturnUrl);
+                  .SignInAsync(userAccount, model.ReturnUrl);
 
+                // TODO: emit user authenticated event
                 return this.RedirectToReturnUrl(model.ReturnUrl);
             }
 
@@ -335,19 +374,25 @@ namespace IdentityBase.Actions.Register
         public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ConfirmAccount
                 );
 
-            if (result.UserAccount == null ||
+            UserAccount userAccount = result.UserAccount;
+
+            if (userAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                if (result.UserAccount != null)
+                if (userAccount != null)
                 {
-                    await this._userAccountService
-                        .ClearVerificationAsync(result.UserAccount);
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user updated event 
                 }
 
                 this.AddModelStateError(ErrorMessages.TokenIsInvalid);
@@ -357,15 +402,15 @@ namespace IdentityBase.Actions.Register
 
             // User account requires completion.
             if (this._applicationOptions.EnableAccountInvitation &&
-                result.UserAccount.CreationKind == CreationKind.Invitation)
+                userAccount.CreationKind == CreationKind.Invitation)
             {
                 // TODO: move invitation confirmation to own contoller
                 //       listening on /invitation/confirm
 
                 ConfirmViewModel vm = new ConfirmViewModel
                 {
-                    RequiresPassword = !result.UserAccount.HasPassword(),
-                    Email = result.UserAccount.Email
+                    RequiresPassword = !userAccount.HasPassword(),
+                    Email = userAccount.Email
                 };
 
                 return this.View("Confirm", vm);
@@ -373,18 +418,25 @@ namespace IdentityBase.Actions.Register
             // User account already fine and can be authenticated.
             else
             {
-                // TODO: Refactor so the db will hit only once in case
-                //       LoginAfterAccountConfirmation is true
+                string returnUrl = userAccount.VerificationStorage;
 
-                string returnUrl = result.UserAccount.VerificationStorage;
+                this._userAccountService.SetEmailAsVerified(userAccount);
 
-                await this._userAccountService
-                    .SetEmailVerifiedAsync(result.UserAccount);
+                if (this._applicationOptions.LoginAfterAccountConfirmation)
+                {
+                    this._userAccountService.SetSuccessfullSignIn(userAccount);
+                }
+
+                await this._userAccountStore.WriteAsync(userAccount);
+
+                // TODO: emit user updated event 
 
                 if (this._applicationOptions.LoginAfterAccountConfirmation)
                 {
                     await this._authenticationService
                         .SignInAsync(result.UserAccount, returnUrl);
+
+                    // TODO: emit user authenticated event 
 
                     return this.RedirectToReturnUrl(returnUrl);
                 }
@@ -412,19 +464,25 @@ namespace IdentityBase.Actions.Register
             }
 
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ConfirmAccount
                 );
 
-            if (result.UserAccount == null ||
+            UserAccount userAccount = result.UserAccount;
+
+            if (userAccount == null ||
                 result.TokenExpired ||
                 !result.PurposeValid)
             {
-                if (result.UserAccount != null)
+                if (userAccount != null)
                 {
-                    await this._userAccountService
-                        .ClearVerificationAsync(result.UserAccount);
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user updated event 
                 }
 
                 this.AddModelStateError(ErrorMessages.TokenIsInvalid);
@@ -436,54 +494,63 @@ namespace IdentityBase.Actions.Register
             {
                 return this.View("Confirm", new ConfirmViewModel
                 {
-                    Email = result.UserAccount.Email
+                    Email = userAccount.Email
                 });
             }
 
-            string returnUrl = result.UserAccount.VerificationStorage;
-            this._userAccountService.SetEmailVerified(result.UserAccount);
+            string returnUrl = userAccount.VerificationStorage;
+            this._userAccountService.SetEmailAsVerified(userAccount);
+            this._userAccountService.SetPassword(userAccount, model.Password);
 
-            this._userAccountService
-                .AddLocalCredentials(result.UserAccount, model.Password);
+            if (this._applicationOptions.LoginAfterAccountRecovery)
+            {
+                this._userAccountService.SetSuccessfullSignIn(userAccount);
+            }
 
-            await this._userAccountService
-                .UpdateUserAccountAsync(result.UserAccount);
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: emit user updated event 
 
             if (result.UserAccount.CreationKind == CreationKind.Invitation)
             {
                 return this.RedirectToReturnUrl(returnUrl);
             }
-            else
+            else if (this._applicationOptions.LoginAfterAccountRecovery)
             {
-                if (this._applicationOptions.LoginAfterAccountRecovery)
-                {
-                    await this._authenticationService
-                        .SignInAsync(result.UserAccount, returnUrl);
+                await this._authenticationService
+                    .SignInAsync(result.UserAccount, returnUrl);
 
-                    return this.RedirectToReturnUrl(returnUrl);
-                }
+                // TODO: emit user authenticated event
 
-                return this.RedirectToLogin(returnUrl);
+                return this.RedirectToReturnUrl(returnUrl);
             }
+
+            return this.RedirectToLogin(returnUrl);
         }
 
         [HttpGet("register/cancel", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ConfirmAccount
                 );
 
-            if (result.UserAccount == null ||
+            UserAccount userAccount = result.UserAccount;
+
+            if (userAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                if (result.UserAccount != null)
+                if (userAccount != null)
                 {
-                    await this._userAccountService
-                        .ClearVerificationAsync(result.UserAccount);
+                    this._userAccountService
+                       .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user updated event 
                 }
 
                 this.AddModelStateError(ErrorMessages.TokenIsInvalid);
@@ -491,10 +558,14 @@ namespace IdentityBase.Actions.Register
                 return this.View("InvalidToken");
             }
 
-            string returnUrl = result.UserAccount.VerificationStorage;
+            string returnUrl = userAccount.VerificationStorage;
 
-            await this._userAccountService
-                .ClearVerificationAsync(result.UserAccount);
+            this._userAccountService
+                .ClearVerificationData(userAccount);
+
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: emit user updated event 
 
             return this.RedirectToReturnUrl(returnUrl);
         }

@@ -6,14 +6,12 @@ namespace IdentityBase.Actions.External
     using System.Security.Claims;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
-    using IdentityBase.Crypto;
     using IdentityBase.Models;
     using IdentityBase.Mvc;
     using IdentityBase.Services;
     using IdentityModel;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
-    using IdentityServer4.Stores;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -27,9 +25,9 @@ namespace IdentityBase.Actions.External
         private readonly ApplicationOptions _applicationOptions;
         private readonly IUserAccountStore _userAccountStore;
         private readonly IdBaseAuthService _authenticationService;
-        private readonly IClientStore _clientStore;
-        private readonly ICrypto _crypto;
         private readonly NotificationService _notificationService;
+        private readonly UserAccountService _userAccountService;
+
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -39,9 +37,8 @@ namespace IdentityBase.Actions.External
             ApplicationOptions applicationOptions,
             IUserAccountStore userAccountStore,
             IdBaseAuthService authenticationService,
-            IClientStore clientStore,
-            ICrypto crypto,
-            NotificationService notificationService)
+            NotificationService notificationService,
+            UserAccountService userAccountService)
         {
             // setting it this way since interaction service is null in the
             // base class oO
@@ -52,9 +49,8 @@ namespace IdentityBase.Actions.External
             this._applicationOptions = applicationOptions;
             this._userAccountStore = userAccountStore;
             this._authenticationService = authenticationService;
-            this._clientStore = clientStore;
-            this._crypto = crypto;
             this._notificationService = notificationService;
+            this._userAccountService = userAccountService;
         }
 
         /// <summary>
@@ -133,50 +129,41 @@ namespace IdentityBase.Actions.External
                     throw new Exception("External authentication error");
                 }
 
+                DateTime now = DateTime.UtcNow;
+                Guid userAccountId = Guid.NewGuid();
+
+                userAccount = new UserAccount
+                {
+                    Id = userAccountId,
+                    Email = email,
+                    FailedLoginCount = 0,
+                    IsEmailVerified = false,
+                    IsLoginAllowed = this._applicationOptions
+                        .RequireLocalAccountVerification,
+                    Accounts = new ExternalAccount[]
+                    {
+                        new ExternalAccount
+                        {
+                            Email = email,
+                            UserAccountId = userAccountId,
+                            Provider = provider,
+                            Subject = subject,
+                            LastLoginAt = null,
+                            IsLoginAllowed = this._applicationOptions
+                                .RequireExternalAccountVerification
+                        }
+                    }
+                };
+
                 if (this._applicationOptions
                     .RequireExternalAccountVerification)
                 {
-                    DateTime now = DateTime.UtcNow;
-                    Guid userAccountId = Guid.NewGuid();
-
-                    // Create new user account that has to be confirmed first
-                    // before login
-                    userAccount = new UserAccount
-                    {
-                        Id = userAccountId,
-                        Email = email,
-                        FailedLoginCount = 0,
-                        IsEmailVerified = false,
-                        PasswordChangedAt = now,
-                        CreatedAt = now,
-                        UpdatedAt = now,
-                        IsLoginAllowed = false,
-
-                        VerificationKey = this._crypto
-                            .Hash(this._crypto.GenerateSalt())
-                            .StripUglyBase64()
-                            .ToLowerInvariant(),
-
-                        VerificationPurpose = (int)VerificationKeyPurpose
-                            .ConfirmAccount,
-
-                        VerificationStorage = returnUrl,
-                        VerificationKeySentAt = now,
-                        Accounts = new ExternalAccount[]
-                        {
-                           new ExternalAccount
-                           {
-                               Email = email,
-                               UserAccountId = userAccountId,
-                               Provider = provider,
-                               Subject = subject,
-                               CreatedAt = now,
-                               UpdatedAt  = now,
-                               LastLoginAt = null,
-                               IsLoginAllowed = false
-                           }
-                        }
-                    };
+                    this._userAccountService.SetVerificationData(
+                        userAccount,
+                        VerificationKeyPurpose.ConfirmAccount,
+                        returnUrl,
+                        now
+                    );
 
                     await this._userAccountStore.WriteAsync(userAccount);
 
@@ -196,37 +183,8 @@ namespace IdentityBase.Actions.External
                 }
                 else
                 {
-                    DateTime now = DateTime.UtcNow;
-                    Guid userAccountId = Guid.NewGuid();
-
-                    // Create new user account that has to be confirmed first
-                    // before login
-                    userAccount = new UserAccount
-                    {
-                        Id = userAccountId,
-                        Email = email,
-                        FailedLoginCount = 0,
-                        IsEmailVerified = false,
-                        PasswordChangedAt = now,
-                        CreatedAt = now,
-                        UpdatedAt = now,
-                        LastLoginAt = now,
-                        IsLoginAllowed = true,
-                        Accounts = new ExternalAccount[]
-                        {
-                           new ExternalAccount
-                           {
-                               Email = email,
-                               UserAccountId = userAccountId,
-                               Provider = provider,
-                               Subject = subject,
-                               CreatedAt = now,
-                               UpdatedAt  = now,
-                               LastLoginAt = now,
-                               IsLoginAllowed = true
-                           }
-                        }
-                    };
+                    // Update last authenticated flags
+                    userAccount.LastLoginAt = now;
 
                     await this._userAccountStore.WriteAsync(userAccount);
 
@@ -253,8 +211,6 @@ namespace IdentityBase.Actions.External
                         UserAccountId = userAccount.Id,
                         Provider = provider,
                         Subject = subject,
-                        CreatedAt = now,
-                        UpdatedAt = now,
                         LastLoginAt = now,
                         IsLoginAllowed = true
                     };
@@ -262,7 +218,7 @@ namespace IdentityBase.Actions.External
                     if (userAccount.Accounts != null)
                     {
                         (userAccount.Accounts as List<ExternalAccount>)
-                            .Add(externalAccount); 
+                            .Add(externalAccount);
                     }
                     else
                     {
@@ -295,6 +251,14 @@ namespace IdentityBase.Actions.External
             AuthenticateResult authResult,
             string provider)
         {
+            // retrieve return URL
+            string returnUrl = authResult.Properties.Items["returnUrl"];
+
+            if (String.IsNullOrWhiteSpace(returnUrl))
+            {
+                throw new Exception("External authentication error");
+            }
+
             // this allows us to collect any additonal claims or properties
             // for the specific prtotocols used and store them in the local
             // auth cookie. This is typically used to store data needed for
@@ -305,9 +269,6 @@ namespace IdentityBase.Actions.External
             this.ProcessLoginCallbackForOidc(
                 authResult, additionalLocalClaims, localSignInProps);
 
-            // issue authentication cookie for user
-            //await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username));   */
-
             await HttpContext.SignInAsync(
                 userAccount.Id.ToString(),
                 userAccount.Email,
@@ -315,19 +276,11 @@ namespace IdentityBase.Actions.External
                 localSignInProps,
                 additionalLocalClaims.ToArray());
 
-            // delete temporary cookie used during external authentication
+            // Delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(
                 IdentityServer4.IdentityServerConstants
                     .ExternalCookieAuthenticationScheme);
-
-            // retrieve return URL
-            string returnUrl = authResult.Properties.Items["returnUrl"];
-
-            if (String.IsNullOrWhiteSpace(returnUrl))
-            {
-                throw new Exception("External authentication error");
-            }
-
+            
             // check if external login is in the context of an OIDC request
             AuthorizationRequest context = await this.InteractionService
                .GetAuthorizationContextAsync(returnUrl);

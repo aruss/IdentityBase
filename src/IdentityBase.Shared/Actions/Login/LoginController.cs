@@ -23,8 +23,8 @@ namespace IdentityBase.Actions.Login
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly IUserAccountStore _userAccountStore;
-        private readonly ICrypto _cryptoService;
         private readonly AuthenticationService _authenticationService;
+        private readonly UserAccountService _userAccountService;
 
         public LoginController(
             IIdentityServerInteractionService interaction,
@@ -32,18 +32,18 @@ namespace IdentityBase.Actions.Login
             ILogger<LoginController> logger,
             IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
-            ICrypto cryptoService,
             IUserAccountStore userAccountStore,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            UserAccountService userAccountService)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
             this.Logger = logger;
             this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
-            this._cryptoService = cryptoService;
             this._userAccountStore = userAccountStore;
             this._authenticationService = authenticationService;
+            this._userAccountService = userAccountService;
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace IdentityBase.Actions.Login
                 string[] hints
             ) = await this.VerifyByEmailAndPasswordAsync(
                 model.Email,
-                model.Password); 
-            
+                model.Password);
+
             // user not present (wrong email)
             if (userAccount == null)
             {
@@ -151,6 +151,10 @@ namespace IdentityBase.Actions.Login
             if (!isPasswordValid)
             {
                 this.AddModelStateError(ErrorMessages.InvalidCredentials);
+
+                this._userAccountService.SetFailedSignIn(userAccount);
+                await this._userAccountStore.WriteAsync(userAccount);
+
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
@@ -158,6 +162,13 @@ namespace IdentityBase.Actions.Login
                 userAccount,
                 model.ReturnUrl,
                 model.RememberLogin);
+
+            this._userAccountService.SetSuccessfullSignIn(userAccount); 
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: emit user updated event
+
+            // TODO: emit user authenticated event 
 
             return this.RedirectToReturnUrl(model.ReturnUrl);
         }
@@ -290,14 +301,11 @@ namespace IdentityBase.Actions.Login
                 isLocalAccount = true;
 
                 // Check if password is valid
-                isPasswordValid = this._cryptoService.VerifyPasswordHash(
-                    userAccount.PasswordHash,
-                    password,
-                    this._applicationOptions.PasswordHashingIterationCount);
+                isPasswordValid = this._userAccountService.IsPasswordValid(
+                    userAccount.PasswordHash, password);
 
                 // TODO: implement invalid passowrd policy 
             }
-
 
             // User might be disabled 
             isLoginAllowed = userAccount.IsLoginAllowed;

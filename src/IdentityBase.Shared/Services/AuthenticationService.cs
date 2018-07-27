@@ -17,7 +17,7 @@ namespace IdentityBase.Services
     public class AuthenticationService
     {
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly UserAccountService _userAccountService;
+        private readonly IUserAccountStore _userAccountStore;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationOptions _applicationOptions;
         private readonly IDateTimeAccessor _dateTimeAccessor;
@@ -25,14 +25,14 @@ namespace IdentityBase.Services
 
         public AuthenticationService(
             IIdentityServerInteractionService interaction,
-            UserAccountService userAccountService,
+            IUserAccountStore userAccountStore,
             IHttpContextAccessor httpContextAccessor,
             ApplicationOptions applicationOptions,
             IDateTimeAccessor dateTimeAccessor,
             IAuthenticationSchemeProvider schemeProvider)
         {
             this._interaction = interaction;
-            this._userAccountService = userAccountService;
+            this._userAccountStore = userAccountStore;
             this._httpContextAccessor = httpContextAccessor;
             this._applicationOptions = applicationOptions;
             this._dateTimeAccessor = dateTimeAccessor;
@@ -46,7 +46,7 @@ namespace IdentityBase.Services
         /// <see cref="UserAccount"/>.</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <param name="properties">The properties.</param>
-        public async Task SignInAsync(  
+        public async Task SignInAsync(
            UserAccount userAccount,
            string returnUrl,
            bool rememberLogin = false)
@@ -71,15 +71,6 @@ namespace IdentityBase.Services
                 userAccount.Id.ToString(),
                 userAccount.Email,
                 properties);
-
-            await this._userAccountService
-                    .PerceiveSuccessfulLoginAsync(userAccount);
-        }
-
-        public async Task SignOutAsync()
-        {
-            // TODO: signout
-            // TODO: log signout event 
         }
 
         public async Task<UserAccount> GetAuthenticatedUserAccountAsync()
@@ -87,7 +78,7 @@ namespace IdentityBase.Services
             Guid userId = Guid.Parse(this._httpContextAccessor.HttpContext
                 .User.FindFirst("sub").Value);
 
-            UserAccount userAccount = await this._userAccountService
+            UserAccount userAccount = await this._userAccountStore
                 .LoadByIdAsync(userId);
 
             return userAccount;

@@ -22,6 +22,7 @@ namespace IdentityBase.Actions.Recover
     {
         private readonly ApplicationOptions _applicationOptions;
         private readonly IEmailService _emailService;
+        private readonly IUserAccountStore _userAccountStore;
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
@@ -32,8 +33,8 @@ namespace IdentityBase.Actions.Recover
             ILogger<RecoverController> logger,
             IdentityBaseContext identityBaseContext,
             ApplicationOptions applicationOptions,
-            IUserAccountStore userAccountStore,
             IEmailService emailService,
+            IUserAccountStore userAccountStore,
             UserAccountService userAccountService,
             NotificationService notificationService,
             AuthenticationService authenticationService)
@@ -44,6 +45,7 @@ namespace IdentityBase.Actions.Recover
             this.IdentityBaseContext = identityBaseContext;
             this._applicationOptions = applicationOptions;
             this._emailService = emailService;
+            this._userAccountStore = userAccountStore;
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
@@ -76,17 +78,19 @@ namespace IdentityBase.Actions.Recover
             }
 
             // Check if user with same email exists
-            UserAccount userAccount = await this._userAccountService
+            UserAccount userAccount = await this._userAccountStore
                 .LoadByEmailAsync(model.Email);
 
             if (userAccount != null)
             {
                 if (userAccount.IsLoginAllowed)
                 {
-                    await this._userAccountService
-                        .SetVirificationDataForResetPasswordAsync(
+                    this._userAccountService.SetVerificationData(
                             userAccount,
+                            VerificationKeyPurpose.ResetPassword,
                             model.ReturnUrl);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
 
                     await this._notificationService
                         .SendUserAccountRecoverEmailAsync(userAccount);
@@ -117,8 +121,7 @@ namespace IdentityBase.Actions.Recover
                 new { ReturnUrl = model.ReturnUrl });
         }
 
-        [NonAction]
-        internal async Task<RecoverViewModel> CreateViewModelAsync(
+        private async Task<RecoverViewModel> CreateViewModelAsync(
             string returnUrl)
         {
             return await this.CreateViewModelAsync(
@@ -126,8 +129,7 @@ namespace IdentityBase.Actions.Recover
             );
         }
 
-        [NonAction]
-        internal async Task<RecoverViewModel> CreateViewModelAsync(
+        private async Task<RecoverViewModel> CreateViewModelAsync(
             RecoverInputModel inputModel,
             UserAccount userAccount = null)
         {
@@ -175,7 +177,7 @@ namespace IdentityBase.Actions.Recover
         public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ResetPassword
                 );
@@ -204,19 +206,26 @@ namespace IdentityBase.Actions.Recover
             ConfirmInputModel model)
         {
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ResetPassword
                 );
 
-            if (result.UserAccount == null ||
+            UserAccount userAccount = result.UserAccount;
+
+            if (userAccount == null ||
                 result.TokenExpired ||
                 !result.PurposeValid)
             {
-                if (result.UserAccount != null)
+                if (userAccount != null)
                 {
-                    await this._userAccountService
-                        .ClearVerificationAsync(result.UserAccount);
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore
+                        .WriteAsync(userAccount);
+
+                    // TODO: Emit user updated event 
                 }
 
                 this.AddModelStateError(ErrorMessages.TokenIsInvalid);
@@ -228,22 +237,33 @@ namespace IdentityBase.Actions.Recover
             {
                 return View(new ConfirmViewModel
                 {
-                    Email = result.UserAccount.Email
+                    Email = userAccount.Email
                 });
             }
 
-            string returnUrl = result.UserAccount.VerificationStorage;
+            string returnUrl = userAccount.VerificationStorage;
 
-            await this._userAccountService.SetNewPasswordAsync(
-                result.UserAccount,
+            this._userAccountService.SetPassword(
+                userAccount,
                 model.Password
             );
 
             if (this._applicationOptions.LoginAfterAccountRecovery)
             {
                 await this._authenticationService
-                    .SignInAsync(result.UserAccount, returnUrl);
+                    .SignInAsync(userAccount, returnUrl);
 
+                this._userAccountService.SetSuccessfullSignIn(userAccount);
+
+                // TODO: Emit user authenticated event
+            }
+
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: Emit user updated eventd
+
+            if (this._applicationOptions.LoginAfterAccountRecovery)
+            {
                 return this.RedirectToReturnUrl(returnUrl);
             }
 
@@ -254,19 +274,24 @@ namespace IdentityBase.Actions.Recover
         public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
-                .HandleVerificationKeyAsync(
+                .GetVerificationResultAsync(
                     key,
                     VerificationKeyPurpose.ResetPassword
                 );
 
-            if (result.UserAccount == null ||
+            UserAccount userAccount = result.UserAccount; 
+
+            if (userAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                if (result.UserAccount != null)
+                if (userAccount  != null)
                 {
-                    await this._userAccountService
-                        .ClearVerificationAsync(result.UserAccount);
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore
+                        .WriteAsync(userAccount);
                 }
 
                 this.AddModelStateError(ErrorMessages.TokenIsInvalid);
@@ -274,10 +299,12 @@ namespace IdentityBase.Actions.Recover
                 return this.View("InvalidToken");
             }
 
-            string returnUrl = result.UserAccount.VerificationStorage;
+            string returnUrl = userAccount.VerificationStorage;
 
-            await this._userAccountService
-                .ClearVerificationAsync(result.UserAccount);
+            this._userAccountService
+                .ClearVerificationData(userAccount);
+
+            await this._userAccountStore.WriteAsync(userAccount);
 
             return this.RedirectToLogin(returnUrl);
         }
