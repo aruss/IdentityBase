@@ -50,7 +50,8 @@ namespace IdentityBase.Actions.Account
             {
                 Email = userAccount.Email,
                 // Phone = userAccount.Phone,
-                ReturnUrl = this.IdentityBaseContext.ReturnUrl
+                ClientId = this.IdentityBaseContext.Client.ClientId,
+                IsEmailVerified = userAccount.IsEmailVerified
             };
 
             return this.View(vm);
@@ -76,7 +77,7 @@ namespace IdentityBase.Actions.Account
             return this.RedirectToAction(
                 "Profile",
                 "AccountProfile",
-                new { ReturnUrl = this.IdentityBaseContext.ReturnUrl }
+                new { clientId = this.IdentityBaseContext.Client.ClientId }
             );
         }
     }

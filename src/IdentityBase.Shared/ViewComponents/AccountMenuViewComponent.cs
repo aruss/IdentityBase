@@ -6,7 +6,9 @@ namespace IdentityBase.Mvc
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using IdentityBase.Services;
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
 
     public class AccountMenuViewModel
     {
@@ -32,30 +34,58 @@ namespace IdentityBase.Mvc
     public class AccountMenuViewComponent : ViewComponent
     {
         private readonly IdentityBaseContext _idbContext;
+        private readonly AuthenticationService _authenticationService;
 
-        public AccountMenuViewComponent(IdentityBaseContext idbContext)
+        public AccountMenuViewComponent(
+            IdentityBaseContext idbContext,
+            AuthenticationService authenticationService)
         {
             this._idbContext = idbContext;
+            this._authenticationService = authenticationService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var items = new List<AccountMenuItem>
+               {
+                    new AccountMenuItem(
+                        "Account",
+                        "AccountProfile",
+                        "Profile"
+                    ),
+
+                    new AccountMenuItem(
+                        "ChangePassword",
+                        "AccountChangePassword",
+                        "ChangePassword"
+                    )
+               };
+
+            var accountProviders = await _authenticationService
+                .GetExternalProvidersAsync();
+
+            if (accountProviders.Any())
+            {
+                items.Add(new AccountMenuItem(
+                    "ExternalLogins",
+                    "AccountExternalLogins",
+                    "ExternalLogins"
+                ));
+            }
+
+            // Add two factor auth if any of thow factor services are installed
+
+            //new AccountMenuItem("TwoFactorAuthentication", "AccountTwoFactorAuth", "TwoFactorAuth"),
+
             var vm = new AccountMenuViewModel
             {
-
                 ReturnUrl = this._idbContext.ReturnUrl,
-                Items = new AccountMenuItem[]
-                {
-                    new AccountMenuItem("Account", "AccountProfile", "Profile"),
-                    new AccountMenuItem("ChangePassword","AccountChangePassword", "ChangePassword"),
-                    new AccountMenuItem("ExternalLogins", "AccountExternalLogins", "ExternalLogins"),
-                    new AccountMenuItem("TwoFactorAuthentication", "AccountTwoFactorAuth", "TwoFactorAuth"),
-                }
+                Items = items.ToArray()
             };
-
+            
             if (String.IsNullOrWhiteSpace(vm.ReturnUrl))
             {
-                vm.ClientId = this._idbContext.Client.ClientId;
+                vm.ClientId = this._idbContext?.Client?.ClientId;
             }
 
             return this.View(vm);

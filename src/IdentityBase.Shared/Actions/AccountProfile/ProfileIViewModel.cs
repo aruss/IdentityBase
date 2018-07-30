@@ -5,9 +5,10 @@ namespace IdentityBase.Actions.Account
 {
     public class ProfileViewModel
     {       
-        public string ReturnUrl { get; set; }
+        public string ClientId { get; set; }
 
         public string Email { get; set; }
+        public bool IsEmailVerified { get; set; }
 
         // public string Phone { get; set; }
     }

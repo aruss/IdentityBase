@@ -20,7 +20,7 @@
                           method="post"
                           asp-controller="AccountProfile"
                           asp-action="Profile"
-                          asp-route-returnUrl="@Model.ReturnUrl"
+                          asp-route-clientId="@Model.ClientId"
                           novalidate="novalidate">
                         <fieldset>
                             <div class="form-group">
@@ -30,7 +30,10 @@
                                        placeholder="@Localizer["Enter email"]"
                                        asp-for="Email" />
 
-                                @*<button id="email-verification" type="submit" class="btn btn-link" formaction="/Identity/Account/Manage?handler=SendVerificationEmail">Send verification email</button>*@
+                                @if (!Model.IsEmailVerified)
+                                {
+                                    <button id="email-verification" type="submit" class="btn btn-link" formaction="/account/Manage?handler=SendVerificationEmail">Send verification email</button>
+                                }
                                 @*<span asp-validation-for="Email"></span>*@
                             </div>
                             @* <div class="form-group">
@@ -39,7 +42,7 @@
                                        placeholder="@Localizer["Enter phone number"]"
                                        asp-for="Phone" />
                             </div>*@
-
+                            
                             <div class="form-group">
                                 <button class="btn btn-primary" localize="" disabled>
                                     Save
