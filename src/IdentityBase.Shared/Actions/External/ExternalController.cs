@@ -306,6 +306,7 @@ namespace IdentityBase.Actions.External
             // }
 
             // TODO: Emit user authenticated event
+            // TODO: Validate return url 
 
             return this.Redirect(returnUrl);
         }

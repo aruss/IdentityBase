@@ -1,3 +1,4 @@
+@model IdentityBase.Actions.Account.ExternalLoginsViewModel
 
 <div class="login-page">
     <div class="page-header">
@@ -11,13 +12,42 @@
         <div class="col-md-9">
 
             <h4>Add another service to log in.</h4>
+            <ul class="list-inline">
+                @foreach (var provider in Model.AvailableProviders)
+                {
+                    <li class="list-inline">
+                        <a class="btn btn-default"
+                           asp-controller="External"
+                           asp-action="Challenge"
+                           asp-route-provider="@provider.AuthenticationScheme"
+                           asp-route-returnUrl="@Url.Action("ExternalLogins", "AccountExternalLogins", new { clientId = Model.ClientId })">
+                            @provider.DisplayName
+                        </a>
+                    </li>
+                }
+            </ul>
 
-            <div class="row">
-                <div class="col-md-6">
+            <h4>Remove your connected accountss</h4>
+            <form id="formRemoveAccount"
+                  method="post"
+                  asp-controller="AccountExternalLogins"
+                  asp-action="RemoveAccount"
+                  asp-route-clientId="@Model.ClientId"
+                  novalidate="novalidate">
 
-                    <h2>....</h2>
-                </div>
-            </div>
+                <ul class="list-inline">
+                    @foreach (var provider in Model.ConnectedProviders)
+                    {
+                        <li class="list-inline">
+                            <button class="btn btn-default"
+                                    name="Provider"
+                                    value="@provider.AuthenticationScheme">
+                                @provider.DisplayName
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </form>
         </div>
     </div>
 </div>

@@ -3,25 +3,110 @@
 
 namespace IdentityBase.Actions.Account
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+    using IdentityBase.Models;
     using IdentityBase.Mvc;
+    using IdentityBase.Services;
+    using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
+    using Microsoft.Extensions.Logging;
 
     [Authorize]
-    [Route("/account/external-logins")]
     public class AccountExternalLoginsController : WebController
     {
-        public AccountExternalLoginsController()
+        private readonly AuthenticationService _authenticationService;
+        private readonly IUserAccountStore _userAccountStore; 
+
+        public AccountExternalLoginsController(
+            IIdentityServerInteractionService interaction,
+            IStringLocalizer localizer,
+            ILogger<AccountExternalLoginsController> logger,
+            IdentityBaseContext identityBaseContext,
+            AuthenticationService authenticationService,
+            IUserAccountStore userAccountStore)
         {
-                
+            this.InteractionService = interaction;
+            this.Localizer = localizer;
+            this.Logger = logger;
+            this.IdentityBaseContext = identityBaseContext;
+            this._authenticationService = authenticationService;
+            this._userAccountStore = userAccountStore; 
         }
 
-        [HttpGet]
+        [HttpGet("/account/external-logins")]
         public async Task<IActionResult> ExternalLogins()
         {
+            List<ExternalProvider> available =
+                (await this._authenticationService
+                    .GetExternalProvidersAsync())
+                    .ToList();
 
-            return this.View();
+            List<ExternalProvider> connected = new List<ExternalProvider>();
+
+            UserAccount userAccount = await this._authenticationService
+                .GetAuthenticatedUserAccountAsync();
+
+            for (int i = available.Count - 1; i >= 0; i--)
+            {
+                ExternalProvider item = available[i];
+
+                if (userAccount.Accounts
+                    .Any(c => c.Provider.Equals(item.AuthenticationScheme)))
+                {
+                    available.Remove(item);
+                    connected.Add(item);
+                }
+            }
+
+            ExternalLoginsViewModel vm = new ExternalLoginsViewModel
+            {
+                ClientId = this.IdentityBaseContext.Client.ClientId,
+                AvailableProviders = available,
+                ConnectedProviders = connected
+            };
+
+            return this.View(vm);
+        }
+
+        [HttpPost("/account/external-logins/remove")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveAccount(
+            RemoveLoginInputModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToInitialAction();
+            }
+
+            UserAccount userAccount = await this._authenticationService
+                .GetAuthenticatedUserAccountAsync();
+
+            userAccount.Accounts = userAccount.Accounts
+                .Where(c => !c.Provider
+                    .Equals(
+                        inputModel.Provider,
+                        StringComparison.InvariantCultureIgnoreCase))
+                .ToArray();
+
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: Emit user updated event 
+
+            return this.RedirectToInitialAction(); 
+        }
+
+        private RedirectToActionResult RedirectToInitialAction()
+        {
+            return this.RedirectToAction(
+                "ExternalLogins",
+                "AccountExternalLogins",
+                new { clientId = this.IdentityBaseContext.Client.ClientId }
+            );
         }
     }
 }

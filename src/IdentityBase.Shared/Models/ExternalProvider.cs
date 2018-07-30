@@ -7,6 +7,9 @@ namespace IdentityBase.Models
     {
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// Provider name if you like
+        /// </summary>
         public string AuthenticationScheme { get; set; }
     }
 }
