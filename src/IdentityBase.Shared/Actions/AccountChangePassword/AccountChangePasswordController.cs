@@ -50,7 +50,8 @@ namespace IdentityBase.Actions.AccountChangePassword
 
             ChangePasswordViewModel vm = new ChangePasswordViewModel
             {
-                ReturnUrl = this.IdentityBaseContext.ReturnUrl
+                ReturnUrl = this.IdentityBaseContext.ReturnUrl,
+                HasPassword = userAccount.HasPassword()
             };
 
             return this.View(vm);
