@@ -46,11 +46,11 @@ namespace IdentityBase.Actions.AccountChangePassword
         public async Task<IActionResult> ChangePassword()
         {
             UserAccount userAccount = await this._authService
-                           .GetAuthenticatedUserAccountAsync();
+                .GetAuthenticatedUserAccountAsync();
 
             ChangePasswordViewModel vm = new ChangePasswordViewModel
             {
-                ReturnUrl = this.IdentityBaseContext.ReturnUrl,
+                ClientId = this.IdentityBaseContext.Client.ClientId,
                 HasPassword = userAccount.HasPassword()
             };
 
@@ -71,7 +71,8 @@ namespace IdentityBase.Actions.AccountChangePassword
             UserAccount userAccount = await this._authService
                 .GetAuthenticatedUserAccountAsync();
 
-            if (!this._userAccountService.IsPasswordValid(
+            if (userAccount.HasPassword() && 
+                !this._userAccountService.IsPasswordValid(
                 userAccount.PasswordHash,
                 inputModel.PasswordCurrent))
             {
@@ -96,7 +97,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             return this.RedirectToAction(
                 "ChangePassword",
                 "AccountChangePassword",
-                new { ReturnUrl = this.IdentityBaseContext.ReturnUrl }
+                new { clientId = this.IdentityBaseContext.Client.ClientId }
             );
         }
     }

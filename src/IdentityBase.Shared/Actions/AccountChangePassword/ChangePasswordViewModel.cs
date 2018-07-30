@@ -19,7 +19,7 @@ namespace IdentityBase.Actions.AccountChangePassword
         [StringLength(100)]
         public string PasswordCurrent { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string ClientId { get; set; }
 
         public bool HasPassword { get; set; }
     }

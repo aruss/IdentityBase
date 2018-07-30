@@ -18,11 +18,7 @@ namespace IdentityBase.Actions.AccountChangePassword
         [StringLength(100)]
         public string PasswordConfirm { get; set; }
 
-        [Required(ErrorMessage = "The {0} field is required.")]
         [StringLength(100)]
         public string PasswordCurrent { get; set; }
-
-        [StringLength(2000)]
-        public string ReturnUrl { get; set; }
     }
 }
