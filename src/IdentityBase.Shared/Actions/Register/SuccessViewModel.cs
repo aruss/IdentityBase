@@ -5,6 +5,7 @@ namespace IdentityBase.Actions.Register
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using IdentityBase.Models;
 
     public class SuccessViewModel 
     {
@@ -29,6 +30,6 @@ namespace IdentityBase.Actions.Register
         [StringLength(2000)]
         public string ReturnUrl { get; set; }
 
-        public string Provider { get; set; }
+        public EmailProviderInfo Provider { get; set; }
     }
 }

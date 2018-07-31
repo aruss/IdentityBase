@@ -112,6 +112,9 @@ namespace IdentityBase
             services.AddDefaultForms();
             services.AddHttpClient();
 
+            services.AddSingleton<
+                IEmailProviderService, DefaultEmailProviderService>(); 
+
             services.AddAntiforgery((options) =>
             {
                 options.Cookie.Name = "idb.srf"; 

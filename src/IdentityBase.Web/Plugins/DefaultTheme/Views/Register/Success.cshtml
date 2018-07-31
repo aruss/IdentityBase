@@ -1,11 +1,14 @@
 @model IdentityBase.Actions.Register.SuccessViewModel
 
 <div class="login-page">
-  <div class="page-header">
-    <h1>Register</h1>
-  </div>
+    <div class="page-header">
+        <h1 localize="">Register</h1>
+    </div>
 
-    <p>Please click on the link in the mail</p>
+    <p localize="">Please check your mail box for confirmation e-mail.</p>
 
-    <p>@Model.Provider</p>
+    @if (Model.Provider != null)
+    {
+        <a href="@Model.Provider.WebMailBaseUrl">@Model.Provider.Provider</a>
+    }
 </div>  

@@ -25,6 +25,7 @@ namespace IdentityBase.Actions.Register
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
         private readonly IUserAccountStore _userAccountStore;
+        private readonly IEmailProviderService _emailProviderService;
 
         public RegisterController(
             IIdentityServerInteractionService interaction,
@@ -36,7 +37,8 @@ namespace IdentityBase.Actions.Register
             ClientService clientService,
             NotificationService notificationService,
             AuthenticationService authenticationService,
-            IUserAccountStore userAccountStore)
+            IUserAccountStore userAccountStore,
+            IEmailProviderService emailProviderService)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
@@ -47,20 +49,23 @@ namespace IdentityBase.Actions.Register
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
             this._userAccountStore = userAccountStore;
+            this._emailProviderService = emailProviderService;
         }
 
         [HttpGet("/register", Name = "Register")]
         [RestoreModelState]
-        public async Task<IActionResult> Register(string returnUrl)
+        public async Task<IActionResult> RegisterGet(
+            string returnUrl)
         {
             RegisterViewModel vm = await this.CreateViewModelAsync(returnUrl);
-            return this.View(vm);
+            return this.View("Register", vm);
         }
 
         [HttpPost("/register", Name = "Register")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
-        public async Task<IActionResult> Register(RegisterInputModel model)
+        public async Task<IActionResult> RegisterPost(
+            RegisterInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -112,6 +117,7 @@ namespace IdentityBase.Actions.Register
             }
 
             return this.View(
+                "Register",
                 await this.CreateViewModelAsync(model, userAccount)
             );
         }
@@ -247,18 +253,21 @@ namespace IdentityBase.Actions.Register
 
 
         [NonAction]
-        private IActionResult CreateSuccessResult(
+        private async Task<IActionResult> CreateSuccessResult(
             UserAccount userAccount,
             string returnUrl)
         {
             // TODO: Create provider via some helper
-            return this.View("Success", new SuccessViewModel
-            {
-                ReturnUrl = returnUrl,
-                Provider = userAccount.Email
-                    .Split('@')
-                    .LastOrDefault()
-            });
+            return this.View(
+                "Success",
+                new SuccessViewModel
+                {
+                    ReturnUrl = returnUrl,
+
+                    Provider = await this._emailProviderService
+                    .GetProviderInfo(userAccount.Email)
+                }
+            );
         }
 
         [NonAction]
@@ -289,8 +298,10 @@ namespace IdentityBase.Actions.Register
                 }
                 else
                 {
-                    return this.CreateSuccessResult(
-                        userAccount, inputModel.ReturnUrl);
+                    return await this.CreateSuccessResult(
+                        userAccount,
+                        inputModel.ReturnUrl
+                    );
                 }
             }
             // Ask user if he wants to merge accounts
@@ -370,7 +381,10 @@ namespace IdentityBase.Actions.Register
                 return this.RedirectToReturnUrl(model.ReturnUrl);
             }
 
-            return this.CreateSuccessResult(userAccount, model.ReturnUrl);
+            return await this.CreateSuccessResult(
+                userAccount,
+                model.ReturnUrl
+            );
         }
 
         [HttpGet("/register/confirm", Name = "RegisterConfirm")]
