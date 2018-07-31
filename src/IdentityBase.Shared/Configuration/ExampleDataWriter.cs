@@ -23,7 +23,7 @@ namespace IdentityBase.Configuration
     {
         public static void Write(IConfiguration config)
         {
-            ICrypto crypto = new DefaultCrypto();
+            ICryptoService crypto = new DefaultCryptoService();
 
             ApplicationOptions options = config.GetSection("App")
                 .Get<ApplicationOptions>();
@@ -33,15 +33,15 @@ namespace IdentityBase.Configuration
             writer.WriteConfigFiles("./config");
         }
 
-        private readonly ICrypto crypto;
-        private readonly ApplicationOptions applicationOptions;
+        private readonly ICryptoService _cryptoService;
+        private readonly ApplicationOptions _applicationOptions;
 
         public ExampleDataWriter(
-            ICrypto crypto,
+            ICryptoService cryptoService,
             ApplicationOptions applicationOptions)
         {
-            this.crypto = crypto;
-            this.applicationOptions = applicationOptions;
+            this._cryptoService = cryptoService;
+            this._applicationOptions = applicationOptions;
         }
 
         public void WriteConfigFiles(string path)
@@ -67,8 +67,8 @@ namespace IdentityBase.Configuration
             );
 
             IEnumerable<UserAccount> users = data.GetUserAccounts(
-                       this.crypto,
-                       this.applicationOptions);
+                       this._cryptoService,
+                       this._applicationOptions);
 
             foreach (UserAccount user in users)
             {

@@ -4,14 +4,14 @@ namespace IdentityBase.UnitTests
     using IdentityBase.Crypto;
     using Xunit;
 
-    [Collection("ICrypto")]
+    [Collection("ICryptoService")]
     public class DefaultCryptoTests : IDisposable
     {
-        private DefaultCrypto crypto;
+        private DefaultCryptoService _cryptoService;
 
         public DefaultCryptoTests()
         {
-            crypto = new DefaultCrypto();
+            this._cryptoService = new DefaultCryptoService();
         }
 
         public void Dispose()

@@ -28,7 +28,7 @@ namespace IdentityBase.Configuration
         }
 
         public IEnumerable<UserAccount> GetUserAccounts(
-            ICrypto crypto,
+            ICryptoService cryptoService,
             ApplicationOptions options)
         {
             var now = DateTime.UtcNow;
@@ -41,7 +41,7 @@ namespace IdentityBase.Configuration
                     Id = Guid.Parse("0c2954d2-4c73-44e3-b0f2-c00403e4adef"),
                     Email = "alice@localhost",
 
-                    PasswordHash  = crypto.HashPassword(
+                    PasswordHash  = cryptoService.HashPassword(
                         "alice@localhost",
                         options.PasswordHashingIterationCount),
 
@@ -86,7 +86,7 @@ namespace IdentityBase.Configuration
                     Id = Guid.Parse("28575826-68a0-4a1d-9428-674a2eb5db95"),
                     Email = "bob@localhost",
 
-                    PasswordHash  = crypto.HashPassword(
+                    PasswordHash  = cryptoService.HashPassword(
                         "bob@localhost",
                         options.PasswordHashingIterationCount),
 
@@ -134,7 +134,7 @@ namespace IdentityBase.Configuration
                     Id = Guid.Parse("6b13d17c-55a6-482e-96b9-dc784015f927"),
                     Email = "jim@localhost",
 
-                    PasswordHash  = crypto.HashPassword(
+                    PasswordHash  = cryptoService.HashPassword(
                         "jim@localhost",
                         options.PasswordHashingIterationCount),
 
@@ -151,7 +151,7 @@ namespace IdentityBase.Configuration
                 {
                     Id = Guid.Parse("13808d08-b1c0-4f28-8d3e-8c9a4051efcb"),
                     Email = "paul@localhost",
-                    PasswordHash  = crypto.HashPassword(
+                    PasswordHash  = cryptoService.HashPassword(
                         "paul@localhost",
                         options.PasswordHashingIterationCount),
 

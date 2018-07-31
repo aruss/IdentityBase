@@ -104,7 +104,7 @@ namespace IdentityBase
                 this._applicationOptions,
                 this._environment);
 
-            services.AddTransient<ICrypto, DefaultCrypto>();
+            services.AddTransient<ICryptoService, DefaultCryptoService>();
             services.AddTransient<ClientService>();
             services.AddScoped<UserAccountService>();
             services.AddScoped<NotificationService>();

@@ -12,12 +12,12 @@ namespace IdentityBase.Services
 
     public class UserAccountService
     {
-        private readonly ICrypto _cryptoService;
+        private readonly ICryptoService _cryptoService;
         private readonly IUserAccountStore _userAccountStore;
         private readonly ApplicationOptions _applicationOptions;
 
         public UserAccountService(
-            ICrypto cryptoService,
+            ICryptoService cryptoService,
             IUserAccountStore userAccountStore,
             ApplicationOptions applicationOptions)
         {

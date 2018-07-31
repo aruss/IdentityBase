@@ -12,22 +12,7 @@ namespace IdentityBase.Crypto
     using System.Security.Cryptography;
     using System.Text;
 
-    public interface ICrypto
-    {
-        string HashPassword(
-            string password,
-            int iterations);
-
-        bool VerifyPasswordHash(
-            string hashedPassword,
-            string password,
-            int iterations);
-
-        string GenerateSalt();
-        string Hash(string value);
-    }
-
-    public class DefaultCrypto : ICrypto
+    public class DefaultCryptoService : ICryptoService
     {
         public const char PasswordHashingIterationCountSeparator = '.';
 
@@ -51,7 +36,7 @@ namespace IdentityBase.Crypto
             int iterations)
         {
             if (!hashedPassword.Contains(
-                DefaultCrypto.PasswordHashingIterationCountSeparator))
+                DefaultCryptoService.PasswordHashingIterationCountSeparator))
             {
                 return this.VerifyPasswordHashInternal(
                    hashedPassword,
