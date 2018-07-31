@@ -1,9 +1,9 @@
 @using IdentityServer4.Extensions
 @{
     string name = null;
-    if (!true.Equals(ViewData["signed-out"]))
+    if (!true.Equals(this.ViewData["signed-out"]))
     {
-        var user = Context.User;
+        var user = this.Context.User;
         name = user?.FindFirst("name")?.Value;
     }
 }
@@ -45,11 +45,13 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a asp-route="AccountProfile"
-                                       asp-route-clientId="@Context.GetIdentityBaseContext().Client.ClientId"
-                                       asp-route-returnUrl="@Context.GetIdentityBaseContext().ReturnUrl"
+                                       asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
+                                       asp-route-returnUrl="@IdentityBaseContext.ReturnUrl"
                                        localize="">Account</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a asp-route="Logout"
+                                       asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
+                                       asp-route-logoutId="@IdentityBaseContext.LogoutId"
                                        localize="">Logout</a></li>
                             </ul>
                         </li>

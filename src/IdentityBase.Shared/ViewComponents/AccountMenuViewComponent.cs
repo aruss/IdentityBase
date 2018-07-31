@@ -10,25 +10,6 @@ namespace IdentityBase.Mvc
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
 
-    public class AccountMenuViewModel
-    {
-        public string ReturnUrl { get; set; }
-        public string ClientId { get; set; }
-        public IEnumerable<AccountMenuItem> Items { get; set; }
-    }
-
-    public class AccountMenuItem
-    {
-        public AccountMenuItem(string route, string name = null)
-        {
-            this.Route = route;
-            this.Name = name ?? route;
-        }
-
-        public string Route { get; set; }
-        public string Name { get; set; }
-    }
-
     public class AccountMenuViewComponent : ViewComponent
     {
         private readonly IdentityBaseContext _idbContext;

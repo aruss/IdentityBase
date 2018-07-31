@@ -9,7 +9,6 @@ namespace IdentityBase
     using IdentityServer4.Stores;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using ServiceBase.Extensions;
 
     public static class StartupDataLayer
     {

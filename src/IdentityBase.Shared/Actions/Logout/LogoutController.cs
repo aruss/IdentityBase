@@ -19,6 +19,7 @@ namespace IdentityBase.Actions.Logout
     using Microsoft.Extensions.Logging;
     using IdentityServer4.Extensions;
 
+
     public class LogoutController : WebController
     {
         private readonly ApplicationOptions _applicationOptions;
@@ -40,10 +41,10 @@ namespace IdentityBase.Actions.Logout
         /// Show logout page at GET /logout
         /// </summary>
         [HttpGet("/logout", Name = "Logout")]
-        public async Task<IActionResult> Logout(string logoutId)
+        public async Task<IActionResult> Logout(LogoutInputModel model)
         {
             LogoutViewModel vm = await this
-                .CreateLogoutViewModelAsync(logoutId);
+                .CreateLogoutViewModelAsync(model.LogoutId);
 
             if (!vm.ShowLogoutPrompt)
             {

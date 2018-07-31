@@ -322,7 +322,6 @@ namespace IdentityBase.EntityFramework.IntegrationTests.Stores
         }
     }
 
-
     [Collection("UserAccountStoreTests")]
     public class UserAccountStore2Tests :
          IClassFixture<DatabaseProviderFixture<UserAccountDbContext>>
