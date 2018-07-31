@@ -19,16 +19,14 @@ namespace IdentityBase.Mvc
 
     public class AccountMenuItem
     {
-        public AccountMenuItem(string name, string controller, string action)
+        public AccountMenuItem(string route, string name = null)
         {
-            this.Name = name;
-            this.Controller = controller;
-            this.Action = action;
+            this.Route = route;
+            this.Name = name ?? route;
         }
 
+        public string Route { get; set; }
         public string Name { get; set; }
-        public string Controller { get; set; }
-        public string Action { get; set; }
     }
 
     public class AccountMenuViewComponent : ViewComponent
@@ -48,17 +46,8 @@ namespace IdentityBase.Mvc
         {
             var items = new List<AccountMenuItem>
                {
-                    new AccountMenuItem(
-                        "Account",
-                        "AccountProfile",
-                        "Profile"
-                    ),
-
-                    new AccountMenuItem(
-                        "ChangePassword",
-                        "AccountChangePassword",
-                        "ChangePassword"
-                    )
+                    new AccountMenuItem("AccountProfile"),
+                    new AccountMenuItem("AccountChangePassword")
                };
 
             var accountProviders = await _authenticationService
@@ -66,11 +55,7 @@ namespace IdentityBase.Mvc
 
             if (accountProviders.Any())
             {
-                items.Add(new AccountMenuItem(
-                    "ExternalLogins",
-                    "AccountExternalLogins",
-                    "ExternalLogins"
-                ));
+                items.Add(new AccountMenuItem("AccountExternalLogins"));
             }
 
             // Add two factor auth if any of thow factor services are installed
@@ -82,7 +67,7 @@ namespace IdentityBase.Mvc
                 ReturnUrl = this._idbContext.ReturnUrl,
                 Items = items.ToArray()
             };
-            
+
             if (String.IsNullOrWhiteSpace(vm.ReturnUrl))
             {
                 vm.ClientId = this._idbContext?.Client?.ClientId;

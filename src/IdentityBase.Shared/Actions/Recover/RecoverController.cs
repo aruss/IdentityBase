@@ -51,7 +51,7 @@ namespace IdentityBase.Actions.Recover
             this._authenticationService = authenticationService;
         }
 
-        [HttpGet("recover", Name = "Recover")]
+        [HttpGet("/recover", Name = "Recover")]
         [RestoreModelState]
         public async Task<IActionResult> Recover(string returnUrl)
         {
@@ -60,7 +60,7 @@ namespace IdentityBase.Actions.Recover
             return this.View(vm);
         }
 
-        [HttpPost("recover", Name = "Recover")]
+        [HttpPost("/recover", Name = "Recover")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> Recover(RecoverInputModel model)
@@ -70,8 +70,7 @@ namespace IdentityBase.Actions.Recover
 
             if (!ModelState.IsValid)
             {
-                return this.RedirectToAction(
-                    "Recover",
+                return this.RedirectToRoute(
                     "Recover",
                     new { ReturnUrl = model.ReturnUrl }
                 );
@@ -115,12 +114,12 @@ namespace IdentityBase.Actions.Recover
             }
 
             // there was an error
-            return this.RedirectToAction(
-                "Recover",
+            return this.RedirectToRoute(
                 "Recover",
                 new { ReturnUrl = model.ReturnUrl });
         }
 
+        [NonAction]
         private async Task<RecoverViewModel> CreateViewModelAsync(
             string returnUrl)
         {
@@ -128,7 +127,8 @@ namespace IdentityBase.Actions.Recover
                 new RecoverInputModel { ReturnUrl = returnUrl }
             );
         }
-
+        
+        [NonAction]
         private async Task<RecoverViewModel> CreateViewModelAsync(
             RecoverInputModel inputModel,
             UserAccount userAccount = null)
@@ -173,7 +173,7 @@ namespace IdentityBase.Actions.Recover
             return vm;
         }
 
-        [HttpGet("recover/confirm", Name = "RecoverConfirm")]
+        [HttpGet("/recover/confirm", Name = "RecoverConfirm")]
         public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
@@ -199,7 +199,7 @@ namespace IdentityBase.Actions.Recover
             return this.View("Confirm", vm);
         }
 
-        [HttpPost("recover/confirm", Name = "RecoverConfirm")]
+        [HttpPost("/recover/confirm", Name = "RecoverConfirm")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(
             [FromQuery]string key,
@@ -270,7 +270,7 @@ namespace IdentityBase.Actions.Recover
             return this.RedirectToLogin(returnUrl);
         }
 
-        [HttpGet("recover/cancel", Name = "RecoverCancel")]
+        [HttpGet("/recover/cancel", Name = "RecoverCancel")]
         public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService

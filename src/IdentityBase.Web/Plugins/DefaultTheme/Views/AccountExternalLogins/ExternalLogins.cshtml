@@ -17,8 +17,7 @@
                 {
                     <li class="list-inline">
                         <a class="btn btn-default"
-                           asp-controller="External"
-                           asp-action="Challenge"
+                           asp-route="External"
                            asp-route-provider="@provider.AuthenticationScheme"
                            asp-route-returnUrl="@Url.Action("ExternalLogins", "AccountExternalLogins", new { clientId = Model.ClientId })">
                             @provider.DisplayName
@@ -27,11 +26,10 @@
                 }
             </ul>
 
-            <h4>Remove your connected accountss</h4>
+            <h4>Remove your connected accounts</h4>
             <form id="formRemoveAccount"
                   method="post"
-                  asp-controller="AccountExternalLogins"
-                  asp-action="RemoveAccount"
+                  asp-route="AccountExternalLoginsRemove"
                   asp-route-clientId="@Model.ClientId"
                   novalidate="novalidate">
 

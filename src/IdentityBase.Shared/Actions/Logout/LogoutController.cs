@@ -39,7 +39,7 @@ namespace IdentityBase.Actions.Logout
         /// <summary>
         /// Show logout page at GET /logout
         /// </summary>
-        [HttpGet("/logout")]
+        [HttpGet("/logout", Name = "Logout")]
         public async Task<IActionResult> Logout(string logoutId)
         {
             LogoutViewModel vm = await this
@@ -89,7 +89,7 @@ namespace IdentityBase.Actions.Logout
         /// <summary>
         /// Handle logout page postback at POST /logout
         /// </summary>
-        [HttpPost("/logout")]
+        [HttpPost("/logout", Name = "Logout")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutViewModel model)
         {

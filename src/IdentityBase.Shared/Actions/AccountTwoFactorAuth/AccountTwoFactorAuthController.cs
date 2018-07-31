@@ -9,7 +9,6 @@ namespace IdentityBase.Actions.Account
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize]
-    [Route("/account/two-factor-auth")]
     public class AccountTwoFactorAuthController : WebController
     {
         public AccountTwoFactorAuthController()
@@ -17,7 +16,7 @@ namespace IdentityBase.Actions.Account
 
         }
 
-        [HttpGet]
+        [HttpGet("/account/two-factor-auth", Name = "AccountTwoFactorAuth")]
         public async Task<IActionResult> TwoFactorAuth()
         {
 

@@ -38,7 +38,7 @@ namespace IdentityBase.Actions.Account
             this._userAccountStore = userAccountStore; 
         }
 
-        [HttpGet("/account/external-logins")]
+        [HttpGet("/account/external-logins", Name = "AccountExternalLogins")]
         public async Task<IActionResult> ExternalLogins()
         {
             List<ExternalProvider> available =
@@ -73,7 +73,7 @@ namespace IdentityBase.Actions.Account
             return this.View(vm);
         }
 
-        [HttpPost("/account/external-logins/remove")]
+        [HttpPost("/account/external-logins/remove", Name = "AccountExternalLoginsRemove")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveAccount(
             RemoveLoginInputModel inputModel)
@@ -100,10 +100,9 @@ namespace IdentityBase.Actions.Account
             return this.RedirectToInitialAction(); 
         }
 
-        private RedirectToActionResult RedirectToInitialAction()
+        private IActionResult RedirectToInitialAction()
         {
-            return this.RedirectToAction(
-                "ExternalLogins",
+            return this.RedirectToRoute(
                 "AccountExternalLogins",
                 new { clientId = this.IdentityBaseContext.Client.ClientId }
             );

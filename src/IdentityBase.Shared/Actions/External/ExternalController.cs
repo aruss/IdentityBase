@@ -56,7 +56,7 @@ namespace IdentityBase.Actions.External
         /// <summary>
         /// initiate roundtrip to external authentication provider
         /// </summary>
-        [HttpGet(Name = "ExternalChallenge")]
+        [HttpGet("/external", Name = "External")]
         public async Task<IActionResult> Challenge(
             string provider,
             string returnUrl)
@@ -83,7 +83,7 @@ namespace IdentityBase.Actions.External
         /// <summary>
         /// Post processing of external authentication
         /// </summary>
-        [HttpGet(Name = "ExternalCallback")]
+        [HttpGet("/external/callback", Name = "ExternalCallback")]
         public async Task<IActionResult> Callback()
         {
             // Read external identity from the temporary cookie

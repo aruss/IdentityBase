@@ -27,8 +27,7 @@ namespace IdentityBase.Mvc
             this WebController controller,
             string returnUrl)
         {
-            return controller.RedirectToAction(
-                "Login",
+            return controller.RedirectToRoute(
                 "Login",
                 new { ReturnUrl = returnUrl }
             );

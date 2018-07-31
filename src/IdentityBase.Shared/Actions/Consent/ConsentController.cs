@@ -34,7 +34,7 @@ namespace IdentityBase.Controllers.Consent
             this._resourceStore = resourceStore;
         }
 
-        [HttpGet("consent", Name = "Consent")]
+        [HttpGet("/consent", Name = "Consent")]
         public async Task<IActionResult> Consent(string returnUrl)
         {
             ConsentViewModel vm = await this.BuildViewModelAsync(returnUrl);
@@ -47,7 +47,7 @@ namespace IdentityBase.Controllers.Consent
             return this.View("Error");
         }
 
-        [HttpPost("consent", Name = "Consent")]
+        [HttpPost("/consent", Name = "Consent")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(
             string button,

@@ -49,7 +49,7 @@ namespace IdentityBase.Actions.Register
             this._userAccountStore = userAccountStore;
         }
 
-        [HttpGet("register", Name = "Register")]
+        [HttpGet("/register", Name = "Register")]
         [RestoreModelState]
         public async Task<IActionResult> Register(string returnUrl)
         {
@@ -57,18 +57,17 @@ namespace IdentityBase.Actions.Register
             return this.View(vm);
         }
 
-        [HttpPost("register", Name = "Register")]
+        [HttpPost("/register", Name = "Register")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> Register(RegisterInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(
-                      "Register",
-                      "Register",
-                      new { ReturnUrl = model.ReturnUrl }
-                  );
+                return this.RedirectToRoute(
+                    "Register",
+                    new { ReturnUrl = model.ReturnUrl }
+                );
             }
 
             string email = model.Email.ToLower();
@@ -190,7 +189,7 @@ namespace IdentityBase.Actions.Register
         //   }
 
         [NonAction]
-        internal async Task<RegisterViewModel> CreateViewModelAsync(
+        private async Task<RegisterViewModel> CreateViewModelAsync(
             string returnUrl)
         {
             return await this.CreateViewModelAsync(
@@ -199,7 +198,7 @@ namespace IdentityBase.Actions.Register
         }
 
         [NonAction]
-        internal async Task<RegisterViewModel> CreateViewModelAsync(
+        private async Task<RegisterViewModel> CreateViewModelAsync(
             RegisterInputModel inputModel,
             UserAccount userAccount = null)
         {
@@ -246,6 +245,8 @@ namespace IdentityBase.Actions.Register
             return vm;
         }
 
+
+        [NonAction]
         private IActionResult CreateSuccessResult(
             UserAccount userAccount,
             string returnUrl)
@@ -260,6 +261,7 @@ namespace IdentityBase.Actions.Register
             });
         }
 
+        [NonAction]
         private async Task<IActionResult> TryMergeWithExistingUserAccount(
             UserAccount userAccount,
             RegisterInputModel inputModel)
@@ -314,6 +316,7 @@ namespace IdentityBase.Actions.Register
             return View(vm);
         }
 
+        [NonAction]
         private async Task<IActionResult> TryCreateNewUserAccount(
             RegisterInputModel model)
         {
@@ -370,7 +373,7 @@ namespace IdentityBase.Actions.Register
             return this.CreateSuccessResult(userAccount, model.ReturnUrl);
         }
 
-        [HttpGet("register/confirm", Name = "RegisterConfirm")]
+        [HttpGet("/register/confirm", Name = "RegisterConfirm")]
         public async Task<IActionResult> Confirm([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService
@@ -445,14 +448,8 @@ namespace IdentityBase.Actions.Register
             }
         }
 
-        [HttpGet("register/complete", Name = "RegisterComplete")]
-        public Task<IActionResult> Complete()
-        {
-            return Task.FromResult<IActionResult>(this.View("Complete"));
-        }
-
         // Currently is only used for invitations 
-        [HttpPost("register/confirm", Name = "RegisterConfirm")]
+        [HttpPost("/register/confirm", Name = "RegisterConfirm")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(
             [FromQuery]string key,
@@ -528,7 +525,7 @@ namespace IdentityBase.Actions.Register
             return this.RedirectToLogin(returnUrl);
         }
 
-        [HttpGet("register/cancel", Name = "RegisterCancel")]
+        [HttpGet("/register/cancel", Name = "RegisterCancel")]
         public async Task<IActionResult> Cancel([FromQuery]string key)
         {
             TokenVerificationResult result = await this._userAccountService

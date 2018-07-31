@@ -15,7 +15,6 @@ namespace IdentityBase.Actions.AccountChangePassword
     using ServiceBase.Mvc;
 
     [Authorize]
-    [Route("/account/change-password")]
     public class AccountChangePasswordController : WebController
     {
         private readonly UserAccountService _userAccountService;
@@ -41,7 +40,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             this._authService = authService;
         }
 
-        [HttpGet(Name = "AccountChangePassword")]
+        [HttpGet("/account/change-password", Name = "AccountChangePassword")]
         [RestoreModelState]
         public async Task<IActionResult> ChangePassword()
         {
@@ -57,7 +56,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             return this.View(vm);
         }
 
-        [HttpPost(Name = "AccountChangePassword")]
+        [HttpPost("/account/change-password", Name = "AccountChangePassword")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> ChangePassword(
@@ -92,10 +91,9 @@ namespace IdentityBase.Actions.AccountChangePassword
             return this.RedirectToInitialAction();
         }
 
-        private RedirectToActionResult RedirectToInitialAction()
+        private IActionResult RedirectToInitialAction()
         {
-            return this.RedirectToAction(
-                "ChangePassword",
+            return this.RedirectToRoute(
                 "AccountChangePassword",
                 new { clientId = this.IdentityBaseContext.Client.ClientId }
             );

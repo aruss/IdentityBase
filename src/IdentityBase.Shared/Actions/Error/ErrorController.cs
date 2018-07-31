@@ -23,7 +23,7 @@ namespace IdentityBase.Actions.Error
             this.Logger = logger;
         }
 
-        [Route("error", Name = "Error")]
+        [Route("/error", Name = "Error")]
         public async Task<IActionResult> Error(string errorId)
         {
             ErrorViewModel vm = new ErrorViewModel();

@@ -1,20 +1,14 @@
 @model IdentityBase.Mvc.AccountMenuViewModel
 @using ServiceBase
-
 <ul class="nav nav-pills nav-stacked">
-
     @foreach (var item in Model.Items)
     {
-        <li id="@item.Name"
-            is-active-route
-            asp-controller="@item.Controller"
-            asp-action="@item.Action">
-            <a asp-controller="@item.Controller"
-               asp-action="@item.Action"
+        <li id="@item.Name">
+            <a asp-route="@item.Route"
                asp-route-clientId="@Model.ClientId"
-               asp-route-returnUrl="@Model.ReturnUrl">@Localizer[item.Name
-                                                     .HumanizeCamelCased()
-                                                     .Capitalize()]</a>
+               asp-route-returnUrl="@Model.ReturnUrl">
+                @Localizer[item.Name.HumanizeCamelCased().Capitalize()]
+            </a>
         </li>
     }
 </ul>

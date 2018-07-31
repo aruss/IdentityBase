@@ -13,8 +13,7 @@
                     {
                         <li class="list-inline">
                             <a class="btn btn-default"
-                               asp-controller="External"
-                               asp-action="Challenge"
+                               asp-route="ExternalChallenge"
                                asp-route-provider="@provider.AuthenticationScheme"
                                asp-route-returnUrl="@Model.ReturnUrl">
                                 @provider.DisplayName

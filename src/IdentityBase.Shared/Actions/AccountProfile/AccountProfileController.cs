@@ -15,7 +15,6 @@ namespace IdentityBase.Actions.Account
     using ServiceBase.Mvc;
 
     [Authorize]
-    [Route("/account")]
     [RestoreModelState]
     public class AccountProfileController : WebController
     {
@@ -39,7 +38,7 @@ namespace IdentityBase.Actions.Account
             this._authService = authService;
         }
 
-        [HttpGet(Name = "account")]
+        [HttpGet("/account", Name = "AccountProfile")]
         [RestoreModelState]
         public async Task<IActionResult> Profile()
         {
@@ -57,7 +56,7 @@ namespace IdentityBase.Actions.Account
             return this.View(vm);
         }
 
-        [HttpPost(Name = "account")]
+        [HttpPost("/account", Name = "AccountProfile")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> Profile(ProfileInputModel inputModel)
@@ -72,10 +71,9 @@ namespace IdentityBase.Actions.Account
             return this.RedirectToInitialAction(); 
         }
 
-        private RedirectToActionResult RedirectToInitialAction()
+        private IActionResult RedirectToInitialAction()
         {
-            return this.RedirectToAction(
-                "Profile",
+            return this.RedirectToRoute(
                 "AccountProfile",
                 new { clientId = this.IdentityBaseContext.Client.ClientId }
             );

@@ -49,7 +49,7 @@ namespace IdentityBase.Actions.Login
         /// <summary>
         /// Shows the login page with local and external logins.
         /// </summary>
-        [HttpGet("login", Name = "Login")]
+        [HttpGet("/login", Name = "Login")]
         [RestoreModelState]
         public async Task<IActionResult> Login(string returnUrl)
         {
@@ -60,13 +60,16 @@ namespace IdentityBase.Actions.Login
             // without showing the login page 
             if (vm.IsExternalLoginOnly)
             {
-                return this.RedirectToAction("ExternalChallenge", new
-                {
-                    provider = vm.ExternalProviders
+                return this.RedirectToRoute(
+                    "External",
+                    new
+                    {
+                        provider = vm.ExternalProviders
                         .First().AuthenticationScheme,
 
-                    returnUrl = returnUrl
-                });
+                        returnUrl = returnUrl
+                    }
+                );
             }
 
             vm.FormModel =
@@ -78,7 +81,7 @@ namespace IdentityBase.Actions.Login
         /// <summary>
         /// Handle postback from username/password login
         /// </summary>
-        [HttpPost("login", Name = "Login")]
+        [HttpPost("/login", Name = "Login")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> Login(LoginInputModel model)
@@ -163,7 +166,7 @@ namespace IdentityBase.Actions.Login
                 model.ReturnUrl,
                 model.RememberLogin);
 
-            this._userAccountService.SetSuccessfullSignIn(userAccount); 
+            this._userAccountService.SetSuccessfullSignIn(userAccount);
             await this._userAccountStore.WriteAsync(userAccount);
 
             // TODO: emit user updated event
