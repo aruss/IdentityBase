@@ -5,6 +5,7 @@ namespace IdentityBase
 {
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using ServiceBase;
     using ServiceBase.DependencyInjection;
     using ServiceBase.Notification.Email;
 
@@ -14,6 +15,11 @@ namespace IdentityBase
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            if (!services.IsAdded<ITokenizer>())
+            {
+                services.AddScoped<ITokenizer, DefaultTokenizer>(); 
+            }
+
             services.AddScoped<IEmailService, DefaultEmailService>();
 
             services.AddFactory<
