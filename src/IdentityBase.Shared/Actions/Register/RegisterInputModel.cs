@@ -12,19 +12,19 @@ namespace IdentityBase.Actions.Register
     {
         [EmailAddress]
         [StringLength(254)]
-        [Required(ErrorMessage = "The {0} field is required.")]
+        [Required(ErrorMessage ="The {0} field is required.")]
         [DataType(DataType.EmailAddress)]
         [DisplayName("Email")]
         [ModelBinder(BinderType = typeof(TrimStringModelBinder))]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "The {0} field is required.")]
+        [Required(ErrorMessage ="The {0} field is required.")]
         [StringLength(100)]
         [DisplayName("Password")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "The {0} field is required.")]
-        [Compare("Password", ErrorMessage = "The passwords do not match.")]
+        [Required(ErrorMessage ="The {0} field is required.")]
+        [Compare("Password", ErrorMessage ="The passwords do not match.")]
         [StringLength(100)]
         [DisplayName("Repeat password")]
         public string PasswordConfirm { get; set; }

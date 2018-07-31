@@ -7,7 +7,6 @@ namespace IdentityBase.Actions.Login
     using System.Linq;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
-    using IdentityBase.Crypto;
     using IdentityBase.Forms;
     using IdentityBase.Models;
     using IdentityBase.Mvc;
@@ -51,7 +50,7 @@ namespace IdentityBase.Actions.Login
         /// </summary>
         [HttpGet("/login", Name = "Login")]
         [RestoreModelState]
-        public async Task<IActionResult> Login(string returnUrl)
+        public async Task<IActionResult> LoginGet(string returnUrl)
         {
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
 
@@ -65,7 +64,7 @@ namespace IdentityBase.Actions.Login
                     new
                     {
                         provider = vm.ExternalProviders
-                        .First().AuthenticationScheme,
+                            .First().AuthenticationScheme,
 
                         returnUrl = returnUrl
                     }
@@ -75,7 +74,7 @@ namespace IdentityBase.Actions.Login
             vm.FormModel =
                 await this.CreateViewModel<ILoginCreateViewModelAction>(vm);
 
-            return this.View(vm);
+            return this.View("Login", vm);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace IdentityBase.Actions.Login
         [HttpPost("/login", Name = "Login")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
-        public async Task<IActionResult> Login(LoginInputModel model)
+        public async Task<IActionResult> LoginPost(LoginInputModel model)
         {
             // TODO: extract in own controller and not add it 
             if (!this._applicationOptions.EnableAccountLogin)
@@ -132,7 +131,7 @@ namespace IdentityBase.Actions.Login
                         "Send email with information that user account is disabled."
                     );
 
-                    // Show "email or password is invalid" message
+                    // Show"email or password is invalid" message
                     this.AddModelStateError(ErrorMessages.InvalidCredentials);
                 }
                 else
@@ -177,7 +176,7 @@ namespace IdentityBase.Actions.Login
         }
 
         [NonAction]
-        internal async Task<LoginViewModel> CreateViewModelAsync(
+        private async Task<LoginViewModel> CreateViewModelAsync(
             string returnUrl)
         {
             LoginViewModel vm = new LoginViewModel
@@ -234,34 +233,8 @@ namespace IdentityBase.Actions.Login
             return vm;
         }
 
-
-        /// <summary>
-        /// User account that is trying to login.
-        /// </summary>
-        public UserAccount UserAccount { get; set; }
-
-        /// <summary>
-        /// Indicated if user has to change password, redirect the user to
-        /// public password change page.
-        /// </summary>
-        public bool NeedChangePassword { get; set; }
-
-        /// <summary>
-        /// Indicated if user is allowed to login, possible cause is, user got banned. 
-        /// </summary>
-        public bool IsLoginAllowed { get; set; }
-
-        /// <summary>
-        /// Has user a local account, if false the user only has external accounts.
-        /// </summary>
-        public bool IsLocalAccount { get; set; }
-
-
-        public bool IsPasswordValid { get; set; }
-
-        public string[] Hints { get; internal set; }
-
-        public async Task<(
+        [NonAction]
+        private async Task<(
             UserAccount userAccount,
             bool isLocalAccount,
             bool isLoginAllowed,

@@ -8,7 +8,7 @@ namespace IdentityBase.Mvc
     using Microsoft.AspNetCore.Razor.TagHelpers;
     using Microsoft.AspNetCore.Routing;
     
-    [HtmlTargetElement(Attributes = "is-active-route")]
+    [HtmlTargetElement(Attributes ="is-active-route")]
     public class ActiveRouteTagHelper : TagHelper
     {
         private IDictionary<string, string> _routeValues;
@@ -29,8 +29,8 @@ namespace IdentityBase.Mvc
 
         /// <summary>Additional parameters for the route.</summary>
         [HtmlAttributeName(
-            "asp-all-route-data",
-            DictionaryAttributePrefix = "asp-route-")]
+"asp-all-route-data",
+            DictionaryAttributePrefix ="asp-route-")]
         public IDictionary<string, string> RouteValues
         {
             get
@@ -105,19 +105,19 @@ namespace IdentityBase.Mvc
         private void MakeActive(TagHelperOutput output)
         {
             TagHelperAttribute classAttr = output.Attributes
-                .FirstOrDefault(a => a.Name == "class");
+                .FirstOrDefault(a => a.Name =="class");
 
             if (classAttr == null)
             {
-                classAttr = new TagHelperAttribute("class", "active");
+                classAttr = new TagHelperAttribute("class","active");
                 output.Attributes.Add(classAttr);
             }
             else if (classAttr.Value == null ||
                 classAttr.Value.ToString().IndexOf("active") < 0)
             {
                 output.Attributes.SetAttribute("class", classAttr.Value == null
-                    ? "active"
-                    : classAttr.Value.ToString() + " active");
+                    ?"active"
+                    : classAttr.Value.ToString() +" active");
             }
         }
     }

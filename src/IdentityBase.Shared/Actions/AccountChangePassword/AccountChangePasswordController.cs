@@ -40,7 +40,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             this._authService = authService;
         }
 
-        [HttpGet("/account/change-password", Name = "AccountChangePassword")]
+        [HttpGet("/account/change-password", Name ="AccountChangePassword")]
         [RestoreModelState]
         public async Task<IActionResult> ChangePassword()
         {
@@ -56,7 +56,7 @@ namespace IdentityBase.Actions.AccountChangePassword
             return this.View(vm);
         }
 
-        [HttpPost("/account/change-password", Name = "AccountChangePassword")]
+        [HttpPost("/account/change-password", Name ="AccountChangePassword")]
         [ValidateAntiForgeryToken]
         [StoreModelState]
         public async Task<IActionResult> ChangePassword(
@@ -76,7 +76,7 @@ namespace IdentityBase.Actions.AccountChangePassword
                 inputModel.PasswordCurrent))
             {
                 this.AddModelStateError("PasswordCurrent",
-                    "Current password does not match");
+        "Current password does not match");
 
                 return this.RedirectToInitialAction();
             }
@@ -94,7 +94,7 @@ namespace IdentityBase.Actions.AccountChangePassword
         private IActionResult RedirectToInitialAction()
         {
             return this.RedirectToRoute(
-                "AccountChangePassword",
+    "AccountChangePassword",
                 new { clientId = this.IdentityBaseContext.Client.ClientId }
             );
         }

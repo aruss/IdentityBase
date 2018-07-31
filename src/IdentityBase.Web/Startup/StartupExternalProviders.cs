@@ -19,14 +19,14 @@ namespace IdentityBase
             if (!config.ContainsSection("ThirdPartyAuth"))
             {
                 logger.LogInformation(
-                    "No third party authentication provides registered");
+        "No third party authentication provides registered");
 
                 return;
             }
 
             // configures the OpenIdConnect handlers to persist the state
             // parameter into the server-side IDistributedCache.
-            // services.AddOidcStateDataFormatterCache("aad", "demoidsrv");
+            // services.AddOidcStateDataFormatterCache("aad","demoidsrv");
 
             AuthenticationBuilder authBuilder = services.AddAuthentication();
 

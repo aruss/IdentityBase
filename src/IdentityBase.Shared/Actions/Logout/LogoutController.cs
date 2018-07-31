@@ -10,14 +10,13 @@ namespace IdentityBase.Actions.Logout
     using IdentityBase.Mvc;
     using IdentityModel;
     using IdentityServer4;
+    using IdentityServer4.Extensions;
     using IdentityServer4.Models;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Localization;
     using Microsoft.Extensions.Logging;
-    using IdentityServer4.Extensions;
 
 
     public class LogoutController : WebController
@@ -41,19 +40,20 @@ namespace IdentityBase.Actions.Logout
         /// Show logout page at GET /logout
         /// </summary>
         [HttpGet("/logout", Name = "Logout")]
-        public async Task<IActionResult> Logout(LogoutInputModel model)
+        public async Task<IActionResult> LogoutGet(LogoutInputModel model)
         {
             LogoutViewModel vm = await this
                 .CreateLogoutViewModelAsync(model.LogoutId);
 
             if (!vm.ShowLogoutPrompt)
             {
-                return await this.Logout(vm);
+                return await this.LogoutPost(model);
             }
 
             return this.View(vm);
         }
 
+        [NonAction]
         private async Task<LogoutViewModel> CreateLogoutViewModelAsync(
             string logoutId)
         {
@@ -92,7 +92,7 @@ namespace IdentityBase.Actions.Logout
         /// </summary>
         [HttpPost("/logout", Name = "Logout")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout(LogoutViewModel model)
+        public async Task<IActionResult> LogoutPost(LogoutInputModel model)
         {
             // build a model so the logged out page knows what to display
             LoggedOutViewModel vm = await this
@@ -132,6 +132,7 @@ namespace IdentityBase.Actions.Logout
             return this.View("LoggedOut", vm);
         }
 
+        [NonAction]
         private async Task<LoggedOutViewModel> CreateLoggedOutViewModelAsync(
             string logoutId)
         {

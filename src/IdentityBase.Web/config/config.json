@@ -73,7 +73,7 @@
       "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      //"ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=identitybase-2B4D44E6-F6C7-4A32-B082-71C956322B05;Trusted_Connection=True;MultipleActiveResultSets=true",
+      //"ConnectionString":"Server=(localdb)\\mssqllocaldb;Database=identitybase-2B4D44E6-F6C7-4A32-B082-71C956322B05;Trusted_Connection=True;MultipleActiveResultSets=true",
       "ConnectionString": "Server=localhost\\SQLEXPRESS;Database=identitybase;Trusted_Connection=True;MultipleActiveResultSets=true"
     },
     "MySql": {
@@ -99,24 +99,24 @@
   },
 
   // https://www.google.com/recaptcha/admin#list
-  // "GoogleRecaptcha": {
-  //   "SiteKey": "",
-  //   "Secret": ""
+  //"GoogleRecaptcha": {
+  //  "SiteKey":"",
+  //  "Secret":""
   // },
 
   // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-2.1
-  // "ThirdPartyAuth": {
-  //   "Google": {
-  //     "ClientId": "",
-  //     "ClientSecret": ""
-  //   },
-  //   "Facebook": {
-  //     "ClientId": "",
-  //     "ClientSecret": ""
-  //   },
-  //   "Microsoft": {
-  //     "ClientId": "",
-  //     "ClientSecret": ""
+  //"ThirdPartyAuth": {
+  //    "Google": {
+  //      "ClientId":"",
+  //      "ClientSecret":""
+  //    },
+  //    "Facebook": {
+  //      "ClientId":"",
+  //      "ClientSecret":""
+  //    },
+  //    "Microsoft": {
+  //      "ClientId":"",
+  //      "ClientSecret":""
   //   }
   // }
 }
