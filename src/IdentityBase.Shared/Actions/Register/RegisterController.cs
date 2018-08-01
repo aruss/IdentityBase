@@ -25,7 +25,7 @@ namespace IdentityBase.Actions.Register
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
         private readonly IUserAccountStore _userAccountStore;
-        private readonly IEmailProviderService _emailProviderService;
+        private readonly IEmailProviderInfoService _emailProviderInfoService;
 
         public RegisterController(
             IIdentityServerInteractionService interaction,
@@ -38,7 +38,7 @@ namespace IdentityBase.Actions.Register
             NotificationService notificationService,
             AuthenticationService authenticationService,
             IUserAccountStore userAccountStore,
-            IEmailProviderService emailProviderService)
+            IEmailProviderInfoService emailProviderInfoService)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
@@ -49,7 +49,7 @@ namespace IdentityBase.Actions.Register
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
             this._userAccountStore = userAccountStore;
-            this._emailProviderService = emailProviderService;
+            this._emailProviderInfoService = emailProviderInfoService;
         }
 
         [HttpGet("/register", Name = "Register")]
@@ -122,77 +122,188 @@ namespace IdentityBase.Actions.Register
             );
         }
 
-        //   [HttpGet("register/complete")]
-        //   public async Task<IActionResult> Complete(string returnUrl)
-        //   {
-        //       var userAccount = await GetUserAccountFromCoockyValue();
-        //       if (userAccount == null)
-        //       {
-        //           ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
-        //           return View("InvalidToken");
-        //       }
-        //
-        //       var vm = new RegisterCompleteViewModel
-        //       {
-        //           ReturnUrl = returnUrl,
-        //           UserAccountId = userAccount.Id,
-        //           Email = userAccount.Email
-        //       };
-        //
-        //       return View(vm);
-        //   }
+        [HttpGet("/register/confirm", Name = "RegisterConfirm")]
+        public async Task<IActionResult> ConfirmGet([FromQuery]string key)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .GetVerificationResultAsync(
+                    key,
+                    VerificationKeyPurpose.ConfirmAccount
+                );
 
-        //   [HttpPost("register/complete")]
-        //   [ValidateAntiForgeryToken]
-        //   public async Task<IActionResult> Complete(RegisterCompleteInputModel model)
-        //   {
-        //       // update user
-        //       // authenticate user
-        //       // redirect to return url
-        //
-        //       var userAccount = await GetUserAccountFromCoockyValue();
-        //       httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
-        //
-        //       throw new NotImplementedException();
-        //
-        //       /*
-        //       // TODO: cleanup
-        //       userAccount.ClearVerification();
-        //       var now = DateTime.UtcNow;
-        //       userAccount.IsLoginAllowed = true;
-        //       userAccount.IsEmailVerified = true;
-        //       userAccount.EmailVerifiedAt = now;
-        //       userAccount.UpdatedAt = now;
-        //
-        //       await Task.WhenAll(
-        //           userAccountService.AddLocalCredentialsAsync(userAccount, model.Password),
-        //           httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null)
-        //       ); */
-        //
-        //       // && interaction.IsValidReturnUrl(returnUrl)
-        //
-        //       if (model.ReturnUrl != null)
-        //       {
-        //           return Redirect(model.ReturnUrl);
-        //       }
-        //
-        //       return Redirect("/");
-        //   }
+            UserAccount userAccount = result.UserAccount;
 
-        //   [NonAction]
-        //   internal async Task<UserAccount> GetUserAccountFromCoockyValue()
-        //   {
-        //       if (httpContextAccessor.HttpContext.Request.Cookies
-        //           .TryGetValue("ConfirmUserAccountId", out string userIdStr))
-        //       {
-        //           if (Guid.TryParse(userIdStr, out Guid userId))
-        //           {
-        //               return await userAccountService.LoadByIdAsync(userId);
-        //           }
-        //       }
-        //
-        //       return null;
-        //   }
+            if (userAccount == null ||
+                !result.PurposeValid ||
+                result.TokenExpired)
+            {
+                if (userAccount != null)
+                {
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user updated event 
+                }
+
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
+
+                return this.View("InvalidToken");
+            }
+
+            // User account requires completion.
+            if (this._applicationOptions.EnableAccountInvitation &&
+                userAccount.CreationKind == CreationKind.Invitation)
+            {
+                // TODO: move invitation confirmation to own contoller
+                //       listening on /invitation/confirm
+
+                ConfirmViewModel vm = new ConfirmViewModel
+                {
+                    RequiresPassword = !userAccount.HasPassword(),
+                    Email = userAccount.Email
+                };
+
+                return this.View("Confirm", vm);
+            }
+            // User account already fine and can be authenticated.
+            else
+            {
+                string returnUrl = userAccount.VerificationStorage;
+
+                this._userAccountService.SetEmailAsVerified(userAccount);
+
+                if (this._applicationOptions.LoginAfterAccountConfirmation)
+                {
+                    this._userAccountService.SetSuccessfullSignIn(userAccount);
+                }
+
+                await this._userAccountStore.WriteAsync(userAccount);
+
+                // TODO: emit user updated event 
+
+                if (this._applicationOptions.LoginAfterAccountConfirmation)
+                {
+                    await this._authenticationService
+                        .SignInAsync(result.UserAccount, returnUrl);
+
+                    // TODO: emit user authenticated event 
+
+                    return this.RedirectToReturnUrl(returnUrl);
+                }
+
+                return this.RedirectToLogin(returnUrl);
+            }
+        }
+
+        // Currently is only used for invitations 
+        [HttpPost("/register/confirm", Name = "RegisterConfirm")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmPost(
+            [FromQuery]string key,
+            ConfirmInputModel model)
+        {
+            if (!this._applicationOptions.EnableAccountInvitation)
+            {
+                return this.NotFound();
+            }
+
+            TokenVerificationResult result = await this._userAccountService
+                .GetVerificationResultAsync(
+                    key,
+                    VerificationKeyPurpose.ConfirmAccount
+                );
+
+            UserAccount userAccount = result.UserAccount;
+
+            if (userAccount == null ||
+                result.TokenExpired ||
+                !result.PurposeValid)
+            {
+                if (userAccount != null)
+                {
+                    this._userAccountService
+                        .ClearVerificationData(userAccount);
+
+                    await this._userAccountStore.WriteAsync(userAccount);
+
+                    // TODO: emit user updated event 
+                }
+
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
+
+                return this.View("InvalidToken");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Confirm", new ConfirmViewModel
+                {
+                    Email = userAccount.Email
+                });
+            }
+
+            string returnUrl = userAccount.VerificationStorage;
+            this._userAccountService.SetEmailAsVerified(userAccount);
+            this._userAccountService.SetPassword(userAccount, model.Password);
+
+            if (this._applicationOptions.LoginAfterAccountRecovery)
+            {
+                this._userAccountService.SetSuccessfullSignIn(userAccount);
+            }
+
+            await this._userAccountStore.WriteAsync(userAccount);
+
+            // TODO: emit user updated event 
+
+            if (result.UserAccount.CreationKind == CreationKind.Invitation)
+            {
+                return this.RedirectToReturnUrl(returnUrl);
+            }
+            else if (this._applicationOptions.LoginAfterAccountRecovery)
+            {
+                await this._authenticationService
+                    .SignInAsync(result.UserAccount, returnUrl);
+
+                // TODO: emit user authenticated event
+
+                return this.RedirectToReturnUrl(returnUrl);
+            }
+
+            return this.RedirectToLogin(returnUrl);
+        }
+
+        /// <summary>
+        /// This method removes the user if cancelation token is valid.
+        /// </summary>
+        /// <param name="key">Cancelation token.</param>
+        [HttpGet("/register/cancel", Name = "RegisterCancel")]
+        public async Task<IActionResult> CancelGet([FromQuery]string key)
+        {
+            TokenVerificationResult result = await this._userAccountService
+                .GetVerificationResultAsync(
+                    key,
+                    VerificationKeyPurpose.ConfirmAccount
+                );
+
+            UserAccount userAccount = result.UserAccount;
+            
+            if (userAccount == null ||
+                !result.PurposeValid ||
+                result.TokenExpired)
+            {
+                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
+                return this.View("InvalidToken");
+            }
+
+            string returnUrl = userAccount.VerificationStorage;
+            await this._userAccountStore.DeleteByIdAsync(userAccount.Id);
+
+            // TODO: emit user removed event 
+
+            return this.RedirectToReturnUrl(returnUrl);
+        }
 
         [NonAction]
         private async Task<RegisterViewModel> CreateViewModelAsync(
@@ -251,21 +362,19 @@ namespace IdentityBase.Actions.Register
             return vm;
         }
 
-
         [NonAction]
         private async Task<IActionResult> CreateSuccessResult(
             UserAccount userAccount,
             string returnUrl)
         {
-            // TODO: Create provider via some helper
             return this.View(
                 "Success",
                 new SuccessViewModel
                 {
                     ReturnUrl = returnUrl,
 
-                    Provider = await this._emailProviderService
-                    .GetProviderInfo(userAccount.Email)
+                    Provider = await this._emailProviderInfoService
+                        .GetProviderInfo(userAccount.Email)
                 }
             );
         }
@@ -387,198 +496,76 @@ namespace IdentityBase.Actions.Register
             );
         }
 
-        [HttpGet("/register/confirm", Name = "RegisterConfirm")]
-        public async Task<IActionResult> Confirm([FromQuery]string key)
-        {
-            TokenVerificationResult result = await this._userAccountService
-                .GetVerificationResultAsync(
-                    key,
-                    VerificationKeyPurpose.ConfirmAccount
-                );
+        //   [HttpGet("register/complete")]
+        //   public async Task<IActionResult> Complete(string returnUrl)
+        //   {
+        //       var userAccount = await GetUserAccountFromCoockyValue();
+        //       if (userAccount == null)
+        //       {
+        //           ModelState.AddModelError(IdentityBaseConstants.ErrorMessages.TokenIsInvalid);
+        //           return View("InvalidToken");
+        //       }
+        //
+        //       var vm = new RegisterCompleteViewModel
+        //       {
+        //           ReturnUrl = returnUrl,
+        //           UserAccountId = userAccount.Id,
+        //           Email = userAccount.Email
+        //       };
+        //
+        //       return View(vm);
+        //   }
 
-            UserAccount userAccount = result.UserAccount;
+        //   [HttpPost("register/complete")]
+        //   [ValidateAntiForgeryToken]
+        //   public async Task<IActionResult> Complete(RegisterCompleteInputModel model)
+        //   {
+        //       // update user
+        //       // authenticate user
+        //       // redirect to return url
+        //
+        //       var userAccount = await GetUserAccountFromCoockyValue();
+        //       httpContextAccessor.HttpContext.Response.Cookies.Delete("ConfirmUserAccountId");
+        //
+        //       throw new NotImplementedException();
+        //
+        //       /*
+        //       // TODO: cleanup
+        //       userAccount.ClearVerification();
+        //       var now = DateTime.UtcNow;
+        //       userAccount.IsLoginAllowed = true;
+        //       userAccount.IsEmailVerified = true;
+        //       userAccount.EmailVerifiedAt = now;
+        //       userAccount.UpdatedAt = now;
+        //
+        //       await Task.WhenAll(
+        //           userAccountService.AddLocalCredentialsAsync(userAccount, model.Password),
+        //           httpContextAccessor.HttpContext.Authentication.SignInAsync(userAccount, null)
+        //       ); */
+        //
+        //       // && interaction.IsValidReturnUrl(returnUrl)
+        //
+        //       if (model.ReturnUrl != null)
+        //       {
+        //           return Redirect(model.ReturnUrl);
+        //       }
+        //
+        //       return Redirect("/");
+        //   }
 
-            if (userAccount == null ||
-                !result.PurposeValid ||
-                result.TokenExpired)
-            {
-                if (userAccount != null)
-                {
-                    this._userAccountService
-                        .ClearVerificationData(userAccount);
-
-                    await this._userAccountStore.WriteAsync(userAccount);
-
-                    // TODO: emit user updated event 
-                }
-
-                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
-
-                return this.View("InvalidToken");
-            }
-
-            // User account requires completion.
-            if (this._applicationOptions.EnableAccountInvitation &&
-                userAccount.CreationKind == CreationKind.Invitation)
-            {
-                // TODO: move invitation confirmation to own contoller
-                //       listening on /invitation/confirm
-
-                ConfirmViewModel vm = new ConfirmViewModel
-                {
-                    RequiresPassword = !userAccount.HasPassword(),
-                    Email = userAccount.Email
-                };
-
-                return this.View("Confirm", vm);
-            }
-            // User account already fine and can be authenticated.
-            else
-            {
-                string returnUrl = userAccount.VerificationStorage;
-
-                this._userAccountService.SetEmailAsVerified(userAccount);
-
-                if (this._applicationOptions.LoginAfterAccountConfirmation)
-                {
-                    this._userAccountService.SetSuccessfullSignIn(userAccount);
-                }
-
-                await this._userAccountStore.WriteAsync(userAccount);
-
-                // TODO: emit user updated event 
-
-                if (this._applicationOptions.LoginAfterAccountConfirmation)
-                {
-                    await this._authenticationService
-                        .SignInAsync(result.UserAccount, returnUrl);
-
-                    // TODO: emit user authenticated event 
-
-                    return this.RedirectToReturnUrl(returnUrl);
-                }
-
-                return this.RedirectToLogin(returnUrl);
-            }
-        }
-
-        // Currently is only used for invitations 
-        [HttpPost("/register/confirm", Name = "RegisterConfirm")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirm(
-            [FromQuery]string key,
-            ConfirmInputModel model)
-        {
-            if (!this._applicationOptions.EnableAccountInvitation)
-            {
-                return this.NotFound();
-            }
-
-            TokenVerificationResult result = await this._userAccountService
-                .GetVerificationResultAsync(
-                    key,
-                    VerificationKeyPurpose.ConfirmAccount
-                );
-
-            UserAccount userAccount = result.UserAccount;
-
-            if (userAccount == null ||
-                result.TokenExpired ||
-                !result.PurposeValid)
-            {
-                if (userAccount != null)
-                {
-                    this._userAccountService
-                        .ClearVerificationData(userAccount);
-
-                    await this._userAccountStore.WriteAsync(userAccount);
-
-                    // TODO: emit user updated event 
-                }
-
-                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
-
-                return this.View("InvalidToken");
-            }
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("Confirm", new ConfirmViewModel
-                {
-                    Email = userAccount.Email
-                });
-            }
-
-            string returnUrl = userAccount.VerificationStorage;
-            this._userAccountService.SetEmailAsVerified(userAccount);
-            this._userAccountService.SetPassword(userAccount, model.Password);
-
-            if (this._applicationOptions.LoginAfterAccountRecovery)
-            {
-                this._userAccountService.SetSuccessfullSignIn(userAccount);
-            }
-
-            await this._userAccountStore.WriteAsync(userAccount);
-
-            // TODO: emit user updated event 
-
-            if (result.UserAccount.CreationKind == CreationKind.Invitation)
-            {
-                return this.RedirectToReturnUrl(returnUrl);
-            }
-            else if (this._applicationOptions.LoginAfterAccountRecovery)
-            {
-                await this._authenticationService
-                    .SignInAsync(result.UserAccount, returnUrl);
-
-                // TODO: emit user authenticated event
-
-                return this.RedirectToReturnUrl(returnUrl);
-            }
-
-            return this.RedirectToLogin(returnUrl);
-        }
-
-        [HttpGet("/register/cancel", Name = "RegisterCancel")]
-        public async Task<IActionResult> Cancel([FromQuery]string key)
-        {
-            TokenVerificationResult result = await this._userAccountService
-                .GetVerificationResultAsync(
-                    key,
-                    VerificationKeyPurpose.ConfirmAccount
-                );
-
-            UserAccount userAccount = result.UserAccount;
-
-            if (userAccount == null ||
-                !result.PurposeValid ||
-                result.TokenExpired)
-            {
-                if (userAccount != null)
-                {
-                    this._userAccountService
-                       .ClearVerificationData(userAccount);
-
-                    await this._userAccountStore.WriteAsync(userAccount);
-
-                    // TODO: emit user updated event 
-                }
-
-                this.AddModelStateError(ErrorMessages.TokenIsInvalid);
-
-                return this.View("InvalidToken");
-            }
-
-            string returnUrl = userAccount.VerificationStorage;
-
-            this._userAccountService
-                .ClearVerificationData(userAccount);
-
-            await this._userAccountStore.WriteAsync(userAccount);
-
-            // TODO: emit user updated event 
-
-            return this.RedirectToReturnUrl(returnUrl);
-        }
+        //   [NonAction]
+        //   internal async Task<UserAccount> GetUserAccountFromCoockyValue()
+        //   {
+        //       if (httpContextAccessor.HttpContext.Request.Cookies
+        //           .TryGetValue("ConfirmUserAccountId", out string userIdStr))
+        //       {
+        //           if (Guid.TryParse(userIdStr, out Guid userId))
+        //           {
+        //               return await userAccountService.LoadByIdAsync(userId);
+        //           }
+        //       }
+        //
+        //       return null;
+        //   }
     }
 }

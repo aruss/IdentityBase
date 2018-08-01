@@ -46,6 +46,18 @@ namespace IdentityBase.EntityFramework.Stores
             {
                 this._context.Remove(entity);
                 await this._context.SaveChangesAsync();
+
+                this._logger.LogDebug(
+                   "{id} found and deleted in database: {userAccountFound}",
+                   id,
+                   true);
+            }
+            else
+            {
+                this._logger.LogDebug(
+                   "{id} found in database: {userAccountFound}",
+                   id,
+                   false);
             }
         }
 
@@ -140,7 +152,8 @@ namespace IdentityBase.EntityFramework.Stores
 
             this._logger.LogDebug(
                 "{key} found in database: {userAccountFound}",
-                key, model != null);
+                key,
+                model != null);
 
             return model;
         }
