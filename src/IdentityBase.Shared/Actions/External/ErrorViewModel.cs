@@ -1,14 +1,13 @@
 // Copyright (c) Russlan Akiev. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace IdentityBase.Actions.Recover
+namespace IdentityBase.Actions.External
 {
-    using IdentityBase.Models;
+    using System.ComponentModel.DataAnnotations;
 
-    public class SuccessViewModel
+    public class ErrorViewModel
     {
+        [StringLength(2000)]
         public string ReturnUrl { get; set; }
-
-        public EmailProviderInfo Provider { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace IdentityBase.Actions.Login
         [HttpGet("/login", Name = "Login")]
         [RestoreModelState]
         public async Task<IActionResult> LoginGet(string returnUrl)
-        {
+        {   
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
 
             // If local authentication is disbaled and there is only one

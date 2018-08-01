@@ -113,7 +113,7 @@ namespace IdentityBase
             services.AddHttpClient();
 
             services.AddSingleton<
-                IEmailProviderService, DefaultEmailProviderService>(); 
+                IEmailProviderInfoService, DefaultEmailProviderInfoService>(); 
 
             services.AddAntiforgery((options) =>
             {

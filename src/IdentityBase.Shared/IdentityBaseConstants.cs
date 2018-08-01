@@ -25,7 +25,7 @@ namespace IdentityBase
             "User account does not exists.";
 
         public const string InvalidEmailAddress =
-            "The Email field is not a valid e-mail address.";
+            "The Email field is not a valid email address.";
 
         public const string TokenIsInvalid = "Invalid token.";
 

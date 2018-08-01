@@ -26,6 +26,7 @@ namespace IdentityBase.Actions.Recover
         private readonly UserAccountService _userAccountService;
         private readonly NotificationService _notificationService;
         private readonly AuthenticationService _authenticationService;
+        private readonly IEmailProviderInfoService _emailProviderInfoService;
 
         public RecoverController(
             IIdentityServerInteractionService interaction,
@@ -94,13 +95,12 @@ namespace IdentityBase.Actions.Recover
                     await this._notificationService
                         .SendUserAccountRecoverEmailAsync(userAccount);
 
-                    // TODO: Create provider via some helper
                     return this.View("Success", new SuccessViewModel
                     {
                         ReturnUrl = model.ReturnUrl,
-                        Provider = userAccount.Email
-                            .Split('@')
-                            .LastOrDefault()
+
+                        Provider = await this._emailProviderInfoService
+                            .GetProviderInfo(userAccount.Email)
                     });
                 }
                 else

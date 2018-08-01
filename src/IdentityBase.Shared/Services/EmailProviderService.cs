@@ -9,17 +9,17 @@ namespace IdentityBase.Services
     using System.Threading.Tasks;
     using IdentityBase.Models;
 
-    public interface IEmailProviderService
+    public interface IEmailProviderInfoService
     {
         Task<EmailProviderInfo> GetProviderInfo(string email);
         Task<bool> HasSameProviderInfo(string emaila, string emailb);
     }
 
-    public class DefaultEmailProviderService : IEmailProviderService
+    public class DefaultEmailProviderInfoService : IEmailProviderInfoService
     {
         private readonly Dictionary<string, EmailProviderInfo> _providerInfos;
 
-        public DefaultEmailProviderService()
+        public DefaultEmailProviderInfoService()
         {
             this._providerInfos = new Dictionary<string, EmailProviderInfo>();
 
@@ -63,6 +63,11 @@ namespace IdentityBase.Services
                 .Split('@')
                 .LastOrDefault()
                 .ToLowerInvariant();
+
+            if (!this._providerInfos.ContainsKey(host))
+            {
+                return null; 
+            }
 
             EmailProviderInfo result = this._providerInfos[host];
 

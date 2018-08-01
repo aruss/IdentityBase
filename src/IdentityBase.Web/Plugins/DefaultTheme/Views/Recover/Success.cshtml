@@ -1,10 +1,14 @@
 @model IdentityBase.Actions.Recover.SuccessViewModel
 
 <div class="login-page">
-  <div class="page-header">
-    <h1 localize="">Recover Account</h1>
-  </div>
+    <div class="page-header">
+        <h1 localize="">Recover Account</h1>
+    </div>
 
-  <p localize="">Please check your email for a message with reset link.</p>
+    <p localize="">Please check your mail box for password reset email.</p>
 
+    @if (Model.Provider != null)
+    {
+        <a href="@Model.Provider.WebMailBaseUrl">@Model.Provider.Provider</a>
+    }
 </div>

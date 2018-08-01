@@ -6,6 +6,7 @@ namespace IdentityBase.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using IdentityBase.Configuration;
     using IdentityBase.Models;
@@ -75,8 +76,23 @@ namespace IdentityBase.Services
 
         public async Task<UserAccount> GetAuthenticatedUserAccountAsync()
         {
-            Guid userId = Guid.Parse(this._httpContextAccessor.HttpContext
-                .User.FindFirst("sub").Value);
+            ClaimsPrincipal user = this._httpContextAccessor.HttpContext.User;
+
+            if (!user.Identity.IsAuthenticated)
+            {
+                return null;
+            }
+
+            Claim subjectClaim = user.FindFirst("sub");
+
+            if (subjectClaim == null)
+            {
+                throw new ApplicationException(
+                    "Authenticated user does not have a sub claim"
+                );
+            }
+
+            Guid userId = Guid.Parse(subjectClaim.Value);
 
             UserAccount userAccount = await this._userAccountStore
                 .LoadByIdAsync(userId);
