@@ -288,7 +288,7 @@ namespace IdentityBase.Actions.Register
                 );
 
             UserAccount userAccount = result.UserAccount;
-            
+
             if (userAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
@@ -356,8 +356,8 @@ namespace IdentityBase.Actions.Register
                     .Select(c => c.Provider),
             };
 
-            vm.FormModel =
-                 await this.CreateViewModel<IRegisterCreateViewModelAction>(vm);
+            vm.FormModel = await this
+                .CreateFormViewModelAsync<IRegisterCreateViewModelAction>(vm);
 
             return vm;
         }

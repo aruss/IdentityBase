@@ -66,8 +66,8 @@ namespace IdentityBase.Actions.Recover
         [StoreModelState]
         public async Task<IActionResult> Recover(RecoverInputModel model)
         {
-            BindInputModelResult formResult =
-                await this.BindInputModel<IRecoverBindInputModelAction>();
+            BindInputModelResult formResult = await this.
+                BindFormInputModelAsync<IRecoverBindInputModelAction>();
 
             if (!ModelState.IsValid)
             {
@@ -127,7 +127,7 @@ namespace IdentityBase.Actions.Recover
                 new RecoverInputModel { ReturnUrl = returnUrl }
             );
         }
-        
+
         [NonAction]
         private async Task<RecoverViewModel> CreateViewModelAsync(
             RecoverInputModel inputModel,
@@ -168,7 +168,7 @@ namespace IdentityBase.Actions.Recover
             };
 
             vm.FormModel = await this
-                .CreateViewModel<IRecoverCreateViewModelAction>(vm);
+                .CreateFormViewModelAsync<IRecoverCreateViewModelAction>(vm);
 
             return vm;
         }
@@ -279,13 +279,13 @@ namespace IdentityBase.Actions.Recover
                     VerificationKeyPurpose.ResetPassword
                 );
 
-            UserAccount userAccount = result.UserAccount; 
+            UserAccount userAccount = result.UserAccount;
 
             if (userAccount == null ||
                 !result.PurposeValid ||
                 result.TokenExpired)
             {
-                if (userAccount  != null)
+                if (userAccount != null)
                 {
                     this._userAccountService
                         .ClearVerificationData(userAccount);

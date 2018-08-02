@@ -14,7 +14,7 @@ namespace IdentityBase.Forms
     public static class IBindInputModelActionControllerExtensions
     {
         public static async Task<CreateViewModelResult>
-            CreateViewModel<TCreateViewModelAction>(
+            CreateFormViewModelAsync<TCreateViewModelAction>(
             this ControllerBase controller,
             object defaultViewModel = null)
             where TCreateViewModelAction : ICreateViewModelAction
@@ -31,12 +31,12 @@ namespace IdentityBase.Forms
             {
                 context.Items["DefaultViewModel"] = defaultViewModel;
             }
-            
+
             // TODO: filter by step and sort topologically
 
             foreach (var formComponent in actions)
             {
-                await formComponent.Execute(context);
+                await formComponent.ExecuteAsync(context);
 
                 if (context.Cancel)
                 {
@@ -62,7 +62,7 @@ namespace IdentityBase.Forms
         }
 
         public async static Task<BindInputModelResult>
-            BindInputModel<TBindInputModelAction>(
+            BindFormInputModelAsync<TBindInputModelAction>(
             this ControllerBase controller)
             where TBindInputModelAction : IBindInputModelAction
         {
@@ -77,7 +77,7 @@ namespace IdentityBase.Forms
             // TODO: filter by step and sort topologically
             foreach (var formComponent in actions)
             {
-                await formComponent.Execute(context);
+                await formComponent.ExecuteAsync(context);
 
                 if (context.Cancel)
                 {
@@ -88,7 +88,8 @@ namespace IdentityBase.Forms
             return new BindInputModelResult(context.Items);
         }
 
-        public static async Task HandleInputModel<TIHandleInputModelAction>(
+        public static async Task HandleFormInputModelAsync
+            <TIHandleInputModelAction>(
             this ControllerBase controller)
             where TIHandleInputModelAction : IHandleInputModelAction
         {
@@ -103,7 +104,7 @@ namespace IdentityBase.Forms
             // TODO: filter by step and sort topologically
             foreach (var formComponent in actions)
             {
-                await formComponent.Execute(context);
+                await formComponent.ExecuteAsync(context);
 
                 if (context.Cancel)
                 {

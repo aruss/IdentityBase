@@ -51,7 +51,7 @@ namespace IdentityBase.Actions.Login
         [HttpGet("/login", Name = "Login")]
         [RestoreModelState]
         public async Task<IActionResult> LoginGet(string returnUrl)
-        {   
+        {
             LoginViewModel vm = await this.CreateViewModelAsync(returnUrl);
 
             // If local authentication is disbaled and there is only one
@@ -71,8 +71,8 @@ namespace IdentityBase.Actions.Login
                 );
             }
 
-            vm.FormModel =
-                await this.CreateViewModel<ILoginCreateViewModelAction>(vm);
+            vm.FormModel = await this.CreateFormViewModelAsync
+                <ILoginCreateViewModelAction>(vm);
 
             return this.View("Login", vm);
         }
@@ -91,8 +91,8 @@ namespace IdentityBase.Actions.Login
                 return this.NotFound();
             }
 
-            BindInputModelResult formResult =
-               await this.BindInputModel<ILoginBindInputModelAction>();
+            BindInputModelResult formResult = await this
+                .BindFormInputModelAsync<ILoginBindInputModelAction>();
 
             // invalid input (return to same login)
             if (!this.ModelState.IsValid)
@@ -126,7 +126,7 @@ namespace IdentityBase.Actions.Login
                 // of user prensentce 
                 if (this._applicationOptions.ObfuscateUserAccountPresence)
                 {
-                    // And then send an email with info what actually happened.
+                    // TODO: And then send an email with info what actually happened.
                     throw new NotImplementedException(
                         "Send email with information that user account is disabled."
                     );
@@ -157,6 +157,8 @@ namespace IdentityBase.Actions.Login
                 this._userAccountService.SetFailedSignIn(userAccount);
                 await this._userAccountStore.WriteAsync(userAccount);
 
+                // TODO: emit user updated event
+
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
@@ -169,8 +171,9 @@ namespace IdentityBase.Actions.Login
             await this._userAccountStore.WriteAsync(userAccount);
 
             // TODO: emit user updated event
+            // TODO: emit user authenticated event
 
-            // TODO: emit user authenticated event 
+            // TODO: check if 2factor auth is enabled 
 
             return this.RedirectToReturnUrl(model.ReturnUrl);
         }

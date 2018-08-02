@@ -28,7 +28,7 @@ namespace IdentityBase.GoogleRecaptcha
         public int Step => 0;
 
         // https://developers.google.com/recaptcha/docs/verify
-        public async Task Execute(BindInputModelContext context)
+        public async Task ExecuteAsync(BindInputModelContext context)
         {
             string inputValue = context.Controller
                 .Request.Form["g-recaptcha-response"];

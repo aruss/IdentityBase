@@ -8,6 +8,6 @@ namespace IdentityBase.Forms
     public interface ICreateViewModelAction
     {
         int Step { get; }
-        Task Execute(CreateViewModelContext context);
+        Task ExecuteAsync(CreateViewModelContext context);
     }
 }

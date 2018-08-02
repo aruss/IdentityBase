@@ -8,6 +8,6 @@ namespace IdentityBase.Forms
     public interface IHandleInputModelAction
     {
         int Step { get; }
-        Task Execute(HandleInputModelContext context);
+        Task ExecuteAsync(HandleInputModelContext context);
     }
 }

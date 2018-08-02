@@ -20,7 +20,7 @@ namespace IdentityBase.GoogleRecaptcha
 
         public int Step => 0;
 
-        public async Task Execute(CreateViewModelContext context)
+        public async Task ExecuteAsync(CreateViewModelContext context)
         {
             //ModelClass model = new ModelClass();
             //context.Items

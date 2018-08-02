@@ -9,7 +9,7 @@ namespace IdentityBase.Forms
     {
         public int Step => 0;
 
-        public async Task Execute(CreateViewModelContext context)
+        public async Task ExecuteAsync(CreateViewModelContext context)
         {
             context.FormElements.Add(new FormElement
             {

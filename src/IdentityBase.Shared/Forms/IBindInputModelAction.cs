@@ -8,6 +8,6 @@ namespace IdentityBase.Forms
     public interface IBindInputModelAction
     {
         int Step { get; }
-        Task Execute(BindInputModelContext context);
+        Task ExecuteAsync(BindInputModelContext context);
     }
 }
