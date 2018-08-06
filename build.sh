@@ -40,13 +40,13 @@ cp -r $DIR/distribution/$RUNTIME/. $BUILDDIR
 echo "Cleanup, restore and compile host application"
 rm -rf $SOURCEDIR/bin 2> /dev/null
 rm -rf $SOURCEDIR/obj 2> /dev/null
-dotnet publish $SOURCEDIR/IdentityBase.Web.csproj -c Release -r $RUNTIME -o $BUILDDIR/lib --force
+dotnet publish $SOURCEDIR/IdentityBase.Web.csproj -c Release -r $RUNTIME -o $BUILDDIR/lib
 
 # Get a list of all host application assemblies
 HOSTASSEMBLIES=$( ls $BUILDDIR/lib/*.* )
 
 echo "Loop throw all plugin source folders"
-for PATH1 in $SOURCEDIR/Plugins/*/ ; do
+for PATH1 in $SOURCEDIR/Plugins/*/; do
 
 	PLUGIN=$(basename $PATH1)
 	PLUGINSOURCEDIR=$SOURCEDIR/Plugins/$PLUGIN
@@ -55,10 +55,10 @@ for PATH1 in $SOURCEDIR/Plugins/*/ ; do
 	echo "Cleanup, restore and compile plugins"
 	rm -rf $PLUGINSOURCEDIR/bin 2> /dev/null
     rm -rf $PLUGINSOURCEDIR/obj 2> /dev/null
-	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR --force
+	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR
 
 	echo "Removing assemblies from plugin directories that a present in host application"
-    for PATH2 in $HOSTASSEMBLIES ; do
+    for PATH2 in $HOSTASSEMBLIES; do
 
         FILE=$(basename $PATH2)
         rm $PLUGINBUILDDIR/$FILE 2> /dev/null
