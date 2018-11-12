@@ -19,7 +19,7 @@ namespace IdentityBase
             if (!config.ContainsSection("ThirdPartyAuth"))
             {
                 logger.LogInformation(
-        "No third party authentication provides registered");
+                  "No third party authentication provides registered");
 
                 return;
             }

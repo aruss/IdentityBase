@@ -32,7 +32,7 @@
     "RequireExternalAccountVerification": false,
     "EnableAccountDeletion": false,
     "EnableLoginHints": false,
-    "LoginAfterAccountCreation": false,
+    "LoginAfterAccountCreation": true,
     "LoginAfterAccountConfirmation": true,
     "LoginAfterAccountRecovery": true,
     "LoginAfterAccountInvitation": true,
@@ -53,7 +53,7 @@
   },
   "Plugins": [
     "DefaultTheme",
-    "IdentityBase.WebApi",
+    //"IdentityBase.WebApi",
     "IdentityBase.EntityFramework.InMemory",
     //"IdentityBase.EntityFramework.MySql",
     //"IdentityBase.EntityFramework.Npgsql",
@@ -70,6 +70,8 @@
     "EnableTokenCleanup": false,
     "SeedExampleDataPath": "./config",
     "Npgsql": {
+      "MaxRetryCount": 5,
+      "MaxRetryDelay": 3000,
       "ConnectionString": "User ID=dev;Password=dev;Host=localhost;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
@@ -98,6 +100,17 @@
     "EnableSwagger": true
   },
 
+  // "Email": {
+  //   "Smtp": {
+  //     "EmailFrom": "arusslabs@gmail.com",
+  //     "Host": "smtp.gmail.com",
+  //     "Port": "587",
+  //     "UseSsl": "true",
+  //     "UserName": "arusslabs@gmail.com",
+  //     "Password": "bQ$1ZLlMyr"
+  //   }
+  // }
+
   // https://www.google.com/recaptcha/admin#list
   //"GoogleRecaptcha": {
   //  "SiteKey":"",
@@ -119,4 +132,4 @@
   //      "ClientSecret":""
   //   }
   // }
-}
+  }

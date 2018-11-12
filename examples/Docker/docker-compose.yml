@@ -2,26 +2,58 @@ version: "2.0"
 
 services:
 
-  # https://hub.docker.com/_/postgres/
-  postgres:
-    container_name: idbase-dev-postgres
-    image: postgres:9.6.9-alpine
-    restart: unless-stopped
-    ports:
-      - 5432:5432
-      - 5433:5433
-    environment:
-      - POSTGRES_DB=identitybase
-      - POSTGRES_PASSWORD=dev
-      - POSTGRES_USER=dev
-
   # https://hub.docker.com/r/identitybasenet/identitybase/
+  # http://identitybase:5000
   identitybase:
     restart: unless-stopped
     image: identitybasenet/identitybase:latest
     ports:
       - 5000:5000
+    networks:
+      - default
     volumes:
       - ./identitybase/config:/usr/local/identitybase/config
+
+  # RP1 dotnet web (dotnet core) 
+  # http://aspnetcoreweb:21402
+  aspnetcoreweb:
+    restart: unless-stopped
+    image: identitybasenet/aspnetcoreweb:latest
+    ports:
+      - 21402:21402
+    networks:
+      - default
     environment:
-      - FOO=bar
+      - APP__AUTHORITY=http://identitybase:5000
+      - APP__ASPNETCOREAPI=http://aspnetcoreapi:3721
+
+  # Web service (dotnet core)
+  aspnetcoreapi:
+    restart: unless-stopped
+    image: identitybasenet/aspnetcoreapi:latest
+    ports:
+      - 3721:3721
+    networks:
+      - default
+    environment:
+      - APP__AUTHORITY=http://identitybase:5000
+
+  # https://hub.docker.com/_/postgres/
+  postgres:
+    container_name: idbase-postgres
+    restart: unless-stopped
+    image: postgres:9.6.9-alpine
+    ports:
+      - 5432:5432
+      - 5433:5433
+    networks:
+      - default
+    environment:
+      - POSTGRES_DB=identitybase
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=dev
+
+networks:
+  default:
+    external:
+      name: identitybase

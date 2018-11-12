@@ -34,5 +34,10 @@ namespace IdentityBase
 
             return !userAccount.LastLoginAt.HasValue;
         }
+
+        public static string GetTwoFactorAuthInfo(this UserAccount userAccount)
+        {
+            return "..."; 
+        }
     }
 }

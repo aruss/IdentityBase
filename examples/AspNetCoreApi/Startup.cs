@@ -3,12 +3,24 @@ namespace AspNetCoreApi
     using System;
     using IdentityServer4.AccessTokenValidation;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            this._configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            ApplicationOptions appOptions = this._configuration
+               .GetSection("App")
+               .Get<ApplicationOptions>() ?? new ApplicationOptions();
+
             services
                 .AddMvcCore()
                 .AddJsonFormatters()
@@ -23,15 +35,16 @@ namespace AspNetCoreApi
 
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:5000";
-                    options.RequireHttpsMetadata = false;
+                    options.Authority = appOptions.Authority;
+                    options.RequireHttpsMetadata = appOptions.Authority
+                        .StartsWith("https");
 
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromSeconds(5);
 
                     // Used for retrospection calls
-                    options.ApiName = "api1";
-                    options.ApiSecret = "secret";
+                    options.ApiName = appOptions.ApiName;
+                    options.ApiSecret = appOptions.ApiSecret;
                 });
         }
 

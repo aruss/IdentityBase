@@ -3,12 +3,20 @@ namespace AspNetCoreWeb.Actions.Invite
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     public class InviteController : Controller
     {
+        private readonly ApplicationOptions _appOptions;
+
+        public InviteController(ApplicationOptions appOptions)
+        {
+            this._appOptions = appOptions;
+        }
+
         [HttpGet("/invite")]
         [Authorize]
         public IActionResult Invite()
@@ -26,6 +34,8 @@ namespace AspNetCoreWeb.Actions.Invite
 
             HttpClient client = new HttpClient();
 
+            client.BaseAddress = new Uri(this._appOptions.Authority); 
+
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", accessToken);
 
@@ -36,7 +46,7 @@ namespace AspNetCoreWeb.Actions.Invite
             };
 
             HttpResponseMessage response = await client.PutJsonAsync(
-                "http://localhost:5000/api/invitations",
+                "/api/invitations",
                 model);
 
             response.EnsureSuccessStatusCode(); 

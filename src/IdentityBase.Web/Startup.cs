@@ -20,6 +20,7 @@ namespace IdentityBase
     using ServiceBase;
     using ServiceBase.DependencyInjection;
     using ServiceBase.Extensions;
+    using ServiceBase.Logging;
     using ServiceBase.Mvc.Theming;
     using ServiceBase.Plugins;
 
@@ -170,7 +171,7 @@ namespace IdentityBase
 
             app.UseLocalization();
             app.UseMiddleware<RequestIdMiddleware>();
-            app.UseLogging();
+            app.UseSerilog();
 
             if (env.IsDevelopment())
             {

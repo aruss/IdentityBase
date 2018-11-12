@@ -510,7 +510,7 @@
     ],
     "RequireClientSecret": true,
     "ClientName": "MVC Hybrid",
-    "ClientUri": "http://localhost:21402",
+    "ClientUri": "http://aspnetcoreweb:21402",
     "LogoUri": null,
     "RequireConsent": true,
     "AllowRememberConsent": true,
@@ -521,12 +521,12 @@
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [
-      "http://localhost:21402/signin-oidc"
+      "http://aspnetcoreweb:21402/signin-oidc"
     ],
     "PostLogoutRedirectUris": [
-      "http://localhost:21402/signout-callback-oidc"
+      "http://aspnetcoreweb:21402/signout-callback-oidc"
     ],
-    "FrontChannelLogoutUri": "http://localhost:21402/signout-oidc",
+    "FrontChannelLogoutUri": "http://aspnetcoreweb:21402/signout-oidc",
     "FrontChannelLogoutSessionRequired": true,
     "BackChannelLogoutUri": null,
     "BackChannelLogoutSessionRequired": true,

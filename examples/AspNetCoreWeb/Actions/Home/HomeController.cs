@@ -18,10 +18,14 @@ namespace AspNetCoreWeb.Actions.Home
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationOptions _appOptions;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            ApplicationOptions appOptions)
         {
-            this._logger = logger; 
+            this._logger = logger;
+            this._appOptions = appOptions;
         }
 
         public IActionResult Index()
@@ -44,10 +48,11 @@ namespace AspNetCoreWeb.Actions.Home
             string token = await HttpContext.GetTokenAsync("access_token");
 
             HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(this._appOptions.Api1BaseAddress); 
             client.SetBearerToken(token);
 
             string response = await client
-                .GetStringAsync("http://localhost:3721/identity");
+                .GetStringAsync("/identity");
 
             ViewBag.Json = JArray.Parse(response).ToString();
 
@@ -57,7 +62,7 @@ namespace AspNetCoreWeb.Actions.Home
         public async Task<IActionResult> RenewTokens()
         {
             DiscoveryResponse disco = await DiscoveryClient
-                .GetAsync("http://localhost:5000");
+                .GetAsync(this._appOptions.Authority);
 
             if (disco.IsError)
             {

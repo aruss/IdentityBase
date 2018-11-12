@@ -10,18 +10,29 @@ namespace AspNetCoreWeb
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Localization;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
 
     public class Startup
     {
-        public Startup()
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
         {
+            this._configuration = configuration;
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ApplicationOptions appOptions = this._configuration
+                .GetSection("App")
+                .Get<ApplicationOptions>() ?? new ApplicationOptions();
+
+            services.AddSingleton(appOptions); 
+
             services.AddLocalization(
                 options => options.ResourcesPath = "Resources");
 
@@ -64,12 +75,12 @@ namespace AspNetCoreWeb
             })
             .AddOpenIdConnect("oidc", options =>
             {
-                options.Authority = "http://localhost:5000";
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = appOptions.Authority
+                    .StartsWith("https");
 
-                options.ClientSecret = "secret";
-                options.ClientId = "mvc.hybrid";
-
+                options.Authority = appOptions.Authority;
+                options.ClientSecret = appOptions.ClientSecret;
+                options.ClientId = appOptions.ClientId;
                 options.ResponseType = "code id_token";
 
                 options.Scope.Clear();

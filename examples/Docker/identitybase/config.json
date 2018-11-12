@@ -1,3 +1,4 @@
+
 {
   "Host": {
     "Urls": "http://*:5000",
@@ -35,7 +36,6 @@
     "LoginAfterAccountCreation": false,
     "LoginAfterAccountConfirmation": true,
     "LoginAfterAccountRecovery": true,
-    "CancelAfterAccountRecovery": false,
     "LoginAfterAccountInvitation": true,
     "VerificationKeyLifetime": 86400,
     "EnableAccountRegistration": true,
@@ -54,15 +54,10 @@
   },
   "Plugins": [
     "DefaultTheme",
-    "IdentityBase.WebApi",
-    //"IdentityBase.EntityFramework.InMemory",
-    //"IdentityBase.EntityFramework.MySql",
     "IdentityBase.EntityFramework.Npgsql",
-    //"IdentityBase.EntityFramework.SqlServer",
     "IdentityBase.EntityFramework.zDbInitializer"
-    //"IdentityBase.SendGrid",
-    //"IdentityBase.Smtp",
-    //"IdentityBase.Twilio"
+    //"IdentityBase.GoogleRecaptcha",
+    //"IdentityBase.Smtp"
   ],
   "EntityFramework": {
     "MigrateDatabase": true,
@@ -70,6 +65,8 @@
     "EnableTokenCleanup": false,
     "SeedExampleDataPath": "./config",
     "Npgsql": {
+      "MaxRetryCount": 10,
+      "MaxRetryDelay": 30,
       "ConnectionString": "User ID=dev;Password=dev;Host=postgres;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
@@ -95,5 +92,34 @@
     "AutorityUrl": "http://localhost:5000",
     "ApiSecret": "secret",
     "EnableSwagger": true
+  },
+
+  "Email": {
+    "Smtp": {
+      "EmailFrom": "arusslabs@gmail.com",
+      "Host": "smtp.gmail.com",
+      "Port": "587",
+      "UseSsl": "true",
+      "UserName": "arusslabs@gmail.com",
+      "Password": "bQ$1ZLlMyr"
+    }
+  },
+
+  // https://www.google.com/recaptcha/admin#list
+  "GoogleRecaptcha": {
+    "SiteKey": "6LeMMgETAAAAAILgjQKYW3cFVrPAjOn9T9y3fX3f",
+    "Secret": "6LeMMgETAAAAAJYQKWPpeLutSqN1Kcj36KNtS7pn"
+  },
+
+  // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-2.1
+  "ThirdPartyAuth": {
+    "Google": {
+      "ClientId": "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com",
+      "ClientSecret": "wdfPY6t8H8cecgjlxud__4Gh"
+    },
+    "Facebook": {
+      "ClientId": "590243871154883",
+      "ClientSecret": "10d0077296fae227e23805513a8972e1"
+    }
   }
 }
