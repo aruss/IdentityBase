@@ -9,6 +9,7 @@ namespace IdentityBase.Mvc
     using IdentityBase.Services;
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
+    using IdentityBase.Models;
 
     public class AccountMenuViewComponent : ViewComponent
     {
@@ -26,13 +27,13 @@ namespace IdentityBase.Mvc
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var items = new List<AccountMenuItem>
-               {
-                    new AccountMenuItem("AccountProfile"),
-                    new AccountMenuItem("AccountChangePassword")
-               };
+            {
+                new AccountMenuItem("AccountProfile"),
+                new AccountMenuItem("AccountChangePassword")
+            };
 
-            var accountProviders = await _authenticationService
-                .GetExternalProvidersAsync();
+            IEnumerable<ExternalProvider> accountProviders =
+                await this._authenticationService.GetExternalProvidersAsync();
 
             if (accountProviders.Any())
             {
@@ -42,6 +43,8 @@ namespace IdentityBase.Mvc
             // Add two factor auth if any of thow factor services are installed
 
             //new AccountMenuItem("TwoFactorAuthentication", "AccountTwoFactorAuth", "TwoFactorAuth"),
+
+            // TODO: add logout button to the main menu 
 
             var vm = new AccountMenuViewModel
             {

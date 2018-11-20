@@ -37,44 +37,76 @@ namespace AspNetCoreWeb.Actions.Home
         }
 
         [Authorize]
+        [HttpGet("/secure")]
         public IActionResult Secure()
         {
             return View();
         }
 
         [Authorize]
-        public async Task<IActionResult> CallApi()
+        [HttpGet("/callapi-user-token")]
+        public async Task<IActionResult> CallApiUserToken()
         {
-            string token = await HttpContext.GetTokenAsync("access_token");
+            string accessToken =
+                await HttpContext.GetTokenAsync("access_token");
 
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(this._appOptions.Api1BaseAddress); 
-            client.SetBearerToken(token);
+            var client = new HttpClient();
+            client.SetBearerToken(accessToken);
 
-            string response = await client
-                .GetStringAsync("/identity");
+            string content =
+                await client.GetStringAsync("http://localhost:5001/identity");
 
-            ViewBag.Json = JArray.Parse(response).ToString();
-
-            return View();
+            ViewBag.Json = JArray.Parse(content).ToString();
+            return View("Json");
         }
 
+        [Authorize]
+        [HttpGet("/callapi-client-credentials")]
+        public async Task<IActionResult> CallApiClientCredentials()
+        {
+            TokenClient tokenClient = new TokenClient(
+                this._appOptions.Authority + "/connect/token",
+                this._appOptions.ClientId,
+                this._appOptions.ClientSecret
+            );
+
+            TokenResponse tokenResponse =
+                await tokenClient.RequestClientCredentialsAsync("api1");
+
+            var client = new HttpClient();
+            client.SetBearerToken(tokenResponse.AccessToken);
+
+            string content =
+                await client.GetStringAsync("http://localhost:5001/identity");
+
+            ViewBag.Json = JArray.Parse(content).ToString();
+            return View("Json");
+        }
+
+
+        [Authorize]
+        [HttpGet("/renew-tokens")]
         public async Task<IActionResult> RenewTokens()
         {
-            DiscoveryResponse disco = await DiscoveryClient
+            DiscoveryResponse discoClient = await DiscoveryClient
                 .GetAsync(this._appOptions.Authority);
 
-            if (disco.IsError)
+            if (discoClient.IsError)
             {
-                throw new Exception(disco.Error);
+                throw new Exception(discoClient.Error);
             }
 
-            TokenClient tokenClient = new TokenClient(disco.TokenEndpoint,
-                "mvc.hybrid", "secret");
+            TokenClient tokenClient = new TokenClient(
+                discoClient.TokenEndpoint,
+                this._appOptions.ClientId,
+                this._appOptions.ClientSecret
+            );
 
-            string rt = await HttpContext.GetTokenAsync("refresh_token");
+            string refreshToken =
+                await HttpContext.GetTokenAsync("refresh_token");
+
             TokenResponse tokenResult = await tokenClient
-                .RequestRefreshTokenAsync(rt);
+                .RequestRefreshTokenAsync(refreshToken);
 
             if (!tokenResult.IsError)
             {
@@ -128,17 +160,16 @@ namespace AspNetCoreWeb.Actions.Home
             return View("Error");
         }
 
+        [HttpGet("/logout")]
         public IActionResult Logout()
         {
-            return new SignOutResult(new[] { "Cookies", "oidc" });
+            return new SignOutResult(new[] {
+                "Cookies",
+                "oidc"
+            });
         }
 
-        public IActionResult Error()
-        {
-            return View();
-        }
-
-        [HttpGet]
+        [HttpGet("/set-language")]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             Response.Cookies.Append(
@@ -148,6 +179,12 @@ namespace AspNetCoreWeb.Actions.Home
             );
 
             return LocalRedirect(returnUrl);
+        }
+
+        [HttpGet("/error")]
+        public IActionResult Error()
+        {
+            return View();
         }
     }
 }

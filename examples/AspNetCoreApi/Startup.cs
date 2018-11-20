@@ -41,10 +41,10 @@ namespace AspNetCoreApi
 
                     options.EnableCaching = true;
                     options.CacheDuration = TimeSpan.FromSeconds(5);
-
+                    
                     // Used for retrospection calls
-                    options.ApiName = appOptions.ApiName;
-                    options.ApiSecret = appOptions.ApiSecret;
+                    options.ApiName = "api1";
+                    options.ApiSecret = appOptions.ApiSecret;                    
                 });
         }
 
@@ -53,7 +53,7 @@ namespace AspNetCoreApi
             app.UseCors(policy =>
             {
                 policy.WithOrigins(
-                    "http://localhost:21402", // AspNetCoreWeb
+                    "http://localhost:5002", // AspNetCoreWeb
                     "http://localhost:3000"); // PhoneGap app
 
                 policy.AllowAnyHeader();

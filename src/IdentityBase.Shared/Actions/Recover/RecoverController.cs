@@ -38,7 +38,8 @@ namespace IdentityBase.Actions.Recover
             IUserAccountStore userAccountStore,
             UserAccountService userAccountService,
             NotificationService notificationService,
-            AuthenticationService authenticationService)
+            AuthenticationService authenticationService,
+            IEmailProviderInfoService emailProviderInfoService)
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;
@@ -50,6 +51,7 @@ namespace IdentityBase.Actions.Recover
             this._userAccountService = userAccountService;
             this._notificationService = notificationService;
             this._authenticationService = authenticationService;
+            this._emailProviderInfoService = emailProviderInfoService;
         }
 
         [HttpGet("/recover", Name = "Recover")]

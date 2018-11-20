@@ -3,10 +3,12 @@
 <h1>Secure</h1>
 
 <div class="panel">
-    <a class="btn btn-primary" href="~/home/callapi">Call API</a>
-    <a class="btn btn-primary" href="~/home/renewtokens">Renew Tokens</a>
-    <a class="btn btn-primary" href="~/invite">Invite User Account</a>
- </div>
+    <a class="btn btn-primary" href="~/callapi-user-token">Call API using user token</a>
+    <a class="btn btn-primary" href="~/renew-tokens">Renew user token</a>
+    <a class="btn btn-primary" href="~/callapi-client-credentials">Call API using client crendentials</a>
+    
+    <!--<a class="btn btn-primary" href="~/invite">Invite User Account</a>-->
+</div>
 
 @{
     string it = await Context.GetTokenAsync("id_token");

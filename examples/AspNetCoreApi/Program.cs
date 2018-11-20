@@ -15,7 +15,7 @@ namespace AspNetCoreApi
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:3721")
+                .UseUrls("http://*:5001")
                 .UseStartup<Startup>()
                 .Build();
     }

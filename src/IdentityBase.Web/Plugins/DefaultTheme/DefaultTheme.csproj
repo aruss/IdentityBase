@@ -269,9 +269,13 @@
     <Content Update="Views\Register\RegisterFormElements\Submit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Shared\Components\AccountMenu\Default.cshtml">
+    <Content Update="Views\Shared\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\Components\AccountMenu\" />
   </ItemGroup>
 
 </Project>

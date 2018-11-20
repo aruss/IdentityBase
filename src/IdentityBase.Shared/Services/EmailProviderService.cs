@@ -58,6 +58,11 @@ namespace IdentityBase.Services
 
         public async Task<EmailProviderInfo> GetProviderInfo(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email)); 
+            }
+
             string host = email
                 .Trim()
                 .Split('@')
@@ -74,7 +79,10 @@ namespace IdentityBase.Services
             return result;
         }
 
-        private void AddProvider(string url, string provider, params string[] hosts)
+        private void AddProvider(
+            string url,
+            string provider,
+            params string[] hosts)
         {
             var info = new EmailProviderInfo
             {

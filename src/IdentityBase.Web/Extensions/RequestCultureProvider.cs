@@ -56,6 +56,7 @@ namespace IdentityBase
 
             // Try get from cookie
             string cookieValue = httpContext.Request.Cookies["idb.c"];
+
             if (String.IsNullOrWhiteSpace(culture))
             {
                 culture = cookieValue;

@@ -206,7 +206,7 @@ namespace IdentityBase.Actions.External
                 // TODO: emit user updated event
             }
 
-            if (!this.HttpContext.User.Identity.IsAuthenticated)
+            if (this.HttpContext.User.Identity.IsAuthenticated)
             {
                 // TODO: emit user authenticated event
             }
@@ -239,7 +239,6 @@ namespace IdentityBase.Actions.External
             IEnumerable<Claim> claims,
             UserAccount userAccount = null)
         {
-
             DateTime now = DateTime.UtcNow;
             Guid userAccountId = Guid.NewGuid();
 

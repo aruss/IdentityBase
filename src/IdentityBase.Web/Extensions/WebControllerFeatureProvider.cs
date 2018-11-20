@@ -18,11 +18,11 @@ namespace IdentityBase
     public class WebControllerFeatureProvider :
         TypedControllerFeatureProvider<WebController>
     {
-        private List<TypeInfo> blackList;
+        private readonly List<TypeInfo> _blackList;
 
         public WebControllerFeatureProvider(ApplicationOptions options)
         {
-            this.blackList = new List<TypeInfo>();
+            this._blackList = new List<TypeInfo>();
             
             this.AddIf<RecoverController>(!options.EnableAccountRecovery);
             this.AddIf<RegisterController>(!options.EnableAccountRegistration);
@@ -31,7 +31,7 @@ namespace IdentityBase
         protected override bool IsController(TypeInfo typeInfo)
         {
             return base.IsController(typeInfo) &&
-                !this.blackList.Contains(typeInfo);
+                !this._blackList.Contains(typeInfo);
         }
 
         private void AddIf<TController>(bool assertion)
@@ -39,7 +39,7 @@ namespace IdentityBase
         {
             if (assertion)
             {
-                this.blackList.Add(typeof(TController).GetTypeInfo());
+                this._blackList.Add(typeof(TController).GetTypeInfo());
             }
         }
     }

@@ -68,13 +68,16 @@ namespace AspNetCoreWeb
 
                 options.DefaultChallengeScheme = "oidc";
             })
-            .AddCookie(options =>
+            /*.AddCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.Cookie.Name = "mvchybrid";
-            })
+            })*/
+            .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
+                options.SignInScheme = "Cookies";
+
                 options.RequireHttpsMetadata = appOptions.Authority
                     .StartsWith("https");
 

@@ -21,6 +21,16 @@ namespace IdentityBase.Configuration
     /// </summary>
     public class ExampleDataWriter
     {
+        public static void Write()
+        {
+            var configBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("./config/config.json", false, false)
+                .Build();
+
+            ExampleDataWriter.Write(configBuilder);
+        }
+
         public static void Write(IConfiguration config)
         {
             ICryptoService crypto = new DefaultCryptoService();
@@ -30,7 +40,10 @@ namespace IdentityBase.Configuration
 
             ExampleDataWriter writer = new ExampleDataWriter(crypto, options);
 
-            writer.WriteConfigFiles("./config");
+            string configPath = config
+                .GetSection("EntityFramework")["SeedExampleDataPath"];
+
+            writer.WriteConfigFiles(configPath);
         }
 
         private readonly ICryptoService _cryptoService;
