@@ -33,19 +33,20 @@ namespace AspNetCoreApi
                 .AddAuthentication(
                     IdentityServerAuthenticationDefaults.AuthenticationScheme)
 
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = appOptions.Authority;
-                    options.RequireHttpsMetadata = appOptions.Authority
-                        .StartsWith("https");
+                .AddIdentityServerAuthentication(
+                    IdentityServerAuthenticationDefaults.AuthenticationScheme,
+                    options =>
+                    {
+                        options.Authority = appOptions.Authority;
+                        
+                        options.RequireHttpsMetadata = appOptions.Authority
+                            .StartsWith("https");
 
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromSeconds(5);
-                    
-                    // Used for retrospection calls
-                    options.ApiName = "api1";
-                    options.ApiSecret = appOptions.ApiSecret;                    
-                });
+                        // Used for retrospection calls
+                        options.ApiName = "api1";
+                        options.ApiSecret = appOptions.ApiSecret;
+                    }
+                );
         }
 
         public void Configure(IApplicationBuilder app)

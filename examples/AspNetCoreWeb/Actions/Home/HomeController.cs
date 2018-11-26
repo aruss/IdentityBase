@@ -33,7 +33,7 @@ namespace AspNetCoreWeb.Actions.Home
             this._logger.LogInformation("CurrentUICulture " +
                 CultureInfo.CurrentUICulture);
 
-            return View();
+            return this.View();
         }
 
         [Authorize]
@@ -56,8 +56,8 @@ namespace AspNetCoreWeb.Actions.Home
             string content =
                 await client.GetStringAsync("http://localhost:5001/identity");
 
-            ViewBag.Json = JArray.Parse(content).ToString();
-            return View("Json");
+            this.ViewBag.Json = JArray.Parse(content).ToString();
+            return this.View("Json");
         }
 
         [Authorize]
@@ -79,8 +79,8 @@ namespace AspNetCoreWeb.Actions.Home
             string content =
                 await client.GetStringAsync("http://localhost:5001/identity");
 
-            ViewBag.Json = JArray.Parse(content).ToString();
-            return View("Json");
+            this.ViewBag.Json = JArray.Parse(content).ToString();
+            return this.View("Json");
         }
 
 
@@ -150,14 +150,14 @@ namespace AspNetCoreWeb.Actions.Home
 
                 info.Properties.StoreTokens(tokens);
 
-                await HttpContext
+                await this.HttpContext
                     .SignInAsync("Cookies", info.Principal, info.Properties);
 
-                return Redirect("~/Home/Secure");
+                return this.RedirectToAction("Secure", "Home"); 
             }
 
-            ViewData["Error"] = tokenResult.Error;
-            return View("Error");
+            this.ViewData["Error"] = tokenResult.Error;
+            return this.View("Error");
         }
 
         [HttpGet("/logout")]
@@ -172,7 +172,7 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/set-language")]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            Response.Cookies.Append(
+            this.Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
@@ -184,7 +184,7 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/error")]
         public IActionResult Error()
         {
-            return View();
+            return this.View();
         }
     }
 }

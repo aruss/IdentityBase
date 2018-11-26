@@ -60,7 +60,9 @@ namespace IdentityBase
             .AddSecretValidator<PrivateKeyJwtSecretValidator>()
             .AddRedirectUriValidator<StrictRedirectUriValidatorAppAuth>()
             .AddSigningCredential(environment, config, appOptions)
-            .AddJwtBearerClientAuthentication(); 
+            .AddJwtBearerClientAuthentication()
+            .AddAppAuthRedirectUriValidator();
+
         }
 
         private static IIdentityServerBuilder AddSigningCredential(
