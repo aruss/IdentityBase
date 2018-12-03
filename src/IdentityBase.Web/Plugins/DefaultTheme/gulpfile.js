@@ -2,6 +2,8 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var browserSync = require('browser-sync');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('watch', ['build'], function () {
 
@@ -18,11 +20,35 @@ gulp.task('styles', function () {
         .pipe(gulp.dest('./Public/css/'));
 });
 
+gulp.task('scripts', function() {
+    return gulp.src([
+        './node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js',
+        './Public/js/theme.js'
+    ])
+        .pipe(sourcemaps.init())
+        .pipe(concat('main.min.js'))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./Public/js/'));
+});
+
 gulp.task('lib', function () {
 
     // jQuery
-    // gulp.src('./node_modules/jquery/dist/jquery.min.js')
-    //   .pipe(gulp.dest('./Public/js'));
+    gulp.src('./node_modules/jquery/dist/jquery.min.*')
+        .pipe(gulp.dest('./Public/js'));
+
+    // jQuery validate
+    gulp.src('./node_modules/jquery-validation/dist/jquery.validate.min.*')
+        .pipe(gulp.dest('./Public/js'));
+
+    // jQuery validate unobstrusive
+    gulp.src('./node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.*')
+        .pipe(gulp.dest('./Public/js'));
+
+    // Bootstrap
+    // No need to copy bootstrap, since only the styles are used
+    // ./node_modules/bootstrap-sass
 });
 
 gulp.task('build', ['lib', 'styles']);

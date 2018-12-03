@@ -3,18 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "description": "Default theme for IdentityBase frontend.",
-  "scripts": {
-
-  },
+  "scripts": {},
   "author": "Russlan Akiev",
-  "license": "MIT",
   "devDependencies": {
     "bootstrap-sass": "3.3.7",
     "browser-sync": "2.18.8",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.1",
     "gulp-sass": "3.1.0",
-    "jquery": "3.2.1"
+    "gulp-sourcemaps": "2.6.1",
+    "gulp-uglify": "3.0.0",
+    "jquery": "3.2.1",
+    "jquery-validation": "1.18.0",
+    "jquery-validation-unobtrusive": "3.2.11"
   },
   "dependencies": {}
 }

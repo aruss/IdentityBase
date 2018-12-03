@@ -17,8 +17,7 @@
     <title>IdentityBase</title>
     <link rel="icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
-    <link rel="stylesheet" href="~/DefaultTheme/lib/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/DefaultTheme/css/site.css" />
+    <link rel="stylesheet" href="~/DefaultTheme/css/main.css" asp-append-version="true"/>
 </head>
 <body>
 
@@ -69,13 +68,13 @@
                 <span>
                     Click <a href="@IdentityBaseContext.Client.ClientUri">here</a>
                     to return to the @IdentityBaseContext.Client.ClientName application.
-                </span>     
+                </span>
             </div>
         }
     </div>
 
-    <script src="~/DefaultTheme/lib/jquery/jquery.js"></script>
-    <script src="~/DefaultTheme/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/DefaultTheme/js/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/DefaultTheme/js/main.min.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
