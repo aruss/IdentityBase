@@ -47,11 +47,11 @@ gulp.task('lib', function () {
         .pipe(gulp.dest('./Public/js'));
 
     // Bootstrap
-    // No need to copy bootstrap, since only the styles are used
+    // No need to copy bootstrap
     // ./node_modules/bootstrap-sass
 });
 
-gulp.task('build', ['lib', 'styles']);
+gulp.task('build', ['lib', 'styles', 'scripts']);
 
 gulp.task('serve', ['build'], function () {
 

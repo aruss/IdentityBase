@@ -3,7 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "Default theme for IdentityBase frontend.",
-  "scripts": {},
+  "scripts": {
+    "build": "node_modules/gulp/bin/gulp.js build"
+  },
   "author": "Russlan Akiev",
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",

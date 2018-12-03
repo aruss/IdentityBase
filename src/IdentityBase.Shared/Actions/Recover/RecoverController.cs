@@ -107,12 +107,18 @@ namespace IdentityBase.Actions.Recover
                 }
                 else
                 {
-                    this.AddModelStateError(ErrorMessages.UserAccountIsDeactivated);
+                    // TODO: return propper view model instead of input model with apropriate flags 
+                    this.AddModelStateError(
+                        nameof(RecoverInputModel.Email),
+                        ErrorMessages.UserAccountIsDeactivated);
                 }
             }
             else
             {
-                this.AddModelStateError(ErrorMessages.UserAccountDoesNotExists);
+                // TODO: return propper view model instead of input model with apropriate flags 
+                this.AddModelStateError(
+                    nameof(RecoverInputModel.Email),
+                    ErrorMessages.UserAccountDoesNotExists);
             }
 
             // there was an error
