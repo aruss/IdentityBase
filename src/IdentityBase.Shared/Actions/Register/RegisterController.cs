@@ -107,8 +107,9 @@ namespace IdentityBase.Actions.Register
                 }
 
                 // If user has a password then its a local account
-                this.ModelState
-                    .AddModelError(ErrorMessages.AccountAlreadyExists);
+                this.ModelState.AddModelError(
+                    nameof (RegisterViewModel.Email),
+                    ErrorMessages.AccountAlreadyExists);
             }
             else
             {

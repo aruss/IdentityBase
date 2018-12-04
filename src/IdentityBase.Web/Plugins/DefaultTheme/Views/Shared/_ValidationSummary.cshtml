@@ -1,4 +1,18 @@
 <div class="alert alert-danger" show-if="!ViewContext.ModelState.IsValid && ViewContext.ModelState.ContainsKey(string.Empty)">
-  <strong localize="">Error</strong>
-  <div asp-validation-summary="ModelOnly" class="danger"></div>
-</div>
+    <strong localize="">Error</strong>
+    <div asp-validation-summary="ModelOnly" class="danger"></div>
+</div>@*
+    @if (!ViewContext.ModelState.IsValid)
+    {
+        foreach (var item in ViewContext.ModelState)
+        {
+            <div>
+                <b>@item.Key</b><br />
+                @foreach (var error in @item.Value.Errors)
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+                <hr/>
+            </div>
+        }
+    }*@

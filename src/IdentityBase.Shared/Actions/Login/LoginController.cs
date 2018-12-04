@@ -85,7 +85,7 @@ namespace IdentityBase.Actions.Login
         [StoreModelState]
         public async Task<IActionResult> LoginPost(LoginInputModel model)
         {
-            // TODO: extract in own controller and not add it 
+            // TODO: extract in own controller and not add it
             if (!this._applicationOptions.EnableAccountLogin)
             {
                 return this.NotFound();
@@ -136,7 +136,9 @@ namespace IdentityBase.Actions.Login
                 }
                 else
                 {
-                    this.AddModelStateError(ErrorMessages.AccountIsDesabled);
+                    this.AddModelStateError(
+                        nameof(LoginViewModel.Email),
+                        ErrorMessages.AccountIsDesabled);
                 }
 
                 return this.RedirectToLogin(model.ReturnUrl);
@@ -172,7 +174,6 @@ namespace IdentityBase.Actions.Login
 
             // TODO: emit user updated event
             // TODO: emit user authenticated event
-
             // TODO: check if 2factor auth is enabled 
 
             return this.RedirectToReturnUrl(model.ReturnUrl);
@@ -186,8 +187,8 @@ namespace IdentityBase.Actions.Login
             {
                 ReturnUrl = returnUrl,
 
-                EnableRememberLogin = this._applicationOptions
-                    .EnableRememberLogin,
+                EnableRememberMe = this._applicationOptions
+                    .EnableRememberMe,
 
                 EnableAccountRegistration = this._applicationOptions
                     .EnableAccountRegistration,
