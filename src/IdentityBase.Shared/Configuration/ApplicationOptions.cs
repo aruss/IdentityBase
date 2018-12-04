@@ -90,21 +90,21 @@ namespace IdentityBase.Configuration
         /// email matches.
         /// </summary>
         public bool AutomaticAccountMerge { get; set; } = true;
-
-        /// <summary>
-        /// Enables "Remember Me" option for login. 
-        /// </summary>
-        public bool EnableRememberLogin { get; set; } = true;
-
+   
         /// <summary>
         /// Enables local account login form. 
         /// </summary>
         public bool EnableAccountLogin { get; set; } = true;
 
         /// <summary>
+        /// Enables "Remember Me" option for login. 
+        /// </summary>
+        public bool EnableRememberMe { get; set; } = false;
+
+        /// <summary>
         /// How long should Remember Login last in seconds.
         /// </summary>
-        public double RememberMeLoginDuration { get; set; } = 28800; // 8 hours
+        public double RememberMeDuration { get; set; } = 28800; // 8 hours
 
         public bool ShowLogoutPrompt { get; set; } = false;
 

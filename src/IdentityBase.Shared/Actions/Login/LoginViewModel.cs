@@ -25,7 +25,7 @@ namespace IdentityBase.Actions.Login
 
         public bool EnableLocalLogin { get; set; }
 
-        public bool EnableRememberLogin { get; set; }
+        public bool EnableRememberMe { get; set; }
 
         public bool EnableAccountRegistration { get; set; }
 

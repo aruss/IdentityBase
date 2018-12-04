@@ -4,9 +4,17 @@
 namespace IdentityBase.Forms
 {
     using System.Threading.Tasks;
+    using IdentityBase.Configuration;
 
     public class LoginCreateViewModelAction : ILoginCreateViewModelAction
     {
+        private readonly ApplicationOptions _options;
+
+        public LoginCreateViewModelAction(ApplicationOptions options)
+        {
+            this._options = options;
+        }
+
         public int Step => 0;
 
         public async Task ExecuteAsync(CreateViewModelContext context)
@@ -23,11 +31,14 @@ namespace IdentityBase.Forms
                 ViewName = "LoginFormElements/Password"
             });
 
-            context.FormElements.Add(new FormElement
+            if (this._options.EnableRememberMe)
             {
-                Name = "RememberMe",
-                ViewName = "LoginFormElements/RememberMe"
-            });
+                context.FormElements.Add(new FormElement
+                {
+                    Name = "RememberMe",
+                    ViewName = "LoginFormElements/RememberMe"
+                });
+            }
 
             context.FormElements.Add(new FormElement
             {

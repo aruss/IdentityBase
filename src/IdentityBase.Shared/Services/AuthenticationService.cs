@@ -54,15 +54,14 @@ namespace IdentityBase.Services
         {
             AuthenticationProperties properties = null;
 
-            if (this._applicationOptions.EnableRememberLogin &&
-                rememberLogin)
+            if (this._applicationOptions.EnableRememberMe && rememberLogin)
             {
                 properties = new AuthenticationProperties
                 {
                     IsPersistent = true,
                     ExpiresUtc = this._dateTimeAccessor.UtcNow.Add(
                         TimeSpan.FromSeconds(
-                            this._applicationOptions.RememberMeLoginDuration
+                            this._applicationOptions.RememberMeDuration
                         )
                     )
                 };
