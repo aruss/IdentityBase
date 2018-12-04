@@ -78,7 +78,7 @@ namespace IdentityBase.Actions.Recover
                     new { ReturnUrl = model.ReturnUrl }
                 );
             }
-
+                        
             // Check if user with same email exists
             UserAccount userAccount = await this._userAccountStore
                 .LoadByEmailAsync(model.Email);
