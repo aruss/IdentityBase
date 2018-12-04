@@ -1,5 +1,16 @@
 @model IdentityBase.GoogleRecaptcha.GoogleRecaptchaViewModel
-<div class="form-group">
+@{
+    Microsoft.AspNetCore.Mvc.ModelBinding.ModelError error = null;
+    if (ViewContext.ModelState.ContainsKey("GoogleRecaptcha"))
+    {
+        error = ViewContext.ModelState["GoogleRecaptcha"].Errors.FirstOrDefault();
+    }
+}
+<div class="form-group form-group-googlerecaptcha">
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <div class="g-recaptcha" data-sitekey="@Model.SiteKey"></div>
+    @if (error != null)
+    {
+        <span class="text-danger">@error.ErrorMessage</span>
+    }
 </div>

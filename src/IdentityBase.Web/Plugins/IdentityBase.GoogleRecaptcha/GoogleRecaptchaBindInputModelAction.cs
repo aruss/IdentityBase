@@ -12,7 +12,8 @@ namespace IdentityBase.GoogleRecaptcha
 
     public class GoogleRecaptchaBindInputModelAction :
         ILoginBindInputModelAction,
-        IRecoverBindInputModelAction
+        IRecoverBindInputModelAction,
+        IRegisterBindInputModelAction
     {
         private readonly GoogleRecaptchaOptions _recaptchaOptions;
         private readonly IHttpClientFactory _httpClientFactory;
@@ -35,8 +36,10 @@ namespace IdentityBase.GoogleRecaptcha
 
             if (string.IsNullOrWhiteSpace(inputValue))
             {
-                context.Controller.ModelState
-                    .AddModelError("Invalid ReCaptcha input");
+                context.Controller.ModelState.AddModelError(
+                    "GoogleRecaptcha",
+                    "Invalid ReCaptcha input"
+                );
 
                 return;
             }

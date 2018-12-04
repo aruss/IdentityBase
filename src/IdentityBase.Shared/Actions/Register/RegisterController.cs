@@ -67,6 +67,9 @@ namespace IdentityBase.Actions.Register
         public async Task<IActionResult> RegisterPost(
             RegisterInputModel model)
         {
+            BindInputModelResult formResult = await this
+                .BindFormInputModelAsync<IRegisterBindInputModelAction>();
+
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToRoute(

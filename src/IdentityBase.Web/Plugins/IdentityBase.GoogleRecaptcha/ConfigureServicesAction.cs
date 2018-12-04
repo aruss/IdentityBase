@@ -8,7 +8,7 @@ namespace IdentityBase.GoogleRecaptcha
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Plugins;
-    
+
     //[DependsOnPlugin("Host")]
     public class ConfigureServicesAction : IConfigureServicesAction
     {
@@ -20,25 +20,43 @@ namespace IdentityBase.GoogleRecaptcha
             IConfiguration configuration = serviceProvider
                 .GetService<IConfiguration>();
 
-            services.AddSingleton(configuration
-                .GetSection("GoogleRecaptcha").Get<GoogleRecaptchaOptions>());
+            GoogleRecaptchaOptions options = configuration
+                .GetSection("GoogleRecaptcha")
+                .Get<GoogleRecaptchaOptions>();
 
-            services.AddScoped<ILoginCreateViewModelAction,
-                GoogleRecaptchaCreateViewModelAction>();
+            if (options.EnableOnLogin)
+            {
+                services.AddScoped<ILoginCreateViewModelAction,
+                    GoogleRecaptchaCreateViewModelAction>();
 
-            services.AddScoped<IRecoverCreateViewModelAction,
-                GoogleRecaptchaCreateViewModelAction>();
+                services.AddScoped<ILoginBindInputModelAction,
+                    GoogleRecaptchaBindInputModelAction>();
+            }
 
-            services.AddScoped<ILoginBindInputModelAction,
-                GoogleRecaptchaBindInputModelAction>();
+            if (options.EnableOnRecover)
+            {
+                services.AddScoped<IRecoverCreateViewModelAction,
+                    GoogleRecaptchaCreateViewModelAction>();
 
-            services.AddScoped<IRecoverBindInputModelAction,
-                GoogleRecaptchaBindInputModelAction>();
+                services.AddScoped<IRecoverBindInputModelAction,
+                    GoogleRecaptchaBindInputModelAction>();
+            }
+
+            if (options.EnableOnRegister)
+            {
+                services.AddScoped<IRegisterCreateViewModelAction,
+                    GoogleRecaptchaCreateViewModelAction>();
+
+                services.AddScoped<IRegisterBindInputModelAction,
+                    GoogleRecaptchaBindInputModelAction>();
+            }
+
+            services.AddSingleton(options);
 
             services.AddHttpClient("GoogleRecaptchaClient", client =>
             {
-                 client.BaseAddress = new Uri("https://www.google.com");
-            }); 
+                client.BaseAddress = new Uri("https://www.google.com");
+            });
         }
     }
 }

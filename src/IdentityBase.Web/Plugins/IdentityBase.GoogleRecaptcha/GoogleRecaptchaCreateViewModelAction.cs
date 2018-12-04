@@ -8,7 +8,8 @@ namespace IdentityBase.GoogleRecaptcha
 
     public class GoogleRecaptchaCreateViewModelAction :
        ILoginCreateViewModelAction,
-       IRecoverCreateViewModelAction
+       IRecoverCreateViewModelAction,
+       IRegisterCreateViewModelAction
     {
         private readonly GoogleRecaptchaOptions _recaptchaOptions;
         
