@@ -20,9 +20,9 @@ namespace IdentityBase.Models
         public DateTime? EmailVerifiedAt { get; set; }
 
         /// <summary>
-        /// Is user allowed to login with local account
+        /// Is user allowed to login. 
         /// </summary>
-        public bool IsLoginAllowed { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Last successfull login date

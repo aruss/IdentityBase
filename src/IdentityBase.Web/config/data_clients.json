@@ -13,6 +13,7 @@
     ],
     "RequireClientSecret": true,
     "ClientName": null,
+    "Description": null,
     "ClientUri": null,
     "LogoUri": null,
     "RequireConsent": true,
@@ -51,6 +52,9 @@
     "AlwaysSendClientClaims": false,
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
+    "UserSsoLifetime": null,
+    "UserCodeType": null,
+    "DeviceCodeLifetime": 300,
     "AllowedCorsOrigins": [],
     "Properties": {}
   },
@@ -68,6 +72,7 @@
     ],
     "RequireClientSecret": true,
     "ClientName": null,
+    "Description": null,
     "ClientUri": null,
     "LogoUri": null,
     "RequireConsent": true,
@@ -106,6 +111,9 @@
     "AlwaysSendClientClaims": false,
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
+    "UserSsoLifetime": null,
+    "UserCodeType": null,
+    "DeviceCodeLifetime": 300,
     "AllowedCorsOrigins": [],
     "Properties": {}
   },
@@ -123,6 +131,7 @@
     ],
     "RequireClientSecret": true,
     "ClientName": "MVC Client",
+    "Description": null,
     "ClientUri": null,
     "LogoUri": null,
     "RequireConsent": true,
@@ -170,6 +179,9 @@
     "AlwaysSendClientClaims": false,
     "ClientClaimsPrefix": "client_",
     "PairWiseSubjectSalt": null,
+    "UserSsoLifetime": null,
+    "UserCodeType": null,
+    "DeviceCodeLifetime": 300,
     "AllowedCorsOrigins": [],
     "Properties": {}
   }

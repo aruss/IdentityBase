@@ -20,11 +20,6 @@ namespace IdentityBase.Models
         [StringLength(254)]
         public string Email { get; set; }
 
-        /// <summary>
-        /// Is user allowed to login with this external account
-        /// </summary>
-        public bool IsLoginAllowed { get; set; }
-
         public DateTime? LastLoginAt { get; set; }
 
         public DateTime CreatedAt { get; set; }

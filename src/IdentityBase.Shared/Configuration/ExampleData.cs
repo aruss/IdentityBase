@@ -31,7 +31,7 @@ namespace IdentityBase.Configuration
             ICryptoService cryptoService,
             ApplicationOptions options)
         {
-            var now = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
 
             var users = new List<UserAccount>
             {
@@ -48,7 +48,7 @@ namespace IdentityBase.Configuration
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
-                    IsLoginAllowed = true,
+                    IsActive = true,
 
                     Claims = new List<UserAccountClaim>
                     {
@@ -93,7 +93,7 @@ namespace IdentityBase.Configuration
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = true,
-                    IsLoginAllowed = true,
+                    IsActive = true,
 
                     Claims = new List<UserAccountClaim>
                     {
@@ -128,7 +128,7 @@ namespace IdentityBase.Configuration
                     }
                 },
                 
-                // Inactive user account with local account but no external accounts
+                // Inactive user account 
                 new UserAccount
                 {
                     Id = Guid.Parse("6b13d17c-55a6-482e-96b9-dc784015f927"),
@@ -142,11 +142,13 @@ namespace IdentityBase.Configuration
                     UpdatedAt = now,
                     IsEmailVerified = true,
                     EmailVerifiedAt = now,
-                    IsLoginAllowed = false,
+                    IsActive = false,
                     Claims = CreateClaims("Jim Panse", "Jim", "Panse"),
                 },
 
-                // Not verified user account with local account but no external accounts
+                // Active user account with not verified email
+                // http://localhost:5000/register/confirm?key=e41935fbff4d4c61176fa0a50491963ffd192fa26f709e2c99034e33b0d386b9&clientId=mvc&culture=en-US
+                // http://localhost:5000/register/cancel?key=e41935fbff4d4c61176fa0a50491963ffd192fa26f709e2c99034e33b0d386b9&clientId=mvc&culture=en-US
                 new UserAccount
                 {
                     Id = Guid.Parse("13808d08-b1c0-4f28-8d3e-8c9a4051efcb"),
@@ -158,12 +160,39 @@ namespace IdentityBase.Configuration
                     CreatedAt = now,
                     UpdatedAt = now,
                     IsEmailVerified = false,
-                    IsLoginAllowed = false,
-                    Claims = CreateClaims("Paul Panzer", "Paul", "Panzer")
-                    // TODO: set VerificationKey, VerificationPurpose, VerificationKeySentAt
+                    IsActive = true,
+                    Claims = CreateClaims("Paul Panzer", "Paul", "Panzer"),
+                    VerificationKey = "e41935fbff4d4c61176fa0a50491963ffd192fa26f709e2c99034e33b0d386b9",
+                    VerificationKeySentAt = now,
+                    VerificationPurpose = 3,
+                    VerificationStorage =
+                        "/connect/authorize/callback?client_id=mvc&redirect_uri=http%3A%2F%2Flocalhost%3A5002%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20email%20api1%20idbase%20offline_access&response_mode=form_post&nonce=636797153419167400.MGFjMWNjYmYtMTE1YS00YWY1LWI2ZWMtMzdkZjEzY2Q5OGY3MWNmYzI4MmYtZGE3NS00MGE1LWJkNzgtZGQzZTYzNzY0MjZm&culture=en-US&state=CfDJ8JQ-mps0lj9HjFm5hrrJZyhB2X5bLQyFqkdLryEawVpBjagMoql-6iZVsSXWZxS77aNnlb4Mti_i57k6c8_Z7iUWsuCNrq1gfL9zWygRrfUHpAHPI5HvEC0tnEANmhzuFaorgsli0Ij3q4p2pxqKYja34_sqyD-_zNffMnnfKDj2d5oqsnPCuUL4a5690I8IFZ_7jpFz3SQkWlnEJPL7P2dKS7faO0K0cfZXeY06HGTaY34LpuDIwHgts39lZNGzR6pZ2RZhV2pvxuheWzZg-tC2jPDnYDYmBAPQ52G_B8ETYzfIrbg-5NOre5bVr757Y8ibpO5Fne-mybTR2rhtHTM&x-client-SKU=ID_NETSTANDARD1_4&x-client-ver=5.2.0.0"
                 },
 
-                // External user account
+                // User account with password reset confirmation
+                // http://localhost:5000/recover/confirm?key=de638ef442b0095a0d99031898d6b6a311358d481669a85bb7ed78b2b3504d43&clientId=mvc&culture=en-US
+                // http://localhost:5000/recover/cancel?key=de638ef442b0095a0d99031898d6b6a311358d481669a85bb7ed78b2b3504d43&clientId=mvc&culture=en-US
+                new UserAccount
+                {
+                    Id = Guid.Parse("e738f782-ed25-4fd2-8c46-9bc36fdd70a0"),
+                    Email = "jack@localhost",
+                    PasswordHash  = cryptoService.HashPassword(
+                        "jack@localhost",
+                        options.PasswordHashingIterationCount),
+
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    IsEmailVerified = false,
+                    IsActive = true,
+                    Claims = CreateClaims("Jack Bauer", "Jack", "Bauer"),
+                    VerificationKey = "de638ef442b0095a0d99031898d6b6a311358d481669a85bb7ed78b2b3504d43",
+                    VerificationKeySentAt = now,
+                    VerificationPurpose = 0,
+                    VerificationStorage =
+                        "/connect/authorize/callback?client_id=mvc&redirect_uri=http%3A%2F%2Flocalhost%3A5002%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20email%20api1%20idbase%20offline_access&response_mode=form_post&nonce=636797178235288011.NWNiNDk2ZWQtN2MwNC00OTA5LTljNWQtNmJmOGQ1NDY5ZGIzMzRiNGM0OTEtMmVkNy00Y2ZkLTlkM2QtMmFlMDk0YzhhNjE3&culture=en-US&state=CfDJ8JQ-mps0lj9HjFm5hrrJZyggvttdEHRL23FvYe60bS3vgeYNJ9amoa1_Dp8jcwT8KOZGTNC85gJJOQ_iFeGGDXxuJxW_MayOPkHFWaeoBvH2pBS-AqArBg0TPprN6NzcV8x7p_JaSREvmTU9pz-aMsmKeWrcgq5L5_Vbw-P8Zv8QrfqtSlY7QXkzgsMiZm6bLvPhSGzUODv_hPHK2PTIJq4_gqwiq7FRk2d6XEpTBaMfwl_C4qx1Vbe4OkpWylCi6IYu8xN0yrMusKgHqMNHr2EfTNPW4DwL6sC-QeBIxXzQU0Eey17zLrZQEtJwVKNQfOAFzL43zvcyj0WUPZebRbs&x-client-SKU=ID_NETSTANDARD1_4&x-client-ver=5.2.0.0"
+                },
+                
+                // User account with only external user account
                 new UserAccount
                 {
                     Id = Guid.Parse("58631b04-9be5-454a-aa1d-f679cd454fa6"),
@@ -173,7 +202,7 @@ namespace IdentityBase.Configuration
                     // had never confirmed the email, since he got via facebook
                     IsEmailVerified = false,
                     // is allowed to login since he registed via facebook
-                    IsLoginAllowed = true,  
+                    IsActive = true,
                     Claims = CreateClaims("Bill Smith", "Bill", "Smith"),
                     Accounts = new List<ExternalAccount>()
                     {
@@ -249,7 +278,7 @@ namespace IdentityBase.Configuration
                     },
                     AllowOfflineAccess = true
                 }
-            };        
+            };
         }
 
         public IEnumerable<IdentityResource> GetIdentityResources()
@@ -301,7 +330,7 @@ namespace IdentityBase.Configuration
                             Name = "idbase",
                             DisplayName =
                                 "Full access to IdentityBase API",
-                        }                        
+                        }
                     }
                 }
             };

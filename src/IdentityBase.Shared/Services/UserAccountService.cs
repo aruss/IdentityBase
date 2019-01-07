@@ -96,7 +96,7 @@ namespace IdentityBase.Services
         {
             this.ClearVerificationData(userAccount);
 
-            userAccount.IsLoginAllowed = true;
+            userAccount.IsActive = true;
             userAccount.IsEmailVerified = true;
             userAccount.EmailVerifiedAt = DateTime.UtcNow;
         }
@@ -144,7 +144,7 @@ namespace IdentityBase.Services
         {
             userAccount.FailedLoginCount = 0;
             userAccount.LastFailedLoginAt = null;
-            userAccount.IsLoginAllowed = true;
+            userAccount.IsActive = true;
             userAccount.LastLoginAt = DateTime.UtcNow;
         }
 
@@ -156,7 +156,7 @@ namespace IdentityBase.Services
             if (userAccount.FailedLoginCount >=
                 this._applicationOptions.AccountLockoutFailedLoginAttempts)
             {
-                userAccount.IsLoginAllowed = false;
+                userAccount.IsActive = false;
             }
         }
     }

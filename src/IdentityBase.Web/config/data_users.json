@@ -4,22 +4,22 @@
     "Email": "alice@localhost",
     "IsEmailVerified": true,
     "EmailVerifiedAt": null,
-    "IsLoginAllowed": true,
+    "IsActive": true,
     "LastLoginAt": null,
     "LastFailedLoginAt": null,
     "FailedLoginCount": 0,
-    "PasswordHash": "7D0.AA/iLcBbF0n+bePVBsYUtZSRIDBvTpI3V40ftf6MNU9nu78DKYY8BDC4BGNdzOc4JQ==",
+    "PasswordHash": "7D0.AKfa3oTatUBrI+puWBmOeT1frxlvmZKOkRdgooZuYhokd3Ym4t5IMMEZijh4rz1B2w==",
     "PasswordChangedAt": null,
     "VerificationKey": null,
     "VerificationPurpose": null,
     "VerificationKeySentAt": null,
     "VerificationStorage": null,
-    "CreatedAt": "2018-11-20T15:17:39.2889255Z",
-    "UpdatedAt": "2018-11-20T15:17:39.2889255Z",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
     "Accounts": [],
     "Claims": [
       {
-        "Id": "9d304d85-a289-4fce-8f5a-89a3796eac03",
+        "Id": "bf779f6b-ed6b-4bfb-9e79-13836a799d57",
         "Type": "name",
         "Value": "Alice Smith",
         "ValueType": null,
@@ -27,7 +27,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "b6b0013d-bce3-4578-a0d1-d72a89577a6b",
+        "Id": "915a2d22-c590-4960-8803-89a106543cee",
         "Type": "given_name",
         "Value": "Alice",
         "ValueType": null,
@@ -35,7 +35,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "a67a939f-a687-4d55-a6f1-51c4ecf89813",
+        "Id": "6411b4f9-d410-43ff-9cb8-22e73ee542cf",
         "Type": "family_name",
         "Value": "Smith",
         "ValueType": null,
@@ -43,7 +43,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "b0da396c-8177-443d-865d-e16e6cc6d9a2",
+        "Id": "8b06d8a4-423c-4360-9a69-b0afa96ea6d1",
         "Type": "email",
         "Value": "alice@localhost",
         "ValueType": null,
@@ -51,7 +51,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "117d42ad-a894-432d-95c4-df22b773d90d",
+        "Id": "fdeac9e8-bcb1-4049-8194-ce0a2adb080c",
         "Type": "email_verified",
         "Value": "true",
         "ValueType": "http://www.w3.org/2001/XMLSchema#boolean",
@@ -59,7 +59,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "c65ec29a-43d8-4517-8792-d9d038d54cf8",
+        "Id": "78ca6061-2e7d-4b55-931d-617657cffd6a",
         "Type": "role",
         "Value": "Admin",
         "ValueType": null,
@@ -67,7 +67,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "fb0ca093-faf7-43c5-a75d-385acead9f62",
+        "Id": "d09bdc88-2d58-47c7-a6a9-94925baf27e0",
         "Type": "role",
         "Value": "Geek",
         "ValueType": null,
@@ -75,7 +75,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "627c1040-29cd-4cc4-a7d4-cdfc0226bca6",
+        "Id": "d1a5d11d-f421-40bd-86fd-03456292f48c",
         "Type": "website",
         "Value": "http://alice.com",
         "ValueType": null,
@@ -83,7 +83,7 @@
         "UserAccountId": "0c2954d2-4c73-44e3-b0f2-c00403e4adef"
       },
       {
-        "Id": "a3c84655-b39b-453d-95e3-2652cd9e2b65",
+        "Id": "0840b133-7cb7-4ab0-820b-f0c7b779ad56",
         "Type": "address",
         "Value": "{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
         "ValueType": "json",
@@ -99,22 +99,22 @@
     "Email": "bob@localhost",
     "IsEmailVerified": true,
     "EmailVerifiedAt": null,
-    "IsLoginAllowed": true,
+    "IsActive": true,
     "LastLoginAt": null,
     "LastFailedLoginAt": null,
     "FailedLoginCount": 0,
-    "PasswordHash": "7D0.AJxPrDxDbE8Af1ta7uyNa63EfQGjj3UiLHxf7SqXL7z8UNSlhoAW0EtKOuOZOE4I7Q==",
+    "PasswordHash": "7D0.ABjg116a8i63jvRAswpxMjaCvwKoAbOv76vPqGj7WlaFDb8T7f9gTe751hZRiO7TsA==",
     "PasswordChangedAt": null,
     "VerificationKey": null,
     "VerificationPurpose": null,
     "VerificationKeySentAt": null,
     "VerificationStorage": null,
-    "CreatedAt": "2018-11-20T15:17:39.2889255Z",
-    "UpdatedAt": "2018-11-20T15:17:39.2889255Z",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
     "Accounts": [],
     "Claims": [
       {
-        "Id": "a7311083-0157-4551-91f6-74c75cec6726",
+        "Id": "7ac0da7d-b568-4f79-9988-f31dc8827947",
         "Type": "name",
         "Value": "Bob Smith",
         "ValueType": null,
@@ -122,7 +122,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "6932ebad-fcdc-4466-8cf2-e4b3882a9439",
+        "Id": "38e9c8a9-26a3-4f02-97ec-bbe926cf66c5",
         "Type": "given_name",
         "Value": "Bob",
         "ValueType": null,
@@ -130,7 +130,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "4a8a1775-3b18-4c58-8ffd-595a4abea715",
+        "Id": "df43f7e9-f11b-4d4a-afa4-ef5e58ee76c4",
         "Type": "family_name",
         "Value": "Smith",
         "ValueType": null,
@@ -138,7 +138,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "001fb27f-ab58-4641-a6ba-52507e8fa752",
+        "Id": "d49c5220-6063-49d4-861f-158274cb6945",
         "Type": "email",
         "Value": "bob@localhost",
         "ValueType": null,
@@ -146,7 +146,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "1b8e834b-8fb0-4211-b070-b42400f0d740",
+        "Id": "02e24541-1354-4421-bc98-db2d8242280d",
         "Type": "email_verified",
         "Value": "true",
         "ValueType": "http://www.w3.org/2001/XMLSchema#boolean",
@@ -154,7 +154,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "1fcf4ae1-aceb-48a9-b328-2ef9b0009621",
+        "Id": "4390bb8e-553d-4f57-8327-74f27d9edba1",
         "Type": "role",
         "Value": "Developer",
         "ValueType": null,
@@ -162,7 +162,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "5d1617e1-5ce8-4c81-9d35-1ee3e40d067d",
+        "Id": "de109945-7512-4d23-81e6-e7b59e2e79d2",
         "Type": "role",
         "Value": "Geek",
         "ValueType": null,
@@ -170,7 +170,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "731ab00b-0b43-4ab2-a9b4-3965cd127e99",
+        "Id": "6c2266f5-1605-4883-8161-04a8e0c08829",
         "Type": "website",
         "Value": "http://bob.com",
         "ValueType": null,
@@ -178,7 +178,7 @@
         "UserAccountId": "28575826-68a0-4a1d-9428-674a2eb5db95"
       },
       {
-        "Id": "5f29b343-dfb7-4de2-bd39-57c3bc2d9cc7",
+        "Id": "e7914af1-b600-49fa-a06d-20efa84e936c",
         "Type": "address",
         "Value": "{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
         "ValueType": "json",
@@ -193,23 +193,23 @@
     "Id": "6b13d17c-55a6-482e-96b9-dc784015f927",
     "Email": "jim@localhost",
     "IsEmailVerified": true,
-    "EmailVerifiedAt": "2018-11-20T15:17:39.2889255Z",
-    "IsLoginAllowed": false,
+    "EmailVerifiedAt": "2018-12-06T18:35:34.1441999Z",
+    "IsActive": false,
     "LastLoginAt": null,
     "LastFailedLoginAt": null,
     "FailedLoginCount": 0,
-    "PasswordHash": "7D0.ALdUjwKlK8OhvABKICTqQOvC7xPHEh2n6kLSWSGVBE38yHxbe6zi3DGFEnlmyyT8lg==",
+    "PasswordHash": "7D0.AFDWcTnzqgM2nbYthndHCDZu1DqIn89AOajE5pAq0DjP10+bWnOSWGVoh61F4jvtQg==",
     "PasswordChangedAt": null,
     "VerificationKey": null,
     "VerificationPurpose": null,
     "VerificationKeySentAt": null,
     "VerificationStorage": null,
-    "CreatedAt": "2018-11-20T15:17:39.2889255Z",
-    "UpdatedAt": "2018-11-20T15:17:39.2889255Z",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
     "Accounts": [],
     "Claims": [
       {
-        "Id": "a8ef0c03-377a-4f4e-ac75-6a7dbb581fc1",
+        "Id": "376c68ff-8ea1-465d-9cef-41ab5d392fe2",
         "Type": "name",
         "Value": "Jim Panse",
         "ValueType": null,
@@ -217,7 +217,7 @@
         "UserAccountId": "6b13d17c-55a6-482e-96b9-dc784015f927"
       },
       {
-        "Id": "c2424d9a-7d96-4601-96af-0dd295fa12db",
+        "Id": "2a774635-6671-4012-b129-cbfbdca6517b",
         "Type": "given_name",
         "Value": "Jim",
         "ValueType": null,
@@ -225,7 +225,7 @@
         "UserAccountId": "6b13d17c-55a6-482e-96b9-dc784015f927"
       },
       {
-        "Id": "fa242099-b4b8-424d-90ea-05e8c476ed00",
+        "Id": "40ad8938-a12f-4766-871d-313c7b46d1bb",
         "Type": "family_name",
         "Value": "Panse",
         "ValueType": null,
@@ -241,22 +241,22 @@
     "Email": "paul@localhost",
     "IsEmailVerified": false,
     "EmailVerifiedAt": null,
-    "IsLoginAllowed": false,
+    "IsActive": true,
     "LastLoginAt": null,
     "LastFailedLoginAt": null,
     "FailedLoginCount": 0,
-    "PasswordHash": "7D0.ACw61+GDWKe0rZ40gNN3H4XDSV2hkcuuSeNYAJq4UBXK0KKtsG0Vsh6OkE4DgTwusA==",
+    "PasswordHash": "7D0.AOfPY8wY2JTyq0h1bfZHo7woYKxOqxGtsQbfdPhJzqK8W5nCckdHma4MBYYgD7TQnQ==",
     "PasswordChangedAt": null,
-    "VerificationKey": null,
-    "VerificationPurpose": null,
-    "VerificationKeySentAt": null,
-    "VerificationStorage": null,
-    "CreatedAt": "2018-11-20T15:17:39.2889255Z",
-    "UpdatedAt": "2018-11-20T15:17:39.2889255Z",
+    "VerificationKey": "e41935fbff4d4c61176fa0a50491963ffd192fa26f709e2c99034e33b0d386b9",
+    "VerificationPurpose": 3,
+    "VerificationKeySentAt": "2018-12-06T18:35:34.1441999Z",
+    "VerificationStorage": "/connect/authorize/callback?client_id=mvc&redirect_uri=http%3A%2F%2Flocalhost%3A5002%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20email%20api1%20idbase%20offline_access&response_mode=form_post&nonce=636797153419167400.MGFjMWNjYmYtMTE1YS00YWY1LWI2ZWMtMzdkZjEzY2Q5OGY3MWNmYzI4MmYtZGE3NS00MGE1LWJkNzgtZGQzZTYzNzY0MjZm&culture=en-US&state=CfDJ8JQ-mps0lj9HjFm5hrrJZyhB2X5bLQyFqkdLryEawVpBjagMoql-6iZVsSXWZxS77aNnlb4Mti_i57k6c8_Z7iUWsuCNrq1gfL9zWygRrfUHpAHPI5HvEC0tnEANmhzuFaorgsli0Ij3q4p2pxqKYja34_sqyD-_zNffMnnfKDj2d5oqsnPCuUL4a5690I8IFZ_7jpFz3SQkWlnEJPL7P2dKS7faO0K0cfZXeY06HGTaY34LpuDIwHgts39lZNGzR6pZ2RZhV2pvxuheWzZg-tC2jPDnYDYmBAPQ52G_B8ETYzfIrbg-5NOre5bVr757Y8ibpO5Fne-mybTR2rhtHTM&x-client-SKU=ID_NETSTANDARD1_4&x-client-ver=5.2.0.0",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
     "Accounts": [],
     "Claims": [
       {
-        "Id": "809e0aa2-6cd5-43e5-9901-029f307e9aa5",
+        "Id": "9336bf2d-9de0-41c2-9dab-3c214e838d1e",
         "Type": "name",
         "Value": "Paul Panzer",
         "ValueType": null,
@@ -264,7 +264,7 @@
         "UserAccountId": "13808d08-b1c0-4f28-8d3e-8c9a4051efcb"
       },
       {
-        "Id": "112aff96-e52f-4209-8e44-42ac5b82eaee",
+        "Id": "caae484b-1f20-400d-add2-ce6b2ae07718",
         "Type": "given_name",
         "Value": "Paul",
         "ValueType": null,
@@ -272,7 +272,7 @@
         "UserAccountId": "13808d08-b1c0-4f28-8d3e-8c9a4051efcb"
       },
       {
-        "Id": "ec3bc805-a5b7-4b4b-8959-c3c21c7a66e8",
+        "Id": "7ad72a3f-1b35-4675-aef9-b9ea2f50d8df",
         "Type": "family_name",
         "Value": "Panzer",
         "ValueType": null,
@@ -284,11 +284,58 @@
     "CreationKind": 0
   },
   {
+    "Id": "e738f782-ed25-4fd2-8c46-9bc36fdd70a0",
+    "Email": "jack@localhost",
+    "IsEmailVerified": false,
+    "EmailVerifiedAt": null,
+    "IsActive": true,
+    "LastLoginAt": null,
+    "LastFailedLoginAt": null,
+    "FailedLoginCount": 0,
+    "PasswordHash": "7D0.AM5AaJfdksOYVUN/dnnpxJPVnl9Beph0dXIQzpMvOMZlNY4QYQK9kCSep5rub1Og5A==",
+    "PasswordChangedAt": null,
+    "VerificationKey": "de638ef442b0095a0d99031898d6b6a311358d481669a85bb7ed78b2b3504d43",
+    "VerificationPurpose": 0,
+    "VerificationKeySentAt": "2018-12-06T18:35:34.1441999Z",
+    "VerificationStorage": "/connect/authorize/callback?client_id=mvc&redirect_uri=http%3A%2F%2Flocalhost%3A5002%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20email%20api1%20idbase%20offline_access&response_mode=form_post&nonce=636797178235288011.NWNiNDk2ZWQtN2MwNC00OTA5LTljNWQtNmJmOGQ1NDY5ZGIzMzRiNGM0OTEtMmVkNy00Y2ZkLTlkM2QtMmFlMDk0YzhhNjE3&culture=en-US&state=CfDJ8JQ-mps0lj9HjFm5hrrJZyggvttdEHRL23FvYe60bS3vgeYNJ9amoa1_Dp8jcwT8KOZGTNC85gJJOQ_iFeGGDXxuJxW_MayOPkHFWaeoBvH2pBS-AqArBg0TPprN6NzcV8x7p_JaSREvmTU9pz-aMsmKeWrcgq5L5_Vbw-P8Zv8QrfqtSlY7QXkzgsMiZm6bLvPhSGzUODv_hPHK2PTIJq4_gqwiq7FRk2d6XEpTBaMfwl_C4qx1Vbe4OkpWylCi6IYu8xN0yrMusKgHqMNHr2EfTNPW4DwL6sC-QeBIxXzQU0Eey17zLrZQEtJwVKNQfOAFzL43zvcyj0WUPZebRbs&x-client-SKU=ID_NETSTANDARD1_4&x-client-ver=5.2.0.0",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
+    "Accounts": [],
+    "Claims": [
+      {
+        "Id": "dfccc350-3ed0-416a-acb5-3337ad3385fa",
+        "Type": "name",
+        "Value": "Jack Bauer",
+        "ValueType": null,
+        "UserAccount": null,
+        "UserAccountId": "e738f782-ed25-4fd2-8c46-9bc36fdd70a0"
+      },
+      {
+        "Id": "bde9f20d-3d9b-463d-bf48-894889c483bd",
+        "Type": "given_name",
+        "Value": "Jack",
+        "ValueType": null,
+        "UserAccount": null,
+        "UserAccountId": "e738f782-ed25-4fd2-8c46-9bc36fdd70a0"
+      },
+      {
+        "Id": "7bfee9b1-58f1-499e-8caa-84c6f90b01ee",
+        "Type": "family_name",
+        "Value": "Bauer",
+        "ValueType": null,
+        "UserAccount": null,
+        "UserAccountId": "e738f782-ed25-4fd2-8c46-9bc36fdd70a0"
+      }
+    ],
+    "CreatedBy": null,
+    "CreationKind": 0
+  },
+  {
     "Id": "58631b04-9be5-454a-aa1d-f679cd454fa6",
     "Email": "bill@localhost",
     "IsEmailVerified": false,
     "EmailVerifiedAt": null,
-    "IsLoginAllowed": true,
+    "IsActive": true,
     "LastLoginAt": null,
     "LastFailedLoginAt": null,
     "FailedLoginCount": 0,
@@ -298,24 +345,23 @@
     "VerificationPurpose": null,
     "VerificationKeySentAt": null,
     "VerificationStorage": null,
-    "CreatedAt": "2018-11-20T15:17:39.2889255Z",
-    "UpdatedAt": "2018-11-20T15:17:39.2889255Z",
+    "CreatedAt": "2018-12-06T18:35:34.1441999Z",
+    "UpdatedAt": "2018-12-06T18:35:34.1441999Z",
     "Accounts": [
       {
         "UserAccountId": "58631b04-9be5-454a-aa1d-f679cd454fa6",
         "Provider": "facebook",
         "Subject": "123456789",
         "Email": "bill@localhost",
-        "IsLoginAllowed": false,
         "LastLoginAt": null,
-        "CreatedAt": "2018-11-20T15:17:39.2889255Z",
+        "CreatedAt": "2018-12-06T18:35:34.1441999Z",
         "UpdatedAt": "0001-01-01T00:00:00",
         "UserAccount": null
       }
     ],
     "Claims": [
       {
-        "Id": "b67f58d5-8764-4779-8e78-c744ebccab98",
+        "Id": "01599760-17a3-4f2b-aa6a-f7524ee7a39e",
         "Type": "name",
         "Value": "Bill Smith",
         "ValueType": null,
@@ -323,7 +369,7 @@
         "UserAccountId": "58631b04-9be5-454a-aa1d-f679cd454fa6"
       },
       {
-        "Id": "9f0f63fe-25e3-4d80-937d-0616ba02427a",
+        "Id": "5556b89b-e4f1-4372-883d-8f6bcca1d89e",
         "Type": "given_name",
         "Value": "Bill",
         "ValueType": null,
@@ -331,7 +377,7 @@
         "UserAccountId": "58631b04-9be5-454a-aa1d-f679cd454fa6"
       },
       {
-        "Id": "c78aacd9-be79-4ab1-9b0c-cbe5462bedb8",
+        "Id": "70e4f597-9d52-4969-bc65-d3bb205e6535",
         "Type": "family_name",
         "Value": "Smith",
         "ValueType": null,

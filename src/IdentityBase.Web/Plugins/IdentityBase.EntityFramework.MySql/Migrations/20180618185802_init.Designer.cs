@@ -437,7 +437,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                         .IsRequired()
                         .HasMaxLength(254);
 
-                    b.Property<bool>("IsLoginAllowed");
+                    b.Property<bool>("IsActive");
 
                     b.Property<DateTime?>("LastLoginAt");
 
@@ -550,7 +550,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
 
                     b.Property<bool>("IsEmailVerified");
 
-                    b.Property<bool>("IsLoginAllowed");
+                    b.Property<bool>("IsActive");
 
                     b.Property<DateTime?>("LastFailedLoginAt");
 

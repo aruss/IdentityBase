@@ -23,7 +23,8 @@
     "Name": "api1",
     "DisplayName": "Some API 1",
     "Description": null,
-    "UserClaims": []
+    "UserClaims": [],
+    "Properties": {}
   },
   {
     "ApiSecrets": [
@@ -49,6 +50,7 @@
     "Name": "idbase",
     "DisplayName": "IdentityBase",
     "Description": null,
-    "UserClaims": []
+    "UserClaims": [],
+    "Properties": {}
   }
 ]

@@ -13,7 +13,7 @@ namespace IdentityBase.EntityFramework.Entities
 
         public DateTime? EmailVerifiedAt { get; set; }
 
-        public bool IsLoginAllowed { get; set; }
+        public bool IsActive { get; set; }
 
         /*public bool IsPhoneVerified { get; set; }
 

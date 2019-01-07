@@ -18,33 +18,31 @@ namespace IdentityBase
 
     public static class ErrorMessages
     {
-        public const string UserAccountIsDeactivated =
-            "User account is diactivated.";
-
         public const string UserAccountDoesNotExists =
-            "User account does not exists.";
+            "User account does not exists";
+
+        public const string UserAccountIsInactive =
+            "Your user account has been disabled";
+
+        public const string UserAccountNeedsConfirmation =
+         "Please confirm your email account";
+
+        public static string UserAccountAlreadyExists =
+            "User already exists";
 
         public const string InvalidEmailAddress =
-            "The Email field is not a valid email address.";
+            "The Email field is not a valid email address";
 
-        public const string TokenIsInvalid = "Invalid token.";
+        public const string TokenIsInvalid =
+            "Invalid token";
 
         public const string RecoveryNoReturnUrl =
-            "Recovery attempt with missing ReturnUrl parameter.";
+            "Recovery attempt with missing ReturnUrl parameter";
 
         public const string EmailAddressAlreadyTaken =
-            "Email address is already taken.";
+            "Email address is already taken";
 
         public const string InvalidCredentials =
-            "Invalid email or password.";
-
-        public const string AccountIsDesabled =
-            "Your user account has be disabled";
-
-        public const string ConfirmAccount =
-            "Please confirm your email account";
-
-        public static string AccountAlreadyExists =
-            "User already exists"; 
+            "Invalid email or password";
     }
 }

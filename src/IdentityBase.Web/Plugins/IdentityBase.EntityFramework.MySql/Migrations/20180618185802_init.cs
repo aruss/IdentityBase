@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityBase.EntityFramework.MySql.Migrations
@@ -110,7 +110,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     Email = table.Column<string>(maxLength: 254, nullable: false),
                     IsEmailVerified = table.Column<bool>(nullable: false),
                     EmailVerifiedAt = table.Column<DateTime>(nullable: true),
-                    IsLoginAllowed = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     LastLoginAt = table.Column<DateTime>(nullable: true),
                     LastFailedLoginAt = table.Column<DateTime>(nullable: true),
                     FailedLoginCount = table.Column<int>(nullable: false),
@@ -398,7 +398,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     Provider = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 254, nullable: false),
-                    IsLoginAllowed = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     LastLoginAt = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)

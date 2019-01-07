@@ -29,14 +29,6 @@ namespace IdentityBase.Configuration
         /// </summary>
         public bool RequireLocalAccountVerification { get; set; } = true;
 
-        // External account options
-
-        /// <summary>
-        /// If enabled users have to confirm the registration if the come from
-        /// third party IDP
-        /// </summary>
-        public bool RequireExternalAccountVerification { get; set; } = false;
-
         // Common options
 
         /// <summary>

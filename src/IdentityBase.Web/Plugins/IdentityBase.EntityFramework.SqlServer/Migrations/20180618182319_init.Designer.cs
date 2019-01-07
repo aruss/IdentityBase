@@ -438,7 +438,7 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(254);
 
-                    b.Property<bool>("IsLoginAllowed");
+                    b.Property<bool>("IsActive");
 
                     b.Property<DateTime?>("LastLoginAt");
 
@@ -551,7 +551,7 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
 
                     b.Property<bool>("IsEmailVerified");
 
-                    b.Property<bool>("IsLoginAllowed");
+                    b.Property<bool>("IsActive");
 
                     b.Property<DateTime?>("LastFailedLoginAt");
 

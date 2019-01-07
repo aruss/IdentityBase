@@ -11,9 +11,7 @@ namespace IdentityBase.EntityFramework.Entities
         public string Subject { get; set; }
 
         public string Email { get; set; }
-
-        public bool IsLoginAllowed { get; set; }
-
+        
         public DateTime? LastLoginAt { get; set; }
 
         public DateTime CreatedAt { get; set; }

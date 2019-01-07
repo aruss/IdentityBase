@@ -250,7 +250,7 @@ namespace IdentityBase.Actions.External
                     Email = email,
                     FailedLoginCount = 0,
                     IsEmailVerified = false,
-                    IsLoginAllowed = true
+                    IsActive = true
                 };
             }
 
@@ -260,8 +260,7 @@ namespace IdentityBase.Actions.External
                 UserAccountId = userAccount.Id,
                 Provider = provider,
                 Subject = subject,
-                LastLoginAt = now,
-                IsLoginAllowed = true
+                LastLoginAt = now
             };
 
             if (userAccount.Accounts != null)

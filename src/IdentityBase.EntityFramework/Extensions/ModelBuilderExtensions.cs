@@ -443,7 +443,7 @@ namespace IdentityBase.EntityFramework.Extensions
 
                 userAccount.Property(x => x.EmailVerifiedAt);
 
-                userAccount.Property(x => x.IsLoginAllowed)
+                userAccount.Property(x => x.IsActive)
                     .IsRequired();
 
                 userAccount.Property(x => x.LastLoginAt);
@@ -507,8 +507,6 @@ namespace IdentityBase.EntityFramework.Extensions
 
                 externalAccount.Property(x => x.Email)
                     .IsRequired().HasMaxLength(254);
-
-                externalAccount.Property(x => x.IsLoginAllowed);
 
                 externalAccount.Property(x => x.LastLoginAt);
 

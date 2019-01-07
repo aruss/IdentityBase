@@ -55,7 +55,7 @@ namespace IdentityBase.Services
             UserAccount user = this._userAccountStore
                 .LoadByIdAsync(userId).Result;
 
-            context.IsActive = user != null && user.IsLoginAllowed;
+            context.IsActive = user != null && user.IsActive;
 
             return Task.FromResult(0);
         }

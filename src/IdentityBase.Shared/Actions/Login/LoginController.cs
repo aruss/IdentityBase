@@ -103,9 +103,10 @@ namespace IdentityBase.Actions.Login
             (
                 UserAccount userAccount,
                 bool isLocalAccount,
-                bool isLoginAllowed,
+                bool isAccountActive,
                 bool isPasswordValid,
                 bool needChangePassword,
+                bool needEmailVerification,
                 string[] hints
             ) = await this.VerifyByEmailAndPasswordAsync(
                 model.Email,
@@ -119,27 +120,21 @@ namespace IdentityBase.Actions.Login
                 return this.RedirectToLogin(model.ReturnUrl);
             }
 
-            // User may not login (deactivated)
-            if (!isLoginAllowed)
+            // User is not active
+            if (!isAccountActive)
             {
-                // If paranoya mode is on, do not epose any existence
-                // of user prensentce 
-                if (this._applicationOptions.ObfuscateUserAccountPresence)
-                {
-                    // TODO: And then send an email with info what actually happened.
-                    throw new NotImplementedException(
-                        "Send email with information that user account is disabled."
-                    );
+                this.AddModelStateError(
+                    nameof(LoginViewModel.Email),
+                    ErrorMessages.UserAccountIsInactive);
 
-                    // Show"email or password is invalid" message
-                    this.AddModelStateError(ErrorMessages.InvalidCredentials);
-                }
-                else
-                {
-                    this.AddModelStateError(
-                        nameof(LoginViewModel.Email),
-                        ErrorMessages.AccountIsDesabled);
-                }
+                return this.RedirectToLogin(model.ReturnUrl);
+            }
+
+            if (needEmailVerification)
+            {
+                this.AddModelStateError(
+                   nameof(LoginViewModel.Email),
+                   ErrorMessages.UserAccountNeedsConfirmation);
 
                 return this.RedirectToLogin(model.ReturnUrl);
             }
@@ -241,9 +236,10 @@ namespace IdentityBase.Actions.Login
         private async Task<(
             UserAccount userAccount,
             bool isLocalAccount,
-            bool isLoginAllowed,
+            bool isAccountActive,
             bool isPasswordValid,
             bool needChangePassword,
+            bool needEmailVerification,
             string[] hints
         )>
         VerifyByEmailAndPasswordAsync(
@@ -254,21 +250,23 @@ namespace IdentityBase.Actions.Login
             UserAccount userAccount = await this._userAccountStore
                .LoadByEmailAsync(email);
 
-            var isLocalAccount = false;
-            var isLoginAllowed = false;
-            var isPasswordValid = false;
-            var needChangePassword = false;
+            bool isLocalAccount = false;
+            bool isAccountActive = false;
+            bool isPasswordValid = false;
+            bool needChangePassword = false;
+            bool needEmailVerification = false;
             string[] hints = null;
 
-            // No uesr, nothing to do here 
+            // No ueser, nothing to do here 
             if (userAccount == null)
             {
                 return (
                     userAccount,
                     isLocalAccount,
-                    isLoginAllowed,
+                    isAccountActive,
                     isPasswordValid,
                     needChangePassword,
+                    needEmailVerification,
                     hints
                 );
             }
@@ -287,8 +285,12 @@ namespace IdentityBase.Actions.Login
                 // TODO: implement invalid passowrd policy 
             }
 
-            // User might be disabled 
-            isLoginAllowed = userAccount.IsLoginAllowed;
+            // User is disabled 
+            isAccountActive = userAccount.IsActive;
+
+            // User requred to verify his email address
+            needEmailVerification = !userAccount.IsEmailVerified &&
+                this._applicationOptions.RequireLocalAccountVerification;
 
             // TODO: Implement password invalidation policy
             needChangePassword = false;
@@ -298,9 +300,10 @@ namespace IdentityBase.Actions.Login
             return (
                 userAccount,
                 isLocalAccount,
-                isLoginAllowed,
+                isAccountActive,
                 isPasswordValid,
                 needChangePassword,
+                needEmailVerification,
                 hints
             );
         }
