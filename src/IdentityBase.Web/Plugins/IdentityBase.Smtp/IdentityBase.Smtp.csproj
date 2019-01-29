@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
@@ -14,7 +14,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="MimeKit" Version="2.0.7" />
+    <PackageReference Include="MimeKit" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>

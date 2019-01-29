@@ -5,7 +5,7 @@ namespace IdentityBase.IntegrationTests
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using AngleSharp.Dom.Html;
+    using AngleSharp.Html.Dom;
     using FluentAssertions;
     using ServiceBase.Tests;
 

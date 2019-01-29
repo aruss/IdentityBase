@@ -6,10 +6,10 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
-  <PropertyGroup>    
-    <TargetFramework>netcoreapp2.1</TargetFramework>    
-    <ApplicationIcon />    
-    <OutputTypeEx>library</OutputTypeEx>    
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationIcon />
+    <OutputTypeEx>library</OutputTypeEx>
     <StartupObject />
   </PropertyGroup>
 
@@ -39,14 +39,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.11" />
-    <PackageReference Include="FluentAssertions" Version="5.5.3" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.4" />
+    <PackageReference Include="AngleSharp" Version="0.10.1" />
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Moq" Version="4.10.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.10" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">

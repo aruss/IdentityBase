@@ -5,8 +5,8 @@ namespace ServiceBase.Tests
     using System.Net.Http;
     using System.Threading.Tasks;
     using AngleSharp.Dom;
-    using AngleSharp.Dom.Html;
-    using AngleSharp.Parser.Html;
+    using AngleSharp.Html.Dom;
+    using AngleSharp.Html.Parser;
 
     // http://www.stefanhendriks.com/2016/04/29/integration-testing-your-dot-net-core-app-with-an-in-memory-database/
     // http://www.stefanhendriks.com/2016/05/11/integration-testing-your-asp-net-core-app-dealing-with-anti-request-forgery-csrf-formdata-and-cookies/
@@ -23,7 +23,7 @@ namespace ServiceBase.Tests
             this HttpContent content)
         {
             string html = await content.ReadAsStringAsync();
-            return new HtmlParser().Parse(html);
+            return new HtmlParser().ParseDocument(html);
         }
 
         /// <summary>

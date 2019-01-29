@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	<PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
