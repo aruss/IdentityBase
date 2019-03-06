@@ -144,10 +144,12 @@
     "AllowPlainTextPkce": false,
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [
-      "http://localhost:5002/signin-oidc"
+      "http://localhost:5002/signin-oidc",
+      "http://web.identitybase/signin-oidc"
     ],
     "PostLogoutRedirectUris": [
-      "http://localhost:5002/signout-callback-oidc"
+      "http://localhost:5002/signout-callback-oidc",
+      "http://web.identitybase/signout-callback-oidc"
     ],
     "FrontChannelLogoutUri": null,
     "FrontChannelLogoutSessionRequired": true,

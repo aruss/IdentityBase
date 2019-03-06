@@ -1,5 +1,12 @@
-FROM microsoft/dotnet:2.1-runtime
-COPY ./bin/Release/netcoreapp2.1/linux-x64/publish /usr/local/aspnetcoreweb
-EXPOSE 21402/tcp
-WORKDIR /usr/local/aspnetcoreweb
+FROM microsoft/dotnet:2.2-sdk as build
+WORKDIR /src
+COPY *.csproj ./
+RUN dotnet restore
+COPY . ./
+RUN dotnet publish -c Release -r linux-x64 -o out
+
+FROM microsoft/dotnet:2.2-aspnetcore-runtime
+WORKDIR /app
+COPY --from=build /src/out .
+EXPOSE 5002/tcp
 ENTRYPOINT ["dotnet", "AspNetCoreWeb.dll"]

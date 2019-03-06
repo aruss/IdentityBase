@@ -1,6 +1,0 @@
-@SET ASPNETCORE_CONTENTROOT=%~dp0
-@SET ASPNETCORE_CONFIGROOT=%~dp0config
-@SET ASPNETCORE_ENVIRONMENT=Production
-
-@dotnet .\lib\IdentityBase.Web.dll
-

@@ -58,7 +58,7 @@ To get started with IdentityBase see the [getting started](/docs/getting-started
 
 ### Platform
 
-IdentityBase is built against ASP.NET Core 2.1 using the tooling that ships with Visual Studio 2017 on Windows 10. This is the only configuration we support on the issue tracker.
+IdentityBase is built against ASP.NET Core 2.2 using the tooling that ships with Visual Studio 2017 on Windows 10. This is the only configuration we support on the issue tracker.
 
 ### Clone
 
@@ -80,7 +80,7 @@ Then clone the repository again.
 ### Requirements
 
 * [Visual Studio 2017](https://www.visualstudio.com/de/vs/community)
-* [.NET Core 2.1](https://www.microsoft.com/net/download/core#/current)
+* [.NET Core 2.2](https://www.microsoft.com/net/download/core#/current)
 * [Docker](https://www.docker.com/docker-windows)
 
 ### How to build
