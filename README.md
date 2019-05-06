@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://github.com/IdentityBaseNet/IdentityBase/raw/develop/docs/icon.png" alt="IdentityBase" width="200">
+  <img src="docs/icon.png" alt="IdentityBase" width="200">
   <br>
   IdentityBase
   <br>
@@ -58,7 +58,7 @@ To get started with IdentityBase see the [getting started](/docs/getting-started
 
 ### Platform
 
-IdentityBase is built against ASP.NET Core 2.2 using the tooling that ships with Visual Studio 2017 on Windows 10. This is the only configuration we support on the issue tracker.
+IdentityBase is built against ASP.NET Core 2.2 using the tooling that ships with Visual Studio 2017 on Windows 10.
 
 ### Clone
 
