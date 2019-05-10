@@ -7,18 +7,19 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace IdentityBase.EntityFramework.MySql.Migrations
+namespace IdentityBase.EntityFramework.SqlServer.Migrations
 {
     [DbContext(typeof(MigrationDbContext))]
-    [Migration("20180618185802_init")]
+    [Migration("20190510112517_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("IdentityBase.EntityFramework.Entities.ApiResource", b =>
                 {
@@ -50,8 +51,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<Guid>("ApiResourceId");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -69,8 +69,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<Guid>("ApiResourceId");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
@@ -103,8 +102,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ApiScopeId")
-                        .IsRequired();
+                    b.Property<Guid>("ApiScopeId");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -122,8 +120,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<Guid>("ApiResourceId");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
@@ -241,8 +238,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -264,8 +260,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Origin")
                         .IsRequired()
@@ -283,8 +278,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("GrantType")
                         .IsRequired()
@@ -302,8 +296,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Provider")
                         .IsRequired()
@@ -321,8 +314,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
@@ -340,8 +332,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -363,8 +354,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
@@ -382,8 +372,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Scope")
                         .IsRequired()
@@ -401,8 +390,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClientId")
-                        .IsRequired();
+                    b.Property<Guid>("ClientId");
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000);
@@ -425,8 +413,6 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
 
             modelBuilder.Entity("IdentityBase.EntityFramework.Entities.ExternalAccount", b =>
                 {
-                    b.Property<Guid>("UserAccountId");
-
                     b.Property<string>("Provider");
 
                     b.Property<string>("Subject");
@@ -437,13 +423,15 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                         .IsRequired()
                         .HasMaxLength(254);
 
-                    b.Property<bool>("IsActive");
-
                     b.Property<DateTime?>("LastLoginAt");
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.HasKey("UserAccountId", "Provider", "Subject");
+                    b.Property<Guid>("UserAccountId");
+
+                    b.HasKey("Provider", "Subject");
+
+                    b.HasIndex("UserAccountId");
 
                     b.ToTable("ExternalAccounts");
                 });
@@ -453,8 +441,7 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("IdentityResourceId")
-                        .IsRequired();
+                    b.Property<Guid>("IdentityResourceId");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -548,9 +535,9 @@ namespace IdentityBase.EntityFramework.MySql.Migrations
 
                     b.Property<int>("FailedLoginCount");
 
-                    b.Property<bool>("IsEmailVerified");
-
                     b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsEmailVerified");
 
                     b.Property<DateTime?>("LastFailedLoginAt");
 

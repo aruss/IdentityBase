@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IdentityBase.EntityFramework.SqlServer.Migrations
+namespace IdentityBase.EntityFramework.Npgsql.Migrations
 {
     public partial class init : Migration
     {
@@ -177,10 +177,10 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ApiSecrets",
                 columns: table => new
                 {
-                    Expiration = table.Column<DateTime>(nullable: true),
                     Id = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Value = table.Column<string>(maxLength: 2000, nullable: true),
+                    Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 250, nullable: true),
                     ApiResourceId = table.Column<Guid>(nullable: false)
                 },
@@ -353,10 +353,10 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ClientSecrets",
                 columns: table => new
                 {
-                    Expiration = table.Column<DateTime>(nullable: true),
                     Id = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Value = table.Column<string>(maxLength: 2000, nullable: false),
+                    Expiration = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(maxLength: 250, nullable: true),
                     ClientId = table.Column<Guid>(nullable: false)
                 },
@@ -394,18 +394,17 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "ExternalAccounts",
                 columns: table => new
                 {
-                    UserAccountId = table.Column<Guid>(nullable: false),
                     Provider = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
+                    UserAccountId = table.Column<Guid>(nullable: false),
                     Email = table.Column<string>(maxLength: 254, nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
                     LastLoginAt = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExternalAccounts", x => new { x.UserAccountId, x.Provider, x.Subject });
+                    table.PrimaryKey("PK_ExternalAccounts", x => new { x.Provider, x.Subject });
                     table.ForeignKey(
                         name: "FK_ExternalAccounts_UserAccounts_UserAccountId",
                         column: x => x.UserAccountId,
@@ -536,6 +535,11 @@ namespace IdentityBase.EntityFramework.SqlServer.Migrations
                 name: "IX_ClientSecrets_ClientId",
                 table: "ClientSecrets",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalAccounts_UserAccountId",
+                table: "ExternalAccounts",
+                column: "UserAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityClaims_IdentityResourceId",
