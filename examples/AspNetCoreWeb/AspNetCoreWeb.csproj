@@ -6,13 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".dockerignore" />
+    <None Remove="build.sh" />
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="wwwroot\**\*;Areas\**\Views">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="3.10.5" />
+    <PackageReference Include="IdentityModel" Version="3.10.10" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

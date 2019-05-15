@@ -10,6 +10,14 @@ namespace IdentityBase.EntityFramework.Npgsql
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
 
+    public static class EntryPoint
+    {
+        public static void Main()
+        {
+
+        }
+    }
+
     /// <summary>
     /// DesignTimeDbContextFactory required for the EF Migration tools 
     /// </summary>

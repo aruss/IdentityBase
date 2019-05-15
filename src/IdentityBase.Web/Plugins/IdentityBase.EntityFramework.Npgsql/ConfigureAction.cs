@@ -10,7 +10,7 @@ namespace IdentityBase.EntityFramework.Npgsql
     {
         public void Execute(IApplicationBuilder app)
         {
-          
+            app.WaitForDatabase(); 
         }
     }
 }

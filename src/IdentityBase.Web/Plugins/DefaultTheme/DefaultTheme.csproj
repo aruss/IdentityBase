@@ -38,6 +38,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Public\css\*.css" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Public\js\*.js" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <None Update="Public\css\site.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -275,3 +281,4 @@
   </ItemGroup>
 
 </Project>
+

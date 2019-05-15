@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# this script removes all the build artificats
+# from the main app and all the plugins.
+
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 SOURCEDIR=$DIR/src/IdentityBase.Web
 

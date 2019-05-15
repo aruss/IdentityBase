@@ -21,7 +21,6 @@ namespace ServiceBase.Tests
         /// <summary>
         /// Alters the key
         /// </summary>
-        /// <param name="config"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>

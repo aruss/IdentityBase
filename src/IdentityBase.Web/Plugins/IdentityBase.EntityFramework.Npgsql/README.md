@@ -13,6 +13,9 @@ PostgreSQL data provider for IdentityBase.
 
 ### Create migration files
 
+Change the project type to "Console Application" and compile it with DEBUG flag
+then run following command. After that change it back to "Class Library".
+
 ```sh
 dotnet ef migrations add init --context MigrationDbContext
 ```

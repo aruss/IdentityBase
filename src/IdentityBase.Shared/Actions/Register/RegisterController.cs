@@ -133,7 +133,7 @@ namespace IdentityBase.Actions.Register
                         .ClearVerificationData(userAccount);
 
                     await this._userAccountStore.WriteAsync(userAccount);
-
+                                       
                     // TODO: emit user updated event 
                 }
 

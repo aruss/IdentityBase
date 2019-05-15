@@ -1,2 +1,3 @@
-dotnet publish AspNetCoreWeb.csproj -c Release -r linux-x64
+#!/bin/bash
+
 docker build . -t identitybasenet/aspnetcoreweb:latest

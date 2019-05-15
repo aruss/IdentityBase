@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# this script builds the .net application with specific runtime and version
+
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 echo "Working directory: \"$DIR\""
@@ -25,7 +27,7 @@ fi
 echo "Version: \"$VERSION\""
 
 SOURCEDIR=$DIR/src/IdentityBase.Web
-BUILDDIR=$DIR/build/$RUNTIME/identitybase-$VERSION
+BUILDDIR=$DIR/.build/$RUNTIME/identitybase-$VERSION
 
 echo "Source directory: \"$SOURCEDIR\""
 echo "Buid directory: \"$BUILDDIR\""
@@ -57,7 +59,7 @@ for PATH1 in $SOURCEDIR/Plugins/*/; do
     rm -rf $PLUGINSOURCEDIR/obj 2> /dev/null
 	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR
 
-	echo "Removing assemblies from plugin directories that a present in host application"
+	echo "Removing assemblies from plugin directories that are present in host application"
     for PATH2 in $HOSTASSEMBLIES; do
 
         FILE=$(basename $PATH2)

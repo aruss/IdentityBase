@@ -10,13 +10,6 @@ namespace IdentityBase.EntityFramework.Npgsql
     using Microsoft.Extensions.DependencyInjection;
     using ServiceBase.Plugins;
 
-    public class NpgsqlEfOptions
-    {
-        public int MaxRetryCount { get; set; } = 3;
-        public int MaxRetryDelay { get; set; } = 30;
-        public string ConnectionString { get; set; }
-    }
-
     public class ConfigureServicesAction : IConfigureServicesAction
     {
         public void Execute(IServiceCollection services)

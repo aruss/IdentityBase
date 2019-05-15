@@ -34,7 +34,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-controller="Home"
+                    <li><a id="authentication" asp-controller="Home"
                            asp-action="Secure">@Localizer["Authentication"]</a></li>
                     
                     @if (User.Identity.IsAuthenticated)
@@ -44,7 +44,7 @@
                                 @User.Identity.Name <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
+                                <li >
                                     <a href="http://localhost:5000/account?clientId=@(AppOptions.ClientId)&culture=@(System.Globalization.CultureInfo.CurrentUICulture.Name)">@Localizer["Account"]</a>
                                 </li>
                                 <li>

@@ -14,7 +14,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="MimeKit" Version="2.1.2" />
+    <PackageReference Include="MimeKit" Version="2.1.4" />
   </ItemGroup>
 
   <ItemGroup>

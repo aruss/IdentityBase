@@ -80,6 +80,7 @@ namespace IdentityBase.Configuration
                             IdentityServerConstants.ClaimValueTypes.Json)
                     }
                 },
+
                 // Active user account 
                 new UserAccount
                 {
