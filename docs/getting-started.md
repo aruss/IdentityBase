@@ -10,7 +10,9 @@ IdentityBase is built against [ASP.NET Core 2.2](https://dotnet.microsoft.com/do
 
 ### How to build
 
-current state is only on windows
-
 run `build-docker.bat` or `build-win7x64.bat` to build IdentityBase
 or use Visual Studio.
+
+If you on linux just run following from the repository main directory
+
+    docker build . -t identitybasenet/identitybase:latest

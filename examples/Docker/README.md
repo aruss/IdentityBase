@@ -18,16 +18,14 @@ Before you start it add following hostnames to your host file.
 127.0.0.1 api1.identitybase.local
 ```
 
-and run docker-compose to build and run the example project.
+and run `docker-compose` to build and run the example project.
 
 ```sh
 docker-compose up
 ```
 
-After it built all the images and started the container navigate to
+After all the images are built and the container are started navigate to
 http://identitybase.local
 
-The test user credentials are
-
-    username: alice@localhost
-    password: alice@localhost
+The test user credentials are `alice@localhost` and `bob@localhost`
+the password is quals to user name.
