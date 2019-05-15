@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".dockerignore" />
+    <None Remove="build.sh" />
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="wwwroot\**\*;Areas\**\Views">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>

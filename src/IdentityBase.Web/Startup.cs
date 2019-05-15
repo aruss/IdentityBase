@@ -168,6 +168,13 @@ namespace IdentityBase
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
+            
+            /*app.Use(async (context, next) =>
+            {
+                context.Request.Scheme = "http";
+                context.Request.Host = new HostString("auth.identitybase.local");
+                await next.Invoke();
+            });*/
 
             app.UseLocalization();
             app.UseMiddleware<RequestIdMiddleware>();

@@ -20,7 +20,7 @@ namespace AspNetCoreApi
             ApplicationOptions appOptions = this._configuration
                .GetSection("App")
                .Get<ApplicationOptions>() ?? new ApplicationOptions();
-
+            
             services
                 .AddMvcCore()
                 .AddJsonFormatters()

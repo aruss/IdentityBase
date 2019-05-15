@@ -4,8 +4,10 @@ namespace AspNetCoreWeb
     using System.Collections.Generic;
     using System.Globalization;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using IdentityModel;
+    using IdentityModel.Client;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
@@ -56,6 +58,26 @@ namespace AspNetCoreWeb
                     new CultureInfo("en-US"),
                     new CultureInfo("de-DE")
                 };
+            });
+
+
+            services.AddHttpClient();
+
+            services.AddSingleton<IDiscoveryCache>(r =>
+            {
+                IHttpClientFactory factory =
+                    r.GetRequiredService<IHttpClientFactory>();
+
+                return new DiscoveryCache(
+                    appOptions.Authority,                    
+                    () => factory.CreateClient(),
+                    new DiscoveryPolicy()
+                    {
+                        Authority = appOptions.Authority,
+                        RequireHttps = appOptions.Authority
+                            .StartsWith("https")
+                    }
+                );
             });
 
             // https://leastprivilege.com/2017/11/15/missing-claims-in-the-asp-net-core-2-openid-connect-handler/

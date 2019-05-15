@@ -1,0 +1,70 @@
+[
+  {
+    "Required": true,
+    "Emphasize": false,
+    "ShowInDiscoveryDocument": true,
+    "Enabled": true,
+    "Name": "openid",
+    "DisplayName": "Your user identifier",
+    "Description": null,
+    "UserClaims": [
+      "sub"
+    ],
+    "Properties": {}
+  },
+  {
+    "Required": false,
+    "Emphasize": true,
+    "ShowInDiscoveryDocument": true,
+    "Enabled": true,
+    "Name": "profile",
+    "DisplayName": "User profile",
+    "Description": "Your user profile information (first name, last name, etc.)",
+    "UserClaims": [
+      "name",
+      "family_name",
+      "given_name",
+      "middle_name",
+      "nickname",
+      "preferred_username",
+      "profile",
+      "picture",
+      "website",
+      "gender",
+      "birthdate",
+      "zoneinfo",
+      "locale",
+      "updated_at"
+    ],
+    "Properties": {}
+  },
+  {
+    "Required": false,
+    "Emphasize": true,
+    "ShowInDiscoveryDocument": true,
+    "Enabled": true,
+    "Name": "email",
+    "DisplayName": "Your email address",
+    "Description": null,
+    "UserClaims": [
+      "email",
+      "email_verified"
+    ],
+    "Properties": {}
+  },
+  {
+    "Required": false,
+    "Emphasize": false,
+    "ShowInDiscoveryDocument": true,
+    "Enabled": true,
+    "Name": "custom.profile",
+    "DisplayName": "custom.profile",
+    "Description": null,
+    "UserClaims": [
+      "name",
+      "email",
+      "location"
+    ],
+    "Properties": {}
+  }
+]

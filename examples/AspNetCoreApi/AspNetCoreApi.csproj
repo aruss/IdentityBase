@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".dockerignore" />
+    <None Remove="build.sh" />
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
   </ItemGroup>

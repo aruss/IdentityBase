@@ -33,6 +33,7 @@ namespace IdentityBase
             ApplicationOptions appOptions = config.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
+            // http://docs.identityserver.io/en/latest/reference/options.html
             IIdentityServerBuilder builder =
                 services.AddIdentityServer((options) =>
             {
@@ -54,6 +55,7 @@ namespace IdentityBase
                 options.UserInteraction.LogoutUrl = "/logout";
                 options.UserInteraction.ConsentUrl = "/consent";
                 options.UserInteraction.ErrorUrl = "/error";
+
             })
             .AddProfileService<ProfileService>()
             .AddSecretParser<JwtBearerClientAssertionSecretParser>()

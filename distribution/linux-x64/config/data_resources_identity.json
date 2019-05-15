@@ -9,7 +9,8 @@
     "Description": null,
     "UserClaims": [
       "sub"
-    ]
+    ],
+    "Properties": {}
   },
   {
     "Required": false,
@@ -34,7 +35,8 @@
       "zoneinfo",
       "locale",
       "updated_at"
-    ]
+    ],
+    "Properties": {}
   },
   {
     "Required": false,
@@ -47,7 +49,8 @@
     "UserClaims": [
       "email",
       "email_verified"
-    ]
+    ],
+    "Properties": {}
   },
   {
     "Required": false,
@@ -61,6 +64,7 @@
       "name",
       "email",
       "location"
-    ]
+    ],
+    "Properties": {}
   }
 ]

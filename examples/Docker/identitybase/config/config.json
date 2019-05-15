@@ -1,0 +1,92 @@
+
+{
+  "Host": {
+    "Urls": "http://*:5000",
+    "UseIISIntegration": false
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Verbose",
+      "Override": {
+        "System": "Information",
+        "Microsoft": "Information"
+      }
+    },
+    "WriteTo": [
+      { "Name": "Console" }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
+  },
+  "App": {
+    "PasswordHashingIterationCount": 0,
+    "AccountLockoutFailedLoginAttempts": 5,
+    "AccountLockoutDuration": 600,
+    "RequireLocalAccountVerification": true,
+    "RequireExternalAccountVerification": false,
+    "EnableAccountDeletion": false,
+    "EnableLoginHints": false,
+    "LoginAfterAccountCreation": false,
+    "LoginAfterAccountConfirmation": true,
+    "LoginAfterAccountRecovery": true,
+    "LoginAfterAccountInvitation": true,
+    "VerificationKeyLifetime": 86400,
+    "EnableAccountRegistration": true,
+    "EnableAccountRecovery": true,
+    "AutomaticAccountMerge": true,
+    "EnableRememberLogin": true,
+    "EnableLocalLogin": true,
+    "RememberMeLoginDuration": 28800,
+    "ShowLogoutPrompt": false,
+    "AutomaticRedirectAfterSignOut": true,
+    "WindowsAuthenticationEnabled": false,
+    "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
+    "WindowsAuthenticationDisplayName": "Windows",
+    "TempPath": "/tmp",
+    "PluginsPath": "./plugins"
+  },
+  "Plugins": [
+    "DefaultTheme",
+    "IdentityBase.EntityFramework.Npgsql",
+    "IdentityBase.EntityFramework.zDbInitializer"
+  ],
+  "EntityFramework": {
+    "MigrateDatabase": true,
+    "SeedExampleData": true,
+    "EnableTokenCleanup": false,
+    "SeedExampleDataPath": "./config",
+    "Npgsql": {
+      "MaxRetryCount": 10,
+      "MaxRetryDelay": 30,
+      "ConnectionString": "User ID=dev;Password=dev;Host=identitybase-postgres;Port=5432;Database=identitybase;Pooling=true;"
+    },
+    "SqlServer": {
+      "ConnectionString": "Server=identitybase-sqlserver,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
+    },
+    "MySql": {
+      "ConnectionString": "server=identitybase-mysql;port=3306;database=identitybase;uid=dev;password=dev"
+    }
+  },
+  "Events": {
+    "RaiseErrorEvents": true,
+    "RaiseFailureEvents": true,
+    "RaiseInformationEvents": true,
+    "RaiseSuccessEvents": true
+  },
+  "IdentityServer": {
+    "SigningCredentialFromPfx": {
+      "Path": "./config/idsvr3test.pfx",
+      "Password": "idsrv3test"
+    }
+  },
+  "WebApi": {
+    "AutorityUrl": "http://auth.identitybase.local",
+    "ApiSecret": "secret",
+    "EnableSwagger": true
+  },
+  "Email": {
+
+  },
+  "Sms": {
+
+  }
+}

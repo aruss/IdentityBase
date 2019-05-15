@@ -19,13 +19,19 @@ namespace AspNetCoreWeb.Actions.Home
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationOptions _appOptions;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IDiscoveryCache _discoveryCache;
 
         public HomeController(
             ILogger<HomeController> logger,
-            ApplicationOptions appOptions)
+            ApplicationOptions appOptions,
+            IHttpClientFactory httpClientFactory,
+            IDiscoveryCache discoveryCache)
         {
             this._logger = logger;
             this._appOptions = appOptions;
+            this._httpClientFactory = httpClientFactory;
+            this._discoveryCache = discoveryCache;
         }
 
         public IActionResult Index()
@@ -47,16 +53,14 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/callapi-user-token")]
         public async Task<IActionResult> CallApiUserToken()
         {
-            string accessToken =
-                await HttpContext.GetTokenAsync("access_token");
+            string token = await this.HttpContext.GetTokenAsync("access_token");
+            HttpClient client = this._httpClientFactory.CreateClient();
+            client.SetBearerToken(token);
 
-            var client = new HttpClient();
-            client.SetBearerToken(accessToken);
+            string response = await client.GetStringAsync(
+                this._appOptions.Api1BaseAddress + "/identity");
 
-            string content =
-                await client.GetStringAsync("http://localhost:5001/identity");
-
-            this.ViewBag.Json = JArray.Parse(content).ToString();
+            this.ViewBag.Json = JArray.Parse(response).ToString();
             return this.View("Json");
         }
 
@@ -64,20 +68,23 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/callapi-client-credentials")]
         public async Task<IActionResult> CallApiClientCredentials()
         {
-            TokenClient tokenClient = new TokenClient(
-                this._appOptions.Authority + "/connect/token",
-                this._appOptions.ClientId,
-                this._appOptions.ClientSecret
-            );
+            HttpClient tokenClienst = this._httpClientFactory.CreateClient();
+            TokenResponse tokenResponse = await tokenClienst
+                .RequestClientCredentialsTokenAsync(
+                new ClientCredentialsTokenRequest
+                {
+                    Address = this._appOptions.Authority + "/connect/token",
+                    ClientId = this._appOptions.ClientId,
+                    ClientSecret = this._appOptions.ClientSecret,
+                    Scope = "api1"
+                });
 
-            TokenResponse tokenResponse =
-                await tokenClient.RequestClientCredentialsAsync("api1");
-
-            var client = new HttpClient();
+            HttpClient client = this._httpClientFactory.CreateClient();
             client.SetBearerToken(tokenResponse.AccessToken);
 
             string content =
-                await client.GetStringAsync("http://localhost:5001/identity");
+                await client.GetStringAsync(
+                    this._appOptions.Api1BaseAddress + "/identity");
 
             this.ViewBag.Json = JArray.Parse(content).ToString();
             return this.View("Json");
@@ -88,72 +95,60 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/renew-tokens")]
         public async Task<IActionResult> RenewTokens()
         {
-            DiscoveryResponse discoClient = await DiscoveryClient
-                .GetAsync(this._appOptions.Authority);
+            DiscoveryResponse disco = await this._discoveryCache.GetAsync();
 
-            if (discoClient.IsError)
+            if (disco.IsError)
             {
-                throw new Exception(discoClient.Error);
+                throw new Exception(disco.Error);
             }
 
-            TokenClient tokenClient = new TokenClient(
-                discoClient.TokenEndpoint,
-                this._appOptions.ClientId,
-                this._appOptions.ClientSecret
-            );
+            string rt = await this.HttpContext.GetTokenAsync("refresh_token");
+            HttpClient tokenClient = this._httpClientFactory.CreateClient();
 
-            string refreshToken =
-                await HttpContext.GetTokenAsync("refresh_token");
-
-            TokenResponse tokenResult = await tokenClient
-                .RequestRefreshTokenAsync(refreshToken);
+            TokenResponse tokenResult =
+                await tokenClient.RequestRefreshTokenAsync(
+                    new RefreshTokenRequest
+                    {
+                        Address = disco.TokenEndpoint,
+                        ClientId = this._appOptions.ClientId,
+                        ClientSecret = this._appOptions.ClientSecret,
+                        RefreshToken = rt,
+                        
+                    });
 
             if (!tokenResult.IsError)
             {
-                string old_id_token = await HttpContext
-                    .GetTokenAsync("id_token");
+                string oldIdToken =
+                    await this.HttpContext.GetTokenAsync("id_token");
 
-                string new_access_token = tokenResult.AccessToken;
-                string new_refresh_token = tokenResult.RefreshToken;
+                string newAccessToken = tokenResult.AccessToken;
+                string newRefreshToken = tokenResult.RefreshToken;
 
-                var tokens = new List<AuthenticationToken>
-                {
-                    new AuthenticationToken
-                    {
-                        Name = OpenIdConnectParameterNames.IdToken,
-                        Value = old_id_token
-                    },
-                    new AuthenticationToken
-                    {
-                        Name = OpenIdConnectParameterNames.AccessToken,
-                        Value = new_access_token
-                    },
-                    new AuthenticationToken
-                    {
-                        Name = OpenIdConnectParameterNames.RefreshToken,
-                        Value = new_refresh_token
-                    }
-                };
-
-                DateTime expiresAt = DateTime.UtcNow +
+                DateTime expiresAt =
+                    DateTime.UtcNow +
                     TimeSpan.FromSeconds(tokenResult.ExpiresIn);
 
-                tokens.Add(new AuthenticationToken
-                {
-                    Name = "expires_at",
-                    Value = expiresAt
-                        .ToString("o", CultureInfo.InvariantCulture)
-                });
+                AuthenticateResult info =
+                    await HttpContext.AuthenticateAsync("Cookies");
 
-                AuthenticateResult info = await HttpContext
-                    .AuthenticateAsync("Cookies");
+                info.Properties
+                    .UpdateTokenValue("refresh_token", newRefreshToken);
 
-                info.Properties.StoreTokens(tokens);
+                info.Properties
+                    .UpdateTokenValue("access_token", newAccessToken);
 
-                await this.HttpContext
-                    .SignInAsync("Cookies", info.Principal, info.Properties);
+                info.Properties.UpdateTokenValue(
+                    "expires_at",
+                    expiresAt.ToString("o", CultureInfo.InvariantCulture)
+                );
 
-                return this.RedirectToAction("Secure", "Home"); 
+                await this.HttpContext.SignInAsync(
+                    "Cookies",
+                    info.Principal,
+                    info.Properties
+                );
+
+                return this.RedirectToAction("Secure", "Home");
             }
 
             this.ViewData["Error"] = tokenResult.Error;
@@ -174,8 +169,12 @@ namespace AspNetCoreWeb.Actions.Home
         {
             this.Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                CookieRequestCultureProvider
+                    .MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1)
+                }
             );
 
             return LocalRedirect(returnUrl);

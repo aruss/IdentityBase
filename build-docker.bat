@@ -1,0 +1,1 @@
+docker build . -t identitybasenet/identitybase:latest

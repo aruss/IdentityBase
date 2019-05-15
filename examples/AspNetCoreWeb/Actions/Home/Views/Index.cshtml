@@ -1,5 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Hosting; 
 @inject IHtmlLocalizer<SharedResources> Localizer
+@inject ApplicationOptions options
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -12,3 +14,11 @@ else
 {
     <h1>@Localizer["NotLoggedIn"]</h1>
 }
+
+    <div class="panel">
+        <h3>Application Settings</h3>
+        Api1BaseAddress: @options.Api1BaseAddress<br>
+        Authority: @options.Authority<br>
+        ClientId: @options.ClientId<br>
+        ClientSecret: @options.ClientSecret
+    </div>

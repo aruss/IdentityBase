@@ -13,15 +13,7 @@
       }
     },
     "WriteTo": [
-      { "Name": "Console" },
-      {
-        "Name": "RollingFile",
-        "Args": {
-          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-          "pathFormat": "./logs/identitybase.json",
-          "fileSizeLimitBytes": 1234567
-        }
-      }
+      { "Name": "Console" }
     ],
     "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId", "RemoteIpAddress" ]
   },
@@ -49,15 +41,13 @@
     "WindowsAuthenticationEnabled": false,
     "WindowsAuthenticationSchemes": [ "Negotiate", "NTLM" ],
     "WindowsAuthenticationDisplayName": "Windows",
-    "TempPath": "./temp",
+    "TempPath": "/tmp",
     "PluginsPath": "./plugins"
   },
   "Plugins": [
     "DefaultTheme",
     "IdentityBase.EntityFramework.Npgsql",
     "IdentityBase.EntityFramework.zDbInitializer"
-    //"IdentityBase.GoogleRecaptcha",
-    //"IdentityBase.Smtp"
   ],
   "EntityFramework": {
     "MigrateDatabase": true,
@@ -67,13 +57,13 @@
     "Npgsql": {
       "MaxRetryCount": 10,
       "MaxRetryDelay": 30,
-      "ConnectionString": "User ID=dev;Password=dev;Host=postgres;Port=5432;Database=identitybase;Pooling=true;"
+      "ConnectionString": "User ID=dev;Password=dev;Host=identitybase-postgres;Port=5432;Database=identitybase;Pooling=true;"
     },
     "SqlServer": {
-      "ConnectionString": "Server=sqlserver,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
+      "ConnectionString": "Server=identitybase-sqlserver,1401;Database=IdentityBase;User ID=dev;Password=fancyStrong(!)Password"
     },
     "MySql": {
-      "ConnectionString": "server=mysql;port=3306;database=identitybase;uid=dev;password=dev"
+      "ConnectionString": "server=identitybase-mysql;port=3306;database=identitybase;uid=dev;password=dev"
     }
   },
   "Events": {
@@ -89,37 +79,14 @@
     }
   },
   "WebApi": {
-    "AutorityUrl": "http://localhost:5000",
+    "AutorityUrl": "http://auth.identitybase.local",
     "ApiSecret": "secret",
     "EnableSwagger": true
   },
-
   "Email": {
-    "Smtp": {
-      "EmailFrom": "arusslabs@gmail.com",
-      "Host": "smtp.gmail.com",
-      "Port": "587",
-      "UseSsl": "true",
-      "UserName": "arusslabs@gmail.com",
-      "Password": "bQ$1ZLlMyr"
-    }
-  },
 
-  // https://www.google.com/recaptcha/admin#list
-  "GoogleRecaptcha": {
-    "SiteKey": "6LeMMgETAAAAAILgjQKYW3cFVrPAjOn9T9y3fX3f",
-    "Secret": "6LeMMgETAAAAAJYQKWPpeLutSqN1Kcj36KNtS7pn"
   },
+  "Sms": {
 
-  // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-2.1
-  "ThirdPartyAuth": {
-    "Google": {
-      "ClientId": "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com",
-      "ClientSecret": "wdfPY6t8H8cecgjlxud__4Gh"
-    },
-    "Facebook": {
-      "ClientId": "590243871154883",
-      "ClientSecret": "10d0077296fae227e23805513a8972e1"
-    }
   }
 }
