@@ -27,49 +27,49 @@ fi
 echo "Version: \"$VERSION\""
 
 SOURCEDIR=$DIR/src/IdentityBase.Web
-BUILDDIR=$DIR/.build/$RUNTIME/identitybase-$VERSION
+OUTPUTDIR=$DIR/artifacts/$RUNTIME/identitybase-$VERSION
 
 echo "Source directory: \"$SOURCEDIR\""
-echo "Buid directory: \"$BUILDDIR\""
+echo "Output directory: \"$OUTPUTDIR\""
 
-echo "Cleanup old build files \"$BUILDDIR\""
-rm -rf $BUILDDIR
-mkdir -p $BUILDDIR
+echo "Cleanup old artifacts \"$OUTPUTDIR\""
+rm -rf $OUTPUTDIR
+mkdir -p $OUTPUTDIR
 
 echo "Copy distribution files"
-cp -r $DIR/distribution/$RUNTIME/. $BUILDDIR
+cp -r $DIR/build/$RUNTIME/. $OUTPUTDIR
 
 echo "Cleanup, restore and compile host application"
 rm -rf $SOURCEDIR/bin 2> /dev/null
 rm -rf $SOURCEDIR/obj 2> /dev/null
-dotnet publish $SOURCEDIR/IdentityBase.Web.csproj -c Release -r $RUNTIME -o $BUILDDIR/lib
+dotnet publish $SOURCEDIR/IdentityBase.Web.csproj -c Release -r $RUNTIME -o $OUTPUTDIR/lib
 
 # Get a list of all host application assemblies
-HOSTASSEMBLIES=$( ls $BUILDDIR/lib/*.* )
+HOSTASSEMBLIES=$( ls $OUTPUTDIR/lib/*.* )
 
 echo "Loop throw all plugin source folders"
 for PATH1 in $SOURCEDIR/Plugins/*/; do
 
 	PLUGIN=$(basename $PATH1)
 	PLUGINSOURCEDIR=$SOURCEDIR/Plugins/$PLUGIN
-    PLUGINBUILDDIR=$BUILDDIR/plugins/$PLUGIN
+    PLUGINOUTPUTDIR=$OUTPUTDIR/plugins/$PLUGIN
 
 	echo "Cleanup, restore and compile plugins"
 	rm -rf $PLUGINSOURCEDIR/bin 2> /dev/null
     rm -rf $PLUGINSOURCEDIR/obj 2> /dev/null
-	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINBUILDDIR
+	dotnet publish $PLUGINSOURCEDIR/$PLUGIN.csproj -c Release -r $RUNTIME -o $PLUGINOUTPUTDIR
 
 	echo "Removing assemblies from plugin directories that are present in host application"
     for PATH2 in $HOSTASSEMBLIES; do
 
         FILE=$(basename $PATH2)
-        rm $PLUGINBUILDDIR/$FILE 2> /dev/null
+        rm $PLUGINOUTPUTDIR/$FILE 2> /dev/null
     done
 
-    rm -rf $PLUGINBUILDDIR/refs 2> /dev/null
-    rm $PLUGINBUILDDIR/*.pdb 2> /dev/null
-    rm $PLUGINBUILDDIR/apphost 2> /dev/null
-    rm $PLUGINBUILDDIR/apphost.exe 2> /dev/null
+    rm -rf $PLUGINOUTPUTDIR/refs 2> /dev/null
+    rm $PLUGINOUTPUTDIR/*.pdb 2> /dev/null
+    rm $PLUGINOUTPUTDIR/apphost 2> /dev/null
+    rm $PLUGINOUTPUTDIR/apphost.exe 2> /dev/null
 done
 
 echo "Building $RUNTIME v$VERSION successfully done"
