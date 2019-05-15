@@ -79,5 +79,3 @@ services:
 
 networks:
   default:
-    external:
-      name: identitybase
