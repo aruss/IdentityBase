@@ -36,7 +36,7 @@
                 <ul class="nav navbar-nav">
                     <li><a id="authentication" asp-controller="Home"
                            asp-action="Secure">@Localizer["Authentication"]</a></li>
-                    
+
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
@@ -45,14 +45,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li >
-                                    <a href="http://localhost:5000/account?clientId=@(AppOptions.ClientId)&culture=@(System.Globalization.CultureInfo.CurrentUICulture.Name)">@Localizer["Account"]</a>
+                                    <a href="@(AppOptions.Authority)/account?clientId=@(AppOptions.ClientId)&culture=@(System.Globalization.CultureInfo.CurrentUICulture.Name)">@Localizer["Account"]</a>
                                 </li>
                                 <li>
                                     <a asp-controller="Home"
                                        asp-action="Logout">@Localizer["Logout"]</a>
                                 </li>
                             </ul>
-                        </li>  
+                        </li>
                     }
 
                     <li>@await Html.PartialAsync("_SelectLanguagePartial")</li>
