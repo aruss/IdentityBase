@@ -38,7 +38,6 @@ RUN dotnet restore src/IdentityBase.Web/Plugins/IdentityBase.Twilio/IdentityBase
 RUN dotnet restore src/IdentityBase.Web/Plugins/DefaultTheme/DefaultTheme.csproj
 
 COPY . ./
-RUN ["ls"]
 RUN ["chmod", "+x", "./build.sh"]
 RUN ["./build.sh", "linux-x64", "latest"]
 

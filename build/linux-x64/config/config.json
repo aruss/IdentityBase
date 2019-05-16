@@ -46,7 +46,7 @@
   },
   "Plugins": [
     "DefaultTheme",
-    "IdentityBase.EntityFramework.Npgsql",
+    "IdentityBase.EntityFramework.InMemory",
     "IdentityBase.EntityFramework.zDbInitializer"
   ],
   "EntityFramework": {

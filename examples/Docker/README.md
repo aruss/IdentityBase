@@ -20,6 +20,10 @@ Before you start it add following hostnames to your host file.
 
 and run `docker-compose` to build and run the example project.
 
+If running in powershell you have to set the following environment var
+
+    COMPOSE_CONVERT_WINDOWS_PATHS=1
+
 ```sh
 docker-compose up
 ```
