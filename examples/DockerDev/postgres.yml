@@ -2,7 +2,7 @@ version: "2.0"
 
 services:
   postgres:
-    container_name: idbase-dev-postgres
+    container_name: identitybase-dev-postgres
     image: postgres:9.6.9-alpine
     restart: unless-stopped
     ports:

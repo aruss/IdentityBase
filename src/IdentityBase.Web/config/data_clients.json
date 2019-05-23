@@ -1,124 +1,6 @@
 [
   {
     "Enabled": true,
-    "ClientId": "client",
-    "ProtocolType": "oidc",
-    "ClientSecrets": [
-      {
-        "Description": null,
-        "Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
-        "Expiration": null,
-        "Type": "SharedSecret"
-      }
-    ],
-    "RequireClientSecret": true,
-    "ClientName": null,
-    "Description": null,
-    "ClientUri": null,
-    "LogoUri": null,
-    "RequireConsent": true,
-    "AllowRememberConsent": true,
-    "AllowedGrantTypes": [
-      "client_credentials"
-    ],
-    "RequirePkce": false,
-    "AllowPlainTextPkce": false,
-    "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [],
-    "PostLogoutRedirectUris": [],
-    "FrontChannelLogoutUri": null,
-    "FrontChannelLogoutSessionRequired": true,
-    "BackChannelLogoutUri": null,
-    "BackChannelLogoutSessionRequired": true,
-    "AllowOfflineAccess": false,
-    "AllowedScopes": [
-      "api1"
-    ],
-    "AlwaysIncludeUserClaimsInIdToken": false,
-    "IdentityTokenLifetime": 300,
-    "AccessTokenLifetime": 3600,
-    "AuthorizationCodeLifetime": 300,
-    "AbsoluteRefreshTokenLifetime": 2592000,
-    "SlidingRefreshTokenLifetime": 1296000,
-    "ConsentLifetime": null,
-    "RefreshTokenUsage": 1,
-    "UpdateAccessTokenClaimsOnRefresh": false,
-    "RefreshTokenExpiration": 1,
-    "AccessTokenType": 0,
-    "EnableLocalLogin": true,
-    "IdentityProviderRestrictions": [],
-    "IncludeJwtId": false,
-    "Claims": [],
-    "AlwaysSendClientClaims": false,
-    "ClientClaimsPrefix": "client_",
-    "PairWiseSubjectSalt": null,
-    "UserSsoLifetime": null,
-    "UserCodeType": null,
-    "DeviceCodeLifetime": 300,
-    "AllowedCorsOrigins": [],
-    "Properties": {}
-  },
-  {
-    "Enabled": true,
-    "ClientId": "ro.client",
-    "ProtocolType": "oidc",
-    "ClientSecrets": [
-      {
-        "Description": null,
-        "Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
-        "Expiration": null,
-        "Type": "SharedSecret"
-      }
-    ],
-    "RequireClientSecret": true,
-    "ClientName": null,
-    "Description": null,
-    "ClientUri": null,
-    "LogoUri": null,
-    "RequireConsent": true,
-    "AllowRememberConsent": true,
-    "AllowedGrantTypes": [
-      "password"
-    ],
-    "RequirePkce": false,
-    "AllowPlainTextPkce": false,
-    "AllowAccessTokensViaBrowser": false,
-    "RedirectUris": [],
-    "PostLogoutRedirectUris": [],
-    "FrontChannelLogoutUri": null,
-    "FrontChannelLogoutSessionRequired": true,
-    "BackChannelLogoutUri": null,
-    "BackChannelLogoutSessionRequired": true,
-    "AllowOfflineAccess": false,
-    "AllowedScopes": [
-      "api1"
-    ],
-    "AlwaysIncludeUserClaimsInIdToken": false,
-    "IdentityTokenLifetime": 300,
-    "AccessTokenLifetime": 3600,
-    "AuthorizationCodeLifetime": 300,
-    "AbsoluteRefreshTokenLifetime": 2592000,
-    "SlidingRefreshTokenLifetime": 1296000,
-    "ConsentLifetime": null,
-    "RefreshTokenUsage": 1,
-    "UpdateAccessTokenClaimsOnRefresh": false,
-    "RefreshTokenExpiration": 1,
-    "AccessTokenType": 0,
-    "EnableLocalLogin": true,
-    "IdentityProviderRestrictions": [],
-    "IncludeJwtId": false,
-    "Claims": [],
-    "AlwaysSendClientClaims": false,
-    "ClientClaimsPrefix": "client_",
-    "PairWiseSubjectSalt": null,
-    "UserSsoLifetime": null,
-    "UserCodeType": null,
-    "DeviceCodeLifetime": 300,
-    "AllowedCorsOrigins": [],
-    "Properties": {}
-  },
-  {
-    "Enabled": true,
     "ClientId": "mvc",
     "ProtocolType": "oidc",
     "ClientSecrets": [
@@ -145,11 +27,11 @@
     "AllowAccessTokensViaBrowser": false,
     "RedirectUris": [
       "http://localhost:5002/signin-oidc",
-      "http://web.identitybase/signin-oidc"
+      "http://identitybase.local/signin-oidc"
     ],
     "PostLogoutRedirectUris": [
       "http://localhost:5002/signout-callback-oidc",
-      "http://web.identitybase/signout-callback-oidc"
+      "http://identitybase.local/signout-callback-oidc"
     ],
     "FrontChannelLogoutUri": null,
     "FrontChannelLogoutSessionRequired": true,

@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.AspNetCore.Hosting; 
+@using Microsoft.AspNetCore.Hosting;
 @inject IHtmlLocalizer<SharedResources> Localizer
 @inject ApplicationOptions options
 @{
@@ -8,17 +8,17 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h1>@Localizer["LoggedInAs"] @User.Identity.Name</h1>
+    <h1 id="user-loggedinas">@Localizer["LoggedInAs"] @User.Identity.Name</h1>
 }
 else
 {
-    <h1>@Localizer["NotLoggedIn"]</h1>
+    <h1 id="user-notloggedin">@Localizer["NotLoggedIn"]</h1>
 }
 
-    <div class="panel">
-        <h3>Application Settings</h3>
-        Api1BaseAddress: @options.Api1BaseAddress<br>
-        Authority: @options.Authority<br>
-        ClientId: @options.ClientId<br>
-        ClientSecret: @options.ClientSecret
-    </div>
+<div class="panel" id="panel-application-options">
+    <h3>Application Settings</h3>
+    Api1BaseAddress: <span id="Api1BaseAddress">@options.Api1BaseAddress</span><br>
+    Authority: <span id="Authority">@options.Authority</span><br>
+    ClientId: <span id="ClientId">@options.ClientId</span><br>
+    ClientSecret: <span id="ClientSecret">@options.ClientSecret</span>
+</div>

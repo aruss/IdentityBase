@@ -17,7 +17,7 @@ services:
       - POSTGRES_USER=dev
 
   # Reverse proxy
-  nginx-svc:
+  nginx:
     container_name: identitybase-nginx
     restart: unless-stopped
     image: openresty/openresty:alpine

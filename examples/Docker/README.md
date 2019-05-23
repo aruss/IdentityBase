@@ -8,7 +8,8 @@ makes calls to a web service using either the user token or by using client
 credentials.
 
 To run this example you require [docker](https://www.docker.com/) installed on
-your host machine.
+your host machine. And dont forget to initialize the git submodules like descriped
+in the main readme file.
 
 Before you start it add following hostnames to your host file.
 
@@ -18,15 +19,11 @@ Before you start it add following hostnames to your host file.
 127.0.0.1 api1.identitybase.local
 ```
 
-and run `docker-compose` to build and run the example project.
+and run `docker-compose up` to build and run the example project.
 
 If running in powershell you have to set the following environment var
 
     COMPOSE_CONVERT_WINDOWS_PATHS=1
-
-```sh
-docker-compose up
-```
 
 After all the images are built and the container are started navigate to
 http://identitybase.local

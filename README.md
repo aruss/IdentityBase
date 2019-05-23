@@ -63,6 +63,14 @@ git config --global core.longpaths true
 
 Then clone the repository again.
 
+### Requirements
+
+For development you require following tools installed on
+your host machine.
+
+- Visual Studio 2017 or newer
+- Docker
+
 ### Examples
 
 If you just want to see IdentityBase in action go to examples folder and try out the

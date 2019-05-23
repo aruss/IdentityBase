@@ -43,15 +43,19 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a asp-route="AccountProfile"
+                                <li>
+                                    <a asp-route="AccountProfile"
                                        asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
                                        asp-route-returnUrl="@IdentityBaseContext.ReturnUrl"
-                                       localize="">Account</a></li>
+                                       localize="">Account</a>
+                                </li>
                                 <li role="separator" class="divider"></li>
-                                <li><a asp-route="Logout"
+                                <li>
+                                    <a asp-route="Logout"
                                        asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
                                        asp-route-logoutId="@IdentityBaseContext.LogoutId"
-                                       localize="">Logout</a></li>
+                                       localize="">Logout</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -73,6 +77,7 @@
     </div>
 
     <script src="~/DefaultTheme/js/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/DefaultTheme/js/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/DefaultTheme/js/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/DefaultTheme/js/main.min.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)

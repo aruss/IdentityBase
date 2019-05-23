@@ -2,7 +2,7 @@
 
 MySQL data provider for IdentityBase.
 
-### Requirements 
+### Requirements
 
 - MySQL
 - MariaDB
@@ -21,13 +21,13 @@ then run following command. After that change it back to "Class Library".
 dotnet ef migrations add init --context MigrationDbContext
 ```
 
-### Start mysql server by running following docker compose file 
+### Start mysql server by running following docker compose file
 
 ```yaml
 version: "2.0"
 
 services:
-  mysql-svc:
+  mysql:
     image: mysql:5.7
     restart: always
     environment:

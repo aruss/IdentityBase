@@ -1,41 +1,40 @@
 @using Microsoft.AspNetCore.Authentication
-
-<h1>Secure</h1>
-
+@{
+    ViewData["Title"] = "Secure Page";
+}
+<h1>Secure Page</h1>
 <div class="panel">
-    <a class="btn btn-primary" href="~/renew-tokens">Renew user token</a>
-    <a class="btn btn-primary" href="~/callapi-user-token">Call API using user token</a>
-    <a class="btn btn-primary" href="~/callapi-client-credentials">Call API using client crendentials</a>
+    <a id="btn-renew-tokens" class="btn btn-primary" href="~/renew-tokens">Renew user token</a>
+    <a id="btn-callapi-user-token" class="btn btn-primary" href="~/callapi-user-token">Call API using user token</a>
+    <a id="btn-callapi-client-credentials" class="btn btn-primary" href="~/callapi-client-credentials">Call API using client crendentials</a>
     <!--<a class="btn btn-primary" href="~/invite">Invite User Account</a>-->
 </div>
-
 @{
     string it = await Context.GetTokenAsync("id_token");
     string at = await Context.GetTokenAsync("access_token");
     string rt = await Context.GetTokenAsync("refresh_token");
 }
-
 <div>
     <dl>
         @if (it != null)
         {
             <dt>id_token</dt>
-            <dd>@it</dd>
+            <dd id="id_token">@it</dd>
         }
         @if (at != null)
         {
             <dt>access_token</dt>
-            <dd>@at</dd>
+            <dd id="access_token">@at</dd>
         }
         @if (rt != null)
         {
             <dt>refresh_token</dt>
-            <dd>@rt</dd>
+            <dd id="refresh_token">@rt</dd>
         }
         @foreach (var claim in User.Claims)
         {
             <dt>@claim.Type</dt>
-            <dd>@claim.Value</dd>
+            <dd id="claim-@claim.Type">@claim.Value</dd>
         }
     </dl>
 </div>
