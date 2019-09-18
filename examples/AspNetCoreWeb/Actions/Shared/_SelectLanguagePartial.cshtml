@@ -2,29 +2,29 @@
 @using Microsoft.AspNetCore.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
-
 @inject IHtmlLocalizer<SharedResources> Localizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
-
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var cultureItems = LocOptions.Value.SupportedUICultures.ToList();
     var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
 }
-
-<li class="dropdown" id="menu-language-dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        @Localizer["Language"] <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu">
+<li class="nav-item dropdown" id="menu-language-dropdown">
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       id="dropdown02"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">@Localizer["Language"]<b class="caret"></b></a>
+    <div class="dropdown-menu" aria-labelledby="dropdown02">
         @foreach (var item in cultureItems)
         {
-            <li id="menu-language-@item.Name">
-                <a asp-controller="Home"
-                   asp-action="SetLanguage"
-                   asp-route-returnUrl="@returnUrl"
-                   asp-route-culture="@item.Name">@item.DisplayName</a>
-            </li>
+            <a id="menu-language-@item.Name"
+               class="dropdown-item"
+               asp-controller="Home"
+               asp-action="SetLanguage"
+               asp-route-returnUrl="@returnUrl"
+               asp-route-culture="@item.Name">@item.DisplayName</a>
         }
-    </ul>
+    </div>
 </li>

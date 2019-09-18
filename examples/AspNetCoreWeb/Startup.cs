@@ -69,7 +69,7 @@ namespace AspNetCoreWeb
                     r.GetRequiredService<IHttpClientFactory>();
 
                 return new DiscoveryCache(
-                    appOptions.Authority,                    
+                    appOptions.Authority,
                     () => factory.CreateClient(),
                     new DiscoveryPolicy()
                     {

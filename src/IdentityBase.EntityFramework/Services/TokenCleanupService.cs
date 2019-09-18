@@ -83,7 +83,7 @@ namespace IdentityBase.EntityFramework.Services
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    this._logger.LogDebug("CancellationRequested. Exiting.");
+                    this._logger.LogDebug("CancellationRequested: exiting");
                     break;
                 }
 
@@ -93,20 +93,20 @@ namespace IdentityBase.EntityFramework.Services
                 }
                 catch (TaskCanceledException)
                 {
-                    this._logger.LogDebug("TaskCanceledException. Exiting.");
+                    this._logger.LogDebug("TaskCanceledException: exiting");
                     break;
                 }
                 catch (Exception ex)
                 {
                     this._logger.LogError(
-                        "Task.Delay exception: {0}. Exiting.",
+                        "Task.Delay exception: {0}: exiting",
                         ex.Message);
                     break;
                 }
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    this._logger.LogDebug("CancellationRequested. Exiting.");
+                    this._logger.LogDebug("CancellationRequested: exiting");
                     break;
                 }
 

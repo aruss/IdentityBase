@@ -120,9 +120,6 @@
   <data name="Account" xml:space="preserve">
     <value>Benutzerkonto</value>
   </data>
-  <data name="Authentication" xml:space="preserve">
-    <value>Authentifizierung</value>
-  </data>
   <data name="Language" xml:space="preserve">
     <value>Sprache</value>
   </data>
@@ -134,5 +131,8 @@
   </data>
   <data name="NotLoggedIn" xml:space="preserve">
     <value>Nicht eingelogt</value>
+  </data>
+  <data name="SecurePage" xml:space="preserve">
+    <value>Geschützte Seite</value>
   </data>
 </root>

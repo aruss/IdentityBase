@@ -36,9 +36,6 @@ namespace AspNetCoreWeb.Actions.Home
 
         public IActionResult Index()
         {
-            this._logger.LogInformation("CurrentUICulture " +
-                CultureInfo.CurrentUICulture);
-
             return this.View();
         }
 
@@ -95,7 +92,7 @@ namespace AspNetCoreWeb.Actions.Home
         [HttpGet("/renew-tokens")]
         public async Task<IActionResult> RenewTokens()
         {
-            DiscoveryResponse disco = await this._discoveryCache.GetAsync();
+            DiscoveryDocumentResponse disco = await this._discoveryCache.GetAsync();
 
             if (disco.IsError)
             {

@@ -19,6 +19,19 @@ namespace IdentityBase
 
     public static class StartupLocalization
     {
+        /*
+        services.AddJsonFileBasedLocalization(options =>
+        {
+            options.DefaultCulture = this._applicationOptions.DefaultCulture;
+        }, options =>
+        {
+            options.RequestCultureProviders = new[]
+            {
+                new RequestCultureProvider()
+            };
+        });
+        */
+
         public static void AddLocalization(
            this IServiceCollection services,
            ApplicationOptions appOptions,
@@ -39,10 +52,10 @@ namespace IdentityBase
 
                 IResourceStore resourceStore =
                     provider.GetRequiredService<IResourceStore>();
-                
+
                 IEnumerable<string> cultures =
                     resourceStore.GetAllLocalizationCulturesAsync().Result;
-                
+
                 options.DefaultRequestCulture =
                     new RequestCulture(appOptions.DefaultCulture);
 

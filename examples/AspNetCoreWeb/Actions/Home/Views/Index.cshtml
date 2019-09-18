@@ -5,20 +5,21 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<h1 class="mt-4" >Home</h1>
 @if (User.Identity.IsAuthenticated)
 {
-    <h1 id="user-loggedinas">@Localizer["LoggedInAs"] @User.Identity.Name</h1>
+    <h3 id="user-loggedinas">@Localizer["LoggedInAs"] @User.Identity.Name</h3>
 }
 else
 {
-    <h1 id="user-notloggedin">@Localizer["NotLoggedIn"]</h1>
+    <h3 id="user-notloggedin">@Localizer["NotLoggedIn"]</h3>
 }
 
+<br/>
 <div class="panel" id="panel-application-options">
     <h3>Application Settings</h3>
-    Api1BaseAddress: <span id="Api1BaseAddress">@options.Api1BaseAddress</span><br>
-    Authority: <span id="Authority">@options.Authority</span><br>
-    ClientId: <span id="ClientId">@options.ClientId</span><br>
-    ClientSecret: <span id="ClientSecret">@options.ClientSecret</span>
+<pre>Api1BaseAddress: <span id="Api1BaseAddress">@options.Api1BaseAddress</span>
+Authority: <span id="Authority">@options.Authority</span>
+ClientId: <span id="ClientId">@options.ClientId</span>
+ClientSecret: <span id="ClientSecret">@options.ClientSecret</span></pre>
 </div>

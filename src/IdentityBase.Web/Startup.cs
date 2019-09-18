@@ -12,6 +12,7 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace IdentityBase
     using ServiceBase;
     using ServiceBase.DependencyInjection;
     using ServiceBase.Extensions;
+    using ServiceBase.Localization;
     using ServiceBase.Logging;
     using ServiceBase.Mvc.Theming;
     using ServiceBase.Plugins;
@@ -60,6 +62,8 @@ namespace IdentityBase
             this._applicationOptions = this._configuration.GetSection("App")
                 .Get<ApplicationOptions>() ?? new ApplicationOptions();
 
+            #region Init plugin assembly loader
+
             // TODO: Add as extension to applicationoptions
             this._pluginsPath = this._applicationOptions.PluginsPath
                 .GetFullPath(this._environment.ContentRootPath);
@@ -70,8 +74,10 @@ namespace IdentityBase
 
             PluginAssembyLoader.LoadAssemblies(
                 this._pluginsPath,
-                loggerFactory,
+                this._logger,
                 whiteList);
+
+            #endregion
         }
 
         /// <summary>
@@ -85,7 +91,7 @@ namespace IdentityBase
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            this._logger.LogInformation("Configure services.");
+            this._logger.LogInformation("Configure services");
 
             services.AddSingleton(this._configuration);
             services.AddSingleton(this._applicationOptions);
@@ -95,11 +101,7 @@ namespace IdentityBase
                 this._logger,
                 this._environment);
 
-            services.AddFactory<
-                IdentityBaseContext,
-                IdentityBaseContextIdSrvFactory>(
-                    ServiceLifetime.Scoped,
-                    ServiceLifetime.Singleton);
+            services.AddFactory<IdentityBaseContext, IdentityBaseContextIdSrvFactory>();
 
             services.AddLocalization(
                 this._applicationOptions,
@@ -113,31 +115,35 @@ namespace IdentityBase
             services.AddDefaultForms();
             services.AddHttpClient();
 
-            services.AddSingleton<
-                IEmailProviderInfoService, DefaultEmailProviderInfoService>(); 
+            services.AddSingleton<IEmailProviderInfoService, DefaultEmailProviderInfoService>();
 
             services.AddAntiforgery((options) =>
             {
-                options.Cookie.Name = "idb.srf"; 
+                options.Cookie.Name = "idb.srf";
             });
-            
-            services
-                .AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
 
-            services
-                .AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
+            services.AddSingleton<IDateTimeAccessor, DateTimeAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddDistributedMemoryCache();
 
-            IThemeInfoProvider provider =
-                new ThemeInfoProvider(this._httpContextAccessor);
-
+            IThemeInfoProvider provider = new ThemeInfoProvider(this._httpContextAccessor);
             services.AddSingleton(provider);
             services.AddPlugins();
-            services.AddPluginsMvc(provider,
-                this._applicationOptions.PluginsPath);
 
-            services.AddExternalProviders(this._configuration, this._logger);                 
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
+                .AddRazorOptions((razor) =>
+            {
+                razor.ViewLocationExpanders.Clear();
+                razor.ViewLocationExpanders.Add(
+                    new ThemeViewLocationExpander(provider, this._applicationOptions.PluginsPath));
+            });
+
+            services.AddPluginsMvc(this._logger);
+
+            services.AddExternalProviders(this._configuration, this._logger);
 
             this.OverrideServices?.Invoke(services);
 
@@ -145,7 +151,7 @@ namespace IdentityBase
             services.ValidateEmailSenderServices(this._logger);
             services.ValidateEventServices(this._logger);
 
-            this._logger.LogInformation("Services configured.");
+            this._logger.LogInformation("Services configured");
 
             return services.BuildServiceProvider();
         }
@@ -164,11 +170,11 @@ namespace IdentityBase
         /// </param>
         public virtual void Configure(IApplicationBuilder app)
         {
-            this._logger.LogInformation("Configure application.");
+            this._logger.LogInformation("Configure application");
 
             IHostingEnvironment env = app.ApplicationServices
                 .GetRequiredService<IHostingEnvironment>();
-            
+
             /*app.Use(async (context, next) =>
             {
                 context.Request.Scheme = "http";
@@ -190,11 +196,11 @@ namespace IdentityBase
             }
 
             app.UseIdentityServer();
-            app.UsePlugins();
-            app.UsePluginsMvc();
             app.UsePluginsStaticFiles(this._pluginsPath);
+            app.UsePluginsMvc();
+            app.UsePlugins();
 
-            this._logger.LogInformation("Configure application.");
+            this._logger.LogInformation("Configure application");
         }
     }
 }

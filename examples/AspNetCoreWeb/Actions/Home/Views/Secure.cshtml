@@ -2,8 +2,8 @@
 @{
     ViewData["Title"] = "Secure Page";
 }
-<h1>Secure Page</h1>
-<div class="panel">
+<h1 class="mt-4">Secure Page</h1>
+<div class="panel mb-3">
     <a id="btn-renew-tokens" class="btn btn-primary" href="~/renew-tokens">Renew user token</a>
     <a id="btn-callapi-user-token" class="btn btn-primary" href="~/callapi-user-token">Call API using user token</a>
     <a id="btn-callapi-client-credentials" class="btn btn-primary" href="~/callapi-client-credentials">Call API using client crendentials</a>
@@ -19,22 +19,22 @@
         @if (it != null)
         {
             <dt>id_token</dt>
-            <dd id="id_token">@it</dd>
+            <dd><pre id="id_token">@it</pre></dd>
         }
         @if (at != null)
         {
             <dt>access_token</dt>
-            <dd id="access_token">@at</dd>
+            <dd><pre id="access_token">@at</pre></dd>
         }
         @if (rt != null)
         {
             <dt>refresh_token</dt>
-            <dd id="refresh_token">@rt</dd>
+            <dd><pre id="refresh_token">@rt</pre></dd>
         }
         @foreach (var claim in User.Claims)
         {
             <dt>@claim.Type</dt>
-            <dd id="claim-@claim.Type">@claim.Value</dd>
+            <dd><pre id="claim-@claim.Type">@claim.Value</pre></dd>
         }
     </dl>
 </div>

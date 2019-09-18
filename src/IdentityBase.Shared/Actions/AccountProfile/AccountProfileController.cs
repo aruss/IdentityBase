@@ -28,7 +28,6 @@ namespace IdentityBase.Actions.Account
             IdentityBaseContext identityBaseContext,
             UserAccountService userAccountService,
             AuthenticationService authService)
-
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;

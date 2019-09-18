@@ -19,8 +19,7 @@ namespace IdentityBase
 
             WebHostWrapper.Start<Startup>(args, (services) =>
             {
-                services
-                    .AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             });
         }
     }

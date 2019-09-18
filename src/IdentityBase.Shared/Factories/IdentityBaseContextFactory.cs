@@ -15,6 +15,10 @@ namespace IdentityBase
     using ServiceBase.DependencyInjection;
     using ServiceBase.Extensions;
 
+    // TODO: dont use DI factories to create context object
+    //       use middleware to load data in the context and store the context
+    //       not in the service collection, put it in httpcontext items or something.
+
     public class IdentityBaseContextBasicFactory
         : IServiceFactory<IdentityBaseContext>
     {
@@ -30,7 +34,7 @@ namespace IdentityBase
             this._clientStore = clientStore;
         }
 
-        public IdentityBaseContext Build()
+        public virtual IdentityBaseContext Build()
         {
             return this.GetIdentityBaseContextAsync().Result;
         }
@@ -101,7 +105,7 @@ namespace IdentityBase
             this._clientStore = clientStore;
         }
 
-        public IdentityBaseContext Build()
+        public override IdentityBaseContext Build()
         {
             return this.GetIdentityBaseContextAsync().Result;
         }

@@ -37,6 +37,7 @@ namespace IdentityBase.EntityFramework
                         {
                             break;
                         }
+
                         logger.LogWarning("Cannot connect to database");
                     }
                     catch (System.Exception ex)

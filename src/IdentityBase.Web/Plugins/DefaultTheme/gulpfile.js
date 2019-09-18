@@ -5,50 +5,35 @@ var browserSync = require('browser-sync');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
-gulp.task('watch', ['build'], function () {
-
-    return gulp.watch([
-        './Public/css/**/*.scss',
-        './Public/css/**/_*.scss'
-    ], ['styles'])
-});
-
 gulp.task('styles', function () {
 
-    return gulp.src('./Public/css/**/*.scss')
+    return gulp.src('./wwwroot/css/**/*.scss')
+        .pipe(sourcemaps.init())
+        .pipe(concat('theme.min.css'))
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-        .pipe(gulp.dest('./Public/css/'));
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./wwwroot/css/'));
 });
 
 gulp.task('scripts', function() {
     return gulp.src([
-        './node_modules/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js',
-        './Public/js/theme.js'
+        './node_modules/jquery/dist/jquery.js',
+        './node_modules/jquery-validation/dist/jquery.validate.js',
+        './node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js',
+        './node_modules/bootstrap/dist/js/bootstrap.js',
+        './wwwroot/js/theme.js'
     ])
         .pipe(sourcemaps.init())
-        .pipe(concat('main.min.js'))
+        .pipe(concat('theme.min.js'))
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./Public/js/'));
+        .pipe(gulp.dest('./wwwroot/js/'));
 });
 
 gulp.task('lib', function () {
 
-    // jQuery
-    gulp.src('./node_modules/jquery/dist/jquery.min.*')
-        .pipe(gulp.dest('./Public/js'));
+    // copy here different required junk from node_modules folder
 
-    // jQuery validate
-    gulp.src('./node_modules/jquery-validation/dist/jquery.validate.min.*')
-        .pipe(gulp.dest('./Public/js'));
-
-    // jQuery validate unobstrusive
-    gulp.src('./node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.*')
-        .pipe(gulp.dest('./Public/js'));
-
-    // Bootstrap
-    // No need to copy bootstrap
-    // ./node_modules/bootstrap-sass
 });
 
 gulp.task('build', ['lib', 'styles', 'scripts']);
@@ -59,15 +44,29 @@ gulp.task('serve', ['build'], function () {
         proxy: "http://localhost:5000",
     });
 
+    watchStyles();
+    watchScripts();
+
     gulp.watch([
         './Views/**/*.cshtml',
-        './Public/js/**/*.js',
-        './Public/css/**/*.css'
+        './wwwroot/js/**/*.min.js',
+        './wwwroot/css/**/*.min.css'
     ]).on('change', browserSync.reload);
-
-    gulp.watch([
-        './Public/css/**/*.scss',
-        './Public/css/**/_*.scss'
-    ], ['styles']);
 });
 
+gulp.task('watch', ['build'], function () {
+    watchStyles();
+    watchScripts();
+});
+
+function watchStyles() {
+    gulp.watch([
+        './wwwroot/css/**/*.scss'
+    ], ['styles']);
+}
+
+function watchScripts() {
+    gulp.watch([
+        './wwwroot/js/**/*.js'
+    ], ['scripts']);
+}

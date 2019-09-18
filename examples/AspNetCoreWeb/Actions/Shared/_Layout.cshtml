@@ -1,90 +1,91 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<SharedResources> Localizer
 @inject ApplicationOptions AppOptions;
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MVC Example</title>
-
-    <environment names="Development">
+    <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" id="menu-toggle">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand" id="menu-home">MVC Example</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li id="menu-secure">
-                        <a asp-controller="Home"
-                           asp-action="Secure">@Localizer["Authentication"]</a>
+            <a class="navbar-brand" href="/"><span class="navbar-brand"> <span localize="">MvcHybrid</span></span></a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarsExampleDefault"
+                    aria-controls="navbarsExampleDefault"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Home"
+                           asp-action="Secure">@Localizer["SecurePage"]</a>
                     </li>
+                </ul>
+
+                <ul class="navbar-nav my-2 my-lg-0">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="dropdown" id="menu-user-dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                @User.Identity.Name <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li id="menu-account">
-                                    <a href="@(AppOptions.Authority)/account?clientId=@(AppOptions.ClientId)&culture=@(System.Globalization.CultureInfo.CurrentUICulture.Name)">@Localizer["Account"]</a>
-                                </li>
-                                <li id="menu-logout">
-                                    <a asp-controller="Home"
-                                       asp-action="Logout">@Localizer["Logout"]</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               id="dropdown01"
+                               data-toggle="dropdown"
+                               aria-haspopup="true"
+                               aria-expanded="false">@User.Identity.Name</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                <a id="menu-account" class="dropdown-item" href="@(AppOptions.Authority)/account?clientId=@(AppOptions.ClientId)&culture=@(System.Globalization.CultureInfo.CurrentUICulture.Name)">@Localizer["Account"]</a>
+                                <a id="menu-logout" class="dropdown-item" asp-controller="Home" asp-action="Logout">@Localizer["Logout"]</a>
+                            </div>
                         </li>
                     }
                     <li>@await Html.PartialAsync("_SelectLanguagePartial")</li>
                 </ul>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
+    </nav>
+    <main role="main" class="container">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - MvcHybrid</p>
-        </footer>
-    </div>
+    </main>
 
-    <environment names="Development">
+    <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
         </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

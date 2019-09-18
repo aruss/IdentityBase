@@ -71,7 +71,7 @@ namespace IdentityBase.EntityFramework.Stores
             catch (DbUpdateConcurrencyException ex)
             {
                 this._logger.LogWarning(
-                    "exception updating {persistedGrantKey} persisted grant in database: {error}",
+                    "Exception updating {persistedGrantKey} persisted grant in database: {error}",
                     token.Key, ex.Message);
             }
 
@@ -130,7 +130,7 @@ namespace IdentityBase.EntityFramework.Stores
             if (persistedGrant != null)
             {
                 this._logger.LogDebug(
-                    "removing {persistedGrantKey} persisted grant from database",
+                    "Removing {persistedGrantKey} persisted grant from database",
                     key);
 
                 this._context.PersistedGrants.Remove(persistedGrant);
@@ -142,7 +142,7 @@ namespace IdentityBase.EntityFramework.Stores
                 catch (DbUpdateConcurrencyException ex)
                 {
                     this._logger.LogInformation(
-                        "exception removing {persistedGrantKey} persisted grant from database: {error}",
+                        "Exception removing {persistedGrantKey} persisted grant from database: {error}",
                         key,
                         ex.Message);
                 }
@@ -150,7 +150,7 @@ namespace IdentityBase.EntityFramework.Stores
             else
             {
                 this._logger.LogDebug(
-                    "no {persistedGrantKey} persisted grant found in database",
+                    "No {persistedGrantKey} persisted grant found in database",
                     key);
             }
 
@@ -228,7 +228,7 @@ namespace IdentityBase.EntityFramework.Stores
             catch (DbUpdateConcurrencyException ex)
             {
                 this._logger.LogInformation(
-                    "exception removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}, grantType {persistedGrantType}: {error}",
+                    "Exception removing {persistedGrantCount} persisted grants from database for subject {subjectId}, clientId {clientId}, grantType {persistedGrantType}: {error}",
                     persistedGrants.Count,
                     subjectId,
                     clientId,

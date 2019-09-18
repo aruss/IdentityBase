@@ -12,7 +12,6 @@ namespace IdentityBase.EntityFramework.DbInitializer
     using IdentityServer4.Models;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using ServiceBase.Extensions;
@@ -166,13 +165,13 @@ namespace IdentityBase.EntityFramework.DbInitializer
                 string path = Path.Combine(rootPath, "data_clients.json");
                 this._logger.LogDebug($"Loading file: {path}");
 
-                var clients = JsonConvert
+                List<Client> clients = JsonConvert
                     .DeserializeObject<List<Client>>(File.ReadAllText(path));
 
                 foreach (var client in clients)
                 {
-                    var entity = client.ToEntity();
-                    entity.Id = System.Guid.NewGuid();
+                    Entities.Client entity = client.ToEntity();
+                    entity.Id = Guid.NewGuid();
 
                     this._configurationDbContext.Clients.Add(entity);
                 }
@@ -185,7 +184,7 @@ namespace IdentityBase.EntityFramework.DbInitializer
                 string path = Path.Combine(rootPath, "data_users.json");
                 this._logger.LogDebug($"Loading file: {path}");
 
-                var userAccounts = JsonConvert
+                List<UserAccount> userAccounts = JsonConvert
                     .DeserializeObject<List<UserAccount>>(
                         File.ReadAllText(path));
 

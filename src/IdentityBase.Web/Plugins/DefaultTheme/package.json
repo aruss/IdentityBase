@@ -4,19 +4,19 @@
   "version": "1.0.0",
   "description": "Default theme for IdentityBase frontend.",
   "scripts": {
-    "build": "node_modules/gulp/bin/gulp.js build"
+    "watch": "gulp build",
+    "build": "gulp build"
   },
   "author": "Russlan Akiev",
   "devDependencies": {
-    "bootstrap-sass": "^3.3.7",
-    "browser-sync": "^2.26.3",
+    "bootstrap": "^4.3.1",
+    "browser-sync": "^2.26.7",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1",
-    "jquery": "^3.3.1",
-    "jquery-validation": "^1.19.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "jquery-validation": "^1.19.1",
     "jquery-validation-unobtrusive": "^3.2.11"
   },
   "dependencies": {}

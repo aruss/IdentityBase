@@ -29,7 +29,6 @@ namespace IdentityBase.Actions.AccountChangePassword
             UserAccountService userAccountService,
             IUserAccountStore userAccountStore,
             AuthenticationService authService)
-
         {
             this.InteractionService = interaction;
             this.Localizer = localizer;

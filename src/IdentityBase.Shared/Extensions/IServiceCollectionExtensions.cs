@@ -17,16 +17,11 @@ namespace IdentityBase
         {
             if (!services.IsAdded<ITokenizer>())
             {
-                services.AddScoped<ITokenizer, DefaultTokenizer>(); 
+                services.AddScoped<ITokenizer, DefaultTokenizer>();
             }
 
             services.AddScoped<IEmailService, DefaultEmailService>();
-
-            services.AddFactory<
-                DefaultEmailServiceOptions,
-                DefaultEmailServiceOptionsFactory>(
-                    ServiceLifetime.Scoped,
-                    ServiceLifetime.Singleton); 
+            services.AddFactory<DefaultEmailServiceOptions, DefaultEmailServiceOptionsFactory>();
         }
     }
 }

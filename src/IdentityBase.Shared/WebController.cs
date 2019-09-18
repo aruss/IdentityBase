@@ -10,6 +10,24 @@ namespace IdentityBase.Mvc
 
     public abstract class WebController : Controller
     {
+        public WebController()
+        {
+
+        }
+
+        public WebController(
+            IStringLocalizer localizer,
+            ILogger logger,
+            IIdentityServerInteractionService interactionService,
+            IdentityBaseContext identityBaseContext
+        )
+        {
+            this.Localizer = localizer;
+            this.Logger = logger;
+            this.InteractionService = interactionService;
+            this.IdentityBaseContext = identityBaseContext;
+        }
+
         public IStringLocalizer Localizer { get; set; }
         public ILogger Logger { get; set; }
         public IIdentityServerInteractionService InteractionService { get; set; }

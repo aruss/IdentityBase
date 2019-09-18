@@ -33,10 +33,7 @@ namespace DefaultTheme
                 pluginName);
 
             // TODO: Move to install action 
-            string localePath = Path.Combine(
-                pluginPath,
-                "Resources",
-                "Localization");
+            string localePath = Path.Combine(pluginPath, "Resources", "Localization");
 
             resourceStore
                 .LoadLocalizationFromDirectoryAsync(

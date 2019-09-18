@@ -8,9 +8,8 @@ namespace IdentityBase.Services
     using IdentityBase.Configuration;
     using IdentityBase.Models;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
-    using Microsoft.AspNetCore.Mvc.Routing;
+    using Microsoft.AspNetCore.Routing;
     using ServiceBase.Extensions;
     using ServiceBase.Notification.Email;
 
@@ -50,9 +49,6 @@ namespace IdentityBase.Services
                  .GetBaseUrl()
                  .RemoveTrailingSlash();
 
-            UrlHelper urlHelper =
-                new UrlHelper(_actionContextAccessor.ActionContext);
-
             IdentityBaseContext idbContext = this._httpContextAccessor
                  .HttpContext.GetIdentityBaseContext();
 
@@ -61,15 +57,15 @@ namespace IdentityBase.Services
                 userAccount.Email,
                 new
                 {
-                    ConfirmUrl = baseUrl + this.GetUrl(
-                        urlHelper,
-                        "RegisterConfirm",
+                    ConfirmUrl = this.GetUrl(
+                        baseUrl,
+                        "/register/confirm",
                         userAccount.VerificationKey,
                         idbContext.Client.ClientId),
 
-                    CancelUrl = baseUrl + this.GetUrl(
-                        urlHelper,
-                        "RegisterCancel",
+                    CancelUrl = this.GetUrl(
+                        baseUrl,
+                        "/register/cancel",
                         userAccount.VerificationKey,
                         idbContext.Client.ClientId),
                 },
@@ -83,10 +79,7 @@ namespace IdentityBase.Services
             string baseUrl = this._httpContextAccessor
                  .HttpContext
                  .GetBaseUrl()
-                 .RemoveTrailingSlash(); 
-
-            UrlHelper urlHelper =
-                new UrlHelper(_actionContextAccessor.ActionContext);
+                 .RemoveTrailingSlash();
 
             IdentityBaseContext idbContext = this._httpContextAccessor
                  .HttpContext.GetIdentityBaseContext();
@@ -96,15 +89,15 @@ namespace IdentityBase.Services
                 userAccount.Email,
                 new
                 {
-                    ConfirmUrl = baseUrl + this.GetUrl(
-                        urlHelper,
-                        "RecoverConfirm",
+                    ConfirmUrl = this.GetUrl(
+                        baseUrl,
+                        "/recover/confirm",
                         userAccount.VerificationKey,
                         idbContext.Client.ClientId),
 
-                    CancelUrl = baseUrl + this.GetUrl(
-                        urlHelper,
-                        "RecoverCancel",
+                    CancelUrl = this.GetUrl(
+                        baseUrl,
+                        "/recover/cancel",
                         userAccount.VerificationKey,
                         idbContext.Client.ClientId),
                 },
@@ -120,12 +113,9 @@ namespace IdentityBase.Services
                  .GetBaseUrl()
                  .RemoveTrailingSlash();
 
-            UrlHelper urlHelper =
-                new UrlHelper(_actionContextAccessor.ActionContext);
-
             IdentityBaseContext idbContext = this._httpContextAccessor
                  .HttpContext.GetIdentityBaseContext();
-            
+
             await this._emailService.SendEmailAsync(
                 EmailTemplates.UserAccountInvited,
                 userAccount.Email,
@@ -137,7 +127,7 @@ namespace IdentityBase.Services
                         userAccount.VerificationKey,
                         idbContext.Client.ClientId),
 
-                    CancelUrl = baseUrl + this.GetUrl(
+                    CancelUrl = this.GetUrl(
                         baseUrl,
                         "/register/cancel",
                         userAccount.VerificationKey,
@@ -148,26 +138,12 @@ namespace IdentityBase.Services
         }
 
         private string GetUrl(
-            string baseUrl,
-            string path,
-            string verificationKey,
-            string clientId)
+             string baseUrl,
+             string path,
+             string verificationKey,
+             string clientId)
         {
             return $"{baseUrl}{path}?key={verificationKey}&clientId={clientId}&culture={CultureInfo.CurrentUICulture.Name}";
-        }
-
-        private string GetUrl(
-            UrlHelper urlHelper,
-            string actionName,
-            string verificationKey,
-            string clientId)
-        {
-            return urlHelper.RouteUrl(actionName, new
-            {
-                key = verificationKey,
-                clientId = clientId,
-                culture = CultureInfo.CurrentUICulture.Name
-            });
         }
     }
 }

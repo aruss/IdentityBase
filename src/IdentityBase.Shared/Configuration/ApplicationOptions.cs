@@ -123,6 +123,6 @@ namespace IdentityBase.Configuration
         /// user account, instead a generic message will be displayed and a
         /// mail with further information will be sent to the user account email.
         /// </summary>
-        public bool ObfuscateUserAccountPresence { get; set; } = false; 
+        public bool ObfuscateUserAccountPresence { get; set; } = false;
     }
 }

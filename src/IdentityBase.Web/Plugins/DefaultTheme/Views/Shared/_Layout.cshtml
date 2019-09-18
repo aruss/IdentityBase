@@ -6,67 +6,70 @@
         var user = this.Context.User;
         name = user?.FindFirst("name")?.Value;
     }
-}
 
-<!DOCTYPE html>
-<html>
+    string clientUri = IdentityBaseContext?.Client?.ClientUri;
+}
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>IdentityBase</title>
     <link rel="icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/DefaultTheme/favicon.ico" />
-    <link rel="stylesheet" href="~/DefaultTheme/css/main.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/DefaultTheme/css/theme.min.css" asp-append-version="true" />
 </head>
 <body>
-
-    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed"
-                        data-toggle="collapse"
-                        data-target="#navbar"
-                        aria-expanded="false"
-                        aria-controls="navbar">
-                    <span class="sr-only" localize="">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <span class="navbar-brand"><img src="~/DefaultTheme/icon.png" class="icon-banner"> <span localize="">IdentityBase</span></span>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
+            <a class="navbar-brand" href="@clientUri">
+                <img src="~/DefaultTheme/icon.png"
+                     class="icon-banner"> <span class="navbar-brand"> <span localize="">IdentityBase</span></span>
+            </a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarsExampleDefault"
+                    aria-controls="navbarsExampleDefault"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto"></ul>
                 @if (name != null)
                 {
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a asp-route="AccountProfile"
-                                       asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
-                                       asp-route-returnUrl="@IdentityBaseContext.ReturnUrl"
-                                       localize="">Account</a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a asp-route="Logout"
-                                       asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
-                                       asp-route-logoutId="@IdentityBaseContext.LogoutId"
-                                       localize="">Logout</a>
-                                </li>
-                            </ul>
+                    <ul class="navbar-nav my-2 my-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               id="dropdown01"
+                               data-toggle="dropdown"
+                               aria-haspopup="true"
+                               aria-expanded="false">@name</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                <a class="dropdown-item"
+                                   asp-route="AccountProfile"
+                                   asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
+                                   asp-route-returnUrl="@IdentityBaseContext.ReturnUrl"
+                                   localize="">Account</a>
+                                <a class="dropdown-item"
+                                   asp-route="Logout"
+                                   asp-route-clientId="@IdentityBaseContext.Client?.ClientId"
+                                   asp-route-logoutId="@IdentityBaseContext.LogoutId"
+                                   localize="">Logout</a>
+                            </div>
                         </li>
                     </ul>
                 }
             </div>
         </div>
     </nav>
-
-    <div class="container body-content">
+    <main role="main" class="container mt-2">
         @RenderBody()
-        @if (IdentityBaseContext.Client != null && IdentityBaseContext.Client.ClientUri != null)
+        @if (clientUri != null)
         {
             <div class="page-footer">
                 <span>
@@ -74,12 +77,8 @@
                 </span>
             </div>
         }
-    </div>
-
-    <script src="~/DefaultTheme/js/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/DefaultTheme/js/jquery.validate.min.js" asp-append-version="true"></script>
-    <script src="~/DefaultTheme/js/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-    <script src="~/DefaultTheme/js/main.min.js" asp-append-version="true"></script>
+    </main>
+    <script src="~/DefaultTheme/js/theme.min.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
