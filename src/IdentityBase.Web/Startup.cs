@@ -12,6 +12,7 @@ namespace IdentityBase
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.HttpOverrides;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Caching.Memory;
@@ -21,7 +22,6 @@ namespace IdentityBase
     using ServiceBase;
     using ServiceBase.DependencyInjection;
     using ServiceBase.Extensions;
-    using ServiceBase.Localization;
     using ServiceBase.Logging;
     using ServiceBase.Mvc.Theming;
     using ServiceBase.Plugins;
@@ -100,6 +100,16 @@ namespace IdentityBase
                 this._configuration,
                 this._logger,
                 this._environment);
+
+            if (this._applicationOptions.Proxy)
+            {
+                services.Configure<ForwardedHeadersOptions>(options =>
+                {
+                    options.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                    options.KnownNetworks.Clear();
+                    options.KnownProxies.Clear();
+                });
+            }
 
             services.AddFactory<IdentityBaseContext, IdentityBaseContextIdSrvFactory>();
 
@@ -181,6 +191,11 @@ namespace IdentityBase
                 context.Request.Host = new HostString("auth.identitybase.local");
                 await next.Invoke();
             });*/
+
+            if (this._applicationOptions.Proxy)
+            {
+                app.UseForwardedHeaders();
+            }
 
             app.UseLocalization();
             app.UseMiddleware<RequestIdMiddleware>();

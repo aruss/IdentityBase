@@ -9,10 +9,15 @@ namespace IdentityBase.Configuration
     public class ApplicationOptions
     {
         /// <summary>
+        /// Set to true if hosted behind a proxy
+        /// </summary>
+        public bool Proxy { get; set; } = false;
+
+        /// <summary>
         /// Location of temporary folder.
         /// </summary>
         public string TempPath { get; set; } = "./temp";
-        
+
         // Local account options
 
         public int PasswordHashingIterationCount { get; set; } = 0;
@@ -51,7 +56,7 @@ namespace IdentityBase.Configuration
         /// Login user automatically after account confirmation
         /// </summary>
         public bool LoginAfterAccountConfirmation { get; set; } = true;
-        
+
         /// <summary>
         /// Login user automatically after successful recovery
         /// </summary>
@@ -82,7 +87,7 @@ namespace IdentityBase.Configuration
         /// email matches.
         /// </summary>
         public bool AutomaticAccountMerge { get; set; } = true;
-   
+
         /// <summary>
         /// Enables local account login form. 
         /// </summary>
@@ -103,7 +108,7 @@ namespace IdentityBase.Configuration
         public bool AutomaticRedirectAfterSignOut { get; set; } = true;
 
         public bool WindowsAuthenticationEnabled { get; set; } = false;
-        
+
         // specify the Windows authentication schemes you want to use for authentication
         public string[] WindowsAuthenticationSchemes { get; set; } =
             new string[] { "Negotiate", "NTLM" };
@@ -111,7 +116,7 @@ namespace IdentityBase.Configuration
         public string WindowsAuthenticationDisplayName { get; set; } =
             "Windows";
 
-        public string PluginsPath { get; set; } = "./Plugins"; 
+        public string PluginsPath { get; set; } = "./Plugins";
 
         /// <summary>
         /// Default UI culture of IdentityServer.
