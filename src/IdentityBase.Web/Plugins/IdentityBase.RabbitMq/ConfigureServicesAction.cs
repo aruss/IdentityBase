@@ -6,8 +6,6 @@ namespace IdentityBase.RabbitMq
     using System;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using ServiceBase.Notification.Sms;
-    using ServiceBase.Notification.Twilio;
     using ServiceBase.Plugins;
 
     public class ConfigureServicesAction : IConfigureServicesAction
@@ -19,7 +17,6 @@ namespace IdentityBase.RabbitMq
 
             IConfiguration configuration = serviceProvider
                 .GetService<IConfiguration>();
-
         }
     }
 }

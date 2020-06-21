@@ -8,7 +8,7 @@ namespace IdentityBase.Models
     using System.ComponentModel.DataAnnotations;
 
     public class UserAccount
-    {        
+    {
         public Guid Id { get; set; }
 
         // Maximum length of a valid email address is 254 characters.
@@ -73,7 +73,7 @@ namespace IdentityBase.Models
         public IEnumerable<UserAccountClaim> Claims { get; set; }
 
         public Guid? CreatedBy { get; set; }
-        public CreationKind CreationKind { get; set; }
 
+        public CreationKind CreationKind { get; set; }
     }
 }

@@ -6,12 +6,13 @@ namespace IdentityBase.EntityFramework.Entities
     {
         public Guid UserAccountId { get; set; }
 
-        public string Provider { get; set; }
+        // facebook, google, xing
+        public string Provider { get; set; } 
 
         public string Subject { get; set; }
 
         public string Email { get; set; }
-        
+
         public DateTime? LastLoginAt { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -36,7 +37,7 @@ namespace IdentityBase.EntityFramework.Entities
         public override int GetHashCode()
         {
             return this.Provider.GetHashCode() ^
-                this.Subject.GetHashCode(); 
+                this.Subject.GetHashCode();
         }
     }
 }
