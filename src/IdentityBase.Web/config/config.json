@@ -102,6 +102,12 @@
   },
 
   "Email": {
+    "SendGrid": {
+      "EmailFrom": "xxxxxxx",
+      "EmailFromName": "xxxxxxx",
+      "Key": "xxxxxxx"
+    },
+
     "Smtp": {
       "EmailFrom": "xxxx@gmail.com",
       "Host": "smtp.gmail.com",
