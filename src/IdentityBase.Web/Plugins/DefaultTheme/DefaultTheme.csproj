@@ -39,12 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\css\*.css" CopyToPublishDirectory="PreserveNewest" />
-    <Content Include="wwwroot\js\*.js" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
-
-
-  <ItemGroup>
+    <None Update="Resources\Localization\Shared.de-DE.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Localization\Shared.en-US.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="wwwroot\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
