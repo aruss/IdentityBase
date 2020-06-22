@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>7f742bdf-fc51-4620-b061-e42e68d2a7ed</UserSecretsId>
     <Authors>Russlan Akiev</Authors>
     <Company />
@@ -12,8 +12,8 @@
     <PackageTags>identityserver aspnet-core dotnet identity identityserver4 oauth2 openid-connect security</PackageTags>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
-	<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
-	<PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <Target Name="CustomCollectFiles">
@@ -52,16 +52,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.2.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-	<PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
-	<PackageReference Include="Microsoft.AspNetCore.ResponseCaching" Version="2.2.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.2" />
-	<PackageReference Include="IdentityServer4" Version="2.5.3" />
-	<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.2" />
+    <PackageReference Include="IdentityServer4" Version="2.5.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>

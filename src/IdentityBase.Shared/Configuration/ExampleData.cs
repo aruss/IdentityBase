@@ -324,15 +324,7 @@ namespace IdentityBase.Configuration
                         new Secret("secret".Sha256())
                     },
 
-                    Scopes =
-                    {
-                        new Scope()
-                        {
-                            Name = "idbase",
-                            DisplayName =
-                                "Full access to IdentityBase API",
-                        }
-                    }
+                    Scopes = new string[] { "idbase" }
                 }
             };
         }

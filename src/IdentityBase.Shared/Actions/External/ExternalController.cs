@@ -286,7 +286,7 @@ namespace IdentityBase.Actions.External
             string provider,
             string returnUrl)
         {
-            if (String.IsNullOrWhiteSpace(returnUrl))
+            if (returnUrl.IsMissing())
             {
                 throw new Exception("External authentication error");
             }
@@ -307,6 +307,8 @@ namespace IdentityBase.Actions.External
                 provider,
                 localSignInProps,
                 additionalLocalClaims.ToArray());
+
+            await HttpContext.SignInAsync(
 
             // Delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(
